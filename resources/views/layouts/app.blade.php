@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Teko" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    
+
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -25,7 +25,7 @@
 
             <header class="header__wrapper--app">
                     <div class="header-title">
-                        <img src="https://assets.profchen.fr/img/logo_main_400.png"> PROF CHEN<small>&nbsp;map</small>
+                        <img src="https://assets.profchen.fr/v2/logo_pokematos.png"> POKEMATOS <small>Rennes</small>
                     </div>
                 </div>
             </header>

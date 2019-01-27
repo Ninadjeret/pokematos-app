@@ -11,7 +11,7 @@ body,
 #app,
 v-app,
 .application--wrap {
-  height: 100%;
+
 }
 
 html {
@@ -51,7 +51,7 @@ header .header-title {
 }
 header .header-title img {
     margin-top: 2px;
-    width: 55px;
+    height: 55px;
 }
 header .header-title small {
     font-family: 'Roboto';

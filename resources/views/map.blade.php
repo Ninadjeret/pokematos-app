@@ -2,6 +2,6 @@
 
 @section('content')
 <div class="container">
-    <p>Map</p>
+    <p><a href="http://api.pokematos.fr:1337/connect/discord">Connect</a></p>
 </div>
 @endsection
