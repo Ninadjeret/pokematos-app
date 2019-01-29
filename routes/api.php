@@ -23,8 +23,8 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 
 });
-Route::get('cities', 'CityController@getAll');
-Route::get('cities/{city}', 'CityController@getOne');
-Route::get('guilds', 'GuildController@getAll');
-Route::get('guilds/{guild}', 'GuildController@getOne');
-Route::get('gyms', 'GymController@getAll');
+Route::get('user/cities', 'CityController@getAll');
+Route::get('user/cities/{city}', 'CityController@getOne');
+Route::get('user/guilds', 'GuildController@getAll');
+Route::get('user/guilds/{guild}', 'GuildController@getOne');
+Route::get('user/cities/{city}/gyms', 'GymController@getAll');

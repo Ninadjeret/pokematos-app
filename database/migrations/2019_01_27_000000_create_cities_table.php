@@ -24,7 +24,7 @@ class CreateCitiesTable extends Migration
 
         Schema::create('guilds', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('guild_id');
+            $table->bigInteger('discord_id')->unique();
             $table->string('name');
             $table->string('type');
             $table->integer('city_id');
@@ -115,11 +115,32 @@ class CreateCitiesTable extends Migration
             $table->string('format')->default('auto'); //auto, custom
             $table->string('custom_message_before')->nullable();
             $table->string('custom_message_after')->nullable();
+            $table->boolean('delete_after_end');
             $table->string('guild_id');
             $table->string('channel_id');
             $table->timestamps();
 
             $table->foreign('guild_id')->references('id')->on('guilds');
+        });
+
+        Schema::create('channel_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('guild_id');
+            $table->string('description')->default('none'); //none, level, pokemon
+            $table->timestamps();
+
+            $table->foreign('guild_id')->references('id')->on('guilds');
+        });
+
+        Schema::create('channels', function (Blueprint $table) {
+            $table->increments('id');
+            $table->bigInteger('discord_id');
+            $table->integer('guild_id');
+            $table->integer('type_id');
+            $table->timestamps();
+
+            $table->foreign('guild_id')->references('id')->on('guilds');
+            $table->foreign('type_id')->references('id')->on('channel_types');
         });
     }
 

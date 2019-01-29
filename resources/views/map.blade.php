@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container">
-    <p><a href="http://api.pokematos.fr:1337/connect/discord">Connect</a></p>
+    <p><a href="/logout">Se déconnecter</a></p>
+    @auth
+    <p>Coucou {{ Auth::user()->name }}</p>
+    @endauth
 </div>
 @endsection
