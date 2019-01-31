@@ -13,11 +13,12 @@
 Route::get('/login', function () {
     return redirect('https://discordapp.com/api/oauth2/authorize?client_id=379369796023877632&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000/login/discord/callback&response_type=code&scope=identify%20email');
 });
+Route::get('//login/discord/callback', 'DiscordController@auth');
 Route::get('/logout', function () {
     Auth::logout();
-    return redirect('/login');
+    return redirect('/');
 });
-Route::get('/login/discord/callback', function () {
+/*Route::get('/login/discord/callback', function () {
     $code = $_GET['code'];
     $creds = base64_encode('379369796023877632:3X9XW5XWjEPollAIcyxxXtAvlvKkLdIh');
     $client = new GuzzleHttp\Client();
@@ -41,12 +42,12 @@ Route::get('/login/discord/callback', function () {
     Auth::loginUsingId($user_id);
     return redirect('/');
     die();
-});
+});*/
 Route::get('/', function () {
     if( Auth::user() ) {
-            return view('map');
+        return view('map');
     }
-    return redirect('/login');
+    return view('login');
 });
 Route::get('/list', function () {
     return view('list');

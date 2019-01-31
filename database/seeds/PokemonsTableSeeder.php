@@ -59,13 +59,13 @@ class PokemonsTableSeeder extends Seeder {
         if(DB::table('guilds')->get()->count() == 0){
             DB::table('guilds')->insert([
                 [
-                    'guild_id' => '377440443258109953',
+                    'discord_id' => '377440443258109953',
                     'name'  => 'Pokemon Go Rennes',
                     'type'  => 'discord',
                     'city_id'  => 1,
                 ],
                 [
-                    'guild_id' => '400277491941638147',
+                    'discord_id' => '400277491941638147',
                     'name'  => 'Pokemon GO - Dijon',
                     'type'  => 'discord',
                     'city_id'  => 2,
