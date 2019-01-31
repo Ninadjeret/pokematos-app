@@ -14,22 +14,23 @@ class DiscordController extends Controller {
 
 
     public function auth(Request $request) {
-        var_dump('oto');
-        $code = Input::get('code');
-        $res = $this->getDiscordToken($code);
 
-        //If discord can't send bearer
+        $code = Input::get('code');
+        if( !$code ) {
+            return redirect('/?access=cancel');
+            die();
+        }
+
+        $res = $this->getDiscordToken($code);
         if( $res->getStatusCode() != 200 ) {
-            return redirect('/login?access=denied&code=1');
+            return redirect('/?access=denied&code=1');
             die();
         }
 
         $data = json_decode($res->getBody());
         $res = $this->getDiscordMe($data);
-
-        //If Bearer token is not valid
         if( $res->getStatusCode() != 200 ) {
-            return redirect('/login?access=denied&code=1');
+            return redirect('/?access=denied&code=1');
             die();
         }
 
@@ -41,6 +42,7 @@ class DiscordController extends Controller {
         } else {
             $user = new User();
         }
+
         $user->password = Hash::make( str_random(20) );
         $user->name = $user_data->username;
         $user->email = $user_data->email;
