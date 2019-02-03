@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
+use RestCord\DiscordClient;
 use App\User;
+use App\Models\Guild;
 
 class DiscordController extends Controller {
 
@@ -34,7 +36,11 @@ class DiscordController extends Controller {
             die();
         }
 
+        $res = $this->getDiscordMe($data);
+        $res_guilds = $this->getDiscordMeGuilds($data);
+
         $user_data = json_decode($res->getBody());
+        $user_guilds = json_decode($res_guilds->getBody());
         $user = User::where('email',$user_data->email)->first();
 
         if( $user ) {
@@ -49,9 +55,51 @@ class DiscordController extends Controller {
         $user->discord_id = $user_data->id;
         $user->discord_name = $user_data->username;
         $user->discord_avatar_id = $user_data->avatar;
+
+        //Gestion de l'attribution des droits d'accès
+        $auth = false;
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+        $guilds = [];
+        if(  !empty( $user_guilds ) ) {
+            foreach( $user_guilds as $user_guild ) {
+                $guild = Guild::where( 'discord_id', $user_guild->id )->first();
+                if( $guild ) {
+                    /*try {
+                        $result = $discord->guild->getGuildMember(array(
+                            'guild.id' => (float) $guild->discord_id,
+                            'user.id' => (float) $user->discord_id,
+                        ));
+
+                        //Gestion des droits d'accès
+                        if ($result && $discord->access_rule == 'everyone') {
+                            $auth = true;
+                        } elseif ($result && $discord->access_rule == 'specific_roles' && !empty(array_intersect($discord->authorized_roles, $result->roles))) {
+                            $auth = true;
+                        }
+
+                        //Gestion des prvilèges d'admin
+                        if (!empty($community->getMapAdminRoles()) && $result && !empty(array_intersect($community->getMapAdminRoles(), $result->roles))) {
+                            $admin[] = $community->wpId;
+                        }
+                    } catch (Exception $e) {
+                        error_log('Exception reçue : ' . $e->getMessage());
+                    }*/
+                    $auth = true;
+                    $guilds[] = $guild->id;
+                }
+
+            }
+        }
+        $user->guilds = json_encode($guilds);
         $user->save();
-        Auth::loginUsingId($user->id);
-        return redirect('/');
+
+        //Login
+        if( $auth ) {
+            Auth::loginUsingId($user->id);
+            return redirect('/');
+        } else {
+            return redirect('/?access=denied&code=1');
+        }
         die();
 
     }
@@ -71,6 +119,16 @@ class DiscordController extends Controller {
     public function getDiscordMe( $data ) {
         $client = new Client();
         $res = $client->get('https://discordapp.com/api/users/@me', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$data->access_token,
+            ]
+        ]);
+        return $res;
+    }
+
+    public function getDiscordMeGuilds( $data ) {
+        $client = new Client();
+        $res = $client->get('https://discordapp.com/api/users/@me/guilds', [
             'headers' => [
                 'Authorization' => 'Bearer '.$data->access_token,
             ]

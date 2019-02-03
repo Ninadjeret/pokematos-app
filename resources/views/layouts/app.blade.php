@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -21,13 +21,11 @@
 </head>
 <body>
     <div id="app">
-        <v-app light v-cloak>
 
             <header class="header__wrapper--app">
                     <div class="header-title">
-                        <img src="https://assets.profchen.fr/v2/logo_pokematos.png"> POKEMATOS <small>Rennes</small>
+                        <city-choice></city-choice>
                     </div>
-                </div>
             </header>
 
             <nav id="main" class="navbar">
@@ -56,12 +54,11 @@
             <main>
                 @yield('content')
             </main>
-        </v-app>
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/manifest.js') }}"></script>
-    <script src="{{ asset('js/vendor.js') }}"></script>
+    <!--<script src="{{ asset('js/manifest.js') }}"></script>
+    <script src="{{ asset('js/vendor.js') }}"></script>-->
     <script src="{{ asset('js/app.js') }}" defer></script>
 </body>
 </html>

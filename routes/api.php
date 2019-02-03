@@ -19,12 +19,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['auth:api']], function () {
 
-    /*** Cities ***/
 
 
 });
+
+/*** Cities ***/
 Route::get('user/cities', 'CityController@getAll');
 Route::get('user/cities/{city}', 'CityController@getOne');
 Route::get('user/guilds', 'GuildController@getAll');
 Route::get('user/guilds/{guild}', 'GuildController@getOne');
-Route::get('user/cities/{city}/gyms', 'GymController@getAll');
+Route::get('user/cities/{city}/gyms', 'GymController@getCityGyms');
+Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
