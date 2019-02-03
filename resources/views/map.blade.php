@@ -6,5 +6,6 @@
     @auth
     <p>Coucou {{ Auth::user()->name }}</p>
     @endauth
+    <raidsmap></raidsmap>
 </div>
 @endsection

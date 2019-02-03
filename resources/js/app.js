@@ -9,6 +9,8 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import VModal from 'vue-js-modal'
+Vue.use(VModal)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -27,7 +29,19 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+ Vue.component(
+     'city-choice',
+     require('./components/CityChoice.vue').default
+ );
+Vue.component(
+    'raidsmap',
+    require('./components/Map.vue').default
+);
+Vue.component(
+    'raidslist',
+    require('./components/List.vue').default
+);
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });
