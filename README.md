@@ -13,4 +13,4 @@ Collaborative map for Pokemon Go players. Raid reporting, Discord notifications,
 3. rename ```.env.example``` in ```.env``` and add your database connexion information (host, port, database name, user & pwd)
 4. run ```php artisan key:generate```
 5. run ```php artisan migrate:fresh``` and next ```php artisan db:seed``` to add database structure & dummy data
-6. run ```php artisan serve```. Pokematos is now available at ```http://127.0.0.1:800```
+6. run ```php artisan serve```. Pokematos is now available at ```http://127.0.0.1:8000```
