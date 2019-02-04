@@ -4,16 +4,13 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\City;
+
 class Guild extends Model
 {
-    protected $fillable = [
-        'authorized_roles',
-    ];
-
-    protected $hidden = [
-        'city_id',
-    ];
-
+    protected $fillable = ['authorized_roles',];
+    protected $hidden = ['city_id'];
+    protected $appends = ['city'];
     protected $casts = [
         'authorized_roles' => 'array',
     ];
@@ -22,7 +19,8 @@ class Guild extends Model
         return $this->map_authorized_roles;
     }
 
-    public function city() {
-        return $this->belongsTo('App\Models\City');
+    public function getCityAttribute() {
+        return City::find($this->city_id);
     }
+
 }
