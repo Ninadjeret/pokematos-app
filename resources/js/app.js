@@ -9,6 +9,13 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import VModal from 'vue-js-modal'
+import { L, LMap, LTileLayer, LMarker } from 'vue2-leaflet'
+
+Vue.use(VModal)
+Vue.component('l-map', LMap)
+Vue.component('l-tile-layer', LTileLayer)
+Vue.component('l-marker', LMarker)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -27,7 +34,27 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+ Vue.component(
+     'app-container',
+     require('./components/Container.vue').default
+ );
+ Vue.component(
+     'app-header',
+     require('./components/Header.vue').default
+ );
+ Vue.component(
+     'app-nav',
+     require('./components/Nav.vue').default
+ );
+Vue.component(
+    'raidsmap',
+    require('./components/Map.vue').default
+);
+Vue.component(
+    'raidslist',
+    require('./components/List.vue').default
+);
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });

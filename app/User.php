@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'guilds'
     ];
 
     /**
@@ -29,7 +29,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
     public function getGuilds() {
         $guilds = array();
         if( empty( $this->guilds ) ) return $guilds;
@@ -37,7 +36,7 @@ class User extends Authenticatable
         if( empty( $guilds_decoded ) ) return $guilds;
 
         foreach( $guilds_decoded as $guild_id ) {
-            $guild_to_add = Guild::where('guild_id', $guild_id)->first();
+            $guild_to_add = Guild::where('discord_id', $guild_id)->first();
             if( $guild_to_add ) {
                 $guilds[] = $guild_to_add;
             }

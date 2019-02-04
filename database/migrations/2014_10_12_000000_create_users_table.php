@@ -20,10 +20,10 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->bigInteger('discord_id')->nullable();
-            $table->bigInteger('messenger_id')->nullable();
+            $table->string('discord_id')->nullable();
+            $table->string('messenger_id')->nullable();
             $table->string('discord_name')->nullable();
-            $table->bigInteger('discord_avatar_id')->nullable();
+            $table->string('discord_avatar_id')->nullable();
             $table->json('guilds')->nullable();
             $table->timestamps();
         });
