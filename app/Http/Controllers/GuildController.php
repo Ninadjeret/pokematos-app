@@ -14,7 +14,7 @@ class GuildController extends Controller {
     }
 
     public function getOne(Request $request, Guild $guild){
-        $guild = Guild::with('city')->find($guild->id);
+        $guild = Guild::find($guild->id);
         return response()->json($guild, 200);
     }
 }

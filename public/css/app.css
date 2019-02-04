@@ -10503,7 +10503,7 @@ html {
 body {
   font-family: "Open Sans", sans-serif;
   font-size: 1.6rem;
-  background: #f4f7fc;
+  background: #fff;
   line-height: 1.3;
 }
 
@@ -10559,6 +10559,7 @@ nav.navbar {
   width: 100%;
   min-height: 50px;
   border-top: 1px solid #eee;
+  padding: 0;
 }
 
 nav.navbar ul {
@@ -10566,6 +10567,8 @@ nav.navbar ul {
   display: flex;
   flex-flow: row wrap;
   flex-shrink: 1;
+  margin-bottom: 0;
+  width: 100%;
 }
 
 nav.navbar ul li {
@@ -10584,6 +10587,12 @@ nav.navbar li a {
   padding: 10px 20px 5px 20px;
   color: rgba(25, 135, 150, 0.4);
   text-decoration: none;
+}
+
+nav.navbar li a:hover,
+nav.navbar li a:active {
+  text-decoration: none;
+  background: #fafafa;
 }
 
 nav.navbar li i {
@@ -10713,5 +10722,58 @@ body.logged-out .branding a:before {
 .v--modal-box #cityChoice li {
   padding: 10px;
   border-bottom: 1px solid rgba(119, 186, 191, 0.2);
+}
+
+.section__title {
+  background: #fafafa;
+  padding: 10px 15px !important;
+  font-family: "Teko";
+  font-size: 20px;
+}
+
+.raid__wrapper {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.raid__img {
+  min-width: 80px;
+  padding-right: 10px;
+}
+
+.raid__img img {
+  max-width: 70px;
+  max-height: auto;
+}
+
+.raid__content h3 {
+  font-family: "Teko";
+  font-size: 24px;
+  margin: 5px 0 7px 0;
+  line-height: 24px;
+}
+
+.raid__timer {
+  display: inline-block;
+  margin-left: 10px;
+  border-radius: 40px;
+  background: pink;
+  color: #fff;
+  font-family: "Roboto";
+  font-size: 12px;
+  line-height: 12px;
+  padding: 5px 10px;
+  vertical-align: top;
+}
+
+.raid__gym img {
+  max-width: 20px;
+  max-height: auto;
+}
+
+.raid__gym {
+  font-size: 1.5rem;
 }
 

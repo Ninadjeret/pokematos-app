@@ -22,35 +22,7 @@
 <body>
     <div id="app">
 
-            <header class="header__wrapper--app">
-                    <div class="header-title">
-                        <city-choice></city-choice>
-                    </div>
-            </header>
-
-            <nav id="main" class="navbar">
-                <ul>
-                    <li>
-                        <a class="{{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">
-                            <i aria-hidden="true" class="material-icons">map</i>
-                            <span>Map</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="{{ Request::is('list') ? 'active' : '' }}" href="{{ url('/list') }}">
-                            <i aria-hidden="true" class="material-icons">notifications_active</i>
-                            <span>Liste</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="{{ Request::is('settings') ? 'active' : '' }}" href="{{ url('/settings') }}">
-                            <i aria-hidden="true" class="material-icons">settings</i>
-                            <span>Réglages</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-
+            <app-container page-title="Test"></app-container>
             <main>
                 @yield('content')
             </main>
