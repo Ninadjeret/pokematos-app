@@ -20,38 +20,18 @@
 
 <script>
 export default {
-    props: ['pageTitle'],
+    props: ['pageTitle', 'currentCity'],
     data() {
         return {
             cities: JSON.parse(localStorage.getItem('pokematos_cities')),
-            currentCity: JSON.parse(localStorage.getItem('pokematos_currentCity'))
         }
     },
     mounted() {
         console.log('Component mounted.')
     },
     created() {
-        this.getCities();
-        this.setDefaultCity();
     },
     methods: {
-        getCities() {
-            axios.get('/api/user/cities').then(res => {
-                this.cities = res.data
-                //console.log(res.data)
-                localStorage.setItem('pokematos_cities', JSON.stringify(res.data));
-            }).catch(err => {
-                //No error
-            });
-        },
-        setDefaultCity() {
-            var city = JSON.parse(localStorage.getItem('pokematos_currentCity'))
-            if (!city) {
-                this.currentCity = this.cities[0];
-                console.log('Ajout de '.this.currentCity);
-                localStorage.setItem('pokematos_currentCity', JSON.stringify(this.currentCity));
-            }
-        },
         setCurrentCity(city) {
             console.log(city);
             this.currentCity = city;
