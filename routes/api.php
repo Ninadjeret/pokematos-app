@@ -30,3 +30,6 @@ Route::get('user/guilds', 'GuildController@getAll');
 Route::get('user/guilds/{guild}', 'GuildController@getOne');
 Route::get('user/cities/{city}/gyms', 'GymController@getCityGyms');
 Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
+
+Route::get('pokemons', 'PokemonController@getAll');
+Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
