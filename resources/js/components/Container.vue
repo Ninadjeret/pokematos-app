@@ -1,6 +1,11 @@
 <template>
 <div id="toto">
-    <app-header v-bind:page-title="pageTitle" v-bind:current-city="currentCity" v-bind:cities="cities"></app-header>
+    <app-header
+        v-bind:page-title="pageTitle"
+        v-bind:current-city="currentCity"
+        v-bind:cities="cities"
+        v-bind:links="links">
+    </app-header>
     <app-nav></app-nav>
     <raidslist v-bind:raids="raids"></raidslist>
 </div>
@@ -11,6 +16,22 @@
         props: ['pageTitle'],
         data() {
             return {
+                links: [{
+                        text: 'Map',
+                        url: '/',
+                        icon: 'map'
+                    },
+                    {
+                        text: 'Liste',
+                        url: '/list',
+                        icon: 'notifications_active'
+                    },
+                    {
+                        text: 'Réglages',
+                        url: '/settings',
+                        icon: 'settings'
+                    },
+                ],
                 raids: JSON.parse( localStorage.getItem('pokematos_raids')),
                 currentCity: JSON.parse( localStorage.getItem('pokematos_currentCity')),
                 cities: JSON.parse(localStorage.getItem('pokematos_cities')),
@@ -18,16 +39,16 @@
         },
         mounted() {
             console.log(this.pageTitle),
-            this.getCities();
-            this.getRaids();
+            this.loadData();
         },
         methods: {
-            getCities() {
+            loadData() {
                 axios.get('/api/user/cities').then(res => {
                     this.cities = res.data
                     //console.log(res.data)
                     localStorage.setItem('pokematos_cities', JSON.stringify(res.data));
                     this.setDefaultCity();
+                    this.getRaids();
                 }).catch(err => {
                     //No error
                 });

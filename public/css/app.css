@@ -10536,6 +10536,12 @@ header .header-title {
   color: #fff;
   font-family: "Teko";
   font-size: 25px;
+  padding: 12px 16px 0 16px;
+  text-align: left;
+}
+
+header .header-title.home {
+  padding: 0;
   text-align: center;
 }
 

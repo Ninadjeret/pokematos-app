@@ -1771,21 +1771,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['pageTitle'],
   data: function data() {
     return {
+      links: [{
+        text: 'Map',
+        url: '/',
+        icon: 'map'
+      }, {
+        text: 'Liste',
+        url: '/list',
+        icon: 'notifications_active'
+      }, {
+        text: 'Réglages',
+        url: '/settings',
+        icon: 'settings'
+      }],
       raids: JSON.parse(localStorage.getItem('pokematos_raids')),
       currentCity: JSON.parse(localStorage.getItem('pokematos_currentCity')),
       cities: JSON.parse(localStorage.getItem('pokematos_cities'))
     };
   },
   mounted: function mounted() {
-    console.log(this.pageTitle), this.getCities();
-    this.getRaids();
+    console.log(this.pageTitle), this.loadData();
   },
   methods: {
-    getCities: function getCities() {
+    loadData: function loadData() {
       var _this = this;
 
       axios.get('/api/user/cities').then(function (res) {
@@ -1794,6 +1811,8 @@ __webpack_require__.r(__webpack_exports__);
         localStorage.setItem('pokematos_cities', JSON.stringify(res.data));
 
         _this.setDefaultCity();
+
+        _this.getRaids();
       }).catch(function (err) {//No error
       });
     },
@@ -1882,8 +1901,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['pageTitle', 'currentCity'],
+  props: ['pageTitle', 'currentCity', 'links'],
   data: function data() {
     return {
       cities: JSON.parse(localStorage.getItem('pokematos_cities'))
@@ -1894,11 +1916,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {},
   methods: {
-    setCurrentCity: function setCurrentCity(city) {
-      console.log(city);
-      this.currentCity = city;
-      localStorage.setItem('pokematos_currentCity', JSON.stringify(this.currentCity));
-      this.hideModal();
+    getCurrentLink: function getCurrentLink() {
+      var currentLocation = window.location.pathname;
+      var current = false;
+      this.links.forEach(function (link) {
+        if (link.url == currentLocation) {
+          current = link;
+        }
+      });
+      console.log(current);
+      return current;
     },
     showModal: function showModal() {
       this.$modal.show('cityChoice');
@@ -1959,6 +1986,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['raids'],
@@ -1969,43 +2000,55 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Component mounted.');
   },
   methods: {
-    HasActiveRaids: function HasActiveRaids() {
+    getActiveRaids: function getActiveRaids() {
       var now = moment__WEBPACK_IMPORTED_MODULE_0___default()();
-      var hasActiveRaids = false;
-      this.raids.forEach(function (raid) {
-        console.log(raid);
+      var activeRaids = [];
 
-        if (now.isAfter(raid.startTime)) {
-          hasActiveRaids = true;
-        }
-      });
-      return hasActiveRaids;
+      if (this.raids && this.raids.length > 0) {
+        this.raids.forEach(function (raid) {
+          if (now.isAfter(raid.start_time)) {
+            activeRaids.push(raid);
+          }
+        });
+      }
+
+      return activeRaids;
     },
-    HasFutureRaids: function HasFutureRaids() {
+    getFutureRaids: function getFutureRaids() {
       var now = moment__WEBPACK_IMPORTED_MODULE_0___default()();
-      var HasFutureRaids = false;
-      this.raids.forEach(function (raid) {
-        console.log(raid);
+      var futureRaids = [];
 
-        if (now.isBefore(raid.startTime)) {
-          HasFutureRaids = true;
-        }
-      });
-      return HasFutureRaids;
+      if (this.raids && this.raids.length > 0) {
+        this.raids.forEach(function (raid) {
+          if (now.isBefore(raid.start_time)) {
+            futureRaids.push(raid);
+          }
+        });
+      }
+
+      return futureRaids;
     },
     getRaidImgUrl: function getRaidImgUrl(raid) {
       var now = moment__WEBPACK_IMPORTED_MODULE_0___default()();
       var raidStatus = 'future';
 
-      if (now.isAfter(raid.startTime)) {
+      if (now.isAfter(raid.start_time)) {
         raidStatus = 'active';
       }
 
-      if (raidStatus == 'active') {
-        return 'https://assets.profchen.fr/img/pokemon/pokemon_icon_068_00.png';
-      } else {
+      if (raidStatus == 'future' || !raid.pokemon) {
         return 'https://assets.profchen.fr/img/eggs/egg_' + raid.egg_level + '.png';
+      } else {
+        return raid.pokemon.thumbnail_url;
       }
+    },
+    getRaidStartTime: function getRaidStartTime(raid) {
+      var startTime = moment__WEBPACK_IMPORTED_MODULE_0___default()(raid.start_time);
+      return startTime.format('HH[h]mm');
+    },
+    getRaidEndTime: function getRaidEndTime(raid) {
+      var endTime = moment__WEBPACK_IMPORTED_MODULE_0___default()(raid.end_time);
+      return endTime.format('HH[h]mm');
     }
   }
 });
@@ -68389,7 +68432,8 @@ var render = function() {
         attrs: {
           "page-title": _vm.pageTitle,
           "current-city": _vm.currentCity,
-          cities: _vm.cities
+          cities: _vm.cities,
+          links: _vm.links
         }
       }),
       _vm._v(" "),
@@ -68470,78 +68514,94 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("header", { staticClass: "header__wrapper--app" }, [
-    _c(
-      "div",
-      { staticClass: "header-title" },
-      [
-        _c("img", {
-          attrs: { src: "https://assets.profchen.fr/img/logo_main_400.png" }
-        }),
-        _vm._v(" POKEMATOS "),
-        _c("small", [_vm._v(_vm._s(_vm.currentCity.name))]),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            on: {
-              click: function($event) {
-                _vm.showModal()
-              }
-            }
-          },
+    _vm.getCurrentLink().url == "/"
+      ? _c(
+          "div",
+          { staticClass: "header-title home" },
           [
-            _c("i", { staticClass: "material-icons" }, [
-              _vm._v("location_city")
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c("modal", { attrs: { name: "cityChoice" } }, [
-          _c("h3", [_vm._v("Choisis ta zone")]),
-          _vm._v(" "),
-          _c(
-            "ul",
-            { attrs: { id: "cityChoice" } },
-            _vm._l(_vm.cities, function(city) {
-              return _c(
-                "li",
-                {
-                  on: {
-                    click: function($event) {
-                      _vm.setCurrentCity(city)
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\r\n                    " +
-                      _vm._s(city.name) +
-                      "\r\n                "
-                  )
-                ]
-              )
+            _c("img", {
+              attrs: { src: "https://assets.profchen.fr/img/logo_main_400.png" }
             }),
-            0
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "footer--actions" }, [
-            _c(
-              "button",
-              {
-                staticClass: "button--close",
-                on: {
-                  click: function($event) {
-                    _vm.hideModal()
-                  }
-                }
-              },
-              [_c("i", { staticClass: "material-icons" }, [_vm._v("close")])]
-            )
-          ])
+            _vm._v(" POKEMATOS "),
+            _vm.currentCity
+              ? _c("small", [_vm._v(_vm._s(_vm.currentCity.name))])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.cities && _vm.cities.length > 1
+              ? _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
+                        _vm.showModal()
+                      }
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "material-icons" }, [
+                      _vm._v("location_city")
+                    ])
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.cities
+              ? _c("modal", { attrs: { name: "cityChoice" } }, [
+                  _c("h3", [_vm._v("Choisis ta zone")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    { attrs: { id: "cityChoice" } },
+                    _vm._l(_vm.cities, function(city) {
+                      return _c(
+                        "li",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.setCurrentCity(city)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\r\n                    " +
+                              _vm._s(city.name) +
+                              "\r\n                "
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "footer--actions" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "button--close",
+                        on: {
+                          click: function($event) {
+                            _vm.hideModal()
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "material-icons" }, [
+                          _vm._v("close")
+                        ])
+                      ]
+                    )
+                  ])
+                ])
+              : _vm._e()
+          ],
+          1
+        )
+      : _c("div", { staticClass: "header-title" }, [
+          _vm._v(
+            "\r\n        " + _vm._s(_vm.getCurrentLink().text) + "\r\n    "
+          )
         ])
-      ],
-      1
-    )
   ])
 }
 var staticRenderFns = []
@@ -68567,7 +68627,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.HasActiveRaids()
+    _vm.getActiveRaids().length > 0
       ? _c("div", { staticClass: "raids__active" }, [
           _c("div", { staticClass: "section__title" }, [
             _vm._v("Raids en cours")
@@ -68576,7 +68636,7 @@ var render = function() {
           _c(
             "div",
             { staticClass: "raids__wrapper" },
-            _vm._l(_vm.raids, function(raid) {
+            _vm._l(_vm.getActiveRaids(), function(raid) {
               return _c("div", { staticClass: "raid__wrapper" }, [
                 _c("div", { staticClass: "raid__img" }, [
                   _c("img", { attrs: { src: _vm.getRaidImgUrl(raid) } })
@@ -68584,7 +68644,13 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "raid__content" }, [
                   _c("h3", [
-                    _vm._v(_vm._s(raid.egg_level) + "T de 17h03 à 17h48"),
+                    _vm._v(
+                      _vm._s(raid.egg_level) +
+                        "T de " +
+                        _vm._s(_vm.getRaidStartTime(raid)) +
+                        " à " +
+                        _vm._s(_vm.getRaidEndTime(raid))
+                    ),
                     _c(
                       "span",
                       {
@@ -68620,7 +68686,7 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.HasFutureRaids()
+    _vm.getFutureRaids().length > 0
       ? _c("div", { staticClass: "raids__active" }, [
           _c("div", { staticClass: "section__title" }, [
             _vm._v("Raids à venir")
@@ -68629,7 +68695,7 @@ var render = function() {
           _c(
             "div",
             { staticClass: "raids__wrapper" },
-            _vm._l(_vm.raids, function(raid) {
+            _vm._l(_vm.getFutureRaids(), function(raid) {
               return _c("div", { staticClass: "raid__wrapper" }, [
                 _c("div", { staticClass: "raid__img" }, [
                   _c("img", { attrs: { src: _vm.getRaidImgUrl(raid) } })
@@ -68637,7 +68703,13 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "raid__content" }, [
                   _c("h3", [
-                    _vm._v(_vm._s(raid.egg_level) + "T de 17h03 à 17h48"),
+                    _vm._v(
+                      _vm._s(raid.egg_level) +
+                        "T de " +
+                        _vm._s(_vm.getRaidStartTime(raid)) +
+                        " à " +
+                        _vm._s(_vm.getRaidEndTime(raid))
+                    ),
                     _c(
                       "span",
                       {
@@ -68670,6 +68742,16 @@ var render = function() {
             }),
             0
           )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    !_vm.raids || _vm.raids.length === 0
+      ? _c("div", { staticClass: "raids__empty hide" }, [
+          _c("img", {
+            attrs: { src: "https://assets.profchen.fr/img/empty_raids.png" }
+          }),
+          _vm._v(" "),
+          _c("h3", [_vm._v("Aucun raid pour le moment...")])
         ])
       : _vm._e()
   ])
