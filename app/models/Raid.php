@@ -9,11 +9,11 @@ use App\Models\Pokemon;
 class Raid extends Model {
 
     protected $hidden = ['gym_id', 'city_id', 'pokemon_id'];
-    protected $appends = ['gym', 'end_time', 'pokemon'];
+    protected $appends = ['end_time', 'pokemon'];
 
-    public function getGymAttribute() {
+    /*public function getGymAttribute() {
         return Stop::find($this->gym_id);
-    }
+    }*/
 
     public function getEndTImeAttribute() {
         $endTime = new \DateTime($this->start_time);

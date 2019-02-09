@@ -7,7 +7,10 @@
         v-bind:links="links">
     </app-header>
     <app-nav></app-nav>
-    <raidslist v-if="getCurrentLink().id == 'list'" v-bind:raids="raids"></raidslist>
+    <raidslist
+        v-if="getCurrentLink().id == 'list'"
+        v-bind:gyms="gyms">
+    </raidslist>
     <settings
         v-if="getCurrentLink().id == 'settings'"
         v-bind:user="user">
@@ -39,7 +42,7 @@
                         icon: 'settings'
                     },
                 ],
-                raids: JSON.parse( localStorage.getItem('pokematos_raids')),
+                gyms: JSON.parse( localStorage.getItem('pokematos_gyms')),
                 currentCity: JSON.parse( localStorage.getItem('pokematos_currentCity')),
                 cities: JSON.parse(localStorage.getItem('pokematos_cities')),
                 user: JSON.parse(localStorage.getItem('pokematos_user')),
@@ -70,10 +73,10 @@
                 }
             },
             getRaids() {
-                axios.get('/api/user/cities/'+this.currentCity.id+'/raids').then( res => {
-                    this.raids = res.data
+                axios.get('/api/user/cities/'+this.currentCity.id+'/gyms').then( res => {
+                    this.gyms = res.data
                     console.log(res.data)
-                    localStorage.setItem('pokematos_raids', JSON.stringify(res.data));
+                    localStorage.setItem('pokematos_gyms', JSON.stringify(res.data));
                 }).catch( err => {
                     //No error
                 });
