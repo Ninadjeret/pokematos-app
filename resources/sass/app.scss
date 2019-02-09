@@ -26,13 +26,29 @@ html {
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
   font-size: 1.6rem;
   background: #fff;
   line-height: 1.3;
 }
 audio, canvas, iframe, img, svg, video {
     vertical-align: middle;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+h3, h4 {
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+}
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: -.02em;
+    opacity: .54;
+    font-size: .6em;
 }
 
 header {
@@ -53,7 +69,7 @@ header {
 header .header-title {
     color: #fff;
     font-family: 'Teko';
-    font-size: 25px;    
+    font-size: 25px;
     padding: 12px 16px 0 16px;
     text-align: left;
 }
@@ -267,4 +283,54 @@ body.logged-out .branding a:before {
 }
 .raid__gym {
     font-size: 1.5rem;
+}
+
+.setting__wrapper {
+    border-bottom: 1px solid #eee;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+}
+.setting__wrapper .user__img {
+    max-width: 50px;
+    max-height: 50px;
+    margin-right: 10px;
+}
+.setting__wrapper .user__img img {
+    border-radius: 500px;
+}
+.setting__wrapper .user__info h3 {
+    font-size: 18px;
+    line-height: 30px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.setting__wrapper .user__info a {
+    color: #ca3366;
+}
+.setting__titre {
+    margin: 0;
+    font-size: 18px;
+}
+.setting__desc {
+    color: #bbb;
+    font-size: 1.4rem;
+    margin: 0;
+    line-height: 1.7rem;
+}
+.setting__wrapper > a {
+    padding: 10px 0;
+    font-size: 16px;
+    color: inherit;
+    width: 100%;
+}
+.settings-section .credit {
+    padding: 10px 15px;
+    font-size: 14px;
+    letter-spacing: 0;
+    margin: 0 0 16px;
+}
+.settings-section .credit i.material-icons {
+    font-size: 14px;
+    vertical-align: middle;
 }

@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 });
 
 /*** Cities ***/
+Route::get('user', 'UserController@getUSer');
 Route::get('user/cities', 'CityController@getAll');
 Route::get('user/cities/{city}', 'CityController@getOne');
 Route::get('user/guilds', 'GuildController@getAll');
