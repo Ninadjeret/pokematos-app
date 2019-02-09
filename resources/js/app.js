@@ -11,11 +11,13 @@ window.Vue = require('vue');
 
 import VModal from 'vue-js-modal'
 import { L, LMap, LTileLayer, LMarker } from 'vue2-leaflet'
+import VueCountdown from '@chenfengyuan/vue-countdown'
 
 Vue.use(VModal)
 Vue.component('l-map', LMap)
 Vue.component('l-tile-layer', LTileLayer)
 Vue.component('l-marker', LMarker)
+Vue.component(VueCountdown.name, VueCountdown)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -59,8 +61,8 @@ Vue.component(
     require('./components/Settings.vue').default
 );
 Vue.component(
-    'raid-modal',
-    require('./components/RaidModal.vue').default
+    'gym-modal',
+    require('./components/GymModal.vue').default
 );
 
 const app = new Vue({

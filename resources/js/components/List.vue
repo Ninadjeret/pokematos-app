@@ -3,14 +3,14 @@
         <div v-if="getActiveRaids().length > 0" class="raids__active">
             <div class="section__title">Raids en cours</div>
             <div class="raids__wrapper">
-                <div v-for="raid in getActiveRaids()" class="raid__wrapper">
+                <div v-on:click="showModal(gym)" v-for="gym in getActiveRaids()" class="raid__wrapper">
                     <div class="raid__img">
-                        <img :src="getRaidImgUrl(raid)">
+                        <img :src="getRaidImgUrl(gym.raid)">
                     </div>
                     <div class="raid__content">
-                        <h3>{{raid.egg_level}}T de {{getRaidStartTime(raid)}} à {{getRaidEndTime(raid)}}<span class="raid__timer active" data-start="2019-02-03 17:03:14" data-end="2019-02-03 17:48:14">Reste 21 min</span></h3>
+                        <h3>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}<span class="raid__timer active" data-start="2019-02-03 17:03:14" data-end="2019-02-03 17:48:14">Reste 21 min</span></h3>
                         <div class="raid__gym">
-                            <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{raid.gym.zone.name}} - {{raid.gym.name}}
+                            <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
                         </div>
                     </div>
                 </div>
@@ -19,31 +19,37 @@
         <div v-if="getFutureRaids().length > 0" class="raids__active">
             <div class="section__title">Raids à venir</div>
             <div class="raids__wrapper">
-                <div v-for="raid in getFutureRaids()" class="raid__wrapper">
+                <div v-on:click="showModal(gym)" v-for="gym in getFutureRaids()" class="raid__wrapper">
                     <div class="raid__img">
-                        <img :src="getRaidImgUrl(raid)">
+                        <img :src="getRaidImgUrl(gym.raid)">
                     </div>
                     <div class="raid__content">
-                        <h3>{{raid.egg_level}}T de {{getRaidStartTime(raid)}} à {{getRaidEndTime(raid)}}<span class="raid__timer active" data-start="2019-02-03 17:03:14" data-end="2019-02-03 17:48:14">Reste 21 min</span></h3>
+                        <h3>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
+                            <span class="raid__timer future">
+                                <countdown :time="getRaidTimeLeft(gym.raid)">
+                                    <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
+                                </countdown>
+                            </span>
+                        </h3>
                         <div class="raid__gym">
-                            <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{raid.gym.zone.name}} - {{raid.gym.name}}
+                            <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div v-if="!raids || raids.length === 0" class="raids__empty hide">
+        <div v-if="!gyms || gyms.length === 0" class="raids__empty hide">
             <img src="https://assets.profchen.fr/img/empty_raids.png" />
             <h3>Aucun raid pour le moment...</h3>
         </div>
-        <raid-modal></raid-modal>
+        <gym-modal ref="gymModal"></gym-modal>
     </div>
 </template>
 
 <script>
     import moment from 'moment';
     export default {
-        props: ['raids'],
+        props: ['gyms'],
         data() {
             return {
             }
@@ -52,13 +58,18 @@
             console.log('Component mounted.')
         },
         methods: {
+            showModal( gym ) {
+                this.$refs.gymModal.showModal( gym );
+            },
             getActiveRaids() {
                 var now = moment();
                 var activeRaids = [];
-                if( this.raids && this.raids.length > 0 ) {
-                    this.raids.forEach(function(raid) {
-                        if( now.isAfter(raid.start_time) ) {
-                            activeRaids.push(raid);
+                if( this.gyms && this.gyms.length > 0 ) {
+                    this.gyms.forEach(function(gym) {
+                        if( gym.raid ) {
+                            if( now.isAfter(gym.raid.start_time) ) {
+                                activeRaids.push(gym);
+                            }
                         }
                     });
                 }
@@ -67,10 +78,12 @@
             getFutureRaids() {
                 var now = moment();
                 var futureRaids = [];
-                if( this.raids && this.raids.length > 0 ) {
-                    this.raids.forEach(function(raid) {
-                        if( now.isBefore(raid.start_time) ) {
-                            futureRaids.push(raid);
+                if( this.gyms && this.gyms.length > 0 ) {
+                    this.gyms.forEach(function(gym) {
+                        if( gym.raid ) {
+                            if( now.isBefore(gym.raid.start_time) ) {
+                                futureRaids.push(gym);
+                            }
                         }
                     });
                 }
@@ -95,6 +108,21 @@
             getRaidEndTime( raid ) {
                 var endTime = moment(raid.end_time);
                 return endTime.format('HH[h]mm');
+            },
+            getRaidTimeLeft( raid ) {
+                var now = moment();
+                var start_time = moment(raid.start_time, '"YYYY-MM-DD HH:mm:ss"');
+                var end_time = moment(raid.end_time, '"YYYY-MM-DD HH:mm:ss"');
+                var raidStatus = 'future';
+                if( now.isAfter(raid.start_time) ) {
+                    raidStatus = 'active';
+                }
+
+                if( raidStatus == 'future' ) {
+                    return parseInt(start_time.diff(now, 'milliseconds'));
+                } else {
+                    return parseInt(end_time.diff(now, 'milliseconds'));
+                }
             }
         }
     }
