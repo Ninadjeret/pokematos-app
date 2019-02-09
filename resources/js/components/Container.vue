@@ -7,7 +7,11 @@
         v-bind:links="links">
     </app-header>
     <app-nav></app-nav>
-    <raidslist v-bind:raids="raids"></raidslist>
+    <raidslist v-if="getCurrentLink().id == 'list'" v-bind:raids="raids"></raidslist>
+    <settings
+        v-if="getCurrentLink().id == 'settings'"
+        v-bind:user="user">
+    </settings>
 </div>
 </template>
 
@@ -17,16 +21,19 @@
         data() {
             return {
                 links: [{
+                        id: 'map',
                         text: 'Map',
                         url: '/',
                         icon: 'map'
                     },
                     {
+                        id: 'list',
                         text: 'Liste',
                         url: '/list',
                         icon: 'notifications_active'
                     },
                     {
+                        id: 'settings',
                         text: 'Réglages',
                         url: '/settings',
                         icon: 'settings'
@@ -35,6 +42,7 @@
                 raids: JSON.parse( localStorage.getItem('pokematos_raids')),
                 currentCity: JSON.parse( localStorage.getItem('pokematos_currentCity')),
                 cities: JSON.parse(localStorage.getItem('pokematos_cities')),
+                user: JSON.parse(localStorage.getItem('pokematos_user')),
             }
         },
         mounted() {
@@ -49,6 +57,7 @@
                     localStorage.setItem('pokematos_cities', JSON.stringify(res.data));
                     this.setDefaultCity();
                     this.getRaids();
+                    this.getUser();
                 }).catch(err => {
                     //No error
                 });
@@ -68,7 +77,26 @@
                 }).catch( err => {
                     //No error
                 });
-            }
+            },
+            getUser() {
+                axios.get('/api/user').then( res => {
+                    this.user = res.data
+                    localStorage.setItem('pokematos_user', JSON.stringify(res.data));
+                }).catch( err => {
+                    //No error
+                });
+            },
+            getCurrentLink() {
+                var currentLocation = window.location.pathname;
+                var current = false;
+                this.links.forEach(function(link) {
+                    if( link.url == currentLocation ) {
+                        current = link;
+                    }
+                });
+                console.log(current);
+                return current;
+            },
         }
     }
 </script>

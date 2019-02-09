@@ -54,6 +54,14 @@ Vue.component(
     'raidslist',
     require('./components/List.vue').default
 );
+Vue.component(
+    'settings',
+    require('./components/Settings.vue').default
+);
+Vue.component(
+    'raid-modal',
+    require('./components/RaidModal.vue').default
+);
 
 const app = new Vue({
     el: '#app',
