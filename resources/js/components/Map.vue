@@ -1,14 +1,24 @@
 <template>
-    <div>
-        <h2>Testtttttttttt</h2>
-        <l-map style="height: 50%; width: 50%" ref="map" :zoom=13 :center="[47.413220, -1.219482]">
+    <div style="height: 100%;">
+        <l-map style="height: 100%; width: 100%" ref="map" :zoom=13 :center="[47.413220, -1.219482]">
             <l-tile-layer :url="url"></l-tile-layer>
+            <l-marker v-for="gym in gyms"
+                :lat-lng="[47.413220, -1.219482]"
+                :key="gym.name"
+                v-on:click="showModal(gym)">
+                <l-icon class="someCustomClasses" :icon-anchor="[0, 134]">
+                    <h1>Headline</h1>
+                    <p>And this is some text</p>
+                </l-icon>
+            </l-marker>
         </l-map>
+        <gym-modal ref="gymModal"></gym-modal>
     </div>
 </template>
 
 <script>
     export default {
+        props: ['gyms'],
         data() {
             return {
               map: null,
@@ -23,6 +33,22 @@
             this.$nextTick(() => {
               this.map = this.$refs.map.mapObject // work as expected
             })
+        },
+        methods: {
+            showModal( gym ) {
+                this.$refs.gymModal.showModal( gym );
+            },
+            getMarker( gym ) {
+
+                var html = '<img class="map-marker__wrapper" src="https://assets.profchen.fr/img/map/map_marker_default.png"/>' + '<span class="map-marker__label">Toto</span>';
+
+                return L.icon({
+                    iconUrl: 'https://assets.profchen.fr/img/map/map_marker_default.png',
+                    className: 'map-marker__wrapper',
+                    html: html,
+                    iconAnchor: [17, 35],
+                })
+            }
         }
     }
 </script>

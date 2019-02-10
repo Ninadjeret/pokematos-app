@@ -11,6 +11,7 @@ window.Vue = require('vue');
 
 import VModal from 'vue-js-modal'
 import { L, LMap, LTileLayer, LMarker } from 'vue2-leaflet'
+import "leaflet/dist/leaflet.css"
 import VueCountdown from '@chenfengyuan/vue-countdown'
 
 Vue.use(VModal)

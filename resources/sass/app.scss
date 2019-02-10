@@ -17,8 +17,9 @@ html,
 body,
 #app,
 v-app,
+#app__container,
 .application--wrap {
-
+    height: 100%;
 }
 
 html {
@@ -50,6 +51,30 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     opacity: .54;
     font-size: .6em;
 }
+.bt {
+    display: inline-block;
+    background: #1c8796;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 10px;
+    border-radius: 100px;
+    box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12), 0 1px 1px 0 rgba(0,0,0,.24);
+    padding: 10px 40px;
+    line-height: 30px;
+    position: relative;
+}
+.bt:before {
+    content: "";
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    height: 40px;
+    display: block;
+    position: absolute;
+    border-radius: 100px;
+    top: 5px;
+    left: 5px;
+    width: calc( 100% - 10px );
+}
+
 
 header {
     display: block;
@@ -90,7 +115,7 @@ header .header-title small {
 nav.navbar {
     position: fixed;
     bottom: 0;
-    z-index: 10000;
+    z-index: 5000;
     background: #fff;
     width: 100%;
     min-height: 50px;
@@ -182,10 +207,28 @@ body.logged-out .branding a:before {
     display: inline-block;
     vertical-align: middle;
 }
-
+.v--modal-overlay {
+    z-index: 9999 !important;
+}
 .v--modal-box {
     max-width: 90%;
     margin: auto;
+    height: calc(100% - 60px) !important;
+    top: 30px !important;
+    border-radius: 0 !important;
+    padding: 1em !important;
+}
+.v--modal-box .dialog__wrap {
+    overflow-y: scroll;
+    overflow-y: overlay;
+    height: 100%;
+    border: 2px solid #77babf;
+    padding-bottom: 70px;
+}
+.v--modal-box hr {
+    margin: 10px 24px;
+    border-color: #77babf;
+    opacity: 0.2;
 }
 .v--modal-box h3 {
     color: #1c8796;
@@ -193,6 +236,11 @@ body.logged-out .branding a:before {
     font-family: 'Teko';
     padding: 30px 24px 0;
     font-size: 3.5rem;
+}
+.v--modal-box .dialog__city {
+    padding: 0 24px;
+    color: #1c8796;
+    text-align: center;
 }
 .v--modal-box .footer--actions {
     position: absolute;
@@ -229,6 +277,34 @@ body.logged-out .branding a:before {
     top: 5px;
     left: 5px;
 }
+.v--modal-box .dialog__egg {
+    text-align: center;
+    color: #43696c;
+}
+
+.v--modal-box .dialog__content {
+    color: #77babf;
+    padding: 0px 24px;
+    text-align: center;
+}
+.v--modal-box .dialog__content ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: -10px;
+}
+.v--modal-box .dialog__content ul li a {
+    position: relative;
+    display: block;
+    line-height: 50px;
+    border-bottom: 1px solid rgba(119, 186, 191, 0.2);
+    color: #77babf;
+}
+.v--modal-box .dialog__content ul li a i {
+    position: absolute;
+    left: 0;
+    top: 13px;
+}
+
 .v--modal-box #cityChoice {
     list-style-type: none;
     color:#1c8796;
@@ -239,6 +315,56 @@ body.logged-out .branding a:before {
     padding: 10px;
     border-bottom: 1px solid rgba(119, 186, 191, 0.2);
 }
+.v--modal-box .modal__screen .step {
+    margin: 0 24px;
+    text-align: center;
+}
+.modal__screen .step__title {
+    color: #1c8796;
+    text-align: center;
+    font-family: 'Teko';
+    font-size: 18px;
+}
+.v--modal-box .modal__screen .step .step__timer {
+    width: calc( 100% - 100px );
+    display: inline-block;
+    font-size: smaller;
+    line-height: 18px;
+    font-style: italic;
+    margin-bottom: 0;
+    opacity: 0.5;
+}
+.modal__screen [data-step-name="level"] .step__wrapper ul {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    width: 100%;
+}
+.modal__screen [data-step-name="level"] .step__wrapper ul li {
+    width: 20%;
+    /* border-left: 1px solid #eee; */
+    display: inline-block;
+    text-align: center;
+    padding: 0 5px;
+}
+.modal__screen [data-step-name="level"] .step__wrapper ul li button {
+    padding: 3px 11px;
+    display: block;
+    border-radius: 100px;
+    border: none;
+    background: #fff;
+    border: 1px solid #eee;
+}
+.footer-action {
+    position: fixed;
+    bottom: 30px;
+    padding: 0;
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
+    left: 0;
+}
+
 .section__title {
     background: #fafafa;
     padding: 10px 15px !important;
@@ -459,4 +585,120 @@ body.logged-out .branding a:before {
     opacity: 0.5;
     transition: visibility 0.3s, opacity 0.3s linear;
     visibility: visible;
+}
+
+
+/*------------------------------------------------------------------------------
+Input Range
+------------------------------------------------------------------------------*/
+input[type=range] {
+    -webkit-appearance: none;
+    margin: 18px 0;
+    width: 100%;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  animate: 0.2s;
+  /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
+  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, #77babf 57.17%);
+  border-radius: 100px;
+  /*border: 0.2px solid #010101;*/
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #77babf, 0px 0px 1px #77babf;
+  /*border: 1px solid #000000;*/
+  height: 24px;
+  width: 24px;
+  border-radius: 100px;
+  background: #1c8796;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -9px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, #77babf 57.17%);
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, #77babf 57.17%);;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, #77babf 57.17%);
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-fill-upper {
+  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, #77babf 57.17%);
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 16px;
+  width: 16px;
+  border-radius: 100px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, #77babf 57.17%);
+}
+input[type=range]:focus::-ms-fill-upper {
+  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, #77babf 57.17%);
+}
+.range_button {
+    background: none;
+    border: none;
+    color: #1c8796;
+    width: 50px;
+    cursor: pointer;
+    display: inline-block;
+}
+.range_button i {
+    border: 1px solid rgba(119, 186, 191, 0.3);
+    border-radius: 50%;
+    padding: 5px;
+}
+range_button:active {
+    color: #ca3366;
+}
+.range_button#range__minus {
+    margin-left: -10px;
+    float: left;
+}
+.range_button#range__plus {
+    float: right;
 }
