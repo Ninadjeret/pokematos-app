@@ -10867,3 +10867,150 @@ body.logged-out .branding a:before {
   vertical-align: middle;
 }
 
+.map__actions {
+  position: fixed;
+  bottom: 65px;
+  /*bottom: 10px;*/
+  right: 0px;
+  width: 78px;
+  /*display: flex;
+  flex-direction: column-reverse; */
+}
+
+.map__actions .actions {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.map__actions #launcher:before {
+  content: "";
+  width: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  height: 50px;
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  top: 5px;
+  left: 5px;
+}
+
+.map__actions #launcher {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background: #1c8796;
+  background-size: contain;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 10px;
+  border-radius: 50%;
+  box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+}
+
+.map__actions button:active {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.map__actions button:disabled i {
+  display: none;
+}
+
+.map__actions button .mdl-spinner {
+  display: none;
+}
+
+.map__actions .mdl-spinner__layer-1,
+.map__actions .mdl-spinner__layer-2,
+.map__actions .mdl-spinner__layer-3,
+.map__actions .mdl-spinner__layer-4 {
+  border-color: #43696c !important;
+}
+
+.map__actions button:disabled .mdl-spinner {
+  display: inline-block;
+  margin-top: 4px;
+  width: 24px;
+  height: 24px;
+}
+
+.map__actions i {
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+.map__actions #launcher .menu-off {
+  display: none;
+}
+
+.map__actions.open #launcher .menu-off {
+  display: initial;
+}
+
+.map__actions.open #launcher .menu-on {
+  display: none;
+}
+
+.map__actions .actions {
+  max-height: 0;
+  transition: all 0.5s ease-out;
+  right: 30px;
+  position: absolute;
+  min-width: 300px;
+  bottom: 85px;
+}
+
+.map__actions .actions button {
+  display: none;
+  background: transparent;
+  border: none;
+  text-align: right;
+  font-size: 20px;
+  margin: 10px 0;
+  color: #fff;
+  text-shadow: 1px 1px 2px #1c8796;
+}
+
+.map__actions .actions button span {
+  dipsplay: inline-block;
+  vertical-align: middle;
+  margin-right: 15px;
+}
+
+.map__actions .actions button i {
+  dipsplay: inline-block;
+  vertical-align: middle;
+  font-size: 30px;
+}
+
+.map__actions .actions button:active {
+  color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.map__actions.open .actions {
+  max-height: 500px;
+  /* approximate max height */
+  transition: all 0.9s ease-out;
+}
+
+.map__actions.open .actions button {
+  display: initial;
+}
+
+.map__actions .map__overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-45deg, #1c8796 0%, #fff 100%);
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s, opacity 0.3s linear;
+}
+
+.map__actions.open .map__overlay {
+  opacity: 0.5;
+  transition: visibility 0.3s, opacity 0.3s linear;
+  visibility: visible;
+}
+

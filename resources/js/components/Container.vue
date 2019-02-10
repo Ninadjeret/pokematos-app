@@ -50,7 +50,10 @@
         },
         mounted() {
             console.log(this.pageTitle),
-            this.loadData();
+            this.loadData(),
+            Event.$on('createImage', (item, response) => {
+                console.log('refresh-data')
+            })
         },
         methods: {
             loadData() {
