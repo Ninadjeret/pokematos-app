@@ -64,6 +64,10 @@ Vue.component(
     'gym-modal',
     require('./components/GymModal.vue').default
 );
+Vue.component(
+    'button-actions',
+    require('./components/ButtonActions.vue').default
+);
 
 const app = new Vue({
     el: '#app',

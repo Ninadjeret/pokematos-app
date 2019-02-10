@@ -42,6 +42,7 @@
             <img src="https://assets.profchen.fr/img/empty_raids.png" />
             <h3>Aucun raid pour le moment...</h3>
         </div>
+        <button-actions></button-actions>
         <gym-modal ref="gymModal"></gym-modal>
     </div>
 </template>
