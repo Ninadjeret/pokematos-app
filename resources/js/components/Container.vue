@@ -1,5 +1,5 @@
 <template>
-<div id="toto">
+<div id="app__container">
     <app-header
         v-bind:page-title="pageTitle"
         v-bind:current-city="currentCity"
@@ -7,6 +7,10 @@
         v-bind:links="links">
     </app-header>
     <app-nav></app-nav>
+    <raidsmap
+        v-if="getCurrentLink().id == 'map'"
+        v-bind:gyms="gyms">
+    </raidsmap>
     <raidslist
         v-if="getCurrentLink().id == 'list'"
         v-bind:gyms="gyms">
@@ -51,11 +55,14 @@
         mounted() {
             console.log(this.pageTitle),
             this.loadData(),
-            Event.$on('createImage', (item, response) => {
+            this.$on('refreshdata', function() {
                 console.log('refresh-data')
             })
         },
         methods: {
+            test() {
+                console.log('refresh-data')
+            },
             loadData() {
                 axios.get('/api/user/cities').then(res => {
                     this.cities = res.data

@@ -43,7 +43,7 @@
             <h3>Aucun raid pour le moment...</h3>
         </div>
         <button-actions></button-actions>
-        <gym-modal ref="gymModal"></gym-modal>
+        <gym-modal ref="gymModal" @refreshdata="test()"></gym-modal>
     </div>
 </template>
 
@@ -56,9 +56,15 @@
             }
         },
         mounted() {
-            console.log('Component mounted.')
+            console.log('Component mounted.'),
+            this.$on('refreshdata', function() {
+                console.log('refresh-data')
+            })
         },
         methods: {
+            test() {
+                console.log('trtete')
+            },
             showModal( gym ) {
                 this.$refs.gymModal.showModal( gym );
             },
