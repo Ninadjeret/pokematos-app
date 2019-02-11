@@ -40,7 +40,7 @@
                 <hr>
                 <div class="step" data-step-num="1" data-step-name="timer">
                     <p class="step__title">A quelle heure commence-t-il ?</p>
-                    <button v-on:click="createRaidData.delai-1" class="range_button" id="range__minus"><i class="material-icons">remove</i></button>
+                    <button v-on:click="substractToTimeRange()" class="range_button" id="range__minus"><i class="material-icons">remove</i></button>
                     <p class="step__timer" data-starttime="">
                         <span v-if="createRaidDelai" class="step__timer--delai">{{createRaidDelai}}</span><br>
                         <span v-if="createRaidHoraires" class="step__timer--horaires">{{createRaidHoraires}}</span>
@@ -54,7 +54,7 @@
                     <p class="step__title">Quel est son niveau ?</p>
                     <div class="step__wrapper">
                         <ul>
-                            <li v-for="raidLevel in raidLevels"><button data-level="raidLevel">{{raidLevel}}T</button></li>
+                            <li v-for="raidLevel in raidLevels" v-on:click="updateRaidLevel(raidLevel)"><button data-level="raidLevel">{{raidLevel}}T</button></li>
                         </ul>
                     </div>
                 </div>
@@ -63,6 +63,13 @@
                 <div v-if="createRaidData.delai >= 0" class="step" data-step-num="3b" data-step-name="boss">
                     <p class="step__title">Quel est le Pokémon ?</p>
                     <div class="step__wrapper">
+                        <ul v-if="pokemons">
+                            <li v-for="pokemon in pokemons" :key="pokemon.id" v-if="createRaidData.eggLevel === 0 || createRaidData.eggLevel == pokemon.boss_level">
+                                <a v-on:click="updateRaidBoss(pokemon)">
+                                    <img :src="pokemon.thumbnail_url">
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
@@ -81,6 +88,7 @@ import moment from 'moment';
 export default {
     data() {
         return {
+            pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons')),
             modalScreen: 'default',
             gym: '',
             raidStatus: 'none',
@@ -90,7 +98,7 @@ export default {
             createRaidData: {
                 delai: -60,
                 startTime: false,
-                eggLevel: false,
+                eggLevel: 0,
                 pokemon: false,
             },
             createRaidDelai: '',
@@ -122,6 +130,10 @@ export default {
             this.createRaidData.delai += 1;
             this.updateTimeRange();
         },
+        substractToTimeRange() {
+            this.createRaidData.delai -= 1;
+            this.updateTimeRange();
+        },
         updateTimeRange() {
             var raidStartTime = moment();
             var raidEndTime = moment();
@@ -135,6 +147,17 @@ export default {
                 this.createRaidDelai = 'Le raid débute dans ' + timeLeft + ' min';
                 this.createRaidHoraires = 'De ' + raidStartTime.format('HH[h]mm') + ' à ' + raidEndTime.format('HH[h]mm');
             }
+        },
+        updateRaidLevel( raidLevel ) {
+            this.createRaidData.eggLevel = raidLevel;
+            if( this.createRaidData.delai < 0 ) {
+                confirm('Coucou');
+            }
+        },
+        updateRaidBoss( pokemon ) {
+            this.createRaidData.pokemon = pokemon;
+            var result = confirm('Coucou');
+            console.log(result);
         },
         getRaidData() {
             var now = moment();

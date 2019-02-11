@@ -42,8 +42,8 @@
             <img src="https://assets.profchen.fr/img/empty_raids.png" />
             <h3>Aucun raid pour le moment...</h3>
         </div>
-        <button-actions></button-actions>
-        <gym-modal ref="gymModal" @refreshdata="test()"></gym-modal>
+        <button-actions @toto="test()"></button-actions>
+        <gym-modal ref="gymModal"></gym-modal>
     </div>
 </template>
 
@@ -57,7 +57,7 @@
         },
         mounted() {
             console.log('Component mounted.'),
-            this.$on('refreshdata', function() {
+            this.$on('toto', function() {
                 console.log('refresh-data')
             })
         },

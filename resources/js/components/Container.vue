@@ -50,6 +50,7 @@
                 currentCity: JSON.parse( localStorage.getItem('pokematos_currentCity')),
                 cities: JSON.parse(localStorage.getItem('pokematos_cities')),
                 user: JSON.parse(localStorage.getItem('pokematos_user')),
+                pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons')),
             }
         },
         mounted() {
@@ -70,6 +71,7 @@
                     localStorage.setItem('pokematos_cities', JSON.stringify(res.data));
                     this.setDefaultCity();
                     this.getRaids();
+                    this.getPokemons();
                     this.getUser();
                 }).catch(err => {
                     //No error
@@ -87,6 +89,14 @@
                     this.gyms = res.data
                     console.log(res.data)
                     localStorage.setItem('pokematos_gyms', JSON.stringify(res.data));
+                }).catch( err => {
+                    //No error
+                });
+            },
+            getPokemons() {
+                axios.get('/api/pokemons/raidbosses').then( res => {
+                    this.pokemons = res.data
+                    localStorage.setItem('pokematos_pokemons', JSON.stringify(res.data));
                 }).catch( err => {
                     //No error
                 });
