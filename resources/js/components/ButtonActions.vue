@@ -2,7 +2,7 @@
     <div ref="buttonactions" :class="'map__actions '+menuClass">
         <div class="map__overlay"></div>
         <div class="actions">
-            <button v-on:click="clickRefresh()" class="action" id="refresh">
+            <button v-on:click="refresh()" class="action" id="refresh">
                 <span>Actualiser</span>
                 <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
                 <i class="material-icons">refresh</i>
@@ -31,9 +31,9 @@ export default {
     created() {
     },
     methods: {
-        clickRefresh() {
+        refresh() {
             console.log('test');
-            this.$emit('refreshdata');
+            this.$emit('toto');
             this.toggleMenu();
         },
         toggleMenu() {

@@ -355,6 +355,36 @@ body.logged-out .branding a:before {
     background: #fff;
     border: 1px solid #eee;
 }
+.modal__screen [data-step-name="level"] .step__wrapper ul li button.active,
+.modal__screen [data-step-name="level"] .step__wrapper ul li button:hover{
+    background: #1c8796;
+    border: 1px solid #1c8796;
+    color: #fff;
+}
+
+.modal__screen [data-step-name="boss"] .step__wrapper ul {
+    padding-left: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.modal__screen [data-step-name="boss"] .step__wrapper ul li {
+    width: 33.33333%;
+    border-bottom: 1px solid #fafafa;
+}
+.modal__screen[data-screen="gym"] .gym__ex {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background: #5bb0c4;
+    padding: 0px 5px;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 9px;
+    text-transform: uppercase;
+    display:none;
+}
 .footer-action {
     position: fixed;
     bottom: 30px;

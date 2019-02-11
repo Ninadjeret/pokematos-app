@@ -2189,9 +2189,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {},
   methods: {
-    clickRefresh: function clickRefresh() {
+    refresh: function refresh() {
       console.log('test');
-      this.$emit('refreshdata');
+      this.$emit('toto');
       this.toggleMenu();
     },
     toggleMenu: function toggleMenu() {
@@ -2258,7 +2258,8 @@ __webpack_require__.r(__webpack_exports__);
       gyms: JSON.parse(localStorage.getItem('pokematos_gyms')),
       currentCity: JSON.parse(localStorage.getItem('pokematos_currentCity')),
       cities: JSON.parse(localStorage.getItem('pokematos_cities')),
-      user: JSON.parse(localStorage.getItem('pokematos_user'))
+      user: JSON.parse(localStorage.getItem('pokematos_user')),
+      pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons'))
     };
   },
   mounted: function mounted() {
@@ -2282,6 +2283,8 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.getRaids();
 
+        _this.getPokemons();
+
         _this.getUser();
       }).catch(function (err) {//No error
       });
@@ -2304,11 +2307,20 @@ __webpack_require__.r(__webpack_exports__);
       }).catch(function (err) {//No error
       });
     },
-    getUser: function getUser() {
+    getPokemons: function getPokemons() {
       var _this3 = this;
 
+      axios.get('/api/pokemons/raidbosses').then(function (res) {
+        _this3.pokemons = res.data;
+        localStorage.setItem('pokematos_pokemons', JSON.stringify(res.data));
+      }).catch(function (err) {//No error
+      });
+    },
+    getUser: function getUser() {
+      var _this4 = this;
+
       axios.get('/api/user').then(function (res) {
-        _this3.user = res.data;
+        _this4.user = res.data;
         localStorage.setItem('pokematos_user', JSON.stringify(res.data));
       }).catch(function (err) {//No error
       });
@@ -2451,10 +2463,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons')),
       modalScreen: 'default',
       gym: '',
       raidStatus: 'none',
@@ -2464,7 +2484,7 @@ __webpack_require__.r(__webpack_exports__);
       createRaidData: {
         delai: -60,
         startTime: false,
-        eggLevel: false,
+        eggLevel: 0,
         pokemon: false
       },
       createRaidDelai: '',
@@ -2496,6 +2516,10 @@ __webpack_require__.r(__webpack_exports__);
       this.createRaidData.delai += 1;
       this.updateTimeRange();
     },
+    substractToTimeRange: function substractToTimeRange() {
+      this.createRaidData.delai -= 1;
+      this.updateTimeRange();
+    },
     updateTimeRange: function updateTimeRange() {
       var raidStartTime = moment__WEBPACK_IMPORTED_MODULE_0___default()();
       var raidEndTime = moment__WEBPACK_IMPORTED_MODULE_0___default()();
@@ -2509,6 +2533,18 @@ __webpack_require__.r(__webpack_exports__);
         this.createRaidDelai = 'Le raid débute dans ' + timeLeft + ' min';
         this.createRaidHoraires = 'De ' + raidStartTime.format('HH[h]mm') + ' à ' + raidEndTime.format('HH[h]mm');
       }
+    },
+    updateRaidLevel: function updateRaidLevel(raidLevel) {
+      this.createRaidData.eggLevel = raidLevel;
+
+      if (this.createRaidData.delai < 0) {
+        confirm('Coucou');
+      }
+    },
+    updateRaidBoss: function updateRaidBoss(pokemon) {
+      this.createRaidData.pokemon = pokemon;
+      var result = confirm('Coucou');
+      console.log(result);
     },
     getRaidData: function getRaidData() {
       var now = moment__WEBPACK_IMPORTED_MODULE_0___default()();
@@ -2683,7 +2719,7 @@ __webpack_require__.r(__webpack_exports__);
     return {};
   },
   mounted: function mounted() {
-    console.log('Component mounted.'), this.$on('refreshdata', function () {
+    console.log('Component mounted.'), this.$on('toto', function () {
       console.log('refresh-data');
     });
   },
@@ -69952,7 +69988,7 @@ var render = function() {
             attrs: { id: "refresh" },
             on: {
               click: function($event) {
-                return _vm.clickRefresh()
+                return _vm.refresh()
               }
             }
           },
@@ -70271,7 +70307,7 @@ var render = function() {
                         attrs: { id: "range__minus" },
                         on: {
                           click: function($event) {
-                            _vm.createRaidData.delai - 1
+                            return _vm.substractToTimeRange()
                           }
                         }
                       },
@@ -70379,13 +70415,23 @@ var render = function() {
                       _c(
                         "ul",
                         _vm._l(_vm.raidLevels, function(raidLevel) {
-                          return _c("li", [
-                            _c(
-                              "button",
-                              { attrs: { "data-level": "raidLevel" } },
-                              [_vm._v(_vm._s(raidLevel) + "T")]
-                            )
-                          ])
+                          return _c(
+                            "li",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.updateRaidLevel(raidLevel)
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "button",
+                                { attrs: { "data-level": "raidLevel" } },
+                                [_vm._v(_vm._s(raidLevel) + "T")]
+                              )
+                            ]
+                          )
                         }),
                         0
                       )
@@ -70410,7 +70456,41 @@ var render = function() {
                           _vm._v("Quel est le Pokémon ?")
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "step__wrapper" })
+                        _c("div", { staticClass: "step__wrapper" }, [
+                          _vm.pokemons
+                            ? _c(
+                                "ul",
+                                _vm._l(_vm.pokemons, function(pokemon) {
+                                  return _vm.createRaidData.eggLevel === 0 ||
+                                    _vm.createRaidData.eggLevel ==
+                                      pokemon.boss_level
+                                    ? _c("li", { key: pokemon.id }, [
+                                        _c(
+                                          "a",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.updateRaidBoss(
+                                                  pokemon
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              attrs: {
+                                                src: pokemon.thumbnail_url
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      ])
+                                    : _vm._e()
+                                }),
+                                0
+                              )
+                            : _vm._e()
+                        ])
                       ]
                     )
                   : _vm._e(),
@@ -70737,16 +70817,15 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _c("button-actions"),
-      _vm._v(" "),
-      _c("gym-modal", {
-        ref: "gymModal",
+      _c("button-actions", {
         on: {
-          refreshdata: function($event) {
+          toto: function($event) {
             return _vm.test()
           }
         }
-      })
+      }),
+      _vm._v(" "),
+      _c("gym-modal", { ref: "gymModal" })
     ],
     1
   )
@@ -83815,8 +83894,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Floflo\Documents\Projets\pokematos\app\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Floflo\Documents\Projets\pokematos\app\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Florian\Documents\Projets\Pokematos\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Florian\Documents\Projets\Pokematos\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
