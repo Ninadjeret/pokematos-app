@@ -2538,13 +2538,20 @@ __webpack_require__.r(__webpack_exports__);
       this.createRaidData.eggLevel = raidLevel;
 
       if (this.createRaidData.delai < 0) {
-        confirm('Coucou');
+        var result = confirm('Confirmer un raid ' + this.createRaidData.eggLevel + 'T à l\'arène ' + this.gym.name);
+
+        if (result) {
+          this.postNewRaid();
+        }
       }
     },
     updateRaidBoss: function updateRaidBoss(pokemon) {
       this.createRaidData.pokemon = pokemon;
-      var result = confirm('Coucou');
-      console.log(result);
+      var result = confirm('Confirmer un raid ' + this.createRaidData.pokemon.name_fr + ' à l\'arène ' + this.gym.name);
+
+      if (result) {
+        this.postNewRaid();
+      }
     },
     getRaidData: function getRaidData() {
       var now = moment__WEBPACK_IMPORTED_MODULE_0___default()();
@@ -2580,6 +2587,21 @@ __webpack_require__.r(__webpack_exports__);
         this.raidAnnonce = 'Un raid ' + this.gym.raid.pokemon.niantic_id + ' têtes est en cours...';
         this.raidUrl = this.gym.raid.pokemon.thumbnail_url;
       }
+    },
+    postNewRaid: function postNewRaid() {
+      this.hideModal();
+      axios.post('/api/user/cities/1/raids', {
+        params: {
+          gym_id: this.gym.id,
+          pokemon_id: this.createRaidData.pokemon.id,
+          egg_level: this.createRaidData.eggLevel,
+          start_time: this.createRaidData.startTime
+        }
+      }).then(function (res) {
+        console.log(res.data);
+      }).catch(function (err) {
+        console.log(err);
+      });
     }
   }
 });
@@ -83894,8 +83916,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Florian\Documents\Projets\Pokematos\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Florian\Documents\Projets\Pokematos\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Floflo\Documents\Projets\pokematos\app\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Floflo\Documents\Projets\pokematos\app\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

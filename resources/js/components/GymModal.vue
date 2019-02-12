@@ -151,13 +151,18 @@ export default {
         updateRaidLevel( raidLevel ) {
             this.createRaidData.eggLevel = raidLevel;
             if( this.createRaidData.delai < 0 ) {
-                confirm('Coucou');
+                var result = confirm('Confirmer un raid '+this.createRaidData.eggLevel+'T à l\'arène '+this.gym.name);
+                if( result ) {
+                    this.postNewRaid();
+                }
             }
         },
         updateRaidBoss( pokemon ) {
             this.createRaidData.pokemon = pokemon;
-            var result = confirm('Coucou');
-            console.log(result);
+            var result = confirm('Confirmer un raid '+this.createRaidData.pokemon.name_fr+' à l\'arène '+this.gym.name);
+            if( result ) {
+                this.postNewRaid();
+            }
         },
         getRaidData() {
             var now = moment();
@@ -193,6 +198,21 @@ export default {
                 this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.niantic_id+' têtes est en cours...';
                 this.raidUrl =  this.gym.raid.pokemon.thumbnail_url;
             }
+        },
+        postNewRaid() {
+            this.hideModal();
+            axios.post('/api/user/cities/1/raids', {
+                 params: {
+                     gym_id: this.gym.id,
+                     pokemon_id: this.createRaidData.pokemon.id,
+                     egg_level: this.createRaidData.eggLevel,
+                     start_time: this.createRaidData.startTime
+                 },
+            }).then(res => {
+                console.log(res.data)
+            }).catch(err => {
+                console.log(err)
+            });
         }
     }
 }

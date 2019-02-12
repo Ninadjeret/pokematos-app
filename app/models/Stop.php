@@ -32,10 +32,37 @@ class Stop extends Model {
     }
 
     public function getRaidAttribute() {
+        if( $this->getActiveRaid() ) {
+            return $this->getActiveRaid();
+        } elseif( $this->getFutureRaid() ) {
+            return $this->getFutureRaid();
+        } else {
+            return false;
+        }
+    }
+
+    public function getFutureRaid() {
+        $begin = new \DateTime();
+        $end = new \DateTime();
+        $end->modify('+ 60 minutes');
         $raid = Raid::where('gym_id', $this->id)
-            ->where('start_time', '>', date('Y-m-d H:i:s') )
+            ->where('start_time', '>', $begin->format('Y-m-d H:i:s') )
+            ->where('start_time', '<', $end->format('Y-m-d H:i:s') )
             ->first();
         if( empty($raid) ) return false;
         return $raid;
     }
+
+    public function getActiveRaid() {
+        $begin = new \DateTime();
+        $begin->modify('- 45 minutes');
+        $end = new \DateTime();
+        $raid = Raid::where('gym_id', $this->id)
+            ->where('start_time', '>', $begin->format('Y-m-d H:i:s') )
+            ->where('start_time', '<', $end->format('Y-m-d H:i:s') )
+            ->first();
+        if( empty($raid) ) return false;
+        return $raid;
+    }
+
 }
