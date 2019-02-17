@@ -86,24 +86,26 @@ class PokemonsTableSeeder extends Seeder {
             ]);
         } // end check if table users is empty
 
+        $arenes = file_get_contents('https://www.profchen.fr/api/v1/gyms?token=AsdxZRqPkrst67utwHVM2w4rt4HjxGNcX8XVJDryMtffBFZk3VGM47HkvnF9');
+        $arenes = json_decode($arenes);
         if(DB::table('stops')->get()->count() == 0){
-            DB::table('stops')->insert([
-                [
-                    'niantic_name' => 'Vern sur Seiche - Église',
-                    'name'  => 'Église',
-                    'gym'  => true,
-                    'city_id'  => 1,
-                    'zone_id'  => 1,
-                ],
-                [
-                    'niantic_name' => 'Le Clos D\'orriere',
-                    'name'  => 'Clos d\'Orrière',
-                    'gym'  => true,
-                    'city_id'  => 1,
-                    'zone_id'  => 1,
-                ],
-            ]);
+            foreach( $arenes as $arene ) {
+                error_log('Import de '.$arene->nameFr);
+                DB::table('stops')->insert([
+                    [
+                        'niantic_name'  => $arene->nianticId,
+                        'name' => $arene->nameFr,
+                        'lat' => $arene->GPSCoordinates->lat,
+                        'lng' => $arene->GPSCoordinates->lng,
+                        'ex' => $arene->raidEx,
+                        'gym' => 1,
+                        'city_id' => 1,
+                        'zone_id' => 1,
+                    ],
+                ]);
+            }
         } // end check if table users is empty
+
 
         $game_master = file_get_contents('https://raw.githubusercontent.com/pokemongo-dev-contrib/pokemongo-game-master/master/versions/latest/GAME_MASTER.json');
         $game_master = json_decode($game_master);

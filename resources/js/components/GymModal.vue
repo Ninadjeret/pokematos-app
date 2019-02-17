@@ -24,6 +24,7 @@
                 <div class="dialog__content">
                     <ul>
                         <li v-if="gym.google_maps_url"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
+                        <li v-if="raidStatus == 'active' && gym.raid.pokemon == false"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
                         <li v-if="raidStatus == 'none'"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
                     </ul>
                 </div>
@@ -32,6 +33,24 @@
                 </div>
             </div>
 
+
+            <div v-if="modalScreen == 'updateRaid'" class="modal__screen update-raid">
+                <h3 class="">Préciser le Pokémon</h3>
+                <hr>
+                <div class="update-raid__wrapper">
+                    <ul v-if="pokemons">
+                        <li v-for="pokemon in pokemons" :key="pokemon.id" v-if="gym.raid.egg_level == pokemon.boss_level">
+                            <a v-on:click="updateRaidBoss(pokemon)">
+                                <img :src="pokemon.thumbnail_url">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <hr>
+                <div class="footer-action">
+                    <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
+                </div>
+            </div>
 
 
             <div v-if="modalScreen == 'createRaid'" class="modal__screen create-raid">
@@ -138,8 +157,13 @@ export default {
             var raidStartTime = moment();
             var raidEndTime = moment();
             if( this.createRaidData.delai >= 0 ) {
+                var timeLeft = 45 - this.createRaidData.delai;
+                raidStartTime.subtract(this.createRaidData.delai, 'minutes').minutes();
+                raidEndTime.add( parseInt(timeLeft), 'minutes').minutes();
+                this.createRaidData.startTime = raidStartTime.format('YYYY-MM-DD HH:mm:ss');
+                this.createRaidDelai = 'Raid en cours. Reste ' + timeLeft + ' min';
+                this.createRaidHoraires = 'De ' + raidStartTime.format('HH[h]mm') + ' à ' + raidEndTime.format('HH[h]mm');
             } else {
-                console.log(this.createRaidData.delai);
                 var timeLeft = Math.abs(this.createRaidData.delai);
                 raidStartTime.add(timeLeft, 'minutes').minutes();
                 raidEndTime.add( parseInt(timeLeft) + parseInt(45), 'minutes').minutes();
@@ -159,9 +183,16 @@ export default {
         },
         updateRaidBoss( pokemon ) {
             this.createRaidData.pokemon = pokemon;
-            var result = confirm('Confirmer un raid '+this.createRaidData.pokemon.name_fr+' à l\'arène '+this.gym.name);
-            if( result ) {
-                this.postNewRaid();
+            if( this.gym.raid ) {
+                var result = confirm('Annoncer '+this.createRaidData.pokemon.name_fr+' comme Boss pour le raid à l\'arène '+this.gym.name);
+                if( result ) {
+                    this.postUpdateRaid();
+                }
+            } else {
+                var result = confirm('Confirmer un raid '+this.createRaidData.pokemon.name_fr+' à l\'arène '+this.gym.name);
+                if( result ) {
+                    this.postNewRaid();
+                }
             }
         },
         getRaidData() {
@@ -207,6 +238,18 @@ export default {
                      pokemon_id: this.createRaidData.pokemon.id,
                      egg_level: this.createRaidData.eggLevel,
                      start_time: this.createRaidData.startTime
+                 },
+            }).then(res => {
+                console.log(res.data)
+            }).catch(err => {
+                console.log(err)
+            });
+        },
+        postUpdateRaid() {
+            this.hideModal();
+            axios.put('/api/user/cities/1/raids/'+this.gym.raid.id, {
+                 params: {
+                     pokemon_id: this.createRaidData.pokemon.id,
                  },
             }).then(res => {
                 console.log(res.data)
