@@ -2177,6 +2177,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2191,8 +2194,15 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     refresh: function refresh() {
       console.log('test');
-      this.$emit('toto');
+      this.$emit('refresh-data');
       this.toggleMenu();
+    },
+    localise: function localise() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          this.$refs.map.mapObject.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
+        });
+      }
     },
     toggleMenu: function toggleMenu() {
       this.menuClass = this.menuClass == 'open' ? '' : 'open';
@@ -2211,6 +2221,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -2263,17 +2275,20 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    console.log(this.pageTitle), this.loadData(), this.$on('refreshdata', function () {
-      console.log('refresh-data');
-    });
+    console.log(this.pageTitle), this.syncData();
   },
   methods: {
     test: function test() {
       console.log('refresh-data');
     },
+    syncData: function syncData() {
+      this.loadData();
+      setInterval(this.loadData, 60000, 'auto');
+    },
     loadData: function loadData() {
       var _this = this;
 
+      console.log('testttt');
       axios.get('/api/user/cities').then(function (res) {
         _this.cities = res.data; //console.log(res.data)
 
@@ -2521,8 +2536,8 @@ __webpack_require__.r(__webpack_exports__);
     showModal: function showModal(gym) {
       console.log('show');
       this.gym = gym;
-      this.getRaidData();
       this.$modal.show('GymModal');
+      this.getRaidData();
     },
     hideModal: function hideModal() {
       this.$modal.hide('GymModal');
@@ -2623,6 +2638,9 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     postNewRaid: function postNewRaid() {
+      var _this = this;
+
+      this.setScreenTo('default');
       this.hideModal();
       axios.post('/api/user/cities/1/raids', {
         params: {
@@ -2632,19 +2650,22 @@ __webpack_require__.r(__webpack_exports__);
           start_time: this.createRaidData.startTime
         }
       }).then(function (res) {
-        console.log(res.data);
+        _this.$emit('refresh-data');
       }).catch(function (err) {
         console.log(err);
       });
     },
     postUpdateRaid: function postUpdateRaid() {
+      var _this2 = this;
+
+      this.setScreenTo('default');
       this.hideModal();
       axios.put('/api/user/cities/1/raids/' + this.gym.raid.id, {
         params: {
           pokemon_id: this.createRaidData.pokemon.id
         }
       }).then(function (res) {
-        console.log(res.data);
+        _this2.$emit('refresh-data');
       }).catch(function (err) {
         console.log(err);
       });
@@ -2793,13 +2814,11 @@ __webpack_require__.r(__webpack_exports__);
     return {};
   },
   mounted: function mounted() {
-    console.log('Component mounted.'), this.$on('toto', function () {
-      console.log('refresh-data');
-    });
+    console.log('Component mounted.');
   },
   methods: {
-    test: function test() {
-      console.log('trtete');
+    refreshData: function refreshData() {
+      this.$emit('refresh-data');
     },
     showModal: function showModal(gym) {
       this.$refs.gymModal.showModal(gym);
@@ -2902,6 +2921,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['gyms'],
   data: function data() {
@@ -2921,6 +2941,9 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    refreshData: function refreshData() {
+      this.$emit('refresh-data');
+    },
     showModal: function showModal(gym) {
       this.$refs.gymModal.showModal(gym);
     },
@@ -70055,6 +70078,23 @@ var render = function() {
           "button",
           {
             staticClass: "action",
+            attrs: { id: "findme" },
+            on: {
+              click: function($event) {
+                return _vm.localise()
+              }
+            }
+          },
+          [
+            _c("span", [_vm._v("Localiser")]),
+            _c("i", { staticClass: "material-icons" }, [_vm._v("gps_fixed")])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "action",
             attrs: { id: "refresh" },
             on: {
               click: function($event) {
@@ -70138,11 +70178,25 @@ var render = function() {
       _c("app-nav"),
       _vm._v(" "),
       _vm.getCurrentLink().id == "map"
-        ? _c("raidsmap", { attrs: { gyms: _vm.gyms } })
+        ? _c("raidsmap", {
+            attrs: { gyms: _vm.gyms },
+            on: {
+              "refresh-data": function($event) {
+                return _vm.loadData()
+              }
+            }
+          })
         : _vm._e(),
       _vm._v(" "),
       _vm.getCurrentLink().id == "list"
-        ? _c("raidslist", { attrs: { gyms: _vm.gyms } })
+        ? _c("raidslist", {
+            attrs: { gyms: _vm.gyms },
+            on: {
+              "refresh-data": function($event) {
+                return _vm.loadData()
+              }
+            }
+          })
         : _vm._e(),
       _vm._v(" "),
       _vm.getCurrentLink().id == "settings"
@@ -70980,13 +71034,20 @@ var render = function() {
       _vm._v(" "),
       _c("button-actions", {
         on: {
-          toto: function($event) {
-            return _vm.test()
+          "refresh-data": function($event) {
+            return _vm.refreshData()
           }
         }
       }),
       _vm._v(" "),
-      _c("gym-modal", { ref: "gymModal" })
+      _c("gym-modal", {
+        ref: "gymModal",
+        on: {
+          "refresh-data": function($event) {
+            return _vm.refreshData()
+          }
+        }
+      })
     ],
     1
   )
@@ -71042,7 +71103,22 @@ var render = function() {
         2
       ),
       _vm._v(" "),
-      _c("gym-modal", { ref: "gymModal" })
+      _c("button-actions", {
+        on: {
+          "refresh-data": function($event) {
+            return _vm.refreshData()
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("gym-modal", {
+        ref: "gymModal",
+        on: {
+          "refresh-data": function($event) {
+            return _vm.refreshData()
+          }
+        }
+      })
     ],
     1
   )
@@ -83471,14 +83547,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************!*\
   !*** ./resources/js/components/Container.vue ***!
   \***********************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Container_vue_vue_type_template_id_ba1063b4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Container.vue?vue&type=template&id=ba1063b4& */ "./resources/js/components/Container.vue?vue&type=template&id=ba1063b4&");
 /* harmony import */ var _Container_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Container.vue?vue&type=script&lang=js& */ "./resources/js/components/Container.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Container_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Container_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -83508,7 +83585,7 @@ component.options.__file = "resources/js/components/Container.vue"
 /*!************************************************************************!*\
   !*** ./resources/js/components/Container.vue?vue&type=script&lang=js& ***!
   \************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83747,14 +83824,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************!*\
   !*** ./resources/js/components/List.vue ***!
   \******************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _List_vue_vue_type_template_id_1856aeee___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./List.vue?vue&type=template&id=1856aeee& */ "./resources/js/components/List.vue?vue&type=template&id=1856aeee&");
 /* harmony import */ var _List_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./List.vue?vue&type=script&lang=js& */ "./resources/js/components/List.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _List_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _List_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -83784,7 +83862,7 @@ component.options.__file = "resources/js/components/List.vue"
 /*!*******************************************************************!*\
   !*** ./resources/js/components/List.vue?vue&type=script&lang=js& ***!
   \*******************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -84037,8 +84115,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Florian\Documents\Projets\Pokematos\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Florian\Documents\Projets\Pokematos\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Floflo\Documents\Projets\pokematos\app\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Floflo\Documents\Projets\pokematos\app\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

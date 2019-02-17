@@ -135,8 +135,8 @@ export default {
         showModal( gym ) {
             console.log('show');
             this.gym = gym;
-            this.getRaidData();
             this.$modal.show('GymModal');
+            this.getRaidData();
         },
         hideModal() {
             this.$modal.hide('GymModal');
@@ -231,6 +231,7 @@ export default {
             }
         },
         postNewRaid() {
+            this.setScreenTo('default');
             this.hideModal();
             axios.post('/api/user/cities/1/raids', {
                  params: {
@@ -240,19 +241,20 @@ export default {
                      start_time: this.createRaidData.startTime
                  },
             }).then(res => {
-                console.log(res.data)
+                this.$emit('refresh-data')
             }).catch(err => {
                 console.log(err)
             });
         },
         postUpdateRaid() {
+            this.setScreenTo('default');
             this.hideModal();
             axios.put('/api/user/cities/1/raids/'+this.gym.raid.id, {
                  params: {
                      pokemon_id: this.createRaidData.pokemon.id,
                  },
             }).then(res => {
-                console.log(res.data)
+                this.$emit('refresh-data')
             }).catch(err => {
                 console.log(err)
             });
