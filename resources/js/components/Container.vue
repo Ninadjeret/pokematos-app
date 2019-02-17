@@ -8,10 +8,12 @@
     </app-header>
     <app-nav></app-nav>
     <raidsmap
+        @refresh-data="loadData()"
         v-if="getCurrentLink().id == 'map'"
         v-bind:gyms="gyms">
     </raidsmap>
     <raidslist
+        @refresh-data="loadData()"
         v-if="getCurrentLink().id == 'list'"
         v-bind:gyms="gyms">
     </raidslist>
@@ -55,16 +57,18 @@
         },
         mounted() {
             console.log(this.pageTitle),
-            this.loadData(),
-            this.$on('refreshdata', function() {
-                console.log('refresh-data')
-            })
+            this.syncData()
         },
         methods: {
             test() {
                 console.log('refresh-data')
             },
+            syncData() {
+                this.loadData();
+                setInterval( this.loadData, 60000, 'auto' );
+            },
             loadData() {
+                console.log('testttt');
                 axios.get('/api/user/cities').then(res => {
                     this.cities = res.data
                     //console.log(res.data)

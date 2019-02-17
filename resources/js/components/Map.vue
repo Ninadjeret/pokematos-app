@@ -8,7 +8,8 @@
                 v-on:click="showModal(gym)">
             </l-marker>
         </l-map>
-        <gym-modal ref="gymModal"></gym-modal>
+        <button-actions @refresh-data="refreshData()"></button-actions>
+        <gym-modal ref="gymModal" @refresh-data="refreshData()"></gym-modal>
     </div>
 </template>
 
@@ -31,6 +32,9 @@
             })
         },
         methods: {
+            refreshData() {
+                this.$emit('refresh-data')
+            },
             showModal( gym ) {
                 this.$refs.gymModal.showModal( gym );
             },
