@@ -8,7 +8,13 @@
                         <img :src="getRaidImgUrl(gym.raid)">
                     </div>
                     <div class="raid__content">
-                        <h3>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}<span class="raid__timer active" data-start="2019-02-03 17:03:14" data-end="2019-02-03 17:48:14">Reste 21 min</span></h3>
+                        <h3>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
+                            <span class="raid__timer active">
+                                <countdown :time="getRaidTimeLeft(gym.raid)">
+                                    <template slot-scope="props">Reste {{ props.totalMinutes }} min</template>
+                                </countdown>
+                            </span>
+                        </h3>
                         <div class="raid__gym">
                             <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
                         </div>

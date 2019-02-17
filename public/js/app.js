@@ -2470,6 +2470,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2524,8 +2543,14 @@ __webpack_require__.r(__webpack_exports__);
       var raidStartTime = moment__WEBPACK_IMPORTED_MODULE_0___default()();
       var raidEndTime = moment__WEBPACK_IMPORTED_MODULE_0___default()();
 
-      if (this.createRaidData.delai >= 0) {} else {
-        console.log(this.createRaidData.delai);
+      if (this.createRaidData.delai >= 0) {
+        var timeLeft = 45 - this.createRaidData.delai;
+        raidStartTime.subtract(this.createRaidData.delai, 'minutes').minutes();
+        raidEndTime.add(parseInt(timeLeft), 'minutes').minutes();
+        this.createRaidData.startTime = raidStartTime.format('YYYY-MM-DD HH:mm:ss');
+        this.createRaidDelai = 'Raid en cours. Reste ' + timeLeft + ' min';
+        this.createRaidHoraires = 'De ' + raidStartTime.format('HH[h]mm') + ' à ' + raidEndTime.format('HH[h]mm');
+      } else {
         var timeLeft = Math.abs(this.createRaidData.delai);
         raidStartTime.add(timeLeft, 'minutes').minutes();
         raidEndTime.add(parseInt(timeLeft) + parseInt(45), 'minutes').minutes();
@@ -2547,10 +2572,19 @@ __webpack_require__.r(__webpack_exports__);
     },
     updateRaidBoss: function updateRaidBoss(pokemon) {
       this.createRaidData.pokemon = pokemon;
-      var result = confirm('Confirmer un raid ' + this.createRaidData.pokemon.name_fr + ' à l\'arène ' + this.gym.name);
 
-      if (result) {
-        this.postNewRaid();
+      if (this.gym.raid) {
+        var result = confirm('Annoncer ' + this.createRaidData.pokemon.name_fr + ' comme Boss pour le raid à l\'arène ' + this.gym.name);
+
+        if (result) {
+          this.postUpdateRaid();
+        }
+      } else {
+        var result = confirm('Confirmer un raid ' + this.createRaidData.pokemon.name_fr + ' à l\'arène ' + this.gym.name);
+
+        if (result) {
+          this.postNewRaid();
+        }
       }
     },
     getRaidData: function getRaidData() {
@@ -2596,6 +2630,18 @@ __webpack_require__.r(__webpack_exports__);
           pokemon_id: this.createRaidData.pokemon.id,
           egg_level: this.createRaidData.eggLevel,
           start_time: this.createRaidData.startTime
+        }
+      }).then(function (res) {
+        console.log(res.data);
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    postUpdateRaid: function postUpdateRaid() {
+      this.hideModal();
+      axios.put('/api/user/cities/1/raids/' + this.gym.raid.id, {
+        params: {
+          pokemon_id: this.createRaidData.pokemon.id
         }
       }).then(function (res) {
         console.log(res.data);
@@ -2685,6 +2731,12 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2836,10 +2888,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
 //
 //
 //
@@ -70260,6 +70308,28 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
+                    _vm.raidStatus == "active" && _vm.gym.raid.pokemon == false
+                      ? _c("li", [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "modal__action create-raid",
+                              on: {
+                                click: function($event) {
+                                  return _vm.setScreenTo("updateRaid")
+                                }
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "material-icons" }, [
+                                _vm._v("fingerprint")
+                              ]),
+                              _c("span", [_vm._v("Préciser le Pokémon")])
+                            ]
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
                     _vm.raidStatus == "none"
                       ? _c("li", [
                           _c(
@@ -70300,6 +70370,61 @@ var render = function() {
                         _vm._v("close")
                       ])
                     ]
+                  )
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.modalScreen == "updateRaid"
+            ? _c("div", { staticClass: "modal__screen update-raid" }, [
+                _c("h3", {}, [_vm._v("Préciser le Pokémon")]),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _c("div", { staticClass: "update-raid__wrapper" }, [
+                  _vm.pokemons
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.pokemons, function(pokemon) {
+                          return _vm.gym.raid.egg_level == pokemon.boss_level
+                            ? _c("li", { key: pokemon.id }, [
+                                _c(
+                                  "a",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.updateRaidBoss(pokemon)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("img", {
+                                      attrs: { src: pokemon.thumbnail_url }
+                                    })
+                                  ]
+                                )
+                              ])
+                            : _vm._e()
+                        }),
+                        0
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _c("div", { staticClass: "footer-action" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "bt modal__action cancel",
+                      on: {
+                        click: function($event) {
+                          return _vm.setScreenTo("default")
+                        }
+                      }
+                    },
+                    [_vm._v("Annuler")]
                   )
                 ])
               ])
@@ -70707,18 +70832,32 @@ var render = function() {
                             "T de " +
                             _vm._s(_vm.getRaidStartTime(gym.raid)) +
                             " à " +
-                            _vm._s(_vm.getRaidEndTime(gym.raid))
+                            _vm._s(_vm.getRaidEndTime(gym.raid)) +
+                            "\n                        "
                         ),
                         _c(
                           "span",
-                          {
-                            staticClass: "raid__timer active",
-                            attrs: {
-                              "data-start": "2019-02-03 17:03:14",
-                              "data-end": "2019-02-03 17:48:14"
-                            }
-                          },
-                          [_vm._v("Reste 21 min")]
+                          { staticClass: "raid__timer active" },
+                          [
+                            _c("countdown", {
+                              attrs: { time: _vm.getRaidTimeLeft(gym.raid) },
+                              scopedSlots: _vm._u([
+                                {
+                                  key: "default",
+                                  fn: function(props) {
+                                    return [
+                                      _vm._v(
+                                        "Reste " +
+                                          _vm._s(props.totalMinutes) +
+                                          " min"
+                                      )
+                                    ]
+                                  }
+                                }
+                              ])
+                            })
+                          ],
+                          1
                         )
                       ]),
                       _vm._v(" "),
@@ -70889,33 +71028,15 @@ var render = function() {
           _c("l-tile-layer", { attrs: { url: _vm.url } }),
           _vm._v(" "),
           _vm._l(_vm.gyms, function(gym) {
-            return _c(
-              "l-marker",
-              {
-                key: gym.name,
-                attrs: { "lat-lng": [47.41322, -1.219482] },
-                on: {
-                  click: function($event) {
-                    return _vm.showModal(gym)
-                  }
+            return _c("l-marker", {
+              key: gym.id,
+              attrs: { "lat-lng": [gym.lat, gym.lng] },
+              on: {
+                click: function($event) {
+                  return _vm.showModal(gym)
                 }
-              },
-              [
-                _c(
-                  "l-icon",
-                  {
-                    staticClass: "someCustomClasses",
-                    attrs: { "icon-anchor": [0, 134] }
-                  },
-                  [
-                    _c("h1", [_vm._v("Headline")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("And this is some text")])
-                  ]
-                )
-              ],
-              1
-            )
+              }
+            })
           })
         ],
         2
@@ -83916,8 +84037,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Floflo\Documents\Projets\pokematos\app\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Floflo\Documents\Projets\pokematos\app\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Florian\Documents\Projets\Pokematos\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Florian\Documents\Projets\Pokematos\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

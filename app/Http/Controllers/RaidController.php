@@ -19,12 +19,13 @@ class RaidController extends Controller {
     public function create( City $city, Request $request ) {
         $gym = Stop::find($request->params['gym_id']);
 
-        if( $gym->getActiveRaid() ) {
-
-        }
-
-        elseif( $gym->getFutureRaid() ) {
-
+        if( $gym->getActiveRaid() || $gym->getFutureRaid() ) {
+            $raid = $gym->raid;
+            if( !$raid->pokemon_id && $request->params['pokemon_id'] ) {
+                $raid->pokemon_id = $request->params['pokemon_id'];
+                $raid->save();
+            }
+            return response()->json($raid, 200);
         }
 
         else {
@@ -32,13 +33,19 @@ class RaidController extends Controller {
             $raid->city_id = $city->id;
             $raid->gym_id = $request->params['gym_id'];
             $raid->egg_level = $request->params['egg_level'];
-            $raid->pokemon_id = $request->params['pokemon_id'];
+            $raid->pokemon_id = isset( $request->params['pokemon_id'] ) ? $request->params['pokemon_id'] : null ;
             $raid->start_time = $request->params['start_time'];
             $raid->save();
             return response()->json($raid, 200);
         }
 
         return response()->json($gym->getFutureRaid(), 200);
+    }
+
+    public function update(City $city, Raid $raid, Request $request) {
+        $raid->pokemon_id = $request->params['pokemon_id'];
+        $raid->save();
+        return response()->json($raid, 200);
     }
 
 }

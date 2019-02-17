@@ -3,13 +3,9 @@
         <l-map style="height: 100%; width: 100%" ref="map" :zoom=13 :center="[47.413220, -1.219482]">
             <l-tile-layer :url="url"></l-tile-layer>
             <l-marker v-for="gym in gyms"
-                :lat-lng="[47.413220, -1.219482]"
-                :key="gym.name"
+                :lat-lng="[gym.lat, gym.lng]"
+                :key="gym.id"
                 v-on:click="showModal(gym)">
-                <l-icon class="someCustomClasses" :icon-anchor="[0, 134]">
-                    <h1>Headline</h1>
-                    <p>And this is some text</p>
-                </l-icon>
             </l-marker>
         </l-map>
         <gym-modal ref="gymModal"></gym-modal>
