@@ -17,7 +17,7 @@ const store = new Vuex.Store({
     },
     mutations: {
         fetchGyms( state ) {
-            console.log('coucou');
+            console.log('/api/user/cities/'+state.currentCity.id+'/gyms');
             axios.get('/api/user/cities/'+state.currentCity.id+'/gyms').then( res => {
                 state.gyms = res.data;
                 localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
@@ -55,6 +55,7 @@ const store = new Vuex.Store({
         },
         setCity( state, payload ) {
             state.currentCity = payload.city;
+            localStorage.setItem('pokematos_currentCity', JSON.stringify(payload.city));
         },
         setSetting( state, payload ) {
             if( state.settings === undefined || !state.settings || state.settings === null ) state.settings = {};
@@ -92,7 +93,6 @@ const store = new Vuex.Store({
         fetchData ({ commit }) {
             commit('fetchGyms')
             commit('fetchPokemon')
-            commit('fetchUser')
         },
         changeCity ({ dispatch, commit }, payload) {
             console.log(payload);

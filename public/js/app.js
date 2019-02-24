@@ -2279,7 +2279,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    this.$store.commit('fetchCities'); //this.$store.dispatch('fetchData');
+    this.$store.commit('fetchCities');
+    this.$store.commit('fetchUser'); //this.$store.dispatch('fetchData');
 
     if (this.currentCity && this.currentCity !== undefined) this.fetch();
     setInterval(this.fetch, 60000, 'auto');
@@ -2588,6 +2589,8 @@ __webpack_require__.r(__webpack_exports__);
           start_time: this.createRaidData.startTime
         }
       }).then(function (res) {
+        console.log(res.data);
+
         _this.$store.dispatch('fetchData');
       }).catch(function (err) {
         console.log(err);
@@ -74376,7 +74379,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticStyle: { height: "100%" } },
+    { staticStyle: { height: "calc(100% - 112px)" } },
     [
       _c(
         "l-map",
@@ -116531,8 +116534,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 var token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
+  console.log(token.content);
   window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-  console.log(window.axios.defaults.headers.common['X-CSRF-TOKEN']);
 } else {
   console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
@@ -117041,7 +117044,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   },
   mutations: {
     fetchGyms: function fetchGyms(state) {
-      console.log('coucou');
+      console.log('/api/user/cities/' + state.currentCity.id + '/gyms');
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/api/user/cities/' + state.currentCity.id + '/gyms').then(function (res) {
         state.gyms = res.data;
         localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
@@ -117076,6 +117079,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     setCity: function setCity(state, payload) {
       state.currentCity = payload.city;
+      localStorage.setItem('pokematos_currentCity', JSON.stringify(payload.city));
     },
     setSetting: function setSetting(state, payload) {
       if (state.settings === undefined || !state.settings || state.settings === null) state.settings = {};
@@ -117118,7 +117122,6 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       var commit = _ref.commit;
       commit('fetchGyms');
       commit('fetchPokemon');
-      commit('fetchUser');
     },
     changeCity: function changeCity(_ref2, payload) {
       var dispatch = _ref2.dispatch,
