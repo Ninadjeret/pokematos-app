@@ -2958,11 +2958,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Settings',
-  props: ['user'],
   data: function data() {
     return {};
   },
   computed: {
+    user: function user() {
+      return this.$store.state.user;
+    },
     settingsHideGyms: {
       get: function get() {
         return this.$store.getters.getSetting('hideGyms');
@@ -117034,7 +117036,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     cities: JSON.parse(localStorage.getItem('pokematos_cities')),
     gyms: JSON.parse(localStorage.getItem('pokematos_gyms')),
     pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons')),
-    settings: JSON.parse(localStorage.getItem('pokematos_settings'))
+    settings: JSON.parse(localStorage.getItem('pokematos_settings')),
+    user: JSON.parse(localStorage.getItem('pokematos_user'))
   },
   mutations: {
     fetchGyms: function fetchGyms(state) {
@@ -117061,6 +117064,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
           state.currentCity = state.cities[0];
           localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
         }
+      }).catch(function (err) {//No error
+      });
+    },
+    fetchUser: function fetchUser(state) {
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/api/user').then(function (res) {
+        state.user = res.data;
+        localStorage.setItem('pokematos_user', JSON.stringify(res.data));
       }).catch(function (err) {//No error
       });
     },
@@ -117108,6 +117118,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       var commit = _ref.commit;
       commit('fetchGyms');
       commit('fetchPokemon');
+      commit('fetchUser');
     },
     changeCity: function changeCity(_ref2, payload) {
       var dispatch = _ref2.dispatch,

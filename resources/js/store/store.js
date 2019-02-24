@@ -13,6 +13,7 @@ const store = new Vuex.Store({
         gyms: JSON.parse(localStorage.getItem('pokematos_gyms') ),
         pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons') ),
         settings: JSON.parse(localStorage.getItem('pokematos_settings') ),
+        user: JSON.parse(localStorage.getItem('pokematos_user') ),
     },
     mutations: {
         fetchGyms( state ) {
@@ -40,6 +41,14 @@ const store = new Vuex.Store({
                     state.currentCity = state.cities[0];
                     localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
                 }
+            }).catch( err => {
+                //No error
+            });
+        },
+        fetchUser( state ) {
+            axios.get('/api/user').then( res => {
+                state.user = res.data
+                localStorage.setItem('pokematos_user', JSON.stringify(res.data));
             }).catch( err => {
                 //No error
             });
@@ -83,6 +92,7 @@ const store = new Vuex.Store({
         fetchData ({ commit }) {
             commit('fetchGyms')
             commit('fetchPokemon')
+            commit('fetchUser')
         },
         changeCity ({ dispatch, commit }, payload) {
             console.log(payload);

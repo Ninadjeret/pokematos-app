@@ -51,12 +51,14 @@
 <script>
     export default {
         name: 'Settings',
-        props: ['user'],
         data() {
             return {
             }
         },
         computed: {
+            user() {
+                return this.$store.state.user;
+            },
             settingsHideGyms: {
                 get: function () {
                     return this.$store.getters.getSetting('hideGyms')
