@@ -17,8 +17,8 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('slug');
-            $table->float('lat', 10, 5)->nullable();
-            $table->float('lng', 10, 5)->nullable();
+            $table->float('lat', 10, 6)->nullable();
+            $table->float('lng', 10, 6)->nullable();
             $table->timestamps();
         });
 
@@ -80,15 +80,18 @@ class CreateCitiesTable extends Migration
 
         Schema::create('announces', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('raid_id');
             $table->string('type');
+            $table->string('source');
+            $table->dateTime('date');
+            $table->integer('user_id');
             $table->string('url')->nullable();
             $table->text('content')->nullable();
-            $table->dateTime('date');
-            $table->integer('message_id');
-            $table->integer('user_id');
-            $table->integer('guild_id');
+            $table->integer('message_id')->nullable();
+            $table->integer('guild_id')->nullable();
             $table->timestamps();
 
+            $table->foreign('raid_id')->references('id')->on('raids');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('guild_id')->references('id')->on('guilds');
         });

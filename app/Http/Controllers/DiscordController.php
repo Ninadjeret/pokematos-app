@@ -95,7 +95,7 @@ class DiscordController extends Controller {
 
         //Login
         if( $auth ) {
-            Auth::loginUsingId($user->id);
+            Auth::loginUsingId($user->id, true);
             return redirect('/');
         } else {
             return redirect('/?access=denied&code=1');

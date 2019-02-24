@@ -246,6 +246,7 @@ export default {
                      start_time: this.createRaidData.startTime
                  },
             }).then(res => {
+                console.log(res.data);
                 this.$store.dispatch('fetchData');
             }).catch(err => {
                 console.log(err)

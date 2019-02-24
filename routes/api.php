@@ -19,20 +19,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['auth:api']], function () {
 
+    Route::get('user', 'UserController@getUSer');
+    Route::get('user/cities', 'CityController@getAll');
+    Route::get('user/cities/{city}', 'CityController@getOne');
+    Route::get('user/guilds', 'GuildController@getAll');
+    Route::get('user/guilds/{guild}', 'GuildController@getOne');
+    Route::get('user/cities/{city}/gyms', 'GymController@getCityGyms');
+    Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
+    Route::post('user/cities/{city}/raids', 'RaidController@create');
+    Route::put('user/cities/{city}/raids/{raid}', 'RaidController@update');
 
+    Route::get('pokemons', 'PokemonController@getAll');
+    Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
 
 });
-
-/*** Cities ***/
-Route::get('user', 'UserController@getUSer');
-Route::get('user/cities', 'CityController@getAll');
-Route::get('user/cities/{city}', 'CityController@getOne');
-Route::get('user/guilds', 'GuildController@getAll');
-Route::get('user/guilds/{guild}', 'GuildController@getOne');
-Route::get('user/cities/{city}/gyms', 'GymController@getCityGyms');
-Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
-Route::post('user/cities/{city}/raids', 'RaidController@create');
-Route::put('user/cities/{city}/raids/{raid}', 'RaidController@update');
-
-Route::get('pokemons', 'PokemonController@getAll');
-Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
