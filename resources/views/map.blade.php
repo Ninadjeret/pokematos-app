@@ -1,11 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <p><a href="/logout">Se déconnecter</a></p>
-    @auth
-    <p>Coucou {{ Auth::user()->name }}</p>
-    @endauth
-    <raidsmap></raidsmap>
+<div id="app" class="flex-center position-ref full-height">
 </div>
 @endsection

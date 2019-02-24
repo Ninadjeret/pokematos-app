@@ -1,0 +1,14 @@
+.map-marker__img.raid {
+    max-width: 49px !important;
+    width: 49px !important;
+}
+.map-marker__label {
+    top: 32px;
+    width: 49px;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+}
+.leaflet-control-zoom {
+    display:none;
+}
