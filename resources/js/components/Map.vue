@@ -73,9 +73,9 @@
                 const that2 = this;
                 var zindex = 1;
                 var label = false;
-                var url = 'https://assets.profchen.fr/img/map/map_marker_default.png';
+                var url = 'https://assets.profchen.fr/img/map/map_marker_default_01.png';
                 var imgclassname = 'map-marker__img';
-                if(gym.raidEx) {
+                if(gym.ex) {
                     url = 'https://assets.profchen.fr/img/map/map_marker_default_ex_00.png';
                 }
                 var html = '<img class="'+imgclassname+'" src="'+url+'"/>';
@@ -102,7 +102,7 @@
                     var html = '<img class="'+imgclassname+'" src="'+url+'"/>' + '<span class="map-marker__label">'+label+'</span>'
                     zindex = gym.raid.egg_level * 100;
                 }
-                
+
                 if( this.$store.getters.getSetting('hideGyms') === false || gym.raid !== false ) {
                     var mapMarker = L.marker([gym.lat, gym.lng], {
                         icon: new L.DivIcon({

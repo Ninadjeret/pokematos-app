@@ -2835,10 +2835,10 @@ __webpack_require__.r(__webpack_exports__);
       var that2 = this;
       var zindex = 1;
       var label = false;
-      var url = 'https://assets.profchen.fr/img/map/map_marker_default.png';
+      var url = 'https://assets.profchen.fr/img/map/map_marker_default_01.png';
       var imgclassname = 'map-marker__img';
 
-      if (gym.raidEx) {
+      if (gym.ex) {
         url = 'https://assets.profchen.fr/img/map/map_marker_default_ex_00.png';
       }
 
