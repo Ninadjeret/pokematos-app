@@ -1,5 +1,6 @@
 <template>
-        <modal v-if="gym" name="GymModal">
+    <v-dialog v-model="dialog" max-width="90%" content-class="gym-modal">
+        <v-card v-if="gym">
             <div class="dialog__wrap">
 
 
@@ -99,7 +100,8 @@
 
 
         </div>
-        </modal>
+    </v-card>
+</v-dialog>
 </template>
 
 <script>
@@ -107,10 +109,9 @@ import moment from 'moment';
 export default {
     data() {
         return {
-            pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons')),
+            dialog: false,
             modalScreen: 'default',
             gym: '',
-            raidStatus: 'none',
             raidUrl: '',
             raidAnnonce: '',
             timeLeft: false,
@@ -123,23 +124,40 @@ export default {
             createRaidDelai: '',
             createRaidHoraires: '',
             raidLevels: [1,2,3,4,5],
+            startTime: false,
+            endTime: false,
         }
     },
-    mounted() {
-        console.log('Component mounted.')
+    computed: {
+        pokemons() {
+            return this.$store.state.pokemons;
+        },
+        raidStatus() {
+            if( this.gym.raid ) {
+                var now = moment();
+                this.startTime = moment(this.gym.raid.start_time, '"YYYY-MM-DD HH:mm:ss"');
+                this.endTime = moment(this.gym.raid.end_time, '"YYYY-MM-DD HH:mm:ss"');
+                if( this.startTime.isAfter(now) ) {
+                    return 'future';
+                } else if( this.endTime.isAfter(now) ) {
+                    return 'active';
+                }
+            } else {
+                return 'none';
+            }
+        }
     },
     created() {
         this.updateTimeRange();
     },
     methods: {
         showModal( gym ) {
-            console.log('show');
             this.gym = gym;
-            this.$modal.show('GymModal');
+            this.dialog = true;
             this.getRaidData();
         },
         hideModal() {
-            this.$modal.hide('GymModal');
+            this.dialog = false;
         },
         setScreenTo( value ) {
             console.log(value);
@@ -198,34 +216,21 @@ export default {
         getRaidData() {
             var now = moment();
 
-            console.log(this.gym.raid);
-            //Statut
-            if( this.gym.raid ) {
-                var startTime = moment(this.gym.raid.start_time, '"YYYY-MM-DD HH:mm:ss"');
-                var endTime = moment(this.gym.raid.end_time, '"YYYY-MM-DD HH:mm:ss"');
-                console.log(endTime.format('YYYY-MM-DD HH:mm:ss'));
-                if( startTime.isAfter(now) ) {
-                    this.raidStatus = 'future';
-                } else if( endTime.isAfter(now) ) {
-                    this.raidStatus = 'active';
-                }
-            }
-
             //Url
             if( this.raidStatus == 'none' ) {
                 this.timeLeft = false;
                 this.raidAnnonce = 'Rien pour le moment...';
                 this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_0.png';
-            } else if( this.raidStatus == 'future' ) {
-                this.timeLeft = parseInt(startTime.diff(now, 'milliseconds'));
+            } else if( this.raidStatus == 'future' && this.startTime ) {
+                this.timeLeft = parseInt(this.startTime.diff(now, 'milliseconds'));
                 this.raidAnnonce = 'Un oeuf '+this.gym.raid.egg_level+' têtes va bientot éclore...';
                 this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
-            } else if( !this.gym.raid.pokemon ) {
-                this.timeLeft = parseInt(endTime.diff(now, 'milliseconds'));
+            } else if( !this.gym.raid.pokemon && this.endTime ) {
+                this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                 this.raidAnnonce = 'Un raid '+this.gym.raid.egg_level+' têtes est en cours...';
                 this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
-            } else {
-                this.timeLeft = parseInt(endTime.diff(now, 'milliseconds'));
+            } else if( this.endTime ) {
+                this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                 this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.niantic_id+' têtes est en cours...';
                 this.raidUrl =  this.gym.raid.pokemon.thumbnail_url;
             }
@@ -241,7 +246,7 @@ export default {
                      start_time: this.createRaidData.startTime
                  },
             }).then(res => {
-                this.$emit('refresh-data')
+                this.$store.dispatch('fetchData');
             }).catch(err => {
                 console.log(err)
             });
@@ -254,7 +259,7 @@ export default {
                      pokemon_id: this.createRaidData.pokemon.id,
                  },
             }).then(res => {
-                this.$emit('refresh-data')
+                this.$store.dispatch('fetchData');
             }).catch(err => {
                 console.log(err)
             });

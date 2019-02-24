@@ -1,110 +1,93 @@
 <template>
-<div id="app__container">
-    <app-header
-        v-bind:page-title="pageTitle"
-        v-bind:current-city="currentCity"
-        v-bind:cities="cities"
-        v-bind:links="links">
-    </app-header>
-    <app-nav></app-nav>
-    <raidsmap
-        @refresh-data="loadData()"
-        v-if="getCurrentLink().id == 'map'"
-        v-bind:gyms="gyms">
-    </raidsmap>
-    <raidslist
-        @refresh-data="loadData()"
-        v-if="getCurrentLink().id == 'list'"
-        v-bind:gyms="gyms">
-    </raidslist>
-    <settings
-        v-if="getCurrentLink().id == 'settings'"
-        v-bind:user="user">
-    </settings>
+<div id="app__container" :class="'template-'+$route.meta.id" data-app>
+        <v-toolbar color="primary" dark>
+            <v-spacer v-if="$route.meta.id == 'map'"></v-spacer>
+            <v-toolbar-title v-if="$route.meta.id == 'map'">
+                <img src="https://assets.profchen.fr/img/logo_pokematos.png"> POKEMATOS <small v-if="this.$store.state.currentCity">{{ this.$store.state.currentCity.name }}</small>
+            </v-toolbar-title>
+            <v-toolbar-title v-if="$route.meta.id != 'map'">{{$route.name}}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn v-if="cities &&  cities.length > 1 && $route.meta.id == 'map'" icon @click.stop="dialogCities = true">
+                <v-icon>location_city</v-icon>
+            </v-btn>
+        </v-toolbar>
+
+        <v-bottom-nav :value="true" absolute color="white">
+          <v-btn to="/" color="primary" flat value="recent" >
+            <span>Map</span>
+            <v-icon>map</v-icon>
+          </v-btn>
+
+          <v-btn to="/list" color="primary" flat value="recent" >
+            <span>Liste</span>
+            <v-icon>notifications_active</v-icon>
+          </v-btn>
+
+          <v-btn to="/settings" color="primary" flat value="recent" >
+            <span>Réglages</span>
+            <v-icon>settings</v-icon>
+          </v-btn>
+        </v-bottom-nav>
+
+
+        <v-dialog v-model="dialogCities" max-width="90%" content-class="city-modal">
+            <v-card>
+                  <v-card-title class="headline">Choisis ta zone</v-card-title>
+                  <v-card-text>
+                      <ul id="cityChoice">
+                          <li v-for="city in cities" @click="changeCity( city )">
+                              {{ city.name }}
+                          </li>
+                      </ul>
+                  </v-card-text>
+            </v-card>
+      </v-dialog>
+
+
+        <router-view></router-view>
 </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+    import VueRouter from 'vue-router'
     export default {
-        props: ['pageTitle'],
+        name: 'Container',
         data() {
             return {
-                links: [{
-                        id: 'map',
-                        text: 'Map',
-                        url: '/',
-                        icon: 'map'
-                    },
-                    {
-                        id: 'list',
-                        text: 'Liste',
-                        url: '/list',
-                        icon: 'notifications_active'
-                    },
-                    {
-                        id: 'settings',
-                        text: 'Réglages',
-                        url: '/settings',
-                        icon: 'settings'
-                    },
-                ],
-                gyms: JSON.parse( localStorage.getItem('pokematos_gyms')),
-                currentCity: JSON.parse( localStorage.getItem('pokematos_currentCity')),
-                cities: JSON.parse(localStorage.getItem('pokematos_cities')),
-                user: JSON.parse(localStorage.getItem('pokematos_user')),
-                pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons')),
+                dialogCities: false,
             }
         },
         mounted() {
-            console.log(this.pageTitle),
-            this.syncData()
+            this.$store.commit('fetchCities');
+            //this.$store.dispatch('fetchData');
+            if( this.currentCity && this.currentCity !== undefined ) this.fetch();
+            setInterval( this.fetch, 60000, 'auto' );
+        },
+        computed: mapState([
+                'cities', 'currentCity'
+        ]),
+        watch: {
+            currentCity: function( val ) {
+                if( val && val !== undefined ) this.fetch();
+            },
         },
         methods: {
-            test() {
+            fetch() {
+                this.$store.dispatch('fetchData');
+            },
+            changeCity( city ) {
+                this.dialogCities = false;
+                this.$store.dispatch('changeCity', {city: city})
+            }
+            /*test() {
                 console.log('refresh-data')
             },
             syncData() {
                 this.loadData();
                 setInterval( this.loadData, 60000, 'auto' );
             },
-            loadData() {
-                console.log('testttt');
-                axios.get('/api/user/cities').then(res => {
-                    this.cities = res.data
-                    //console.log(res.data)
-                    localStorage.setItem('pokematos_cities', JSON.stringify(res.data));
-                    this.setDefaultCity();
-                    this.getRaids();
-                    this.getPokemons();
-                    this.getUser();
-                }).catch(err => {
-                    //No error
-                });
-            },
-            setDefaultCity() {
-                var city = JSON.parse(localStorage.getItem('pokematos_currentCity'))
-                if (!city) {
-                    this.currentCity = this.cities[0];
-                    localStorage.setItem('pokematos_currentCity', JSON.stringify(this.currentCity));
-                }
-            },
-            getRaids() {
-                axios.get('/api/user/cities/'+this.currentCity.id+'/gyms').then( res => {
-                    this.gyms = res.data
-                    console.log(res.data)
-                    localStorage.setItem('pokematos_gyms', JSON.stringify(res.data));
-                }).catch( err => {
-                    //No error
-                });
-            },
-            getPokemons() {
-                axios.get('/api/pokemons/raidbosses').then( res => {
-                    this.pokemons = res.data
-                    localStorage.setItem('pokematos_pokemons', JSON.stringify(res.data));
-                }).catch( err => {
-                    //No error
-                });
-            },
+
             getUser() {
                 axios.get('/api/user').then( res => {
                     this.user = res.data
@@ -113,17 +96,7 @@
                     //No error
                 });
             },
-            getCurrentLink() {
-                var currentLocation = window.location.pathname;
-                var current = false;
-                this.links.forEach(function(link) {
-                    if( link.url == currentLocation ) {
-                        current = link;
-                    }
-                });
-                console.log(current);
-                return current;
-            },
+            */
         }
     }
 </script>
