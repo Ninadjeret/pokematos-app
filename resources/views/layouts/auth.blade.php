@@ -21,11 +21,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="logged-out">
-    <div id="app" class="page-content-full container">
-      <main>
+
           @yield('content')
-      </main>
-    </div>
+
 
     <!-- Scripts -->
     <script src="{{ asset('js/manifest.js') }}"></script>

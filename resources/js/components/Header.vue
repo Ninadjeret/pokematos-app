@@ -1,9 +1,9 @@
 <template>
 <header class="header__wrapper--app">
-    <div class="header-title">
-        <img src="https://assets.profchen.fr/img/logo_main_400.png"> POKEMATOS <small>{{ currentCity.name }}</small>
-        <button v-on:click="showModal()"><i class="material-icons">location_city</i></button>
-        <modal name="cityChoice">
+    <div v-if="getCurrentLink().url == '/'" class="header-title home">
+        <img src="https://assets.profchen.fr/img/logo_main_400.png"> POKEMATOS <small v-if="currentCity">{{ currentCity.name }}</small>
+        <button v-if="cities && cities.length > 1" v-on:click="showModal()"><i class="material-icons">location_city</i></button>
+        <modal v-if="cities" name="cityChoice">
             <h3>Choisis ta zone</h3>
             <ul id="cityChoice">
                 <li v-for="city in cities" v-on:click="setCurrentCity(city)">
@@ -15,49 +15,36 @@
             </div>
         </modal>
     </div>
+    <div v-else class="header-title">
+        {{getCurrentLink().text}}
+    </div>
 </header>
 </template>
 
 <script>
 export default {
-    props: ['pageTitle'],
+    props: ['pageTitle', 'currentCity', 'links'],
     data() {
         return {
             cities: JSON.parse(localStorage.getItem('pokematos_cities')),
-            currentCity: JSON.parse(localStorage.getItem('pokematos_currentCity'))
         }
     },
     mounted() {
         console.log('Component mounted.')
     },
     created() {
-        this.getCities();
-        this.setDefaultCity();
     },
     methods: {
-        getCities() {
-            axios.get('/api/user/cities').then(res => {
-                this.cities = res.data
-                //console.log(res.data)
-                localStorage.setItem('pokematos_cities', JSON.stringify(res.data));
-            }).catch(err => {
-                //No error
+        getCurrentLink() {
+            var currentLocation = window.location.pathname;
+            var current = false;
+            this.links.forEach(function(link) {
+                if( link.url == currentLocation ) {
+                    current = link;
+                }
             });
-        },
-        setDefaultCity() {
-            var city = JSON.parse(localStorage.getItem('pokematos_currentCity'))
-            if (!city) {
-                this.currentCity = this.cities[0];
-                console.log('Ajout de '.this.currentCity);
-                localStorage.setItem('pokematos_currentCity', JSON.stringify(this.currentCity));
-            }
-        },
-        setCurrentCity(city) {
-            console.log(city);
-            this.currentCity = city;
-            localStorage.setItem('pokematos_currentCity', JSON.stringify(this.currentCity));
-            this.hideModal();
-
+            console.log(current);
+            return current;
         },
         showModal() {
             this.$modal.show('cityChoice');
