@@ -1,0 +1,9 @@
+.v-bottom-nav {
+    z-index: 5000;
+    a.v-btn:hover {
+        text-decoration: none;
+    }
+    a.v-btn--active {
+        color: $primary;
+    }
+}

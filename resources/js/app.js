@@ -8,11 +8,29 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import "leaflet/dist/leaflet.css"
+import 'es6-promise/auto'
 
+import Vuetify from 'vuetify';
+import fr from '../lang/fr/vuetify';
 import VModal from 'vue-js-modal'
 import { L, LMap, LTileLayer, LMarker } from 'vue2-leaflet'
-import "leaflet/dist/leaflet.css"
+import VueRouter from 'vue-router';
 import VueCountdown from '@chenfengyuan/vue-countdown'
+import Vuex from 'vuex'
+import appStore from './store/store';
+
+
+Vue.use(Vuex)
+Vue.use(Vuetify, {
+  lang: {
+    locales: { fr },
+    current: 'fr',
+  },
+  theme: {
+    primary: '#5a6cae', // #C2185B
+  },
+});
 
 Vue.use(VModal)
 Vue.component('l-map', LMap)
@@ -26,50 +44,29 @@ Vue.component(VueCountdown.name, VueCountdown)
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
  Vue.component(
-     'app-container',
-     require('./components/Container.vue').default
+     'gym-modal',
+     require('./components/GymModal.vue').default
  );
  Vue.component(
-     'app-header',
-     require('./components/Header.vue').default
+     'button-actions',
+     require('./components/ButtonActions.vue').default
  );
- Vue.component(
-     'app-nav',
-     require('./components/Nav.vue').default
- );
-Vue.component(
-    'raidsmap',
-    require('./components/Map.vue').default
-);
-Vue.component(
-    'raidslist',
-    require('./components/List.vue').default
-);
-Vue.component(
-    'settings',
-    require('./components/Settings.vue').default
-);
-Vue.component(
-    'gym-modal',
-    require('./components/GymModal.vue').default
-);
-Vue.component(
-    'button-actions',
-    require('./components/ButtonActions.vue').default
-);
 
-const app = new Vue({
-    el: '#app',
+import routes from './routes';
+import Container from './components/Container.vue';
+Vue.use(VueRouter);
+const router = new VueRouter({
+    routes
 });
+
+/*const app = new Vue({
+    el: '#app',
+    render: h => h(Container),
+    router,
+});*/
+const app = new Vue({
+    render: h => h(Container),
+    store: appStore,
+    router
+}).$mount('#app')

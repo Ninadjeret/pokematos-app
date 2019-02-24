@@ -20,13 +20,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
 
-            <app-container page-title="Test"></app-container>
-            <main>
-                @yield('content')
-            </main>
-    </div>
+@yield('content')
 
     <!-- Scripts -->
     <!--<script src="{{ asset('js/manifest.js') }}"></script>

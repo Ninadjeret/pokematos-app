@@ -22,6 +22,7 @@
                     <p class="setting__desc">N'afficher sur la carte que les arênes avec un raid en cours ou à venir</p>
                 </div>
                 <div class="setting__value">
+                    <v-switch v-model="settingsHideGyms"></v-switch>
                 </div>
             </div>
         </div>
@@ -49,13 +50,24 @@
 
 <script>
     export default {
+        name: 'Settings',
         props: ['user'],
         data() {
             return {
             }
         },
-        mounted() {
-            console.log('Component mounted.')
+        computed: {
+            settingsHideGyms: {
+                get: function () {
+                    return this.$store.getters.getSetting('hideGyms')
+                },
+                set: function (newValue) {
+                    this.$store.commit('setSetting', {
+                        setting: 'hideGyms',
+                        value: newValue
+                    });
+                }
+            }
         }
     }
 </script>

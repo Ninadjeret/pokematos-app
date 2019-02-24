@@ -1,0 +1,201 @@
+.v-overlay--active {
+    z-index: 6000 !important;
+}
+.v-dialog__content--active {
+    z-index: 6001 !important;
+}
+
+.v--modal-overlay {
+    z-index: 9999 !important;
+}
+.v-dialog__content {
+    .v-dialog.city-modal {
+        ul {
+            list-style-type: none;
+            color:$primary;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid rgba(119, 186, 191, 0.2);
+            font-family: 'Teko';
+            font-size: 24px;
+        }
+    }
+    .v-dialog.gym-modal {
+        height: calc(100% - 60px);
+        border-radius: 0 !important;
+        margin: auto;
+        .v-card {
+            height: 100%;
+            padding: 1em !important;
+        }
+    }
+}
+.v-dialog__content .dialog__wrap {
+    overflow-y: scroll;
+    overflow-y: overlay;
+    height: 100%;
+    border: 2px solid $secondary;
+    padding-bottom: 70px;
+}
+.v-dialog__content hr {
+    margin: 10px 24px;
+    border-color: $secondary;
+    opacity: 0.2;
+}
+.v-dialog__content h3 {
+    color: $primary;
+    text-align: center;
+    font-family: 'Teko';
+    padding: 30px 24px 0;
+    font-size: 3.5rem;
+}
+.v-dialog__content .dialog__city {
+    padding: 0 24px;
+    color: $primary;
+    text-align: center;
+}
+.v-dialog__content .footer--actions {
+    position: absolute;
+    bottom: 0;
+    padding: 0;
+    margin-bottom: 10px;
+    right: calc( 50% - 25px );
+}
+.v-dialog__content .button--close {
+    width: 45px;
+    min-width: 50px;
+    height: 50px;
+    background: $primary;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 10px;
+    border-radius: 50%;
+    box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12), 0 1px 1px 0 rgba(0,0,0,.24);
+    padding: 0;
+    position: relative;
+}
+.v-dialog__content .button--close i {
+    font-size: 18px;
+    line-height: 50px;
+}
+.v-dialog__content .button--close:before {
+    content: "";
+    width: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    height: 40px;
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    top: 5px;
+    left: 5px;
+}
+.v-dialog__content .dialog__egg {
+    text-align: center;
+    color: #43696c;
+}
+
+.v-dialog__content .dialog__content {
+    color: $secondary;
+    padding: 0px 24px;
+    text-align: center;
+}
+.v-dialog__content .dialog__content ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: -10px;
+}
+.v-dialog__content .dialog__content ul li a {
+    position: relative;
+    display: block;
+    line-height: 50px;
+    border-bottom: 1px solid rgba(119, 186, 191, 0.2);
+    color: $secondary;
+}
+.v-dialog__content .dialog__content ul li a i {
+    position: absolute;
+    left: 0;
+    top: 13px;
+}
+
+.v-dialog__content .modal__screen .step {
+    margin: 0 24px;
+    text-align: center;
+}
+.modal__screen .step__title {
+    color: $primary;
+    text-align: center;
+    font-family: 'Teko';
+    font-size: 18px;
+}
+.v-dialog__content .modal__screen .step .step__timer {
+    width: calc( 100% - 100px );
+    display: inline-block;
+    font-size: smaller;
+    line-height: 18px;
+    font-style: italic;
+    margin-bottom: 0;
+    opacity: 0.5;
+}
+.modal__screen [data-step-name="level"] .step__wrapper ul {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    width: 100%;
+}
+.modal__screen [data-step-name="level"] .step__wrapper ul li {
+    width: 20%;
+    /* border-left: 1px solid #eee; */
+    display: inline-block;
+    text-align: center;
+    padding: 0 5px;
+}
+.modal__screen [data-step-name="level"] .step__wrapper ul li button {
+    padding: 3px 11px;
+    display: block;
+    border-radius: 100px;
+    border: none;
+    background: #fff;
+    border: 1px solid #eee;
+}
+.modal__screen [data-step-name="level"] .step__wrapper ul li button.active,
+.modal__screen [data-step-name="level"] .step__wrapper ul li button:hover{
+    background: $primary;
+    border: 1px solid $primary;
+    color: #fff;
+}
+
+.modal__screen [data-step-name="boss"] .step__wrapper ul {
+    padding-left: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.modal__screen [data-step-name="boss"] .step__wrapper ul li {
+    width: 33.33333%;
+    border-bottom: 1px solid #fafafa;
+}
+.modal__screen[data-screen="gym"] .gym__ex {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background: #5bb0c4;
+    padding: 0px 5px;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 9px;
+    text-transform: uppercase;
+    display:none;
+}
+.footer-action {
+    position: fixed;
+    bottom: 30px;
+    padding: 0;
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
+    left: 0;
+}

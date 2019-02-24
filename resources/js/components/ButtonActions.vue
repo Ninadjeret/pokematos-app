@@ -2,7 +2,7 @@
     <div ref="buttonactions" :class="'map__actions '+menuClass">
         <div class="map__overlay"></div>
         <div class="actions">
-            <button v-on:click="localise()" class="action" id="findme">
+            <button v-if="this.$route.meta.id == 'map'" v-on:click="localise()" class="action" id="findme">
                 <span>Localiser</span><i class="material-icons">gps_fixed</i>
             </button>
             <button v-on:click="refresh()" class="action" id="refresh">
@@ -35,16 +35,12 @@ export default {
     },
     methods: {
         refresh() {
-            console.log('test');
-            this.$emit('refresh-data');
+            this.$store.dispatch('fetchData');
             this.toggleMenu();
         },
         localise() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    this.$refs.map.mapObject.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
-                });
-            }
+            this.$emit('localize');
+            this.toggleMenu();
         },
         toggleMenu() {
              this.menuClass = ( this.menuClass == 'open' ) ? '' : 'open' ;

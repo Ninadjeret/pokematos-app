@@ -1,16 +1,16 @@
 <template>
     <div>
-        <div v-if="getActiveRaids().length > 0" class="raids__active">
+        <div v-if="activeRaids.length > 0" class="raids__active">
             <div class="section__title">Raids en cours</div>
             <div class="raids__wrapper">
-                <div v-on:click="showModal(gym)" v-for="gym in getActiveRaids()" class="raid__wrapper">
+                <div v-on:click="showModal(gym)" v-for="gym in activeRaids" class="raid__wrapper">
                     <div class="raid__img">
                         <img :src="getRaidImgUrl(gym.raid)">
                     </div>
                     <div class="raid__content">
                         <h3>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
                             <span class="raid__timer active">
-                                <countdown :time="getRaidTimeLeft(gym.raid)">
+                                <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
                                     <template slot-scope="props">Reste {{ props.totalMinutes }} min</template>
                                 </countdown>
                             </span>
@@ -22,17 +22,18 @@
                 </div>
             </div>
         </div>
-        <div v-if="getFutureRaids().length > 0" class="raids__active">
+
+        <div v-if="futureRaids.length > 0" class="raids__future">
             <div class="section__title">Raids à venir</div>
             <div class="raids__wrapper">
-                <div v-on:click="showModal(gym)" v-for="gym in getFutureRaids()" class="raid__wrapper">
+                <div v-on:click="showModal(gym)" v-for="gym in futureRaids" class="raid__wrapper">
                     <div class="raid__img">
                         <img :src="getRaidImgUrl(gym.raid)">
                     </div>
                     <div class="raid__content">
                         <h3>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
                             <span class="raid__timer future">
-                                <countdown :time="getRaidTimeLeft(gym.raid)">
+                                <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
                                     <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
                                 </countdown>
                             </span>
@@ -44,60 +45,38 @@
                 </div>
             </div>
         </div>
-        <div v-if="!gyms || gyms.length === 0" class="raids__empty hide">
+        <div v-if="futureRaids.length === 0 &  activeRaids.length === 0" class="raids__empty hide">
             <img src="https://assets.profchen.fr/img/empty_raids.png" />
             <h3>Aucun raid pour le moment...</h3>
         </div>
-        <button-actions @refresh-data="refreshData()"></button-actions>
-        <gym-modal ref="gymModal" @refresh-data="refreshData()"></gym-modal>
+        <button-actions></button-actions>
+        <gym-modal ref="gymModal"></gym-modal>
     </div>
 </template>
 
 <script>
     import moment from 'moment';
     export default {
+        name: 'List',
         props: ['gyms'],
         data() {
             return {
+            }
+        },
+        computed: {
+            activeRaids() {
+                return this.$store.getters.activeRaids;
+            },
+            futureRaids() {
+                return this.$store.getters.futureRaids;
             }
         },
         mounted() {
             console.log('Component mounted.')
         },
         methods: {
-            refreshData() {
-                this.$emit('refresh-data')
-            },
             showModal( gym ) {
                 this.$refs.gymModal.showModal( gym );
-            },
-            getActiveRaids() {
-                var now = moment();
-                var activeRaids = [];
-                if( this.gyms && this.gyms.length > 0 ) {
-                    this.gyms.forEach(function(gym) {
-                        if( gym.raid ) {
-                            if( now.isAfter(gym.raid.start_time) ) {
-                                activeRaids.push(gym);
-                            }
-                        }
-                    });
-                }
-                return activeRaids;
-            },
-            getFutureRaids() {
-                var now = moment();
-                var futureRaids = [];
-                if( this.gyms && this.gyms.length > 0 ) {
-                    this.gyms.forEach(function(gym) {
-                        if( gym.raid ) {
-                            if( now.isBefore(gym.raid.start_time) ) {
-                                futureRaids.push(gym);
-                            }
-                        }
-                    });
-                }
-                return futureRaids;
             },
             getRaidImgUrl( raid ) {
                 var now = moment();
