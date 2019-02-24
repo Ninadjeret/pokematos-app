@@ -60,6 +60,7 @@
         },
         mounted() {
             this.$store.commit('fetchCities');
+            this.$store.commit('fetchUser');
             //this.$store.dispatch('fetchData');
             if( this.currentCity && this.currentCity !== undefined ) this.fetch();
             setInterval( this.fetch, 60000, 'auto' );

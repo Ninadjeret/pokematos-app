@@ -40,18 +40,14 @@ class PokemonsTableSeeder extends Seeder {
                 [
                     'name' => 'Rennes',
                     'slug' => 'rennes',
+                    'lat' => 48.045741,
+                    'lng' => -1.6082411,
                 ],
                 [
                     'name' => 'Dijon',
                     'slug' => 'dijon',
-                ],
-                [
-                    'name' => 'Besançon',
-                    'slug' => 'besancon',
-                ],
-                [
-                    'name' => 'Thionville',
-                    'slug' => 'thionville',
+                    'lat' => 47.331881,
+                    'lng' => 5.032221,
                 ]
             ]);
         } // end check if table users is empty
@@ -80,16 +76,22 @@ class PokemonsTableSeeder extends Seeder {
         if(DB::table('zones')->get()->count() == 0){
             DB::table('zones')->insert([
                 [
-                    'name'  => 'Vern Sur Seiche',
+                    'name'  => 'Vern',
                     'city_id'  => 1,
+                ],
+                [
+                    'name'  => 'Centre ville',
+                    'city_id'  => 2,
                 ],
             ]);
         } // end check if table users is empty
 
-        $arenes = file_get_contents('https://www.profchen.fr/api/v1/gyms?token=AsdxZRqPkrst67utwHVM2w4rt4HjxGNcX8XVJDryMtffBFZk3VGM47HkvnF9');
-        $arenes = json_decode($arenes);
+        $arenes_vern = file_get_contents('https://www.profchen.fr/api/v1/gyms?token=AsdxZRqPkrst67utwHVM2w4rt4HjxGNcX8XVJDryMtffBFZk3VGM47HkvnF9');
+        $arenes_vern = json_decode($arenes_vern);
+        $arenes_dijon = file_get_contents('https://dijon.profchen.fr/api/v1/gyms?token=AsdxZRqPkrst67utwHVM2w4rt4HjxGNcX8XVJDryMtffBFZk3VGM47HkvnF9');
+        $arenes_dijon = json_decode($arenes_dijon);
         if(DB::table('stops')->get()->count() == 0){
-            foreach( $arenes as $arene ) {
+            foreach( $arenes_vern as $arene ) {
                 error_log('Import de '.$arene->nameFr);
                 DB::table('stops')->insert([
                     [
@@ -101,6 +103,21 @@ class PokemonsTableSeeder extends Seeder {
                         'gym' => 1,
                         'city_id' => 1,
                         'zone_id' => 1,
+                    ],
+                ]);
+            }
+            foreach( $arenes_dijon as $arene ) {
+                error_log('Import de '.$arene->nameFr);
+                DB::table('stops')->insert([
+                    [
+                        'niantic_name'  => $arene->nianticId,
+                        'name' => $arene->nameFr,
+                        'lat' => $arene->GPSCoordinates->lat,
+                        'lng' => $arene->GPSCoordinates->lng,
+                        'ex' => $arene->raidEx,
+                        'gym' => 1,
+                        'city_id' => 2,
+                        'zone_id' => 2,
                     ],
                 ]);
             }
