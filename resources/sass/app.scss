@@ -57,6 +57,19 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     opacity: .54;
     font-size: .6em;
 }
+.v-content__wrap .container {
+    padding : 0;
+}
+
+
+.fade-enter-active {
+  transition: all .3s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+
 .bt {
     display: inline-block;
     background: $primary;
