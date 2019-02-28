@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get('user', 'UserController@getUSer');
-    Route::get('user/cities', 'CityController@getAll');
+    Route::get('user/cities', 'UserController@getCities');
     Route::get('user/cities/{city}', 'CityController@getOne');
     Route::get('user/guilds', 'GuildController@getAll');
     Route::get('user/guilds/{guild}', 'GuildController@getOne');

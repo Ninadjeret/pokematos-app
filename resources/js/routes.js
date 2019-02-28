@@ -1,32 +1,52 @@
 import Map from './components/Map.vue'
 import List from './components/List.vue'
 import Settings from './components/Settings.vue'
+import Admin from './components/Admin.vue'
+import AdminBosses from './components/admin/Bosses.vue'
 
 const routes = [
     {
         path: '/',
-        name: 'Map',
+        name: 'map',
         meta: {
-            id: 'map'
+            title: 'Map'
         },
         component: Map
      },
      {
          path: '/list',
-         name: 'Liste',
+         name: 'list',
          meta: {
-             id: 'list'
+             title: 'Liste'
          },
          component: List
       },
       {
           path: '/settings',
-          name: 'Réglages',
+          name: 'settings',
           meta: {
-              id: 'settings'
+              title: 'Réglages'
           },
           component: Settings
        },
+       {
+           path: '/admin',
+           name: 'admin',
+           meta: {
+               title: 'Administration'
+           },
+           component: Admin,
+           children: [
+                {
+                      path: 'boss',
+                      name: 'admin.boss',
+                      meta: {
+                          title: 'Gérer les Boss'
+                      },
+                      component: AdminBosses
+                }
+        ]
+        },
 ];
 
 export default routes;
