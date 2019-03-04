@@ -1,5 +1,5 @@
 <template>
-    <div style="height: calc(100% - 112px);">
+    <div style="height: 100%;">
         <l-map style="height: 100%; width: 100%" ref="map" :zoom=13 :center="[currentCity.lat, currentCity.lng]">
             <l-tile-layer :url="url"></l-tile-layer>
         </l-map>

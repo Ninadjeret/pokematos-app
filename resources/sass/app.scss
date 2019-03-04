@@ -13,6 +13,7 @@
 @import 'map';
 @import 'dialog';
 @import 'buttonactions';
+@import 'admin';
 
 .navbar-laravel {
   background-color: #fff;
@@ -110,6 +111,27 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     margin-right: auto;
     margin-left: auto;
 }
+
+.template-map {
+    .v-content {
+        height: 100%;
+    }
+    .v-content__wrap {
+        height: 100%;
+        .container {
+            height: 100%;
+            max-width: 100% !important;
+        }
+    }
+}
+
+.v-footer {
+    z-index: 4000;
+}
+.v-toolbar {
+    z-index: 4000;
+}
+
 body.logged-out {
     background: url(https://assets.profchen.fr/img/bg_loading.jpg) top right;
     background-size: cover;
@@ -410,4 +432,30 @@ range_button:active {
 .update-raid__wrapper ul li {
     width: 33.33333%;
     border-bottom: 1px solid #fafafa;
+}
+
+.snackbar {
+    position:fixed;
+    bottom: 80px;
+    width: 200px;
+    right:50%;
+    margin-right:-100px;
+    border-radius: 100px;
+    background: rgba( 0, 0, 0, 0.5 );
+    color: #fff;
+    text-align: center;
+    padding: 8px;
+    z-index: 99999;
+}
+.theme--light.v-subheader {
+    color: #212529;
+}
+.v-subheader {
+    background: #fafafa;
+    /*padding: 10px 15px !important;*/
+    font-family: "Teko";
+    font-size: 20px;
+}
+.theme--light.v-label.v-label--active {
+    color: $primary;
 }

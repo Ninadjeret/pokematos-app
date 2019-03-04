@@ -53,6 +53,8 @@ Vue.component(VueCountdown.name, VueCountdown)
      require('./components/ButtonActions.vue').default
  );
 
+ Vue.component( 'snackbar', require('./components/parts/Snackbar.vue').default );
+
 import routes from './routes';
 import Container from './components/Container.vue';
 Vue.use(VueRouter);
