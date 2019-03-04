@@ -10,6 +10,7 @@ use App\Models\Zone;
 
 class Stop extends Model {
 
+    protected $fillable = ['name', 'niantic_name', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id'];
     protected $appends = ['zone', 'city', 'google_maps_url', 'raid'];
     protected $hidden = ['zone_id', 'city_id'];
     protected $casts = [

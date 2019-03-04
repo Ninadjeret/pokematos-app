@@ -71,27 +71,30 @@ class DiscordController extends Controller {
                         ));
 
                         //Gestion des droits d'accès
-                        if ($result && $discord->access_rule == 'everyone') {
+                        if ($result && $guild->access_rule == 'everyone') {
                             $auth = true;
-                        } elseif ($result && $discord->access_rule == 'specific_roles' && !empty(array_intersect($discord->authorized_roles, $result->roles))) {
+                        } elseif ($result && $guild->access_rule == 'specific_roles' && !empty(array_intersect($guild->authorized_roles, $result->roles))) {
                             $auth = true;
                         }
 
                         //Gestion des prvilèges d'admin
-                        if (!empty($community->getMapAdminRoles()) && $result && !empty(array_intersect($community->getMapAdminRoles(), $result->roles))) {
+                        if (!empty($guild->getMapAdminRoles()) && $result && !empty(array_intersect($guild->getMapAdminRoles(), $result->roles))) {
                             $admin[] = $community->wpId;
                         }
                     } catch (Exception $e) {
                         error_log('Exception reçue : ' . $e->getMessage());
                     }*/
                     $auth = true;
-                    $guilds[] = $guild->id;
+                    $guilds[] = [
+                        'id' => $guild->id,
+                        'admin' => true,
+                    ];
                 }
 
             }
         }
-        $user->guilds = json_encode($guilds);
         $user->save();
+        $user->saveGuilds($guilds);
 
         //Login
         if( $auth ) {
