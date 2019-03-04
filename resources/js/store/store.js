@@ -14,15 +14,32 @@ const store = new Vuex.Store({
         pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons') ),
         settings: JSON.parse(localStorage.getItem('pokematos_settings') ),
         user: JSON.parse(localStorage.getItem('pokematos_user') ),
+        snackbar: false,
     },
     mutations: {
-        fetchGyms( state ) {
-            console.log('/api/user/cities/'+state.currentCity.id+'/gyms');
+        fetchGyms( state, payload ) {
+            if( payload ) {
+                state.snackbar = {
+                    message: 'Synchronisation en cours',
+                    timeout: 10000
+                }
+            }
             axios.get('/api/user/cities/'+state.currentCity.id+'/gyms').then( res => {
                 state.gyms = res.data;
                 localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
+                if( payload ) {
+                    state.snackbar = {
+                        message: 'Synchronisation terminée',
+                        timeout: 1000
+                    }
+                }
             }).catch( err => {
-                //No error
+                if( payload ) {
+                    state.snackbar = {
+                        message: 'Erreur de synchronisation',
+                        timeout: 1000
+                    }
+                }
             });
         },
         fetchPokemon( state ) {
@@ -61,6 +78,9 @@ const store = new Vuex.Store({
             if( state.settings === undefined || !state.settings || state.settings === null ) state.settings = {};
             state.settings[payload.setting] = payload.value;
             localStorage.setItem('pokematos_settings', JSON.stringify(state.settings));
+        },
+        setSnackbar( state, payload ) {
+            state.snackbar = payload;
         }
     },
     getters: {
@@ -90,12 +110,14 @@ const store = new Vuex.Store({
         },
     },
     actions: {
-        fetchData ({ commit }) {
+        autoFetchData ({ commit }) {
             commit('fetchGyms')
             commit('fetchPokemon')
         },
+        fetchData ({ commit }) {
+            commit('fetchGyms', true)
+        },
         changeCity ({ dispatch, commit }, payload) {
-            console.log(payload);
             commit('setCity', payload)
             dispatch('fetchData');
         },

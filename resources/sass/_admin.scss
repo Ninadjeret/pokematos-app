@@ -1,0 +1,62 @@
+.v-toolbar__content {
+    .v-btn--active:before {
+        background-color: $primary;
+    }
+}
+
+.v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
+    background-color: $primary;
+}
+
+.v-list__tile__title {
+    span {
+        font-size: 14px;
+        color: $grey;
+    }
+}
+
+.search__wrapper {
+    background: #fafafa;
+    padding: 20px 10px 20px 10px;
+    .v-text-field--outline>.v-input__control>.v-input__slot {
+        background-color: #fff !important;
+        border-color: #ddd !important;
+    }
+}
+
+.setting {
+    border-top: 1px solid #eee;
+    padding: 16px;
+    label {
+        width: 100%;
+        font-size: 18px;
+        padding-bottom: 5px;
+    }
+    p.description {
+        width: 100%;
+        color: #bbb;
+        font-size: 14px;
+    }
+    input[type="text"], select {
+        height: 40px;
+        width: 100%;
+        font-size: 16px;
+        line-height: 1.4;
+        border-radius: 0px;
+        padding: 8px;
+        border: 1px solid #ced4da;
+    }
+    textarea {
+        height: 80px;
+        width: 100%;
+        font-size: 16px;
+        line-height: 1.4;
+        border-radius: 0px;
+        padding: 8px;
+        border: 1px solid #ced4da;
+    }
+    select {
+        -moz-appearance: menulist-button;
+        -webkit-appearance: menulist-button;
+    }
+}

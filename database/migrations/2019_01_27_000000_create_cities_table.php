@@ -78,6 +78,7 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->string('niantic_name');
             $table->string('name');
+            $table->string('description')->nullable();
             $table->float('lat', 10, 5)->nullable();
             $table->float('lng', 10, 5)->nullable();
             $table->boolean('ex')->default(false);

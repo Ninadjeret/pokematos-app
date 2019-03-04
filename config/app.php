@@ -13,7 +13,12 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'version' => [
+        'current' => '1.5.0',
+        'forceUpadte' => false,
+    ],
+
+    'name' => env('APP_NAME', 'Pokématos'),
 
     /*
     |--------------------------------------------------------------------------
