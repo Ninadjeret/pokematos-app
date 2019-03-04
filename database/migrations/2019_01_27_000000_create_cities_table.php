@@ -35,6 +35,18 @@ class CreateCitiesTable extends Migration
             $table->foreign('city_id')->references('id')->on('cities');
         });
 
+        Schema::create('user_guilds', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('guild_id');
+            $table->integer('user_id');
+            $table->string('user_roles')->nullable();
+            $table->boolean('admin')->default(false);
+            $table->timestamps();
+
+            $table->foreign('guild_id')->references('id')->on('guilds');
+            $table->foreign('user_id')->references('id')->on('users');
+        });
+
         Schema::create('pokemons', function (Blueprint $table) {
             $table->increments('id');
             $table->string('pokedex_id');
@@ -66,6 +78,7 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->string('niantic_name');
             $table->string('name');
+            $table->string('description')->nullable();
             $table->float('lat', 10, 5)->nullable();
             $table->float('lng', 10, 5)->nullable();
             $table->boolean('ex')->default(false);
