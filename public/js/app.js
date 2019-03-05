@@ -3404,8 +3404,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'AdminZonesEdit',
   data: function data() {
@@ -74030,52 +74028,54 @@ var render = function() {
     "div",
     [
       _vm.$route.name == "admin"
-        ? _c(
-            "div",
-            { staticClass: "parent_view" },
-            [
-              _vm._m(0),
-              _vm._v(" "),
-              _c(
-                "v-list",
-                [
-                  _vm._l(_vm.generalItems, function(item, index) {
-                    return [
-                      _c(
-                        "v-list-tile",
-                        {
-                          key: item.route,
-                          attrs: { to: { name: item.route } }
-                        },
-                        [
-                          _c(
-                            "v-list-tile-action",
-                            [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-tile-content",
-                            [
-                              _c("v-list-tile-title", [
-                                _vm._v(_vm._s(item.label))
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider")
-                    ]
-                  })
-                ],
-                2
-              )
-            ],
-            1
-          )
+        ? _c("div", { staticClass: "parent_view" }, [
+            _c(
+              "div",
+              { staticClass: "settings-section" },
+              [
+                _c("v-subheader", [_vm._v("Général")]),
+                _vm._v(" "),
+                _c(
+                  "v-list",
+                  [
+                    _vm._l(_vm.generalItems, function(item, index) {
+                      return [
+                        _c(
+                          "v-list-tile",
+                          {
+                            key: item.route,
+                            attrs: { to: { name: item.route } }
+                          },
+                          [
+                            _c(
+                              "v-list-tile-action",
+                              [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-tile-content",
+                              [
+                                _c("v-list-tile-title", [
+                                  _vm._v(_vm._s(item.label))
+                                ])
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("v-divider")
+                      ]
+                    })
+                  ],
+                  2
+                )
+              ],
+              1
+            )
+          ])
         : _vm._e(),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [_c("router-view")], 1)
@@ -74083,16 +74083,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "settings-section" }, [
-      _c("div", { staticClass: "section__title" }, [_vm._v("Général")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -75858,22 +75849,30 @@ var render = function() {
         [
           _c("v-subheader", [_vm._v("Description")]),
           _vm._v(" "),
-          _c(
-            "v-list-tile",
-            [
-              _c("v-text-field", {
-                attrs: { "hide-details": "", label: "Nom" },
-                model: {
+          _c("div", { staticClass: "setting" }, [
+            _c("label", [_vm._v("Nom")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
                   value: _vm.name,
-                  callback: function($$v) {
-                    _vm.name = $$v
-                  },
                   expression: "name"
                 }
-              })
-            ],
-            1
-          ),
+              ],
+              attrs: { type: "text" },
+              domProps: { value: _vm.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.name = $event.target.value
+                }
+              }
+            })
+          ]),
           _vm._v(" "),
           _c("v-divider"),
           _vm._v(" "),
@@ -75886,6 +75885,7 @@ var render = function() {
                   _c(
                     "v-list-tile",
                     {
+                      attrs: { color: "pink" },
                       on: {
                         click: function($event) {
                           _vm.dialog = true
