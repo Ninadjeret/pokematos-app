@@ -2522,6 +2522,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2576,6 +2577,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     hideModal: function hideModal() {
       this.dialog = false;
+    },
+    canDeleteRaid: function canDeleteRaid() {
+      if (this.$store.state.currentCity.admin == true) {
+        return true;
+      } else if (this.$store.state.user.id == this.gym.raid.source.user.id) {
+        return true;
+      } else {
+        return false;
+      }
     },
     setScreenTo: function setScreenTo(value) {
       console.log(value);
@@ -2658,6 +2668,13 @@ __webpack_require__.r(__webpack_exports__);
         this.raidUrl = this.gym.raid.pokemon.thumbnail_url;
       }
     },
+    deleteRaidConfirm: function deleteRaidConfirm() {
+      var result = confirm('Supprimer le raid ' + this.gym.raid.egg_level + 'T à l\'arène ' + this.gym.name);
+
+      if (result) {
+        this.deleteRaid();
+      }
+    },
     postNewRaid: function postNewRaid() {
       var _this = this;
 
@@ -2685,10 +2702,27 @@ __webpack_require__.r(__webpack_exports__);
       this.hideModal();
       axios.put('/api/user/cities/1/raids/' + this.gym.raid.id, {
         params: {
+          gym_id: this.gym.id,
           pokemon_id: this.createRaidData.pokemon.id
         }
       }).then(function (res) {
         _this2.$store.dispatch('fetchData');
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    deleteRaid: function deleteRaid() {
+      var _this3 = this;
+
+      this.setScreenTo('default');
+      this.hideModal();
+      axios.delete('/api/user/cities/1/raids/' + this.gym.raid.id).then(function (res) {
+        _this3.$store.dispatch('fetchData');
+
+        _this3.$store.commit('setSnackbar', {
+          message: 'Raid supprimé',
+          timeout: 1500
+        });
       }).catch(function (err) {
         console.log(err);
       });
@@ -74610,6 +74644,28 @@ var render = function() {
                                     _vm._v("add_alert")
                                   ]),
                                   _c("span", [_vm._v("Annoncer un raid")])
+                                ]
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.gym.raid && _vm.canDeleteRaid()
+                          ? _c("li", [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "modal__action delete-raid",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.deleteRaidConfirm()
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("i", { staticClass: "material-icons" }, [
+                                    _vm._v("delete")
+                                  ]),
+                                  _c("span", [_vm._v("Supprimer le raid")])
                                 ]
                               )
                             ])
