@@ -27,6 +27,7 @@
                         <li v-if="gym.google_maps_url"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
                         <li v-if="raidStatus == 'active' && gym.raid.pokemon == false"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
                         <li v-if="raidStatus == 'none'"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
+                        <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
                     </ul>
                 </div>
                 <div class="footer--actions">
@@ -159,6 +160,15 @@ export default {
         hideModal() {
             this.dialog = false;
         },
+        canDeleteRaid() {
+            if( this.$store.state.currentCity.admin == true ) {
+                return true;
+            } else if( this.$store.state.user.id == this.gym.raid.source.user.id ) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         setScreenTo( value ) {
             console.log(value);
             this.modalScreen = value;
@@ -235,6 +245,13 @@ export default {
                 this.raidUrl =  this.gym.raid.pokemon.thumbnail_url;
             }
         },
+        deleteRaidConfirm() {
+            var result = confirm('Supprimer le raid '+this.gym.raid.egg_level+'T à l\'arène '+this.gym.name);
+            if( result ) {
+                this.deleteRaid();
+            }
+
+        },
         postNewRaid() {
             this.setScreenTo('default');
             this.hideModal();
@@ -257,10 +274,24 @@ export default {
             this.hideModal();
             axios.put('/api/user/cities/1/raids/'+this.gym.raid.id, {
                  params: {
+                     gym_id: this.gym.id,
                      pokemon_id: this.createRaidData.pokemon.id,
                  },
             }).then(res => {
                 this.$store.dispatch('fetchData');
+            }).catch(err => {
+                console.log(err)
+            });
+        },
+        deleteRaid() {
+            this.setScreenTo('default');
+            this.hideModal();
+            axios.delete('/api/user/cities/1/raids/'+this.gym.raid.id).then(res => {
+                this.$store.dispatch('fetchData');
+                this.$store.commit('setSnackbar', {
+                    message: 'Raid supprimé',
+                    timeout: 1500
+                });
             }).catch(err => {
                 console.log(err)
             });
