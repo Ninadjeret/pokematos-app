@@ -10941,6 +10941,18 @@ a.text-dark:focus {
   border-color: #ddd !important;
 }
 
+.settings-section .v-list__tile {
+  height: 58px;
+}
+
+.settings-section hr.v-divider {
+  margin: 0;
+}
+
+.settings-section a.v-list__tile:hover {
+  text-decoration: none;
+}
+
 .setting {
   border-top: 1px solid #eee;
   padding: 16px;
