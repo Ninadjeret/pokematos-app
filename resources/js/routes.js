@@ -6,6 +6,7 @@ import AdminGyms from './components/admin/Gyms.vue'
 import AdminGym from './components/admin/Gym.vue'
 import AdminZones from './components/admin/Zones.vue'
 import AdminZone from './components/admin/Zone.vue'
+import AdminAccess from './components/admin/Acces.vue'
 
 const routes = [
     {
@@ -40,6 +41,15 @@ const routes = [
            },
            component: Admin,
            children: [
+               {
+                     path: 'gyms',
+                     name: 'admin.access',
+                     meta: {
+                         title: 'Gérer les droits d\'accès',
+                         parent: 'admin'
+                     },
+                     component: AdminAccess
+               },
                 {
                       path: 'gyms',
                       name: 'admin.gyms',

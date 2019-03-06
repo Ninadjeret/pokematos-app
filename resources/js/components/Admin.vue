@@ -15,7 +15,23 @@
                   </v-list-tile>
                   <v-divider></v-divider>
                 </template>
-              </v-list>                
+              </v-list>
+
+              <v-subheader>Discord</v-subheader>
+              <v-list>
+              <template v-for="(item, index) in discordItems">
+                  <v-list-tile :key="item.route" :to="{ name: item.route}">
+                      <v-list-tile-action>
+                          <v-icon>{{item.icon}}</v-icon>
+                      </v-list-tile-action>
+                      <v-list-tile-content>
+                          <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                      </v-list-tile-content>
+                </v-list-tile>
+                <v-divider></v-divider>
+              </template>
+            </v-list>
+
             </div>
         </div>
         <transition name="fade">
@@ -41,6 +57,13 @@
                         route: 'admin.zones',
                         icon: 'map'
                     }
+                ],
+                discordItems: [
+                    {
+                        label: 'Gérer les droits d\'accès',
+                        route: 'admin.access',
+                        icon: 'lock_open'
+                    },
                 ]
             }
         },

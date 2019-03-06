@@ -10941,6 +10941,10 @@ a.text-dark:focus {
   border-color: #ddd !important;
 }
 
+.settings-section .v-list {
+  padding: 0;
+}
+
 .settings-section .v-list__tile {
   height: 58px;
 }
