@@ -17,20 +17,22 @@
                 </template>
               </v-list>
 
-              <v-subheader>Discord</v-subheader>
-              <v-list>
-              <template v-for="(item, index) in discordItems">
-                  <v-list-tile :key="item.route" :to="{ name: item.route}">
-                      <v-list-tile-action>
-                          <v-icon>{{item.icon}}</v-icon>
-                      </v-list-tile-action>
-                      <v-list-tile-content>
-                          <v-list-tile-title>{{item.label}}</v-list-tile-title>
-                      </v-list-tile-content>
-                </v-list-tile>
-                <v-divider></v-divider>
-              </template>
-            </v-list>
+              <div v-for="guild in currentCity.guilds">
+                  <v-subheader>Discord {{guild.name}}</v-subheader>
+                  <v-list>
+                  <template v-for="(item, index) in discordItems">
+                      <v-list-tile :key="item.route" :to="{ name: item.route, params: { id: guild.id }}">
+                          <v-list-tile-action>
+                              <v-icon>{{item.icon}}</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-content>
+                              <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                          </v-list-tile-content>
+                    </v-list-tile>
+                    <v-divider></v-divider>
+                  </template>
+                </v-list>
+            </div>
 
             </div>
         </div>

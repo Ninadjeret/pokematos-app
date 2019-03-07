@@ -48,9 +48,12 @@ class User extends Authenticatable
                 $cities_ids[] = $guild->city_id;
                 $city_to_add = City::find($guild->city_id);
                 if( $city_to_add ) {
+                    $city_to_add->guilds = [$guild];
                     $city_to_add->admin = $guild->admin;
                     $cities[] = $city_to_add;
                 }
+            } else {
+                $city_to_add->guilds[] = $guild;
             }
         }
         return $cities;

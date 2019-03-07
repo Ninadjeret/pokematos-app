@@ -122,7 +122,7 @@ export default {
                 eggLevel: 0,
                 pokemon: false,
             },
-            createRaidDelai: '',
+            createRaidDelai: 0,
             createRaidHoraires: '',
             raidLevels: [1,2,3,4,5],
             startTime: false,
@@ -174,10 +174,12 @@ export default {
             this.modalScreen = value;
         },
         addToTimeRange() {
+            this.createRaidData.delai = parseInt(this.createRaidData.delai);
             this.createRaidData.delai += 1;
             this.updateTimeRange();
         },
         substractToTimeRange() {
+            this.createRaidData.delai = parseInt(this.createRaidData.delai);
             this.createRaidData.delai -= 1;
             this.updateTimeRange();
         },
