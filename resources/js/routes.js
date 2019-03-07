@@ -42,14 +42,14 @@ const routes = [
            component: Admin,
            children: [
                {
-                     path: 'gyms',
+                     path: ':id/access',
                      name: 'admin.access',
                      meta: {
                          title: 'Gérer les droits d\'accès',
                          parent: 'admin'
                      },
                      component: AdminAccess
-               },
+                },
                 {
                       path: 'gyms',
                       name: 'admin.gyms',

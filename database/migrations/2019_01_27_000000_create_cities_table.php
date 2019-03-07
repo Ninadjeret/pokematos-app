@@ -161,6 +161,16 @@ class CreateCitiesTable extends Migration
             $table->foreign('guild_id')->references('id')->on('guilds');
             $table->foreign('type_id')->references('id')->on('channel_types');
         });
+
+        Schema::create('guild_settings', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('guild_id');
+            $table->string('key');
+            $table->string('value');
+            $table->timestamps();
+
+            $table->foreign('guild_id')->references('id')->on('guilds');
+        });
     }
 
     /**

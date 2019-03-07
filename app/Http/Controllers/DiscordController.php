@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
 use RestCord\DiscordClient;
 use App\User;
+use App\Models\City;
 use App\Models\Guild;
 
 class DiscordController extends Controller {
@@ -64,14 +65,15 @@ class DiscordController extends Controller {
             foreach( $user_guilds as $user_guild ) {
                 $guild = Guild::where( 'discord_id', $user_guild->id )->first();
                 if( $guild ) {
-                    /*try {
-                        $result = $discord->guild->getGuildMember(array(
-                            'guild.id' => (float) $guild->discord_id,
-                            'user.id' => (float) $user->discord_id,
-                        ));
+                    //var_dump( $discord->guild->getGuild(['guild.id' => (int) $guild->discord_id]));
+                    try {
+                        /*$result = $discord->guild->getGuildMember(array(
+                            'guild.id' => (int) $guild->discord_id,
+                            'user.id' => (int) $user->discord_id,
+                        ));*/
 
                         //Gestion des droits d'accès
-                        if ($result && $guild->access_rule == 'everyone') {
+                        /*if ($result && $guild->access_rule == 'everyone') {
                             $auth = true;
                         } elseif ($result && $guild->access_rule == 'specific_roles' && !empty(array_intersect($guild->authorized_roles, $result->roles))) {
                             $auth = true;
@@ -80,10 +82,10 @@ class DiscordController extends Controller {
                         //Gestion des prvilèges d'admin
                         if (!empty($guild->getMapAdminRoles()) && $result && !empty(array_intersect($guild->getMapAdminRoles(), $result->roles))) {
                             $admin[] = $community->wpId;
-                        }
+                        }*/
                     } catch (Exception $e) {
                         error_log('Exception reçue : ' . $e->getMessage());
-                    }*/
+                    }
                     $auth = true;
                     $guilds[] = [
                         'id' => $guild->id,
@@ -93,6 +95,8 @@ class DiscordController extends Controller {
 
             }
         }
+
+
         $user->save();
         $user->saveGuilds($guilds);
 
@@ -137,5 +141,16 @@ class DiscordController extends Controller {
             ]
         ]);
         return $res;
+    }
+
+    public function getRoles( Request $request, City $city, Guild $guild ) {
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+        $roles = $discord->guild->getGuildRoles(['guild.id' => $guild->discord_id]);
+        $return = array();
+        foreach ($roles as $key => $row) {
+            $return[$key] = $row->name;
+        }
+        array_multisort($return, SORT_ASC|SORT_NATURAL|SORT_FLAG_CASE, $roles);
+        return response()->json($roles, 200);
     }
 }

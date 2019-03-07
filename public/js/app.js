@@ -2199,6 +2199,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Admin',
@@ -2560,7 +2562,7 @@ __webpack_require__.r(__webpack_exports__);
         eggLevel: 0,
         pokemon: false
       },
-      createRaidDelai: '',
+      createRaidDelai: 0,
       createRaidHoraires: '',
       raidLevels: [1, 2, 3, 4, 5],
       startTime: false,
@@ -2613,10 +2615,12 @@ __webpack_require__.r(__webpack_exports__);
       this.modalScreen = value;
     },
     addToTimeRange: function addToTimeRange() {
+      this.createRaidData.delai = parseInt(this.createRaidData.delai);
       this.createRaidData.delai += 1;
       this.updateTimeRange();
     },
     substractToTimeRange: function substractToTimeRange() {
+      this.createRaidData.delai = parseInt(this.createRaidData.delai);
       this.createRaidData.delai -= 1;
       this.updateTimeRange();
     },
@@ -3157,38 +3161,57 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'AdminAccess',
   data: function data() {
     return {
       loading: false,
       name: '',
-      mapAccessRule: 'left'
+      map_access_rule: 'everyone',
+      map_access_roles: [],
+      map_access_admin_roles: [],
+      roles: []
     };
   },
   created: function created() {
     this.fetch();
+    this.fetchDiscordRoles();
   },
   methods: {
     fetch: function fetch() {
       var _this = this;
 
-      axios.get('/api/user/cities/' + this.$store.state.currentCity.id + '/zones/' + this.$route.params.id).then(function (res) {
-        _this.name = res.data.name;
+      axios.get('/api/user/cities/' + this.$store.state.currentCity.id + '/guilds/' + this.$route.params.id + '/settings').then(function (res) {
+        if (res.data.map_access_rule) _this.map_access_rule = res.data.map_access_rule;
+        if (res.data.map_access_roles) _this.map_access_roles = res.data.map_access_roles;
+        if (res.data.map_access_admin_roles) _this.map_access_admin_roles = res.data.map_access_admin_roles;
       }).catch(function (err) {//No error
       });
     },
     fetchDiscordRoles: function fetchDiscordRoles() {
       var _this2 = this;
 
-      axios.get('/api/user/cities/' + this.$store.state.currentCity.id + '/zones/' + this.$route.params.id).then(function (res) {
-        _this2.name = res.data.name;
+      axios.get('/api/user/cities/' + this.$store.state.currentCity.id + '/guilds/' + this.$route.params.id + '/roles').then(function (res) {
+        _this2.roles = res.data;
       }).catch(function (err) {//No error
       });
     },
     submit: function submit() {
       var args = {
-        name: this.name
+        settings: {
+          map_access_rule: this.map_access_rule,
+          map_access_roles: this.map_access_roles,
+          map_access_admin_roles: this.map_access_admin_roles
+        }
       };
       this.save(args);
     },
@@ -3199,7 +3222,7 @@ __webpack_require__.r(__webpack_exports__);
         message: 'Enregistrement en cours'
       });
       this.loading = true;
-      axios.put('/api/user/cities/' + this.$store.state.currentCity.id + '/zones/' + this.$route.params.id, args).then(function (res) {
+      axios.put('/api/user/cities/' + this.$store.state.currentCity.id + '/guilds/' + this.$route.params.id + '/settings', args).then(function (res) {
         _this3.$store.commit('setSnackbar', {
           message: 'Enregistrement effectué',
           timeout: 1500
@@ -74227,47 +74250,62 @@ var render = function() {
                   2
                 ),
                 _vm._v(" "),
-                _c("v-subheader", [_vm._v("Discord")]),
-                _vm._v(" "),
-                _c(
-                  "v-list",
-                  [
-                    _vm._l(_vm.discordItems, function(item, index) {
-                      return [
-                        _c(
-                          "v-list-tile",
-                          {
-                            key: item.route,
-                            attrs: { to: { name: item.route } }
-                          },
-                          [
-                            _c(
-                              "v-list-tile-action",
-                              [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-list-tile-content",
-                              [
-                                _c("v-list-tile-title", [
-                                  _vm._v(_vm._s(item.label))
-                                ])
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c("v-divider")
-                      ]
-                    })
-                  ],
-                  2
-                )
+                _vm._l(_vm.currentCity.guilds, function(guild) {
+                  return _c(
+                    "div",
+                    [
+                      _c("v-subheader", [
+                        _vm._v("Discord " + _vm._s(guild.name))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-list",
+                        [
+                          _vm._l(_vm.discordItems, function(item, index) {
+                            return [
+                              _c(
+                                "v-list-tile",
+                                {
+                                  key: item.route,
+                                  attrs: {
+                                    to: {
+                                      name: item.route,
+                                      params: { id: guild.id }
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-list-tile-action",
+                                    [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-tile-content",
+                                    [
+                                      _c("v-list-tile-title", [
+                                        _vm._v(_vm._s(item.label))
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-divider")
+                            ]
+                          })
+                        ],
+                        2
+                      )
+                    ],
+                    1
+                  )
+                })
               ],
-              1
+              2
             )
           ])
         : _vm._e(),
@@ -75624,19 +75662,19 @@ var render = function() {
               {
                 attrs: { mandatory: "" },
                 model: {
-                  value: _vm.mapAccessRule,
+                  value: _vm.map_access_rule,
                   callback: function($$v) {
-                    _vm.mapAccessRule = $$v
+                    _vm.map_access_rule = $$v
                   },
-                  expression: "mapAccessRule"
+                  expression: "map_access_rule"
                 }
               },
               [
-                _c("v-btn", { attrs: { value: "left" } }, [
+                _c("v-btn", { attrs: { value: "everyone" } }, [
                   _vm._v("Tous les utilisateurs")
                 ]),
                 _vm._v(" "),
-                _c("v-btn", { attrs: { value: "center" } }, [
+                _c("v-btn", { attrs: { value: "specific_roles" } }, [
                   _vm._v("Seulement certains roles")
                 ])
               ],
@@ -75646,31 +75684,98 @@ var render = function() {
           1
         ),
         _vm._v(" "),
+        _vm.map_access_rule == "specific_roles"
+          ? _c("div", { staticClass: "setting" }, [
+              _c("label", [_vm._v("Roles autorisés")]),
+              _vm._v(" "),
+              _vm.roles
+                ? _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.map_access_roles,
+                          expression: "map_access_roles"
+                        }
+                      ],
+                      attrs: { multiple: "true" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.map_access_roles = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    _vm._l(_vm.roles, function(role) {
+                      return _c("option", { domProps: { value: role.id } }, [
+                        _vm._v(_vm._s(role.name))
+                      ])
+                    }),
+                    0
+                  )
+                : _vm._e()
+            ])
+          : _vm._e(),
+        _vm._v(" "),
         _c("v-subheader", [_vm._v("Administration")]),
         _vm._v(" "),
         _c("div", { staticClass: "setting" }, [
-          _c("label", [_vm._v("Nom")]),
+          _c("label", [_vm._v("Roles des administrateurs")]),
           _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.name,
-                expression: "name"
-              }
-            ],
-            attrs: { type: "text" },
-            domProps: { value: _vm.name },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.name = $event.target.value
-              }
-            }
-          })
+          _c("p", { staticClass: "description" }, [
+            _vm._v(
+              "Si les utilisateurs disposent d'un des roles sélectionnés, il seront automatiquement définis comme administrateurs de la map."
+            )
+          ]),
+          _vm._v(" "),
+          _vm.roles
+            ? _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.map_access_admin_roles,
+                      expression: "map_access_admin_roles"
+                    }
+                  ],
+                  attrs: { multiple: "true" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.map_access_admin_roles = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                _vm._l(_vm.roles, function(role) {
+                  return _c("option", { domProps: { value: role.id } }, [
+                    _vm._v(_vm._s(role.name))
+                  ])
+                }),
+                0
+              )
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c(
@@ -119393,7 +119498,7 @@ var routes = [{
   },
   component: _components_Admin_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
   children: [{
-    path: 'gyms',
+    path: ':id/access',
     name: 'admin.access',
     meta: {
       title: 'Gérer les droits d\'accès',

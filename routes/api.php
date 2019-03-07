@@ -43,6 +43,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/cities/{city}/gyms/{stop}', 'CityController@saveGym');
     Route::delete('user/cities/{city}/gyms/{stop}', 'CityController@deleteGym');
 
+    //ADMIN / Guilds
+    Route::get('user/cities/{city}/guilds/{guild}/roles', 'DiscordController@getRoles');
+    Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
+    Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
+
     //commun
     Route::get('pokemons', 'PokemonController@getAll');
     Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');

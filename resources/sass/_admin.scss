@@ -69,7 +69,22 @@
         border: 1px solid #ced4da;
     }
     select {
-        -moz-appearance: menulist-button;
-        -webkit-appearance: menulist-button;
+        -moz-appearance:inherit;
+        -webkit-appearance: inherit;
+    }
+    [multiple="multiple"] {
+        height: 100px;
+    }
+    .v-btn-toggle {
+        .v-btn {
+            text-transform: none;
+        }
+        .v-btn--active:before, .v-btn:focus:before, .v-btn:hover:before{
+            background: $primary;
+            opacity: 1;
+        }
+        .v-btn--active .v-btn__content {
+            color: #fff;
+        }
     }
 }
