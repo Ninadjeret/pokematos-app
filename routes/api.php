@@ -28,7 +28,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/cities/{city}/gyms', 'GymController@getCityGyms');
     Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
     Route::post('user/cities/{city}/raids', 'RaidController@create');
-    Route::put('user/cities/{city}/raids/{raid}', 'RaidController@update');
+    Route::put('user/cities/{city}/raids/{raid}', 'RaidController@create');
+    Route::delete('user/cities/{city}/raids/{raid}', 'RaidController@delete');
 
     //Admin
     Route::get('user/cities/{city}/zones', 'CityController@getZones');
@@ -41,6 +42,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/cities/{city}/gyms/{stop}', 'CityController@getGym');
     Route::put('user/cities/{city}/gyms/{stop}', 'CityController@saveGym');
     Route::delete('user/cities/{city}/gyms/{stop}', 'CityController@deleteGym');
+
+    //ADMIN / Guilds
+    Route::get('user/cities/{city}/guilds/{guild}/roles', 'DiscordController@getRoles');
+    Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
+    Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
 
     //commun
     Route::get('pokemons', 'PokemonController@getAll');

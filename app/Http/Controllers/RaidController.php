@@ -56,10 +56,15 @@ class RaidController extends Controller {
 
     }
 
-    public function update(City $city, Raid $raid, Request $request) {
+    /*public function update(City $city, Raid $raid, Request $request) {
         $raid->pokemon_id = $request->params['pokemon_id'];
         $raid->save();
         return response()->json($raid, 200);
+    }*/
+
+    public function delete(City $city, Raid $raid, Request $request) {
+        Raid::destroy($raid->id);
+        return response()->json(null, 204);
     }
 
 }
