@@ -2,16 +2,14 @@
     <div>
         <div class="settings-section">
             <v-subheader>Description</v-subheader>
-            <!--<v-container style="padding:16px;">
-                <v-text-field hide-details outline v-model="name" label="Nom"></v-text-field>
-            </v-container>-->
-            <v-list-tile>
-                <v-text-field hide-details v-model="name" label="Nom"></v-text-field>
-            </v-list-tile>
+            <div class="setting">
+                <label>Nom</label>
+                <input v-model="name" type="text">
+            </div>
             <v-divider></v-divider>
             <div v-if="$route.params.id && Number.isInteger($route.params.id)">
                 <v-subheader v-if="">Autres actions</v-subheader>
-                <v-list-tile @click="dialog = true">Supprimer la zone</v-list-tile>
+                <v-list-tile color="pink" @click="dialog = true">Supprimer la zone</v-list-tile>
             </div>
 
             <v-btn dark fixed bottom right fab @click="submit()">

@@ -10941,6 +10941,22 @@ a.text-dark:focus {
   border-color: #ddd !important;
 }
 
+.settings-section .v-list {
+  padding: 0;
+}
+
+.settings-section .v-list__tile {
+  height: 58px;
+}
+
+.settings-section hr.v-divider {
+  margin: 0;
+}
+
+.settings-section a.v-list__tile:hover {
+  text-decoration: none;
+}
+
 .setting {
   border-top: 1px solid #eee;
   padding: 16px;
@@ -10980,8 +10996,27 @@ a.text-dark:focus {
 }
 
 .setting select {
-  -moz-appearance: menulist-button;
-  -webkit-appearance: menulist-button;
+  -moz-appearance: inherit;
+  -webkit-appearance: inherit;
+}
+
+.setting [multiple=multiple] {
+  height: 100px;
+}
+
+.setting .v-btn-toggle .v-btn {
+  text-transform: none;
+}
+
+.setting .v-btn-toggle .v-btn--active:before,
+.setting .v-btn-toggle .v-btn:focus:before,
+.setting .v-btn-toggle .v-btn:hover:before {
+  background: #5a6cae;
+  opacity: 1;
+}
+
+.setting .v-btn-toggle .v-btn--active .v-btn__content {
+  color: #fff;
 }
 
 .navbar-laravel {
