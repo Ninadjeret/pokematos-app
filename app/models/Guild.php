@@ -2,10 +2,10 @@
 
 namespace App\models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use App\Models\City;
 use App\Models\GuildSetting;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 
 class Guild extends Model
 {
@@ -14,11 +14,8 @@ class Guild extends Model
     protected $appends = ['city', 'settings'];
     protected $casts = [
         'authorized_roles' => 'array',
+        'settings' => 'object',
     ];
-
-    public function authorizedRoles() {
-        return $this->map_authorized_roles;
-    }
 
     public function getCityAttribute() {
         return City::find($this->city_id);
@@ -33,7 +30,7 @@ class Guild extends Model
                 $return[$setting->key] = $value;
             }
         }
-        return $return;
+        return (object) $return;
     }
 
     public function updateSettings( $settings ) {

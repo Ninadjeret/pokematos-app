@@ -3201,6 +3201,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get('/api/user/cities/' + this.$store.state.currentCity.id + '/guilds/' + this.$route.params.id + '/roles').then(function (res) {
+        console.log(res.data);
         _this2.roles = res.data;
       }).catch(function (err) {//No error
       });
@@ -119635,6 +119636,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
         if (!state.currentCity || state.currentCity == undefined) {
           state.currentCity = state.cities[0];
           localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
+        } else {
+          var newCurrentCity = res.data.find(function (city) {
+            return city.id == state.currentCity.id;
+          });
+          state.currentCity = newCurrentCity;
+          localStorage.setItem('pokematos_currentCity', JSON.stringify(newCurrentCity));
         }
       }).catch(function (err) {//No error
       });
