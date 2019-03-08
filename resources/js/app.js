@@ -68,6 +68,7 @@ const router = new VueRouter({
     router,
 });*/
 const app = new Vue({
+    el: '#app',
     render: h => h(Container),
     store: appStore,
     router

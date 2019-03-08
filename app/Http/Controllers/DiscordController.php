@@ -64,6 +64,8 @@ class DiscordController extends Controller {
         $guilds = [];
         if(  !empty( $user_guilds ) ) {
             foreach( $user_guilds as $user_guild ) {
+                $auth_discord = false;
+                $admin = false;
                 $guild = Guild::where( 'discord_id', $user_guild->id )->first();
                 if( $guild ) {
 
@@ -75,23 +77,29 @@ class DiscordController extends Controller {
 
                         if( $result ) {
 
+Log::debug(print_r($guild->name, true));
                             //Gestion des droits d'accès
                             if( empty($guild->settings->map_access_rule) || $guild->settings->map_access_rule == 'everyone' ) {
                                 $auth = true;
+                                $auth_discord = true;
+                                Log::debug(print_r($guild->name, true));
                             } elseif( $guild->settings->map_access_rule == 'specific_roles' && !empty(array_intersect($guild->settings->map_access_roles, $result->roles))) {
+                                $auth_discord = false;
                                 $auth = true;
                             }
 
                             //Gestion des prvilèges d'admin
-                            $admin = false;
                             if ( !empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $result->roles))) {
                                 $admin = true;
                             }
 
-                            $guilds[] = [
-                                'id' => $guild->id,
-                                'admin' => $admin,
-                            ];
+                            if( $auth_discord ) {
+                                $guilds[] = [
+                                    'id' => $guild->id,
+                                    'admin' => $admin,
+                                ];
+                            }
+
 
                         }
 
