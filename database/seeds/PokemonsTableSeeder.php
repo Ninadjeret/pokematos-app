@@ -55,21 +55,21 @@ class PokemonsTableSeeder extends Seeder {
         if(DB::table('guilds')->get()->count() == 0){
             DB::table('guilds')->insert([
                 [
-                    'discord_id' => '377440443258109953',
-                    'name'  => 'Pokemon Go Rennes',
+                    'discord_id' => '483921469189914634',
+                    'name'  => 'Pokématos',
                     'type'  => 'discord',
                     'city_id'  => 1,
                     'access_rule' => 'specific_roles',
                     'authorized_roles' => json_encode(['377449927321845771', '494618121366143027'])
                 ],
-                [
+                /*[
                     'discord_id' => '400277491941638147',
                     'name'  => 'Pokemon GO - Dijon',
                     'type'  => 'discord',
                     'city_id'  => 2,
                     'access_rule' => 'everyone',
                     'authorized_roles' => json_encode(['377449927321845771', '494618121366143027'])
-                ],
+                ],*/
             ]);
         } // end check if table users is empty
 

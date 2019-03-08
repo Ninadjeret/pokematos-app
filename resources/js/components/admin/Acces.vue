@@ -63,6 +63,7 @@
             },
             fetchDiscordRoles() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/roles').then( res => {
+                    console.log(res.data);
                     this.roles = res.data;
                 }).catch( err => {
                     //No error
