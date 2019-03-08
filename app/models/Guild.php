@@ -14,7 +14,6 @@ class Guild extends Model
     protected $appends = ['city', 'settings'];
     protected $casts = [
         'authorized_roles' => 'array',
-        'settings' => 'object',
     ];
 
     public function getCityAttribute() {

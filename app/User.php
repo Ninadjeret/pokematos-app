@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Guild;
 use App\Models\City;
 use App\Models\UserGuild;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -60,22 +61,35 @@ class User extends Authenticatable
     }
 
     public function saveGuilds( $guilds ) {
-        if( empty( $guilds ) ) return;
-        foreach( $guilds as $guild ) {
-            $finded_guild = UserGuild::where('user_id', $this->id)
-                ->where('guild_id', $guild['id'])
-                ->first();
-            if( $finded_guild ) {
-                $finded_guild->admin = $guild['admin'];
-                $finded_guild->save();
-            } else {
-                UserGuild::create([
-                    'guild_id' => $guild['id'],
-                    'user_id' => $this->id,
-                    'admin' => $guild['admin']
-                ]);
+        $old_guilds = [];
+        if( !empty($guilds) ) {
+            foreach( $guilds as $guild ) {
+                $finded_guild = UserGuild::where('user_id', $this->id)
+                    ->where('guild_id', $guild['id'])
+                    ->first();
+                if( $finded_guild ) {
+                    $finded_guild->admin = $guild['admin'];
+                    $finded_guild->save();
+                } else {
+                    $finded_guild = UserGuild::create([
+                        'guild_id' => $guild['id'],
+                        'user_id' => $this->id,
+                        'admin' => $guild['admin']
+                    ]);
+                }
+                $old_guilds[] = $finded_guild->id;
             }
         }
+
+        Log::debug( print_r($old_guilds, true) );
+
+        $guilds_to_delete = UserGuild::whereNotIn('id', $old_guilds)->get();
+        if( !empty($guilds_to_delete) ) {
+            foreach( $guilds_to_delete as $guild_to_delete ) {
+                UserGuild::destroy($guild_to_delete->id);
+            }
+        }
+
     }
 
 }

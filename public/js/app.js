@@ -118478,6 +118478,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]({
 });*/
 
 var app = new Vue({
+  el: '#app',
   render: function render(h) {
     return h(_components_Container_vue__WEBPACK_IMPORTED_MODULE_11__["default"]);
   },
@@ -119640,8 +119641,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
           var newCurrentCity = res.data.find(function (city) {
             return city.id == state.currentCity.id;
           });
-          state.currentCity = newCurrentCity;
-          localStorage.setItem('pokematos_currentCity', JSON.stringify(newCurrentCity));
+
+          if (newCurrentCity) {
+            state.currentCity = newCurrentCity;
+            localStorage.setItem('pokematos_currentCity', JSON.stringify(newCurrentCity));
+          } else {
+            state.currentCity = state.cities[0];
+            localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
+          }
         }
       }).catch(function (err) {//No error
       });

@@ -61,8 +61,14 @@ const store = new Vuex.Store({
                     var newCurrentCity = res.data.find(function(city) {
                       return city.id == state.currentCity.id;
                     });
-                    state.currentCity = newCurrentCity;
-                    localStorage.setItem('pokematos_currentCity', JSON.stringify(newCurrentCity));
+                    if( newCurrentCity ) {
+                        state.currentCity = newCurrentCity;
+                        localStorage.setItem('pokematos_currentCity', JSON.stringify(newCurrentCity));
+                    } else {
+                        state.currentCity = state.cities[0];
+                        localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
+                    }
+
                 }
             }).catch( err => {
                 //No error
