@@ -57,6 +57,18 @@ const store = new Vuex.Store({
                 if (!state.currentCity || state.currentCity == undefined) {
                     state.currentCity = state.cities[0];
                     localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
+                } else {
+                    var newCurrentCity = res.data.find(function(city) {
+                      return city.id == state.currentCity.id;
+                    });
+                    if( newCurrentCity ) {
+                        state.currentCity = newCurrentCity;
+                        localStorage.setItem('pokematos_currentCity', JSON.stringify(newCurrentCity));
+                    } else {
+                        state.currentCity = state.cities[0];
+                        localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
+                    }
+
                 }
             }).catch( err => {
                 //No error
