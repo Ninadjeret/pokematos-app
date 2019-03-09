@@ -74345,7 +74345,7 @@ var render = function() {
       _c("div", { staticClass: "map__overlay" }),
       _vm._v(" "),
       _c("div", { staticClass: "actions" }, [
-        this.$route.meta.id == "map"
+        this.$route.name == "map"
           ? _c(
               "button",
               {

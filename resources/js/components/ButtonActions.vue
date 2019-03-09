@@ -2,7 +2,7 @@
     <div ref="buttonactions" :class="'map__actions '+menuClass">
         <div class="map__overlay"></div>
         <div class="actions">
-            <button v-if="this.$route.meta.id == 'map'" v-on:click="localise()" class="action" id="findme">
+            <button v-if="this.$route.name == 'map'" v-on:click="localise()" class="action" id="findme">
                 <span>Localiser</span><i class="material-icons">gps_fixed</i>
             </button>
             <button v-on:click="refresh()" class="action" id="refresh">
