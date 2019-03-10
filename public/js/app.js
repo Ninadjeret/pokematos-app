@@ -2824,6 +2824,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'List',
@@ -75242,8 +75244,14 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "raid__content" }, [
                       _c("h3", [
+                        gym.ex
+                          ? _c("span", { staticClass: "gym__ex" }, [
+                              _vm._v("EX")
+                            ])
+                          : _vm._e(),
                         _vm._v(
-                          _vm._s(gym.raid.egg_level) +
+                          "\n                        " +
+                            _vm._s(gym.raid.egg_level) +
                             "T de " +
                             _vm._s(_vm.getRaidStartTime(gym.raid)) +
                             " à " +
@@ -75331,8 +75339,14 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "raid__content" }, [
                       _c("h3", [
+                        gym.ex
+                          ? _c("span", { staticClass: "gym__ex" }, [
+                              _vm._v("EX")
+                            ])
+                          : _vm._e(),
                         _vm._v(
-                          _vm._s(gym.raid.egg_level) +
+                          "\n                        " +
+                            _vm._s(gym.raid.egg_level) +
                             "T de " +
                             _vm._s(_vm.getRaidStartTime(gym.raid)) +
                             " à " +

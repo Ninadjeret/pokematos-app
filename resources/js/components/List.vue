@@ -8,7 +8,8 @@
                         <img :src="getRaidImgUrl(gym.raid)">
                     </div>
                     <div class="raid__content">
-                        <h3>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
+                        <h3><span v-if="gym.ex" class="gym__ex">EX</span>
+                            {{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
                             <span class="raid__timer active">
                                 <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
                                     <template slot-scope="props">Reste {{ props.totalMinutes }} min</template>
@@ -31,7 +32,8 @@
                         <img :src="getRaidImgUrl(gym.raid)">
                     </div>
                     <div class="raid__content">
-                        <h3>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
+                        <h3><span v-if="gym.ex" class="gym__ex">EX</span>
+                            {{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
                             <span class="raid__timer future">
                                 <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
                                     <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
