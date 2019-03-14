@@ -10546,6 +10546,19 @@ a.text-dark:focus {
   display: none;
 }
 
+.raid__content .gym__ex {
+  display: inline-block;
+  margin-right: 10px;
+  border-radius: 40px;
+  background: #a8a7cf;
+  color: #fff;
+  font-family: "Roboto";
+  font-size: 12px;
+  line-height: 12px;
+  padding: 5px 10px;
+  vertical-align: top;
+}
+
 .v-overlay--active {
   z-index: 6000 !important;
 }
@@ -10581,6 +10594,18 @@ a.text-dark:focus {
 .v-dialog__content .v-dialog.gym-modal .v-card {
   height: 100%;
   padding: 1em !important;
+}
+
+.modal__screen .gym__ex {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  background: #a8a7cf;
+  padding: 2px 10px;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
 }
 
 .v-dialog__content .dialog__wrap {
@@ -10745,19 +10770,6 @@ a.text-dark:focus {
 .modal__screen [data-step-name=boss] .step__wrapper ul li {
   width: 33.33333%;
   border-bottom: 1px solid #fafafa;
-}
-
-.modal__screen[data-screen=gym] .gym__ex {
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  background: #5bb0c4;
-  padding: 0px 5px;
-  color: #fff;
-  border-radius: 4px;
-  font-size: 9px;
-  text-transform: uppercase;
-  display: none;
 }
 
 .footer-action {
@@ -11019,6 +11031,35 @@ a.text-dark:focus {
   color: #fff;
 }
 
+.multiselect {
+  min-height: 50px;
+}
+
+.multiselect .multiselect__select {
+  top: 7px;
+}
+
+.multiselect .multiselect__tags {
+  min-height: 50px;
+  padding: 15px 40px 0 8px;
+}
+
+.setting.pokemon {
+  padding: 5px 16px;
+}
+
+.setting.pokemon img {
+  max-width: 70px;
+  padding-right: 10px;
+}
+
+.setting.pokemon p {
+  display: inline-block;
+  font-family: "Teko";
+  font-size: 24px;
+  width: calc(100% - 140px);
+}
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -11076,6 +11117,10 @@ h6 small {
   letter-spacing: -0.02em;
   opacity: 0.54;
   font-size: 0.6em;
+}
+
+.mb-60 {
+  margin-bottom: 60px;
 }
 
 .v-content__wrap .container {
@@ -11253,19 +11298,6 @@ body.logged-out .branding a:before {
 
 .raid__gym {
   font-size: 1.5rem;
-}
-
-.modal__screen .gym__ex {
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  background: #5bb0c4;
-  padding: 0px 5px;
-  color: #fff;
-  border-radius: 4px;
-  font-size: 9px;
-  text-transform: uppercase;
-  display: none;
 }
 
 .modal__screen .dialog__counter {

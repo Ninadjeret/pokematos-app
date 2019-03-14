@@ -243,7 +243,7 @@ export default {
                 this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
             } else if( this.endTime ) {
                 this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
-                this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.niantic_id+' têtes est en cours...';
+                this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.name_fr+' est en cours...';
                 this.raidUrl =  this.gym.raid.pokemon.thumbnail_url;
             }
         },
