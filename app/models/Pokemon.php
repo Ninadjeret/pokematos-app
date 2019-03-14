@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pokemon extends Model {
 
+    protected $fillable = ['boss', 'boss_level'];
     protected $table = 'pokemons';
     protected $appends = ['thumbnail_url'];
     protected $casts = [

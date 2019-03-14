@@ -12,3 +12,18 @@
 .leaflet-control-zoom {
     display:none;
 }
+
+.raid__content {
+    .gym__ex {
+        display: inline-block;
+        margin-right: 10px;
+        border-radius: 40px;
+        background: $secondary;
+        color: #fff;
+        font-family: "Roboto";
+        font-size: 12px;
+        line-height: 12px;
+        padding: 5px 10px;
+        vertical-align: top;
+    }
+}

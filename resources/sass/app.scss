@@ -58,6 +58,10 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     opacity: .54;
     font-size: .6em;
 }
+
+.mb-60 {
+    margin-bottom: 60px;
+}
 .v-content__wrap .container {
     padding : 0;
 }
@@ -218,18 +222,6 @@ body.logged-out .branding a:before {
 }
 .raid__gym {
     font-size: 1.5rem;
-}
-.modal__screen .gym__ex {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    background: #5bb0c4;
-    padding: 0px 5px;
-    color: #fff;
-    border-radius: 4px;
-    font-size: 9px;
-    text-transform: uppercase;
-    display:none;
 }
 
 .modal__screen .dialog__counter {
