@@ -86,6 +86,10 @@ const store = new Vuex.Store({
             state.currentCity = payload.city;
             localStorage.setItem('pokematos_currentCity', JSON.stringify(payload.city));
         },
+        setPokemons( state, payload ) {
+            state.pokemons = payload;
+            localStorage.setItem('pokematos_pokemons', JSON.stringify(payload));
+        },
         setSetting( state, payload ) {
             if( state.settings === undefined || !state.settings || state.settings === null ) state.settings = {};
             state.settings[payload.setting] = payload.value;

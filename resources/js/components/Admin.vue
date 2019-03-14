@@ -34,6 +34,21 @@
                 </v-list>
             </div>
 
+            <v-subheader>Commun</v-subheader>
+            <v-list>
+            <template v-for="(item, index) in commonItems">
+                <v-list-tile :key="item.route" :to="{ name: item.route}">
+                    <v-list-tile-action>
+                        <v-icon>{{item.icon}}</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                    </v-list-tile-content>
+              </v-list-tile>
+              <v-divider></v-divider>
+            </template>
+          </v-list>
+
             </div>
         </div>
         <transition name="fade">
@@ -65,6 +80,13 @@
                         label: 'Gérer les droits d\'accès',
                         route: 'admin.access',
                         icon: 'lock_open'
+                    },
+                ],
+                commonItems: [
+                    {
+                        label: 'Gérer les boss',
+                        route: 'admin.bosses',
+                        icon: 'fingerprint'
                     },
                 ]
             }

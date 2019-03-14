@@ -7,6 +7,7 @@ import AdminGym from './components/admin/Gym.vue'
 import AdminZones from './components/admin/Zones.vue'
 import AdminZone from './components/admin/Zone.vue'
 import AdminAccess from './components/admin/Acces.vue'
+import AdminBosses from './components/admin/Bosses.vue'
 
 const routes = [
     {
@@ -103,6 +104,15 @@ const routes = [
                           parent: 'admin.zones'
                       },
                       component: AdminZone
+                },
+                {
+                      path: 'bosses',
+                      name: 'admin.bosses',
+                      meta: {
+                          title: 'Gérer les boss',
+                          parent: 'admin'
+                      },
+                      component: AdminBosses
                 },
         ]
         },

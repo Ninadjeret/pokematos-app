@@ -126,17 +126,25 @@ class PokemonsTableSeeder extends Seeder {
 
         $game_master = file_get_contents('https://raw.githubusercontent.com/pokemongo-dev-contrib/pokemongo-game-master/master/versions/latest/GAME_MASTER.json');
         $game_master = json_decode($game_master);
+
+        $names_fr = file_get_contents('https://raw.githubusercontent.com/sindresorhus/pokemon/master/data/fr.json');
+        $names_fr = json_decode($names_fr, true);
         if(DB::table('pokemons')->get()->count() == 0){
             foreach( $game_master as $game_master_2 ) {
                 if( is_array($game_master_2) ) { foreach( $game_master_2 as $node ) {
                 if( !isset($node->pokemonSettings) || empty($node->pokemonSettings) ) continue;
                 if( strstr($node->templateId, 'ALOLA')) continue;
                 if( strstr($node->templateId, 'NORMAL')) continue;
+
+                $pokedex_id = substr($node->templateId, 2, 3);
+                $name_fr = ( isset($names_fr[(int)$pokedex_id]) ) ? $names_fr[(int)$pokedex_id - 1] : null;
+
                 error_log('Import de '.$node->pokemonSettings->pokemonId);
                 DB::table('pokemons')->insert([
                     [
-                        'pokedex_id' => substr($node->templateId, 2, 3),
+                        'pokedex_id' => $pokedex_id,
                         'niantic_id'  => $node->pokemonSettings->pokemonId,
+                        'name_fr'   => $name_fr,
                         'base_att'  => $node->pokemonSettings->stats->baseAttack,
                         'base_def'  => $node->pokemonSettings->stats->baseDefense,
                         'base_sta'  => $node->pokemonSettings->stats->baseStamina,

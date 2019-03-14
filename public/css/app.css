@@ -11031,6 +11031,35 @@ a.text-dark:focus {
   color: #fff;
 }
 
+.multiselect {
+  min-height: 50px;
+}
+
+.multiselect .multiselect__select {
+  top: 7px;
+}
+
+.multiselect .multiselect__tags {
+  min-height: 50px;
+  padding: 15px 40px 0 8px;
+}
+
+.setting.pokemon {
+  padding: 5px 16px;
+}
+
+.setting.pokemon img {
+  max-width: 70px;
+  padding-right: 10px;
+}
+
+.setting.pokemon p {
+  display: inline-block;
+  font-family: "Teko";
+  font-size: 24px;
+  width: calc(100% - 140px);
+}
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -11088,6 +11117,10 @@ h6 small {
   letter-spacing: -0.02em;
   opacity: 0.54;
   font-size: 0.6em;
+}
+
+.mb-60 {
+  margin-bottom: 60px;
 }
 
 .v-content__wrap .container {
