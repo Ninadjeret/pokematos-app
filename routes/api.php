@@ -51,5 +51,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     //commun
     Route::get('pokemons', 'PokemonController@getAll');
     Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
+    Route::put('pokemons/raidbosses', 'PokemonController@updateRaidBosses');
 
 });
