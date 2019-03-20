@@ -18,7 +18,7 @@
             <v-subheader>Administration</v-subheader>
             <div class="setting">
                 <label>Roles des administrateurs</label>
-                <p class="description">Si les utilisateurs disposent d'un des roles sélectionnés, il seront automatiquement définis comme administrateurs de la map.</p>
+                <p class="description">Par défaut, tous les utilisateurs "administrateur" sur Discord sont administrateur de la map. Vous pouvez également ajouter d'autres roles comme administrateurs</p>
                 <select multiple="true" v-if="roles" v-model="map_access_admin_roles">
                     <option v-for="role in roles" :value="role.id">{{role.name}}</option>
                 </select>

@@ -2222,16 +2222,28 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       generalItems: [{
-        label: 'Gérer les arènes',
+        label: 'Arènes',
         route: 'admin.gyms',
         icon: 'place'
       }, {
-        label: 'Gérer les zones géographiques',
+        label: 'Aones géographiques',
         route: 'admin.zones',
         icon: 'map'
       }],
       discordItems: [{
-        label: 'Gérer les droits d\'accès',
+        label: 'Signalements de raids',
+        route: 'admin.raids',
+        icon: 'add_alert'
+      }, {
+        label: 'Signalements de pops sauvages',
+        route: 'admin.access',
+        icon: 'add_a_photo'
+      }, {
+        label: 'Signalement de quètes',
+        route: 'admin.access',
+        icon: 'add_location'
+      }, {
+        label: 'Droits d\'accès',
         route: 'admin.access',
         icon: 'lock_open'
       }],
@@ -3823,6 +3835,71 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/RaidReporting.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/RaidReporting.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'AdminRaids',
+  data: function data() {
+    return {
+      menuItems: [{
+        label: 'Détecter les annonces',
+        route: 'admin.gyms',
+        icon: 'place'
+      }, {
+        label: 'Recevoir les annonces',
+        route: 'admin.zones',
+        icon: 'map'
+      }, {
+        label: 'Roles personnalisés',
+        route: 'admin.zones',
+        icon: 'map'
+      }]
+    };
+  },
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['currentCity']),
+  watch: {},
+  mounted: function mounted() {},
+  methods: {}
 });
 
 /***/ }),
@@ -76123,7 +76200,7 @@ var render = function() {
           _vm._v(" "),
           _c("p", { staticClass: "description" }, [
             _vm._v(
-              "Si les utilisateurs disposent d'un des roles sélectionnés, il seront automatiquement définis comme administrateurs de la map."
+              'Par défaut, tous les utilisateurs "administrateur" sur Discord sont administrateur de la map. Vous pouvez également ajouter d\'autres roles comme administrateurs'
             )
           ]),
           _vm._v(" "),
@@ -77003,6 +77080,87 @@ var render = function() {
       1
     )
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/RaidReporting.vue?vue&type=template&id=ec3faa2e&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/RaidReporting.vue?vue&type=template&id=ec3faa2e& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm.$route.name == "admin.raids"
+        ? _c("div", { staticClass: "parent_view" }, [
+            _c(
+              "div",
+              { staticClass: "settings-section" },
+              [
+                _c("v-subheader", [_vm._v("Général")]),
+                _vm._v(" "),
+                _c(
+                  "v-list",
+                  [
+                    _vm._l(_vm.menuItems, function(item, index) {
+                      return [
+                        _c(
+                          "v-list-tile",
+                          {
+                            key: item.route,
+                            attrs: { to: { name: item.route } }
+                          },
+                          [
+                            _c(
+                              "v-list-tile-action",
+                              [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-tile-content",
+                              [
+                                _c("v-list-tile-title", [
+                                  _vm._v(_vm._s(item.label))
+                                ])
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("v-divider")
+                      ]
+                    })
+                  ],
+                  2
+                )
+              ],
+              1
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [_c("router-view")], 1)
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -120086,6 +120244,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/admin/RaidReporting.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/admin/RaidReporting.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _RaidReporting_vue_vue_type_template_id_ec3faa2e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RaidReporting.vue?vue&type=template&id=ec3faa2e& */ "./resources/js/components/admin/RaidReporting.vue?vue&type=template&id=ec3faa2e&");
+/* harmony import */ var _RaidReporting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RaidReporting.vue?vue&type=script&lang=js& */ "./resources/js/components/admin/RaidReporting.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _RaidReporting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _RaidReporting_vue_vue_type_template_id_ec3faa2e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _RaidReporting_vue_vue_type_template_id_ec3faa2e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/admin/RaidReporting.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/RaidReporting.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/admin/RaidReporting.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RaidReporting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./RaidReporting.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/RaidReporting.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RaidReporting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/RaidReporting.vue?vue&type=template&id=ec3faa2e&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/admin/RaidReporting.vue?vue&type=template&id=ec3faa2e& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RaidReporting_vue_vue_type_template_id_ec3faa2e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./RaidReporting.vue?vue&type=template&id=ec3faa2e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/RaidReporting.vue?vue&type=template&id=ec3faa2e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RaidReporting_vue_vue_type_template_id_ec3faa2e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RaidReporting_vue_vue_type_template_id_ec3faa2e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/admin/Zone.vue":
 /*!************************************************!*\
   !*** ./resources/js/components/admin/Zone.vue ***!
@@ -120312,6 +120539,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_admin_Zone_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/admin/Zone.vue */ "./resources/js/components/admin/Zone.vue");
 /* harmony import */ var _components_admin_Acces_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/admin/Acces.vue */ "./resources/js/components/admin/Acces.vue");
 /* harmony import */ var _components_admin_Bosses_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/admin/Bosses.vue */ "./resources/js/components/admin/Bosses.vue");
+/* harmony import */ var _components_admin_RaidReporting_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/admin/RaidReporting.vue */ "./resources/js/components/admin/RaidReporting.vue");
+
 
 
 
@@ -120358,6 +120587,14 @@ var routes = [{
       parent: 'admin'
     },
     component: _components_admin_Acces_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
+  }, {
+    path: ':id/raids',
+    name: 'admin.raids',
+    meta: {
+      title: 'Signalement de raids',
+      parent: 'admin'
+    },
+    component: _components_admin_RaidReporting_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
   }, {
     path: 'gyms',
     name: 'admin.gyms',

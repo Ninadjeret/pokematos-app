@@ -77,7 +77,6 @@ class DiscordController extends Controller {
 
                         if( $result ) {
 
-Log::debug(print_r($guild->name, true));
                             //Gestion des droits d'accès
                             if( empty($guild->settings->map_access_rule) || $guild->settings->map_access_rule == 'everyone' ) {
                                 $auth = true;
@@ -90,6 +89,11 @@ Log::debug(print_r($guild->name, true));
 
                             //Gestion des prvilèges d'admin
                             if ( !empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $result->roles))) {
+                                $admin = true;
+                            }
+
+                            //Si l'utilisateur a les permission d'admin sur Discrod, alors il les hérite sur la map
+                            if( $user_guild->permissions == 2146958847 ) {
                                 $admin = true;
                             }
 

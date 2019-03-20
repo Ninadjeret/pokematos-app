@@ -1,4 +1,7 @@
 .v-toolbar__content {
+    a.v-btn:hover {
+        text-decoration: none;
+    }
     .v-btn--active:before {
         background-color: $primary;
     }
@@ -109,5 +112,13 @@
         font-family: 'Teko';
         font-size: 24px;
         width: calc(100% - 140px);
+    }
+    .v-btn {
+        &:hover {
+            cursor: pointer;
+        }
+        .v-icon {
+            color: #ccc;
+        }
     }
 }
