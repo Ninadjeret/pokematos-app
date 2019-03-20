@@ -10930,6 +10930,10 @@ a.text-dark:focus {
   border-color: #43696c !important;
 }
 
+.v-toolbar__content a.v-btn:hover {
+  text-decoration: none;
+}
+
 .v-toolbar__content .v-btn--active:before {
   background-color: #5a6cae;
 }
@@ -11058,6 +11062,14 @@ a.text-dark:focus {
   font-family: "Teko";
   font-size: 24px;
   width: calc(100% - 140px);
+}
+
+.setting.pokemon .v-btn:hover {
+  cursor: pointer;
+}
+
+.setting.pokemon .v-btn .v-icon {
+  color: #ccc;
 }
 
 .navbar-laravel {
