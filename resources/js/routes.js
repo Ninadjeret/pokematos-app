@@ -8,6 +8,7 @@ import AdminZones from './components/admin/Zones.vue'
 import AdminZone from './components/admin/Zone.vue'
 import AdminAccess from './components/admin/Acces.vue'
 import AdminBosses from './components/admin/Bosses.vue'
+import AdminRaids from './components/admin/RaidReporting.vue'
 
 const routes = [
     {
@@ -51,6 +52,15 @@ const routes = [
                      },
                      component: AdminAccess
                 },
+                {
+                      path: ':id/raids',
+                      name: 'admin.raids',
+                      meta: {
+                          title: 'Signalement de raids',
+                          parent: 'admin'
+                      },
+                      component: AdminRaids
+                 },
                 {
                       path: 'gyms',
                       name: 'admin.gyms',

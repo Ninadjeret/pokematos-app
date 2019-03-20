@@ -65,19 +65,34 @@
             return {
                 generalItems: [
                     {
-                        label: 'Gérer les arènes',
+                        label: 'Arènes',
                         route: 'admin.gyms',
                         icon: 'place'
                     },
                     {
-                        label: 'Gérer les zones géographiques',
+                        label: 'Aones géographiques',
                         route: 'admin.zones',
                         icon: 'map'
                     }
                 ],
                 discordItems: [
                     {
-                        label: 'Gérer les droits d\'accès',
+                        label: 'Signalements de raids',
+                        route: 'admin.raids',
+                        icon: 'add_alert'
+                    },
+                    {
+                        label: 'Signalements de pops sauvages',
+                        route: 'admin.access',
+                        icon: 'add_a_photo'
+                    },
+                    {
+                        label: 'Signalement de quètes',
+                        route: 'admin.access',
+                        icon: 'add_location'
+                    },
+                    {
+                        label: 'Droits d\'accès',
                         route: 'admin.access',
                         icon: 'lock_open'
                     },
