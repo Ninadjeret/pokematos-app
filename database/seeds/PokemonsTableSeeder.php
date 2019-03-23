@@ -17,7 +17,6 @@ class PokemonsTableSeeder extends Seeder {
                     'password' => bcrypt('florian'),
                     'discord_id' => 539079553813839873,
                     'discord_name' => 'Ninadjeret',
-                    'guilds'    => '["377440443258109953", "400277491941638147"]',
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
                 ],
@@ -27,7 +26,6 @@ class PokemonsTableSeeder extends Seeder {
                     'password' => bcrypt('kisulov'),
                     'discord_id' => 484022213507547152,
                     'discord_name' => 'Kisulov',
-                    'guilds'    => '["377440443258109953"]',
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
                 ],
@@ -59,8 +57,6 @@ class PokemonsTableSeeder extends Seeder {
                     'name'  => 'Pokématos',
                     'type'  => 'discord',
                     'city_id'  => 1,
-                    'access_rule' => 'specific_roles',
-                    'authorized_roles' => json_encode(['377449927321845771', '494618121366143027'])
                 ],
                 /*[
                     'discord_id' => '400277491941638147',
