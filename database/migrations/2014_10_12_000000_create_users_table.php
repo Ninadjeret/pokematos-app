@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
             $table->string('messenger_id')->nullable();
             $table->string('discord_name')->nullable();
             $table->string('discord_avatar_id')->nullable();
-            $table->json('guilds')->nullable();
             $table->timestamps();
         });
     }

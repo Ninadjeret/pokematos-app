@@ -28,8 +28,6 @@ class CreateCitiesTable extends Migration
             $table->string('name');
             $table->string('type');
             $table->integer('city_id');
-            $table->string('access_rule')->default('everyone'); //everyone, specific_roles
-            $table->json('authorized_roles')->nullable();
             $table->timestamps();
 
             $table->foreign('city_id')->references('id')->on('cities');
@@ -170,6 +168,29 @@ class CreateCitiesTable extends Migration
             $table->timestamps();
 
             $table->foreign('guild_id')->references('id')->on('guilds');
+        });
+
+        Schema::create('roles', function (Blueprint $table) {
+            $table->increments('id');
+            $table->bigInteger('discord_id');
+            $table->integer('guild_id');
+            $table->string('name')->nullable();
+            $table->string('type')->nullable();
+            $table->string('relation_id')->nullable();
+            $table->string('restricted')->default(0);
+            $table->timestamps();
+
+            $table->foreign('guild_id')->references('id')->on('guilds');
+        });
+
+        Schema::create('role_permissions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('role_id');
+            $table->string('discord_channel_id');
+            $table->text('authorized_roles');
+            $table->timestamps();
+
+            $table->foreign('role_id')->references('id')->on('roles');
         });
     }
 

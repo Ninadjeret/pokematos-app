@@ -54,3 +54,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('pokemons/raidbosses', 'PokemonController@updateRaidBosses');
 
 });
+
+Route::get('bot/roles', 'BotController@getRoles');
+Route::post('bot/roles', 'BotController@createRole');
+Route::delete('bot/roles/{role}', 'BotController@deleteRole');
+Route::get('bot/roles/{role}', 'BotController@getRole');
+Route::put('bot/roles/{role}', 'BotController@updateRole');
