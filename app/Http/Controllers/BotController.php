@@ -17,6 +17,14 @@ class BotController extends Controller {
         return response()->json($roles, 200);
     }
 
+    public function getRole( Request $request, $role ) {
+
+        $role = Role::where('discord_id', $role)->first();
+        if( empty($role) ) return response()->json('Le role n\'a pas été trouvé', 400);
+
+        return response()->json($role, 200);
+    }
+
     public function createRole( Request $request ) {
 
         $guild = Guild::where('discord_id', $request->guild_id)->first();
