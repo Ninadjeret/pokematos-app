@@ -83,16 +83,12 @@
                     },
                     {
                         label: 'Signalements de pops sauvages',
-<<<<<<< HEAD
                         route: 'admin.pops',
-=======
                         route: 'admin.access',
->>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
                         icon: 'add_a_photo'
                     },
                     {
                         label: 'Signalement de quètes',
-<<<<<<< HEAD
                         route: 'admin.quests',
                         icon: 'add_location'
                     },
@@ -102,12 +98,10 @@
                         icon: 'alternate_email'
                     },
                     {
-=======
                         route: 'admin.access',
                         icon: 'add_location'
                     },
                     {
->>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
                         label: 'Droits d\'accès',
                         route: 'admin.access',
                         icon: 'lock_open'

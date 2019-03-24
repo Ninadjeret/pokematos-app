@@ -4,21 +4,14 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\models\Guild;
-<<<<<<< HEAD
 use App\models\RoleCategory;
 use RestCord\DiscordClient;
 
-class Role extends Model {
-
-    protected $fillable = ['discord_id', 'guild_id', 'name', 'type', 'relation_id', 'restricted', 'category_id'];
-    protected $appends = ['guild', 'category'];
-=======
 
 class Role extends Model {
 
     protected $fillable = ['discord_id', 'guild_id', 'name', 'type', 'relation_id', 'restricted'];
     protected $appends = ['guild'];
->>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
     protected $hidden = ['guild_id'];
     protected $casts = [
         'restricted' => 'boolean'
@@ -28,7 +21,6 @@ class Role extends Model {
         return Guild::find($this->guild_id);
     }
 
-<<<<<<< HEAD
     public function getCategoryAttribute() {
         return RoleCategory::find($this->category_id);
     }
@@ -91,7 +83,4 @@ class Role extends Model {
 
         return true;
     }
-
-=======
->>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
 }

@@ -181,7 +181,6 @@ class DiscordController extends Controller {
         array_multisort($order, SORT_ASC|SORT_NATURAL|SORT_FLAG_CASE, $return);
         return response()->json($return, 200);
     }
-<<<<<<< HEAD
 
     public function getChannels( Request $request, City $city, Guild $guild ) {
         $discord = new DiscordClient(['token' => config('discord.token')]);
@@ -199,6 +198,4 @@ class DiscordController extends Controller {
 
         return response()->json($return, 200);
     }
-=======
->>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
 }
