@@ -13,6 +13,33 @@
                     <option v-for="categorie in categories" :value="categorie.id">{{categorie.name}}</option>
                 </select>
             </div>
+            <div class="setting">
+                <label>Ce role fait référence à</label>
+                <v-btn-toggle v-model="type" mandatory>
+                    <v-btn value="gym">Une arène</v-btn>
+                    <v-btn value="zone">Une zone</v-btn>
+                    <v-btn value="pokemon">Un Pokémon</v-btn>
+                    <v-btn value="other">Autre chose</v-btn>
+                </v-btn-toggle>
+            </div>
+            <div class="setting" v-if="type == 'gym' && gyms">
+                <label>Arène liée</label>
+                <select v-model="gym_id">
+                    <option v-for="gym in gyms" :value="gym.id">{{gym.name}}</option>
+                </select>
+            </div>
+            <div class="setting" v-if="type == 'zone' && zones">
+                <label>Zone géographique liée</label>
+                <select v-model="zone_id">
+                    <option v-for="zone in zones" :value="zone.id">{{zone.name}}</option>
+                </select>
+            </div>
+            <div class="setting" v-if="type == 'pokemon' && pokemons">
+                <label>Pokémon lié</label>
+                <select v-model="pokemon_id">
+                    <option v-for="pokemon in pokemons" :value="pokemon.id">{{pokemon.name_fr}}</option>
+                </select>
+            </div>
             <v-divider></v-divider>
             <div v-if="this.$route.params.role_id">
                 <v-subheader v-if="">Autres actions</v-subheader>
@@ -45,11 +72,19 @@
                 loading: false,
                 dialog: false,
                 name: '',
+                type: 'other',
+                gym_id: '',
+                zone_id: '',
+                pokemon_id: '',
                 category_id: '',
-                categories: []
+                categories: [],
+                gyms: []
             }
         },
         created() {
+            this.fetchGyms();
+            this.fetchZones();
+            this.fetchPokemons();
             this.fetchCategories();
             if( this.$route.params.role_id ) {
                 this.fetch();
@@ -59,6 +94,10 @@
             fetch() {
                 axios.get('/api/user/guilds/'+this.$route.params.id+'/roles/'+this.$route.params.role_id).then( res => {
                     this.name = res.data.name;
+                    this.type = res.data.type,
+                    this.gym_id = res.data.gym_id;
+                    this.zone_id = res.data.zone_id;
+                    this.pokemon_id = res.data.pokemon_id;
                     this.category_id = res.data.category_id;
                     console.log(this.channel_id);
                 }).catch( err => {
@@ -68,15 +107,31 @@
             fetchCategories() {
                 axios.get('/api/user/guilds/'+this.$route.params.id+'/rolecategories').then( res => {
                     this.categories = res.data;
-                    console.log(this.categories);
-                }).catch( err => {
-                    //
+                });
+            },
+            fetchGyms() {
+                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms').then( res => {
+                    this.gyms = res.data;
+                });
+            },
+            fetchZones() {
+                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/zones').then( res => {
+                    this.zones = res.data;
+                });
+            },
+            fetchPokemons() {
+                axios.get('/api/pokemons').then( res => {
+                    this.pokemons = res.data;
                 });
             },
             submit() {
                 const args = {
                     name: this.name,
-                    category_id: this.category_id
+                    type: this.type,
+                    gym_id: this.gym_id,
+                    zone_id: this.zone_id,
+                    pokemon_id: this.pokemon_id,
+                    category_id: this.category_id,
                 };
                 if( this.$route.params.role_id ) {
                     this.save(args);

@@ -28,7 +28,7 @@ class RaidController extends Controller {
             if( !$raid->pokemon_id && $request->params['pokemon_id'] ) {
                 $raid->pokemon_id = $request->params['pokemon_id'];
                 $raid->save();
-                $announceType = 'update';
+                $announceType = 'raid-update';
             }
         }
 
@@ -40,7 +40,7 @@ class RaidController extends Controller {
             $raid->pokemon_id = isset( $request->params['pokemon_id'] ) ? $request->params['pokemon_id'] : null ;
             $raid->start_time = $request->params['start_time'];
             $raid->save();
-            $announceType = 'create';
+            $announceType = 'raid-create';
         }
         if( $announceType ) {
             $announce = Announce::create([

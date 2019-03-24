@@ -45,7 +45,6 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     //ADMIN / Guilds
     Route::get('user/cities/{city}/guilds/{guild}/roles', 'DiscordController@getRoles');
-
     Route::get('user/cities/{city}/guilds/{guild}/channels', 'DiscordController@getChannels');
     Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');

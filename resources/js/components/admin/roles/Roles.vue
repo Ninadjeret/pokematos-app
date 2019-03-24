@@ -1,10 +1,10 @@
 <template>
-    <div>
-        <div class="settings-section">
-            <div class="search__wrapper">
-                <v-text-field single-line hide-details outline v-model="search" label="Recherche"></v-text-field>
-            </div>
-            <v-list>
+<div>
+    <div class="settings-section">
+        <div class="search__wrapper">
+            <v-text-field single-line hide-details outline v-model="search" label="Recherche"></v-text-field>
+        </div>
+        <v-list>
             <template v-for="(item, index) in filteredItems">
               <v-list-tile :key="item.id" :to="{ name: 'admin.roles.roles.edit', params: { id: $route.params.id, role_id:item.id } }">
                 <v-list-tile-content>
@@ -12,13 +12,16 @@
                       @{{item.name}} <span v-if="item.category" class=""> // {{item.category.name}}</span>
                   </v-list-tile-title>
                 </v-list-tile-content>
+            </v-list-tile>
               </v-list-tile>
               <v-divider></v-divider>
             </template>
-          </v-list>
-            <v-btn dark fixed bottom right fab :to="{ name: 'admin.roles.roles.add', params: { id: $route.params.id } }"><v-icon>add</v-icon></v-btn>
-        </div>
+        </v-list>
+        <v-btn dark fixed bottom right fab :to="{ name: 'admin.roles.roles.add', params: { id: $route.params.id } }">
+            <v-icon>add</v-icon>
+        </v-btn>
     </div>
+</div>
 </template>
 
 <script>
@@ -34,10 +37,14 @@
             filteredItems() {
                 return this.items.filter((item) => {
                     let matchingTitle = 1;
+                    let matchingCategory = 1;
+                    let matchingType = 1;
                     if (this.search != null) {
                         matchingTitle = item.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+                        matchingCategory = item.category.name.toLowerCase() == this.search.toLowerCase();
+                        matchingType = ':'+item.type == this.search.toLowerCase();
                     }
-                    return (matchingTitle);
+                    return (matchingTitle || matchingCategory || matchingType);
                 });
             },
         },
