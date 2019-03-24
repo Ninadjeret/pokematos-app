@@ -174,23 +174,33 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->bigInteger('discord_id');
             $table->integer('guild_id');
-            $table->string('name')->nullable();
+            $table->integer('category_id');
+            $table->string('name');
             $table->string('type')->nullable();
             $table->string('relation_id')->nullable();
-            $table->string('restricted')->default(0);
             $table->timestamps();
 
             $table->foreign('guild_id')->references('id')->on('guilds');
+            $table->foreign('category_id')->references('id')->on('role_categories');
+        });
+
+        Schema::create('role_categories', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('guild_id');
+            $table->string('name');
+            $table->string('channel_discord_id');
+            $table->string('restricted')->default(0);
+            $table->timestamps();
         });
 
         Schema::create('role_permissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('role_id');
+            $table->integer('role_category_id');
             $table->string('discord_channel_id');
             $table->text('authorized_roles');
             $table->timestamps();
 
-            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('role_category_id')->references('id')->on('role_categories');
         });
     }
 
