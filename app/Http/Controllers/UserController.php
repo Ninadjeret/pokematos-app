@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Models\City;
+<<<<<<< HEAD
 use App\Models\Role;
 use App\Models\Guild;
 use App\Models\RoleCategory;
+=======
+use App\Models\Guild;
+>>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,6 +36,7 @@ class UserController extends Controller {
         return response()->json($guild, 200);
     }
 
+<<<<<<< HEAD
     /**
     * ==================================================================
     * GESTION DES ROLES
@@ -119,4 +124,6 @@ class UserController extends Controller {
         return response()->json(null, 204);
     }
 
+=======
+>>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
 }

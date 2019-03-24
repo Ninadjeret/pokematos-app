@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     //ADMIN / Guilds
     Route::get('user/cities/{city}/guilds/{guild}/roles', 'DiscordController@getRoles');
+<<<<<<< HEAD
     Route::get('user/cities/{city}/guilds/{guild}/channels', 'DiscordController@getChannels');
     Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
@@ -61,6 +62,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@updateRoleCategory');
     Route::delete('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@deleteRoleCategory');
 
+=======
+    Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
+    Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
+
+>>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
     //commun
     Route::get('pokemons', 'PokemonController@getAll');
     Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
@@ -73,6 +79,7 @@ Route::post('bot/roles', 'BotController@createRole');
 Route::delete('bot/roles/{role}', 'BotController@deleteRole');
 Route::get('bot/roles/{role}', 'BotController@getRole');
 Route::put('bot/roles/{role}', 'BotController@updateRole');
+<<<<<<< HEAD
 
 Route::get('bot/rolecategories', 'BotController@getRoleCategories');
 Route::post('bot/rolecategories', 'BotController@createRoleCategory');
@@ -84,3 +91,5 @@ Route::post('bot/rolecategories/{categorie}/permissions', 'BotController@createR
 Route::get('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@getRoleCategoryPermission');
 Route::put('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@updateRoleCategoryPermission');
 Route::delete('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@deleteRoleCategoryPermission');
+=======
+>>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664

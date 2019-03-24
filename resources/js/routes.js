@@ -9,11 +9,14 @@ import AdminZone from './components/admin/Zone.vue'
 import AdminAccess from './components/admin/Acces.vue'
 import AdminBosses from './components/admin/Bosses.vue'
 import AdminRaids from './components/admin/RaidReporting.vue'
+<<<<<<< HEAD
 import AdminRolesHome from './components/admin/RolesHome.vue'
 import AdminRolesCategories from './components/admin/roles/Categories.vue'
 import AdminRolesCategorie from './components/admin/roles/Categorie.vue'
 import AdminRolesRoles from './components/admin/roles/Roles.vue'
 import AdminRolesRole from './components/admin/roles/Role.vue'
+=======
+>>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
 
 const routes = [
     {
@@ -58,6 +61,7 @@ const routes = [
                      component: AdminAccess
                 },
                 {
+<<<<<<< HEAD
                       path: ':id/roles',
                       name: 'admin.roles',
                       meta: {
@@ -123,6 +127,8 @@ const routes = [
                        ]
                  },
                 {
+=======
+>>>>>>> 7825fa41493a2ae4c4324d72e593c91c40f72664
                       path: ':id/raids',
                       name: 'admin.raids',
                       meta: {
