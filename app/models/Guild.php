@@ -16,6 +16,17 @@ class Guild extends Model
         'authorized_roles' => 'array',
     ];
 
+    protected $allowedSettings = [
+        'map_access_rule' => 'everyone',
+        'map_access_roles' => [],
+        'map_access_admin_roles' => [],
+
+        'roles_gym_color' => '#009688',
+        'roles_gymex_color' => '#E91E63',
+        'roles_zone_color' => '#2196F3',
+        'roles_pokemon_color' => '#4CAF50',
+    ];
+
     public function getCityAttribute() {
         return City::find($this->city_id);
     }
@@ -23,11 +34,14 @@ class Guild extends Model
     public function getSettingsAttribute() {
         $return = [];
         $settings = GuildSetting::where('guild_id', $this->id)->get();
-        if( $settings ) {
-            foreach( $settings as $setting ) {
-                $value = ( json_decode($setting->value) ) ? json_decode($setting->value) : $setting->value ;
-                $return[$setting->key] = $value;
+
+        foreach( $this->allowedSettings as $settingKey => $value ) {
+            if( $settings ) {
+                foreach( $settings as $setting ) {
+                    if($setting->key == $settingKey) $value = ( json_decode($setting->value) ) ? json_decode($setting->value) : $setting->value ;
+                }
             }
+            $return[$settingKey] = $value;
         }
         return (object) $return;
     }

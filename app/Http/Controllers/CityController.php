@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\models\City;
 use App\models\Zone;
 use App\models\Stop;
+use App\models\Role;
 use App\User;
 
 class CityController extends Controller {
@@ -80,6 +81,17 @@ class CityController extends Controller {
             'lng' => $request->lng,
 
         ]);
+
+        $roles = Role::where('type', 'gym')
+            ->where('gym_id', $stop->id)
+            ->get();
+
+        if( $roles ) {
+            foreach( $roles as $role ) {
+                $role->change([]);
+            }
+        }
+
         return response()->json($stop, 200);
     }
 

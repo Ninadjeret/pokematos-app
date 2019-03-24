@@ -43,6 +43,15 @@
 .setting {
     border-top: 1px solid #eee;
     padding: 16px;
+    &.colorpicker {
+        display: flex;
+        label {
+            line-height: 35px;
+            margin-bottom: 0;
+            padding-bottom: 0;
+            font-size: 16px;
+        }
+    }
     label {
         width: 100%;
         font-size: 18px;
