@@ -10,8 +10,8 @@ use RestCord\DiscordClient;
 
 class Role extends Model {
 
-    protected $fillable = ['discord_id', 'guild_id', 'name', 'type', 'relation_id', 'restricted'];
-    protected $appends = ['guild'];
+    protected $fillable = ['discord_id', 'guild_id', 'name', 'type', 'gym_id', 'zone_id', 'pokemon_id', 'restricted', 'category_id'];
+    protected $appends = ['guild', 'category'];
     protected $hidden = ['guild_id'];
     protected $casts = [
         'restricted' => 'boolean'
@@ -43,7 +43,9 @@ class Role extends Model {
             'category_id' => $roleCategory->id,
             'name' => $args['name'],
             'type' => $args['type'],
-            'relation_id' => $args['relation_id'],
+            'gym_id' => $args['gym_id'],
+            'zone_id' => $args['zone_id'],
+            'pokemon_id' => $args['pokemon_id'],
         ]);
 
         /*$discord->channel->createMessage([
@@ -65,7 +67,11 @@ class Role extends Model {
 
         $this->update([
             'name' => ($args['name']) ? $args['name'] : $this->name,
+            'type' => ($args['type']) ? $args['type'] : $this->name,
             'category_id' => ($args['category_id']) ? $args['category_id'] : $this->category_id,
+            'gym_id' => ($args['gym_id']) ? $args['gym_id'] : $this->gym_id,
+            'zone_id' => ($args['zone_id']) ? $args['zone_id'] : $this->zone_id,
+            'pokemon_id' => ($args['pokemon_id']) ? $args['pokemon_id'] : $this->pokemon_id,
         ]);
 
         return true;

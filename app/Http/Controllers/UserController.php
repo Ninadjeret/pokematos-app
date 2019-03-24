@@ -53,7 +53,9 @@ class UserController extends Controller {
             'category_id' => $roleCategory->id,
             'name' => $request->name,
             'type' => ( $request->type ) ? $request->type : null,
-            'relation_id' => ( $request->relation_id ) ? $request->relation_id : null,
+            'gym_id' => ( $request->gym_id ) ? $request->gym_id : null,
+            'zone_id' => ( $request->zone_id ) ? $request->zone_id : null,
+            'pokemon_id' => ( $request->pokemon_id ) ? $request->pokemon_id : null,
         ]);
         return response()->json($role, 200);
     }
@@ -70,7 +72,9 @@ class UserController extends Controller {
             'name' => ($request->name) ? $request->name : $role->name,
             'category_id' => $roleCategory->id,
             'type' => ( $request->type ) ? $request->type : $role->type,
-            'relation_id' => ( $request->relation_id ) ? $request->relation_id : $role->relation_id,
+            'gym_id' => ( $request->gym_id ) ? $request->gym_id : $role->gym_id,
+            'zone_id' => ( $request->zone_id ) ? $request->zone_id : $role->zone_id,
+            'pokemon_id' => ( $request->pokemon_id ) ? $request->pokemon_id : $role->pokemon_id,
         ]);
         return response()->json($role, 200);
     }

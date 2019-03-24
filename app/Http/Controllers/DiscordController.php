@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Models\Role;
 use App\Models\City;
 use App\Models\Guild;
 use GuzzleHttp\Client;
@@ -172,11 +173,14 @@ class DiscordController extends Controller {
         $return = array();
         $order = array();
         foreach ($roles as $key => $row) {
-            $return[] = [
-                'name' => $row->name,
-                'id' => (string) $row->id
-            ];
-            $order[$key] = $row->name;
+            $role = Role::where('discord_id', $row->id)->first();
+            if( !$role ) {
+                $return[] = [
+                    'name' => $row->name,
+                    'id' => (string) $row->id
+                ];
+                $order[$key] = $row->name;
+            }
         }
         array_multisort($order, SORT_ASC|SORT_NATURAL|SORT_FLAG_CASE, $return);
         return response()->json($return, 200);

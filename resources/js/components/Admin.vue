@@ -70,7 +70,7 @@
                         icon: 'place'
                     },
                     {
-                        label: 'Aones géographiques',
+                        label: 'Zones géographiques',
                         route: 'admin.zones',
                         icon: 'map'
                     }
@@ -96,10 +96,6 @@
                         label: 'Roles personnalisés',
                         route: 'admin.roles',
                         icon: 'alternate_email'
-                    },
-                    {
-                        route: 'admin.access',
-                        icon: 'add_location'
                     },
                     {
                         label: 'Droits d\'accès',
