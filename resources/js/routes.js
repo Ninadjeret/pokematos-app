@@ -9,6 +9,11 @@ import AdminZone from './components/admin/Zone.vue'
 import AdminAccess from './components/admin/Acces.vue'
 import AdminBosses from './components/admin/Bosses.vue'
 import AdminRaids from './components/admin/RaidReporting.vue'
+import AdminRolesHome from './components/admin/RolesHome.vue'
+import AdminRolesCategories from './components/admin/roles/Categories.vue'
+import AdminRolesCategorie from './components/admin/roles/Categorie.vue'
+import AdminRolesRoles from './components/admin/roles/Roles.vue'
+import AdminRolesRole from './components/admin/roles/Role.vue'
 
 const routes = [
     {
@@ -52,6 +57,71 @@ const routes = [
                      },
                      component: AdminAccess
                 },
+                {
+                      path: ':id/roles',
+                      name: 'admin.roles',
+                      meta: {
+                          title: 'Gérer les roles personnalisés',
+                          parent: 'admin'
+                      },
+                      component: AdminRolesHome,
+                      children: [
+                          {
+                                path: 'categories',
+                                name: 'admin.roles.categories',
+                                meta: {
+                                    title: 'Gérer les catégories de roles',
+                                    parent: 'admin.roles'
+                                },
+                                component: AdminRolesCategories
+                           },
+                           {
+                                 path: 'categories/add',
+                                 name: 'admin.roles.categories.add',
+                                 meta: {
+                                     title: 'Nouvelle catégorie',
+                                     parent: 'admin.roles.categories'
+                                 },
+                                 component: AdminRolesCategorie
+                            },
+                           {
+                                 path: 'categories/:category_id',
+                                 name: 'admin.roles.categories.edit',
+                                 meta: {
+                                     title: 'Modifier la catégorie',
+                                     parent: 'admin.roles.categories'
+                                 },
+                                 component: AdminRolesCategorie
+                            },
+                            {
+                                  path: 'roles',
+                                  name: 'admin.roles.roles',
+                                  meta: {
+                                      title: 'Gérer les roles',
+                                      parent: 'admin.roles'
+                                  },
+                                  component: AdminRolesRoles
+                             },
+                             {
+                                   path: 'roles/add',
+                                   name: 'admin.roles.roles.add',
+                                   meta: {
+                                       title: 'Nouveau role',
+                                       parent: 'admin.roles.roles'
+                                   },
+                                   component: AdminRolesRole
+                              },
+                             {
+                                   path: 'roles/:role_id',
+                                   name: 'admin.roles.roles.edit',
+                                   meta: {
+                                       title: 'Modifier le role',
+                                       parent: 'admin.roles.roles'
+                                   },
+                                   component: AdminRolesRole
+                              },
+                       ]
+                 },
                 {
                       path: ':id/raids',
                       name: 'admin.raids',

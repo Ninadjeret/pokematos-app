@@ -83,11 +83,21 @@
                     },
                     {
                         label: 'Signalements de pops sauvages',
+                        route: 'admin.pops',
                         route: 'admin.access',
                         icon: 'add_a_photo'
                     },
                     {
                         label: 'Signalement de quètes',
+                        route: 'admin.quests',
+                        icon: 'add_location'
+                    },
+                    {
+                        label: 'Roles personnalisés',
+                        route: 'admin.roles',
+                        icon: 'alternate_email'
+                    },
+                    {
                         route: 'admin.access',
                         icon: 'add_location'
                     },

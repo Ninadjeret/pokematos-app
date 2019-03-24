@@ -181,4 +181,21 @@ class DiscordController extends Controller {
         array_multisort($order, SORT_ASC|SORT_NATURAL|SORT_FLAG_CASE, $return);
         return response()->json($return, 200);
     }
+
+    public function getChannels( Request $request, City $city, Guild $guild ) {
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+        $channels = $discord->guild->getGuildChannels(['guild.id' => $guild->discord_id]);
+
+        $return = [];
+        foreach($channels as $channel) {
+            if( $channel->type == 0 ) {
+                $return[] = [
+                    'name' => $channel->name,
+                    'id' => (string) $channel->id
+                ];
+            }
+        }
+
+        return response()->json($return, 200);
+    }
 }
