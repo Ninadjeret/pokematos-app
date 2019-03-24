@@ -13,6 +13,11 @@
                         <v-list-tile-content>
                             <v-list-tile-title>{{item.label}}</v-list-tile-title>
                         </v-list-tile-content>
+                        <v-list-tile-action>
+                            <v-btn icon ripple>
+                                <v-icon color="grey lighten-1">arrow_forward_ios</v-icon>
+                            </v-btn>
+                        </v-list-tile-action>
                   </v-list-tile>
                   <v-divider></v-divider>
                 </template>
