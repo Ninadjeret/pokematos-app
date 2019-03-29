@@ -39,6 +39,7 @@ class RaidController extends Controller {
             $raid->egg_level = $request->params['egg_level'];
             $raid->pokemon_id = isset( $request->params['pokemon_id'] ) ? $request->params['pokemon_id'] : null ;
             $raid->start_time = $request->params['start_time'];
+            $raid->ex = (isset($request->params['ex'])) ? $request->params['ex'] : false;
             $raid->save();
             $announceType = 'raid-create';
         }
