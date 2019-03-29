@@ -8,8 +8,9 @@
                         <img :src="getRaidImgUrl(gym.raid)">
                     </div>
                     <div class="raid__content">
-                        <h3><span v-if="gym.ex" class="gym__ex">EX</span>
-                            {{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
+                        <h3>
+                            <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                            <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
                             <span class="raid__timer active">
                                 <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
                                     <template slot-scope="props">Reste {{ props.totalMinutes }} min</template>
@@ -32,10 +33,14 @@
                         <img :src="getRaidImgUrl(gym.raid)">
                     </div>
                     <div class="raid__content">
-                        <h3><span v-if="gym.ex" class="gym__ex">EX</span>
-                            {{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}
+                        <h3>
+                            <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                            <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
                             <span class="raid__timer future">
-                                <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                <countdown v-if="gym.raid.ex" :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                    <template slot-scope="props">Dans {{ props.days }}j et {{ props.hours }}h</template>
+                                </countdown>
+                                <countdown v-else :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
                                     <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
                                 </countdown>
                             </span>

@@ -10,7 +10,7 @@ use App\Models\Zone;
 
 class Stop extends Model {
 
-    protected $fillable = ['name', 'niantic_name', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id'];
+    protected $fillable = ['name', 'niantic_name', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id', 'ex'];
     protected $appends = ['zone', 'city', 'google_maps_url', 'raid'];
     protected $hidden = ['zone_id', 'city_id'];
     protected $casts = [
@@ -50,8 +50,15 @@ class Stop extends Model {
             ->where('start_time', '>', $begin->format('Y-m-d H:i:s') )
             ->where('start_time', '<', $end->format('Y-m-d H:i:s') )
             ->first();
-        if( empty($raid) ) return false;
-        return $raid;
+        if( !empty($raid) ) return $raid;
+
+        $raidEx = Raid::where('gym_id', $this->id)
+            ->where('start_time', '>', $begin->format('Y-m-d H:i:s') )
+            ->where('ex', '1')
+            ->first();
+        if( !empty($raidEx) ) return $raidEx;
+
+        return false;
     }
 
     public function getActiveRaid() {

@@ -10772,6 +10772,24 @@ a.text-dark:focus {
   text-transform: uppercase;
 }
 
+.modal__screen.create-raid-ex .v-picker.v-card {
+  box-shadow: none;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.modal__screen.create-raid-ex .v-picker__title {
+  display: none;
+}
+
+.modal__screen.create-raid-ex .v-date-picker-table {
+  height: auto;
+}
+
+.modal__screen.create-raid-ex .v-date-picker-table .v-btn--active {
+  background: #5a6cae;
+}
+
 .v-dialog__content .dialog__wrap {
   overflow-y: scroll;
   overflow-y: overlay;

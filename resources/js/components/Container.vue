@@ -1,5 +1,5 @@
 <template>
-<div id="app__container" :class="'template-'+$route.name" data-app>
+<div id="app__container" :class="'template-'+$route.name" data-app v-if="currentCity">
         <v-toolbar fixed app color="primary" dark>
             <v-btn v-if="$route.meta.parent" :to="{ name: $route.meta.parent}" icon><v-icon>arrow_back</v-icon></v-btn>
             <v-spacer v-if="$route.name == 'map'"></v-spacer>

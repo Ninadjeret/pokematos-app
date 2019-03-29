@@ -115,6 +115,7 @@ class CreateCitiesTable extends Migration
             $table->integer('pokemon_id')->nullable();
             $table->integer('city_id')->nullable();
             $table->integer('gym_id')->nullable();
+            $table->boolean('ex')->default(false);
             $table->timestamps();
 
             $table->foreign('pokemon_id')->references('id')->on('pokemons');
