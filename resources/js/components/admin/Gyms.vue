@@ -36,11 +36,13 @@
                 return this.gyms.filter((gym) => {
                     let matchingTitle = 1;
                     let matchingZone = 1;
+                    let matchingEx = 1;
                     if (this.search != null) {
                         matchingTitle = gym.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
                         matchingZone = gym.zone.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+                        matchingEx = gym.ex && this.search.toLowerCase() == ':ex';
                     }
-                    return (matchingTitle || matchingZone);
+                    return (matchingTitle || matchingZone || matchingEx);
                 });
             },
         },
