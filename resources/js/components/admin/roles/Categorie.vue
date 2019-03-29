@@ -13,7 +13,14 @@
                     <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
                 </select>
             </div>
-            <v-divider></v-divider>
+            <v-subheader>Restrictions</v-subheader>
+            <div class="setting d-flex switch">
+                <div>
+                    <label>Limiter l'utilisation de ce role</label>
+                    <p class="description">Limiter les mentions @{{name}} à certains roles/salons ?</p>
+                </div>
+                <v-switch v-model="ex"></v-switch>
+            </div>
             <div v-if="this.$route.params.category_id">
                 <v-subheader v-if="">Autres actions</v-subheader>
                 <v-list-tile color="pink" @click="dialog = true">Supprimer la catégorie</v-list-tile>

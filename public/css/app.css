@@ -11204,9 +11204,9 @@ a.text-dark:focus {
   border: 1px solid #ced4da;
 }
 
-.setting select {
-  -moz-appearance: inherit;
-  -webkit-appearance: inherit;
+.setting select:not([multiple=multiple]) {
+  -moz-appearance: menulist;
+  -webkit-appearance: menulist;
 }
 
 .setting [multiple=multiple] {
@@ -11226,6 +11226,14 @@ a.text-dark:focus {
 
 .setting .v-btn-toggle .v-btn--active .v-btn__content {
   color: #fff;
+}
+
+.setting.switch .description {
+  margin-bottom: 0;
+}
+
+.setting.switch .v-input__slot {
+  margin-bottom: 0;
 }
 
 .multiselect {

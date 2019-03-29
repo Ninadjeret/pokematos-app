@@ -80,9 +80,9 @@
         padding: 8px;
         border: 1px solid #ced4da;
     }
-    select {
-        -moz-appearance:inherit;
-        -webkit-appearance: inherit;
+    select:not([multiple="multiple"]) {
+        -moz-appearance:menulist;
+        -webkit-appearance: menulist;
     }
     [multiple="multiple"] {
         height: 100px;
@@ -99,6 +99,15 @@
             color: #fff;
         }
     }
+    &.switch {
+        .description {
+            margin-bottom: 0;
+        }
+        .v-input__slot {
+            margin-bottom: 0;
+        }
+    }
+
 }
 .multiselect {
     min-height: 50px;
