@@ -105,6 +105,27 @@
             </div>
         </div>
 
+        <div class="settings-section">
+            <v-subheader>Boss de raid EX</v-subheader>
+            <multiselect
+                :reset-after="true"
+                v-model="value"
+                :options="pokemons"
+                track-by="name_fr"
+                label="name_fr"
+                placeholder="Ajouter un Pokémon"
+                @select="addBossTo6t">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name_fr }}</strong></template>
+            </multiselect>
+            <div v-for="(boss, index) in bosses6t" class="setting pokemon">
+                <img :src="boss.thumbnail_url">
+                <p>{{boss.name_fr}}</p>
+                <v-btn flat icon color="deep-orange" @click="remove6t(index)">
+                    <v-icon>close</v-icon>
+                </v-btn>
+            </div>
+        </div>
+
         <v-btn dark fixed bottom right fab @click="submit()">
             <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
             <v-icon v-else>save</v-icon>
@@ -129,6 +150,7 @@
                 bosses3t: [],
                 bosses4t: [],
                 bosses5t: [],
+                bosses6t: [],
             }
         },
         created() {
@@ -142,6 +164,7 @@
                 this.bosses3t = this.$store.state.pokemons.filter(boss => boss.boss_level == '3');
                 this.bosses4t = this.$store.state.pokemons.filter(boss => boss.boss_level == '4');
                 this.bosses5t = this.$store.state.pokemons.filter(boss => boss.boss_level == '5');
+                this.bosses6t = this.$store.state.pokemons.filter(boss => boss.boss_level == '6');
             },
             fetch() {
                 axios.get('/api/pokemons').then( res => {
@@ -151,50 +174,46 @@
                 });
             },
             addBossTo1t(selectedOption, id) {
-                console.log(selectedOption);
                 if( this.bosses1t.filter( boss => boss.id == selectedOption.id ).length > 0 ) return;
                 this.bosses1t.push(selectedOption);
             },
             remove1t(index) {
-                console.log('toto');
-                console.log(index);
                 this.bosses1t.splice(index, 1);
             },
             addBossTo2t(selectedOption, id) {
-                console.log(selectedOption);
+                if( this.bosses2t.filter( boss => boss.id == selectedOption.id ).length > 0 ) return;
                 this.bosses2t.push(selectedOption);
             },
             remove2t(index) {
-                console.log('toto');
-                console.log(index);
                 this.bosses2t.splice(index, 1);
             },
             addBossTo3t(selectedOption, id) {
-                console.log(selectedOption);
+                if( this.bosses3t.filter( boss => boss.id == selectedOption.id ).length > 0 ) return;
                 this.bosses3t.push(selectedOption);
             },
             remove3t(index) {
-                console.log('toto');
-                console.log(index);
                 this.bosses3t.splice(index, 1);
             },
             addBossTo4t(selectedOption, id) {
-                console.log(selectedOption);
+                if( this.bosses4t.filter( boss => boss.id == selectedOption.id ).length > 0 ) return;
                 this.bosses4t.push(selectedOption);
             },
             remove4t(index) {
-                console.log('toto');
-                console.log(index);
                 this.bosses4t.splice(index, 1);
             },
             addBossTo5t(selectedOption, id) {
-                console.log(selectedOption);
+                if( this.bosses5t.filter( boss => boss.id == selectedOption.id ).length > 0 ) return;
                 this.bosses5t.push(selectedOption);
             },
             remove5t(index) {
-                console.log('toto');
-                console.log(index);
                 this.bosses5t.splice(index, 1);
+            },
+            addBossTo6t(selectedOption, id) {
+                if( this.bosses6t.filter( boss => boss.id == selectedOption.id ).length > 0 ) return;
+                this.bosses6t.push(selectedOption);
+            },
+            remove6t(index) {
+                this.bosses6t.splice(index, 1);
             },
             submit() {
                 const args = {
@@ -203,6 +222,7 @@
                     bosses3t: this.bosses3t,
                     bosses4t: this.bosses4t,
                     bosses5t: this.bosses5t,
+                    bosses6t: this.bosses6t,
                 };
                 this.save(args);
             },

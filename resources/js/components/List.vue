@@ -38,7 +38,7 @@
                             <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
                             <span class="raid__timer future">
                                 <countdown v-if="gym.raid.ex" :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
-                                    <template slot-scope="props">Dans {{ props.days }}j et {{ props.hours }}h</template>
+                                    <template slot-scope="props">{{ props.days }}j et {{ props.hours }}h</template>
                                 </countdown>
                                 <countdown v-else :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
                                     <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
@@ -52,11 +52,41 @@
                 </div>
             </div>
         </div>
+
         <div v-if="futureRaids.length === 0 &  activeRaids.length === 0" class="raids__empty hide">
-            <img src="https://assets.profchen.fr/img/empty_raids.png" />
             <h3>Aucun raid pour le moment...</h3>
+            <div class="wrapper" v-if="raidsListFilters.length < 5">
+                <p>Elargissez vos critères pour voir s'il y a d'autres raids dans les environs</p>
+                <v-btn depressed @click="dialog = true">Modifier mes filtres</v-btn>
+            </div>
+            <img src="https://assets.profchen.fr/img/empty.png" />
         </div>
-        <button-actions></button-actions>
+
+        <v-dialog v-model="dialog" max-width="290" content-class="list-filters">
+            <v-card>
+                <v-subheader>Ordre d'affichage</v-subheader>
+                <v-card-text>
+                    <select v-model="raidsListOrder">
+                        <option v-for="orderOption in orderOptions" :value="orderOption.id">{{orderOption.name}}</option>
+                    </select>
+                </v-card-text>
+                <v-subheader>Quels raids voir ?</v-subheader>
+                <v-card-text>
+                    <v-checkbox v-model="raidsListFilters" label="Raids ex" value="6"></v-checkbox>
+                    <v-checkbox v-model="raidsListFilters" label="Raids 5 têtes" value="5"></v-checkbox>
+                    <v-checkbox v-model="raidsListFilters" label="Raids 4 têtes" value="4"></v-checkbox>
+                    <v-checkbox v-model="raidsListFilters" label="Raids 3 têtes" value="3"></v-checkbox>
+                    <v-checkbox v-model="raidsListFilters" label="Raids 2 têtes" value="2"></v-checkbox>
+                    <v-checkbox v-model="raidsListFilters" label="Raids 1 tête" value="1"></v-checkbox>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" flat @click="dialog = false">Fermer</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <button-actions @showfilters="dialog = true"></button-actions>
         <gym-modal ref="gymModal"></gym-modal>
     </div>
 </template>
@@ -68,20 +98,69 @@
         props: ['gyms'],
         data() {
             return {
+                dialog:false,
+                orderOptions: [{id:'date', name:'Date'}, {id:'level', name:'Niveau de Boss'}]
             }
         },
         computed: {
             activeRaids() {
-                return this.$store.getters.activeRaids;
+                const that = this;
+                return this.$store.getters.activeRaids.sort(this.compare).filter(function(gym) {
+                    let isEmpty = ( that.raidsListFilters.length == 0 ) ? true : false;
+                    let inArray = ( that.raidsListFilters.includes( gym.raid.egg_level.toString()) ) ? true : false;
+                    return isEmpty || inArray;
+                });;
             },
             futureRaids() {
-                return this.$store.getters.futureRaids;
+                const that = this;
+                return this.$store.getters.futureRaids.sort(this.compare).filter(function(gym) {
+                    let isEmpty = ( that.raidsListFilters.length == 0 ) ? true : false;
+                    let inArray = ( that.raidsListFilters.includes( gym.raid.egg_level.toString()) ) ? true : false;
+                    return isEmpty || inArray;
+                });
+            },
+            raidsListOrder: {
+                get: function () {
+                    return this.$store.getters.getSetting('raidsListOrder');
+                },
+                set: function (newValue) {
+                    this.$store.commit('setSetting', {
+                        setting: 'raidsListOrder',
+                        value: newValue
+                    });
+                }
+            },
+            raidsListFilters: {
+                get: function () {
+                    return this.$store.getters.getSetting('raidsListFilters');
+                },
+                set: function (newValue) {
+                    this.$store.commit('setSetting', {
+                        setting: 'raidsListFilters',
+                        value: newValue
+                    });
+                }
             }
         },
-        mounted() {
-            console.log('Component mounted.')
+        created() {
+            this.$store.commit('initSetting', {
+                setting: 'raidsListFilters',
+                value: ["1","2","3","4","5","6"]
+            });
+            this.$store.commit('initSetting', {
+                setting: 'raidsListOrder',
+                value: 'date'
+            });
         },
         methods: {
+            compare(a, b) {
+                console.log(this.raidsListOrder);
+                if( this.raidsListOrder == 'date' ) {
+                    return (a.raid.start_time > b.raid.start_time) ? 1 : -1;
+                } else {
+                    return (a.raid.egg_level > b.raid.egg_level) ? -1 : 1;
+                }
+            },
             showModal( gym ) {
                 this.$refs.gymModal.showModal( gym );
             },

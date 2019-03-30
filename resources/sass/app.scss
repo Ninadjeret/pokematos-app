@@ -451,3 +451,27 @@ range_button:active {
 .theme--light.v-label.v-label--active {
     color: $primary;
 }
+
+.raids__empty {
+    position: fixed;
+    bottom: 50px;
+    h3 {
+        font-family: 'Teko';
+        font-size: 46px;
+        line-height: 40px;
+        text-align: center;
+        color: #555;
+        margin: 0px 00px;
+    }
+    div.wrapper {
+        text-align: center;
+        margin: 20px 40px 10px 40px;
+        p {
+            color: #aaa;
+            margin-top: 20px;
+        }
+        .v-btn {
+            margin-bottom: 40px;
+        }
+    }
+}

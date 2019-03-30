@@ -294,6 +294,7 @@ export default {
                 this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                 this.raidAnnonce = 'Un raid '+this.gym.raid.egg_level+' têtes est en cours...';
                 this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
+                if( this.gym.raid.ex ) this.raidAnnonce = 'Un raid EX est en cours...'; 
             } else if( this.endTime ) {
                 this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                 this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.name_fr+' est en cours...';
@@ -331,7 +332,7 @@ export default {
                  params: {
                      gym_id: this.gym.id,
                      pokemon_id: false,
-                     egg_level: 5,
+                     egg_level: 6,
                      start_time: this.exDate+' '+this.exHour+':'+this.exMinutes+':00',
                      ex: true,
                  },

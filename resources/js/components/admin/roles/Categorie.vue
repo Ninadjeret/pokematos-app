@@ -17,7 +17,7 @@
             <div class="setting d-flex switch">
                 <div>
                     <label>Limiter l'utilisation de ce role</label>
-                    <p class="description">Limiter les mentions @{{name}} à certains roles/salons ?</p>
+                    <p class="description">Limiter les mentions de cette catégorie à certains roles/salons ?</p>
                 </div>
                 <v-switch v-model="ex"></v-switch>
             </div>

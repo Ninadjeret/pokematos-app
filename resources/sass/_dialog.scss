@@ -218,3 +218,9 @@
     text-align: center;
     left: 0;
 }
+
+.list-filters {
+    .v-input--selection-controls.v-input--checkbox {
+        margin-top:0;
+    }
+}
