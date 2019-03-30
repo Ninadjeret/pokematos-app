@@ -10655,6 +10655,18 @@ a.text-dark:focus {
   }
 }
 
+.v-input--checkbox.v-input--is-label-active .theme--light.v-icon {
+  color: #5a6cae;
+}
+
+.v-input--switch.v-input--is-label-active .theme--light.v-input--switch__thumb {
+  color: #5a6cae;
+}
+
+.v-input--switch.v-input--is-label-active .theme--light.v-input--switch__track {
+  color: #5a6cae;
+}
+
 .v-toolbar__title {
   font-family: "Teko";
   color: #fff;
@@ -11788,7 +11800,7 @@ range_button:active {
   font-size: 46px;
   line-height: 40px;
   text-align: center;
-  color: #555;
+  color: #5a6cae;
   margin: 0px 0px;
 }
 

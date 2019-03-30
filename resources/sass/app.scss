@@ -8,6 +8,7 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+@import 'vuetify';
 @import 'header';
 @import 'nav';
 @import 'map';
@@ -460,7 +461,7 @@ range_button:active {
         font-size: 46px;
         line-height: 40px;
         text-align: center;
-        color: #555;
+        color: #5a6cae;
         margin: 0px 00px;
     }
     div.wrapper {
