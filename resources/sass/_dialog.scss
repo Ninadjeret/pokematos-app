@@ -46,6 +46,22 @@
         font-size: 10px;
         text-transform: uppercase;
     }
+    &.create-raid-ex {
+        .v-picker.v-card {
+            box-shadow: none;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        .v-picker__title {
+            display: none;
+        }
+        .v-date-picker-table {
+            height: auto;
+            .v-btn--active {
+                background: $primary;
+            }
+        }
+    }
 }
 .v-dialog__content .dialog__wrap {
     overflow-y: scroll;
@@ -201,4 +217,10 @@
     width: 100%;
     text-align: center;
     left: 0;
+}
+
+.list-filters {
+    .v-input--selection-controls.v-input--checkbox {
+        margin-top:0;
+    }
 }

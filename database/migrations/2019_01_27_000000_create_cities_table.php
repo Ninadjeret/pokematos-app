@@ -108,6 +108,17 @@ class CreateCitiesTable extends Migration
             $table->foreign('guild_id')->references('id')->on('guilds');
         });
 
+        Schema::create('raid_channels', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('raid_id');
+            $table->integer('guild_id');
+            $table->string('channel_discord_id');
+            $table->timestamps();
+
+            $table->foreign('raid_id')->references('id')->on('raids');
+            $table->foreign('guild_id')->references('id')->on('guilds');
+        });
+
         Schema::create('raids', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('egg_level');
@@ -115,6 +126,8 @@ class CreateCitiesTable extends Migration
             $table->integer('pokemon_id')->nullable();
             $table->integer('city_id')->nullable();
             $table->integer('gym_id')->nullable();
+            $table->boolean('ex')->default(false);
+            $table->string('status')->default('future');
             $table->timestamps();
 
             $table->foreign('pokemon_id')->references('id')->on('pokemons');
@@ -165,7 +178,7 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->integer('guild_id');
             $table->string('key');
-            $table->string('value');
+            $table->string('value')->nullable();
             $table->timestamps();
 
             $table->foreign('guild_id')->references('id')->on('guilds');
@@ -181,6 +194,8 @@ class CreateCitiesTable extends Migration
             $table->integer('gym_id')->nullable();
             $table->integer('zone_id')->nullable();
             $table->integer('pokemon_id')->nullable();
+            $table->string('channel_discord_id')->nullable();
+            $table->string('message_discord_id')->nullable();
             $table->timestamps();
 
             $table->foreign('guild_id')->references('id')->on('guilds');
@@ -194,8 +209,9 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->integer('guild_id');
             $table->string('name');
-            $table->string('channel_discord_id');
-            $table->string('restricted')->default(0);
+            $table->boolean('notifications')->default(false);
+            $table->string('channel_discord_id')->nullable();
+            $table->boolean('restricted')->default(false);
             $table->timestamps();
 
             $table->foreign('guild_id')->references('id')->on('guilds');
@@ -204,8 +220,9 @@ class CreateCitiesTable extends Migration
         Schema::create('role_permissions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('role_category_id');
-            $table->string('discord_channel_id');
-            $table->text('authorized_roles');
+            $table->text('channels');
+            $table->string('type')->default('auth');
+            $table->text('roles');
             $table->timestamps();
 
             $table->foreign('role_category_id')->references('id')->on('role_categories');

@@ -96,8 +96,19 @@
 
                     //Raids à venir
                     } else {
-                        label = raidStartTime.diff(now, 'minutes') + ' min';
-                        url = 'https://assets.profchen.fr/img/map/map_marker_future_'+gym.raid.egg_level+'.png';
+                        if( gym.raid.ex ) {
+                            if( raidStartTime.diff(now, 'days') >= 1 ) {
+                                label = raidStartTime.diff(now, 'days') + ' jours';
+                            } else if( raidStartTime.diff(now, 'hours') >= 1 ) {
+                                label = raidStartTime.diff(now, 'hours') + 'h';
+                            } else {
+                                label = raidStartTime.diff(now, 'minutes') + ' min'
+                            }
+                            url = 'https://assets.profchen.fr/img/map/map_marker_future_'+gym.raid.egg_level+'.png';
+                        } else {
+                            label = raidStartTime.diff(now, 'minutes') + ' min';
+                            url = 'https://assets.profchen.fr/img/map/map_marker_future_'+gym.raid.egg_level+'.png';
+                        }
                     }
                     var html = '<img class="'+imgclassname+'" src="'+url+'"/>' + '<span class="map-marker__label">'+label+'</span>'
                     zindex = gym.raid.egg_level * 100;

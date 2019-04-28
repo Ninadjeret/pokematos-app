@@ -20,11 +20,17 @@ class Guild extends Model
         'map_access_rule' => 'everyone',
         'map_access_roles' => [],
         'map_access_admin_roles' => [],
+        'map_access_moderation_roles' => [],
 
         'roles_gym_color' => '#009688',
         'roles_gymex_color' => '#E91E63',
         'roles_zone_color' => '#2196F3',
         'roles_pokemon_color' => '#4CAF50',
+
+        'raidsex_active' => false,
+        'raidsex_channels' => false,
+        'raidsex_channel_category_id' => '',
+        'raidsex_access' => 'everyone',
     ];
 
     public function getCityAttribute() {
@@ -41,7 +47,7 @@ class Guild extends Model
                     if($setting->key == $settingKey) $value = ( json_decode($setting->value) ) ? json_decode($setting->value) : $setting->value ;
                 }
             }
-            $return[$settingKey] = $value;
+            $return[$settingKey] = (is_array($value)) ? $value : (string) $value;
         }
         return (object) $return;
     }

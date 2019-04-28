@@ -16,16 +16,24 @@
                     </p>
                     <img :src="raidUrl">
                     <span v-if="timeLeft && timeLeft > 0" class="dialog__counter">
-                        <countdown :time="timeLeft"  v-on:end="getRaidData()">
-                            <template slot-scope="props">{{ props.totalMinutes }}:{{ props.seconds }}</template>
-                        </countdown>
+                        <div v-if="gym.raid.ex == 1">
+                            <countdown :time="timeLeft"  v-on:end="getRaidData()">
+                                <template slot-scope="props">{{ props.days }}j {{ props.hours }}h et {{ props.minutes }}min</template>
+                            </countdown>
+                        </div>
+                        <div v-if="gym.raid.ex == 0">
+                            <countdown :time="timeLeft"  v-on:end="getRaidData()">
+                                <template slot-scope="props">{{ props.totalMinutes }}:{{ props.seconds }}</template>
+                            </countdown>
+                        </div>
                     </span>
                 </div>
                 <hr>
                 <div class="dialog__content">
                     <ul>
-                        <li v-if="raidStatus == 'active' && gym.raid.pokemon == false"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
+                        <li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
                         <li v-if="raidStatus == 'none'"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
+                        <li v-if="raidStatus == 'none' && gym.ex === true && user.permissions.city.raidex_create"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
                         <li v-if="gym.google_maps_url"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
                     </ul>
@@ -50,6 +58,34 @@
                 </div>
                 <hr>
                 <div class="footer-action">
+                    <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
+                </div>
+            </div>
+
+            <div v-if="modalScreen == 'createRaidEx'" class="modal__screen create-raid-ex">
+                <h3 class="">Annoncer un raid EX</h3>
+                <hr>
+                <div class="update-raid__wrapper">
+                    <p class="step__title">Quel jour ?</p>
+                    <v-date-picker v-model="exDate" locale="fr-fr" :first-day-of-week="1" full-width :min="exBeginDate" :max="exEndDate"></v-date-picker>
+                </div>
+                <hr>
+                    <p class="step__title">A quelle heure ?</p>
+                    <v-layout>
+                        <v-flex xs6>
+                            <select v-if="exAllowedHours" v-model="exHour">
+                                <option v-for="hour in exAllowedHours" :value="hour">{{hour}}h</option>
+                            </select>
+                        </v-flex>
+                        <v-flex xs6>
+                            <select v-if="exAllowedMinutes" v-model="exMinutes">
+                                <option v-for="minutes in exAllowedMinutes" :value="minutes">{{minutes}}</option>
+                            </select>
+                        </v-flex>
+                    </v-layout>
+                <hr>
+                <div class="footer-action">
+                    <a v-on:click="postNewRaidEx()" class="bt modal__action cancel">Confirmer</a>
                     <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
                 </div>
             </div>
@@ -127,11 +163,19 @@ export default {
             raidLevels: [1,2,3,4,5],
             startTime: false,
             endTime: false,
+            exAllowedHours: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            exAllowedMinutes: [0, 15, 30, 45],
+            exDate: new Date().toISOString().substr(0, 10),
+            exHour: 13,
+            exMinutes: 0,
         }
     },
     computed: {
         pokemons() {
             return this.$store.state.pokemons;
+        },
+        user() {
+            return this.$store.state.user;
         },
         raidStatus() {
             if( this.gym.raid ) {
@@ -146,7 +190,13 @@ export default {
             } else {
                 return 'none';
             }
-        }
+        },
+        exBeginDate () {
+            return moment().format('YYYY-MM-DD')
+        },
+        exEndDate () {
+            return moment().add(14, 'days').format('YYYY-MM-DD')
+        },
     },
     created() {
         this.updateTimeRange();
@@ -235,12 +285,19 @@ export default {
                 this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_0.png';
             } else if( this.raidStatus == 'future' && this.startTime ) {
                 this.timeLeft = parseInt(this.startTime.diff(now, 'milliseconds'));
-                this.raidAnnonce = 'Un oeuf '+this.gym.raid.egg_level+' têtes va bientot éclore...';
-                this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
+                if( this.gym.raid.ex ) {
+                    this.raidAnnonce = 'Un raid EX va avoir lieu ici prochainement';
+                    this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
+                } else {
+                    this.raidAnnonce = 'Un oeuf '+this.gym.raid.egg_level+' têtes va bientot éclore...';
+                    this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
+                }
+
             } else if( !this.gym.raid.pokemon && this.endTime ) {
                 this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                 this.raidAnnonce = 'Un raid '+this.gym.raid.egg_level+' têtes est en cours...';
                 this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
+                if( this.gym.raid.ex ) this.raidAnnonce = 'Un raid EX est en cours...';
             } else if( this.endTime ) {
                 this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                 this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.name_fr+' est en cours...';
@@ -263,6 +320,24 @@ export default {
                      pokemon_id: this.createRaidData.pokemon.id,
                      egg_level: this.createRaidData.eggLevel,
                      start_time: this.createRaidData.startTime
+                 },
+            }).then(res => {
+                console.log(res.data);
+                this.$store.dispatch('fetchData');
+            }).catch(err => {
+                console.log(err)
+            });
+        },
+        postNewRaidEx() {
+            this.setScreenTo('default');
+            this.hideModal();
+            axios.post('/api/user/cities/1/raids', {
+                 params: {
+                     gym_id: this.gym.id,
+                     pokemon_id: false,
+                     egg_level: 6,
+                     start_time: this.exDate+' '+this.exHour+':'+this.exMinutes+':00',
+                     ex: true,
                  },
             }).then(res => {
                 console.log(res.data);

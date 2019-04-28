@@ -101,7 +101,9 @@ class UserController extends Controller {
             'name' => $request->name,
             'channel_discord_id' => $request->channel_discord_id,
             'restricted' => ($request->restricted) ? $request->restricted : 0,
+            'notifications' => ($request->notifications) ? $request->notifications : 0,
         ]);
+        $categorie->savePermissions($request->permissions, $request->permissions_to_delete);
         return response()->json($categorie, 200);
     }
 
@@ -114,7 +116,9 @@ class UserController extends Controller {
             'name' => ($request->name) ? $request->name : $categorie->name,
             'channel_discord_id' => ($request->channel_discord_id) ? $request->channel_discord_id : $categorie->channel_discord_id,
             'restricted' => ($request->restricted) ? $request->restricted : $categorie->restricted,
+            'notifications' => ($request->notifications) ? $request->notifications : 0,
         ]);
+        $categorie->savePermissions($request->permissions, $request->permissions_to_delete);
         return response()->json($categorie, 200);
     }
 

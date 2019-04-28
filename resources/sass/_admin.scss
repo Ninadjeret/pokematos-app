@@ -80,9 +80,9 @@
         padding: 8px;
         border: 1px solid #ced4da;
     }
-    select {
-        -moz-appearance:inherit;
-        -webkit-appearance: inherit;
+    select:not([multiple="multiple"]) {
+        -moz-appearance:menulist;
+        -webkit-appearance: menulist;
     }
     [multiple="multiple"] {
         height: 100px;
@@ -99,6 +99,15 @@
             color: #fff;
         }
     }
+    &.switch {
+        .description {
+            margin-bottom: 0;
+        }
+        .v-input__slot {
+            margin-bottom: 0;
+        }
+    }
+
 }
 .multiselect {
     min-height: 50px;
@@ -128,6 +137,35 @@
         }
         .v-icon {
             color: #ccc;
+        }
+    }
+}
+.permissions {
+    .theme--light.bt--small.bt--secondary {
+        background-color: $primary;
+        color: #fff;
+        margin-top: 20px;
+    }
+}
+.permission {
+    .v-card__title--primary {
+        padding: 10px;
+    }
+    .permission__role {
+        background: rgba(168, 167, 207, 0.2);
+        color: $primary;
+        padding: 1px 5px;
+        display: inline-block;
+        border-radius: 5px;
+    }
+    .permission__content {
+        width: calc(100% - 52px);
+    }
+    .permission__actions {
+        display: flex;
+        flex-direction: column;
+        .theme--dark.v-btn {
+            color: $grey;
         }
     }
 }

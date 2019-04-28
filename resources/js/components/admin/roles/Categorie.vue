@@ -6,14 +6,51 @@
                 <label>Nom</label>
                 <input v-model="name" type="text">
             </div>
-            <div class="setting">
+            <v-subheader>Notifications</v-subheader>
+            <div class="setting d-flex switch">
+                <div>
+                    <label>Utiliser les roles de la catégorie {{name}} comme des notifications</label>
+                    <p class="description">Les joueurs pourront s'attribuer les roles selon leurs besoins et ainsi être notifiés lorsqu'ils seront utilisés.</p>
+                </div>
+                <v-switch v-model="notifications"></v-switch>
+            </div>
+            <div v-if="notifications" class="setting">
                 <label>Salon d'inscription</label>
                 <p class="description">C'est dans ce salon que le bot affichera les messages permettant aux joueurs de s'inscrire à un role</p>
                 <select v-if="channels" v-model="channel_id">
                     <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
                 </select>
             </div>
-            <v-divider></v-divider>
+            <v-subheader>Restrictions</v-subheader>
+            <div class="setting d-flex switch">
+                <div>
+                    <label>Controler l'utilisation</label>
+                    <p class="description">Limiter les mentions de cette catégorie à certains roles/salons ?</p>
+                </div>
+                <v-switch v-model="restricted"></v-switch>
+            </div>
+            <div v-if="restricted" class="setting">
+                <div>
+                    <label>Règles d'utilisation</label>
+                </div>
+                <div class="permissions">
+                    <v-layout row wrap>
+                        <v-flex xs12>
+                              <permission
+                                v-for="(permission, index) in permissions"
+                                :key="index"
+                                :permission="permission"
+                                :channels="channels"
+                                :roles="roles"
+                                @delete-permission="deletePermission(index, permission)"
+                              />
+                      </v-flex>
+                      </v-layout>
+                      <div class="text-xs-center">
+                            <v-btn class="bt--small bt--secondary" @click="addPermission">Ajouter une règle</v-btn>
+                      </div>
+                </div>
+            </div>
             <div v-if="this.$route.params.category_id">
                 <v-subheader v-if="">Autres actions</v-subheader>
                 <v-list-tile color="pink" @click="dialog = true">Supprimer la catégorie</v-list-tile>
@@ -46,11 +83,17 @@
                 dialog: false,
                 name: '',
                 channel_id: '',
-                channels: []
+                channels: [],
+                roles: [],
+                notifications: false,
+                restricted: false,
+                permissions: [],
+                permissions_to_delete: [],
             }
         },
         created() {
             this.fetchChannels();
+            this.fetchRoles();
             if( this.$route.params.category_id ) {
                 this.fetch();
             }
@@ -59,8 +102,11 @@
             fetch() {
                 axios.get('/api/user/guilds/'+this.$route.params.id+'/rolecategories/'+this.$route.params.category_id).then( res => {
                     this.name = res.data.name;
+                    this.notifications = res.data.notifications;
                     this.channel_id = res.data.channel_discord_id;
-                    console.log(this.channel_id);
+                    this.restricted = res.data.restricted;
+                    this.permissions = res.data.permissions;
+                    console.log(res.data);
                 }).catch( err => {
                     //No error
                 });
@@ -68,15 +114,21 @@
             fetchChannels() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/channels').then( res => {
                     this.channels = res.data;
-                    console.log(this.channels);
-                }).catch( err => {
-                    //
-                });
+                })
+            },
+            fetchRoles() {
+                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/roles').then( res => {
+                    this.roles = res.data;
+                })
             },
             submit() {
                 const args = {
                     name: this.name,
-                    channel_discord_id: this.channel_id
+                    notifications: this.notifications,
+                    channel_discord_id: this.channel_id,
+                    restricted: this.restricted,
+                    permissions: this.permissions,
+                    permissions_to_delete: this.permissions_to_delete,
                 };
                 if( this.$route.params.category_id ) {
                     this.save(args);
@@ -134,7 +186,22 @@
                             timeout: 1500
                         })
                     });
-            }
-        }
+            },
+            addPermission() {
+                this.permissions.push({
+                    id: false,
+                    channels: [],
+                    roles: [],
+                    type: 'auth',
+                    open: true,
+                });
+          },
+          deletePermission(index, permission) {
+             if (permission.id) {
+                 this.permissions_to_delete.push(permission.id);
+             }
+             this.permissions.splice(index, 1);
+         },
     }
+}
 </script>

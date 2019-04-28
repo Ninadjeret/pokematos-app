@@ -93,6 +93,21 @@ class PokemonController extends Controller {
             }
         }
 
+        $bosses_6t = $request->bosses6t;
+        if( $bosses_6t ) {
+            foreach( $bosses_6t as $boss ) {
+                Log::debug( '$boss' );
+                Log::debug( print_r($boss, true) );
+                $pokemon = Pokemon::find($boss['id']);
+                if( $pokemon ) {
+                    $pokemon->update([
+                        'boss' => 1,
+                        'boss_level' => 6
+                    ]);
+                    $pokemon_ids[] = $boss['id'];
+                }
+            }
+        }
 
         Log::debug( print_r($pokemon_ids, true) );
 

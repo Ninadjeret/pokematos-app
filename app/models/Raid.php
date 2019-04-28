@@ -10,8 +10,9 @@ use App\Models\Announce;
 
 class Raid extends Model {
 
+    protected $fillable = ['status'];
     protected $hidden = ['gym_id', 'city_id', 'pokemon_id'];
-    protected $appends = ['end_time', 'pokemon', 'source'];
+    protected $appends = ['end_time', 'pokemon', 'source', 'channels'];
 
     /*public function getGymAttribute() {
         return Stop::find($this->gym_id);
@@ -38,6 +39,14 @@ class Raid extends Model {
             'user' => User::find($annonce->user_id),
         ];
         return $return;
+    }
+
+    public function getChannelsAttribute() {
+        $channels = raidChannel::where('raid_id', $this->id)->get();
+        if( $channels ) {
+            return $channels;
+        }
+        return [];
     }
 
     public function getLastAnnounce() {

@@ -20,7 +20,7 @@
                 <textarea v-model="description"></textarea>
             </div>
 
-            <div class="setting d-flex">
+            <div class="setting d-flex switch">
                 <div>
                     <label>Arêne Ex</label>
                     <p class="description">Nom de l’arène, tel qu'il est présent dans le jeu</p>

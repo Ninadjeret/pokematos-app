@@ -2,6 +2,24 @@
     <div>
         <div class="parent_view" v-if="$route.name == 'admin'">
             <div class="settings-section">
+
+                <div v-for="guild in currentCity.guilds">
+                    <v-subheader>Discord {{guild.name}}</v-subheader>
+                    <v-list>
+                    <template v-for="(item, index) in discordItems">
+                        <v-list-tile :key="item.route" :to="{ name: item.route, params: { id: guild.id }}">
+                            <v-list-tile-action>
+                                <v-icon>{{item.icon}}</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                            </v-list-tile-content>
+                      </v-list-tile>
+                      <v-divider></v-divider>
+                    </template>
+                  </v-list>
+              </div>
+
                 <v-subheader>Général</v-subheader>
                 <v-list>
                 <template v-for="(item, index) in generalItems">
@@ -17,22 +35,7 @@
                 </template>
               </v-list>
 
-              <div v-for="guild in currentCity.guilds">
-                  <v-subheader>Discord {{guild.name}}</v-subheader>
-                  <v-list>
-                  <template v-for="(item, index) in discordItems">
-                      <v-list-tile :key="item.route" :to="{ name: item.route, params: { id: guild.id }}">
-                          <v-list-tile-action>
-                              <v-icon>{{item.icon}}</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                              <v-list-tile-title>{{item.label}}</v-list-tile-title>
-                          </v-list-tile-content>
-                    </v-list-tile>
-                    <v-divider></v-divider>
-                  </template>
-                </v-list>
-            </div>
+
 
             <v-subheader>Commun</v-subheader>
             <v-list>
@@ -82,15 +85,9 @@
                         icon: 'add_alert'
                     },
                     {
-                        label: 'Signalements de pops sauvages',
-                        route: 'admin.pops',
-                        route: 'admin.access',
-                        icon: 'add_a_photo'
-                    },
-                    {
-                        label: 'Signalement de quètes',
-                        route: 'admin.quests',
-                        icon: 'add_location'
+                        label: 'Signalements de raids EX',
+                        route: 'admin.raidsex',
+                        icon: 'star'
                     },
                     {
                         label: 'Roles personnalisés',

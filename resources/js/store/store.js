@@ -6,6 +6,12 @@ import VuexPersistence from 'vuex-persist';
 
 Vue.use(Vuex);
 
+const defaultSettings = {
+    raidsListFilters: ["1","2","3","4","5","6"],
+    raidsListOrder: 'date',
+    hideGyms: false
+}
+
 const store = new Vuex.Store({
     state: {
         currentCity: JSON.parse(localStorage.getItem('pokematos_currentCity') ),
@@ -94,6 +100,15 @@ const store = new Vuex.Store({
             if( state.settings === undefined || !state.settings || state.settings === null ) state.settings = {};
             state.settings[payload.setting] = payload.value;
             localStorage.setItem('pokematos_settings', JSON.stringify(state.settings));
+        },
+        initSetting( state, payload ) {
+            if( state.settings === undefined || !state.settings || state.settings === null ) state.settings = {};
+            if( state.settings[payload.setting] ) {
+                return;
+            } else {
+                state.settings[payload.setting] = payload.value;
+                localStorage.setItem('pokematos_settings', JSON.stringify(state.settings));
+            }            
         },
         setSnackbar( state, payload ) {
             state.snackbar = payload;

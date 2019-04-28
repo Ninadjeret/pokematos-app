@@ -8,6 +8,7 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+@import 'vuetify';
 @import 'header';
 @import 'nav';
 @import 'map';
@@ -137,16 +138,15 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
 }
 
 body.logged-out {
-    background: url(https://assets.profchen.fr/img/bg_loading.jpg) top right;
+    background: url(https://assets.profchen.fr/img/splash_bg.jpg) top right;
     background-size: cover;
 }
 body.logged-out .branding img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 200px;
     display: block;
-    margin: auto;
+    position: fixed;
+    bottom: 0;
+    left: calc( 50% - 100px );
 }
 body.logged-out .branding h1 {
     color: #fff;
@@ -156,7 +156,7 @@ body.logged-out .branding h1 {
     font-weight: 500;
     text-align: center;
 }
-body.logged-out .branding a {
+body.logged-out .branding a.login {
     background: transparent;
     border: 1px solid #fff;
     color: #fff;
@@ -168,7 +168,11 @@ body.logged-out .branding a {
     text-decoration: none;
     border-radius: 4px !important;
 }
-body.logged-out .branding a:before {
+body.logged-out .branding a.login:hover {
+    color: $primary;
+    background: #fff;
+}
+body.logged-out .branding a.login:before {
     content: "";
     width: 30px;
     height: 30px;
@@ -176,6 +180,18 @@ body.logged-out .branding a:before {
     background-size: contain;
     display: inline-block;
     vertical-align: middle;
+}
+
+body.logged-out .branding a.minor {
+    color: rgba(255, 255, 255, 0.7);
+    padding-top: 50px;
+    width:250px;
+    margin: auto;
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    position: fixed;
+    bottom: 120px;
 }
 
 .section__title {
@@ -450,4 +466,35 @@ range_button:active {
 }
 .theme--light.v-label.v-label--active {
     color: $primary;
+}
+
+.raids__empty {
+    position: fixed;
+    bottom: 50px;
+    h3 {
+        font-family: 'Teko';
+        font-size: 46px;
+        line-height: 40px;
+        text-align: center;
+        color: #5a6cae;
+        margin: 0px 00px;
+    }
+    div.wrapper {
+        text-align: center;
+        margin: 20px 40px 10px 40px;
+        p {
+            color: #aaa;
+            margin-top: 20px;
+        }
+        .v-btn {
+            margin-bottom: 40px;
+        }
+    }
+}
+
+.page-content-full {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: -webkit-fill-available;
 }

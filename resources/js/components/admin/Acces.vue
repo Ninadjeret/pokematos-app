@@ -15,6 +15,13 @@
                     <option v-for="role in roles" :value="role.id">{{role.name}}</option>
                 </select>
             </div>
+            <v-subheader>Modération</v-subheader>
+            <div class="setting">
+                <label>Roles des modérateurs</label>
+                <select multiple="true" v-if="roles" v-model="map_access_moderation_roles">
+                    <option v-for="role in roles" :value="role.id">{{role.name}}</option>
+                </select>
+            </div>
             <v-subheader>Administration</v-subheader>
             <div class="setting">
                 <label>Roles des administrateurs</label>
@@ -44,6 +51,7 @@
                 map_access_rule: 'everyone',
                 map_access_roles: [],
                 map_access_admin_roles: [],
+                map_access_moderation_roles: [],
                 roles: [],
             }
         },
@@ -57,6 +65,7 @@
                     if( res.data.map_access_rule ) this.map_access_rule = res.data.map_access_rule;
                     if( res.data.map_access_roles ) this.map_access_roles = res.data.map_access_roles;
                     if( res.data.map_access_admin_roles ) this.map_access_admin_roles = res.data.map_access_admin_roles;
+                    if( res.data.map_access_moderation_roles ) this.map_access_moderation_roles = res.data.map_access_moderation_roles;
                 }).catch( err => {
                     //No error
                 });
@@ -74,7 +83,8 @@
                     settings: {
                         map_access_rule: this.map_access_rule,
                         map_access_roles: this.map_access_roles,
-                        map_access_admin_roles: this.map_access_admin_roles
+                        map_access_admin_roles: this.map_access_admin_roles,
+                        map_access_moderation_roles: this.map_access_moderation_roles
                     }
                 };
                 this.save(args);
