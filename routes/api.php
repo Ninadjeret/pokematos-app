@@ -79,7 +79,6 @@ Route::delete('bot/roles/{role}', 'BotController@deleteRole');
 Route::get('bot/roles/{role}', 'BotController@getRole');
 Route::put('bot/roles/{role}', 'BotController@updateRole');
 
-
 Route::get('bot/rolecategories', 'BotController@getRoleCategories');
 Route::post('bot/rolecategories', 'BotController@createRoleCategory');
 Route::get('bot/rolecategories/{categorie}', 'BotController@getRoleCategory');

@@ -31,11 +31,16 @@ class BotController extends Controller {
      * @return [type]           [description]
      */
     public function getRole( Request $request, $role ) {
-
         $role = Role::where('discord_id', $role)->first();
         if( empty($role) ) return response()->json('Le role n\'a pas été trouvé', 400);
 
-        return response()->json($role, 200);
+        $return = $role->toArray();
+        unset($return['guild']['settings']);
+        if( $return['category'] ) {
+            unset($return['category']['guild']);
+        }
+
+        return response()->json($return, 200);
     }
 
 
@@ -200,5 +205,6 @@ class BotController extends Controller {
         RoleCategoy::destroy($categorie->id);
         return response()->json(null, 204);
     }
+
 
 }

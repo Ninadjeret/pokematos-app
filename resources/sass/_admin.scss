@@ -71,6 +71,9 @@
         padding: 8px;
         border: 1px solid #ced4da;
     }
+    [disabled="disabled"] {
+        color: $grey;
+    }
     textarea {
         height: 80px;
         width: 100%;

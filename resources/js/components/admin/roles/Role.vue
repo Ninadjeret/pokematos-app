@@ -4,8 +4,9 @@
             <v-subheader>Description</v-subheader>
             <div class="setting">
                 <label>Nom</label>
-                <p class="description">@{{name}}</p>
-                <input v-model="name" type="text">
+                <p v-if="name == '@everyone'" class="description">Le nom du role @everyone ne peut pas être modifié</p>
+                <p v-else class="description">@{{name}}</p>
+                <input v-model="name" :disabled="(name == '@everyone')" type="text">
             </div>
             <div class="setting">
                 <label>Catégorie</label>
