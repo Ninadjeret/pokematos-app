@@ -140,3 +140,32 @@
         }
     }
 }
+.permissions {
+    .theme--light.bt--small.bt--secondary {
+        background-color: $primary;
+        color: #fff;
+        margin-top: 20px;
+    }
+}
+.permission {
+    .v-card__title--primary {
+        padding: 10px;
+    }
+    .permission__role {
+        background: rgba(168, 167, 207, 0.2);
+        color: $primary;
+        padding: 1px 5px;
+        display: inline-block;
+        border-radius: 5px;
+    }
+    .permission__content {
+        width: calc(100% - 52px);
+    }
+    .permission__actions {
+        display: flex;
+        flex-direction: column;
+        .theme--dark.v-btn {
+            color: $grey;
+        }
+    }
+}

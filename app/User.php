@@ -16,6 +16,7 @@ class User extends Authenticatable
 
     protected $fillable = ['name', 'email', 'password', 'guilds'];
     protected $hidden = ['password', 'remember_token',];
+    protected $appends = ['permissions'];
 
     public function getGuilds() {
         $guilds = [];
@@ -35,6 +36,20 @@ class User extends Authenticatable
         }
 
         return $guilds;
+    }
+
+    public function getPermissionsAttribute() {
+
+        $raid_ex = false;
+        foreach( $this->getGuilds() as $guild ) {
+            if( $guild->settings->raidsex_active ) $raid_ex = true;
+        }
+
+        return (object) [
+            'city' => (object) [
+                'raidex_create' => $raid_ex,
+            ],        
+        ];
     }
 
     public function getCities() {

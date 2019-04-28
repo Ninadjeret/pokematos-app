@@ -11289,6 +11289,37 @@ a.text-dark:focus {
   color: #ccc;
 }
 
+.permissions .theme--light.bt--small.bt--secondary {
+  background-color: #5a6cae;
+  color: #fff;
+  margin-top: 20px;
+}
+
+.permission .v-card__title--primary {
+  padding: 10px;
+}
+
+.permission .permission__role {
+  background: rgba(168, 167, 207, 0.2);
+  color: #5a6cae;
+  padding: 1px 5px;
+  display: inline-block;
+  border-radius: 5px;
+}
+
+.permission .permission__content {
+  width: calc(100% - 52px);
+}
+
+.permission .permission__actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.permission .permission__actions .theme--dark.v-btn {
+  color: #aaa;
+}
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -11431,17 +11462,16 @@ h6 small {
 }
 
 body.logged-out {
-  background: url(https://assets.profchen.fr/img/bg_loading.jpg) top right;
+  background: url(https://assets.profchen.fr/img/splash_bg.jpg) top right;
   background-size: cover;
 }
 
 body.logged-out .branding img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 200px;
   display: block;
-  margin: auto;
+  position: fixed;
+  bottom: 0;
+  left: calc( 50% - 100px );
 }
 
 body.logged-out .branding h1 {
@@ -11453,7 +11483,7 @@ body.logged-out .branding h1 {
   text-align: center;
 }
 
-body.logged-out .branding a {
+body.logged-out .branding a.login {
   background: transparent;
   border: 1px solid #fff;
   color: #fff;
@@ -11466,7 +11496,12 @@ body.logged-out .branding a {
   border-radius: 4px !important;
 }
 
-body.logged-out .branding a:before {
+body.logged-out .branding a.login:hover {
+  color: #5a6cae;
+  background: #fff;
+}
+
+body.logged-out .branding a.login:before {
   content: "";
   width: 30px;
   height: 30px;
@@ -11474,6 +11509,18 @@ body.logged-out .branding a:before {
   background-size: contain;
   display: inline-block;
   vertical-align: middle;
+}
+
+body.logged-out .branding a.minor {
+  color: rgba(255, 255, 255, 0.7);
+  padding-top: 50px;
+  width: 250px;
+  margin: auto;
+  display: block;
+  text-align: center;
+  font-size: 16px;
+  position: fixed;
+  bottom: 120px;
 }
 
 .section__title {
@@ -11816,5 +11863,12 @@ range_button:active {
 
 .raids__empty div.wrapper .v-btn {
   margin-bottom: 40px;
+}
+
+.page-content-full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: -webkit-fill-available;
 }
 

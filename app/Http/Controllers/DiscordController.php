@@ -33,6 +33,7 @@ class DiscordController extends Controller {
         }
 
         $data = json_decode($res->getBody());
+        Log::debug( print_r( $data, true ) );
         $res = $this->getDiscordMe($data);
         if( $res->getStatusCode() != 200 ) {
             return redirect('/?access=denied&code=1');
@@ -43,6 +44,7 @@ class DiscordController extends Controller {
         $res_guilds = $this->getDiscordMeGuilds($data);
 
         $user_data = json_decode($res->getBody());
+        Log::debug( print_r( $user_data, true ) );
         $user_guilds = json_decode($res_guilds->getBody());
         $user = User::where('email',$user_data->email)->first();
 
@@ -58,6 +60,9 @@ class DiscordController extends Controller {
         $user->discord_id = $user_data->id;
         $user->discord_name = $user_data->username;
         $user->discord_avatar_id = $user_data->avatar;
+        $user->discord_discriminator = $user_data->discriminator;
+        $user->discord_access_token = $data->access_token;
+        $user->discord_refresh_token = $data->refresh_token;
 
         //Gestion de l'attribution des droits d'accès
         $auth = false;
@@ -65,6 +70,7 @@ class DiscordController extends Controller {
         $guilds = [];
         if(  !empty( $user_guilds ) ) {
             foreach( $user_guilds as $user_guild ) {
+
                 $auth_discord = false;
                 $admin = false;
                 $guild = Guild::where( 'discord_id', $user_guild->id )->first();
@@ -94,7 +100,7 @@ class DiscordController extends Controller {
                             }
 
                             //Si l'utilisateur a les permission d'admin sur Discrod, alors il les hérite sur la map
-                            if( $user_guild->permissions == 2146958847 ) {
+                            if( $user_guild->permissions >= 2146958847 ) {
                                 $admin = true;
                             }
 
@@ -193,6 +199,23 @@ class DiscordController extends Controller {
         $return = [];
         foreach($channels as $channel) {
             if( $channel->type == 0 ) {
+                $return[] = [
+                    'name' => $channel->name,
+                    'id' => (string) $channel->id
+                ];
+            }
+        }
+
+        return response()->json($return, 200);
+    }
+
+    public function getChannelCategories( Request $request, City $city, Guild $guild ) {
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+        $channels = $discord->guild->getGuildChannels(['guild.id' => $guild->discord_id]);
+
+        $return = [];
+        foreach($channels as $channel) {
+            if( $channel->type == 4 ) {
                 $return[] = [
                     'name' => $channel->name,
                     'id' => (string) $channel->id

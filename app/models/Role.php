@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class Role extends Model {
 
-    protected $fillable = ['discord_id', 'guild_id', 'name', 'type', 'gym_id', 'zone_id', 'pokemon_id', 'restricted', 'category_id'];
+    protected $fillable = ['discord_id', 'guild_id', 'name', 'type', 'gym_id', 'zone_id', 'pokemon_id', 'restricted', 'category_id', 'channel_discord_id', 'message_discord_id'];
     protected $appends = ['guild', 'category'];
     protected $hidden = ['guild_id'];
     protected $casts = [
@@ -64,10 +64,22 @@ class Role extends Model {
             'pokemon_id' => $args['pokemon_id'],
         ]);
 
-        /*$discord->channel->createMessage([
-            'channel.id' => (int) $roleCategory->channel_discord_id,
-            'content' => '<@&'.$role->discord_id.'>'
-        ]);*/
+
+        if( $roleCategory->notifications ) {
+            $message = $discord->channel->createMessage([
+                'channel.id' => (int) $roleCategory->channel_discord_id,
+                'content' => '<@&'.$role->discord_id.'>'
+            ]);
+            $discord->channel->createReaction([
+                'channel.id' => (int) $roleCategory->channel_discord_id,
+                'message.id' => (int) $message['id'],
+                'emoji' => '✅'
+            ]);
+            $role->update([
+                'channel_discord_id' => $roleCategory->channel_discord_id,
+                'message_discord_id' => $message['id']
+             ]);
+        }
 
         return $role;
     }
@@ -104,6 +116,11 @@ class Role extends Model {
             'name' => $name,
             'color' => $color,
         ]);
+        $discord->channel->editMessage([
+            'channel.id' => (int) $this->category->channel_discord_id,
+            'message.id' => (int) $this->message_discord_id,
+            'content' => '<@&'.$this->discord_id.'>'
+        ]);
 
         $this->update([
             'name' => $name,
@@ -120,9 +137,13 @@ class Role extends Model {
     public function suppr() {
 
         $discord = new DiscordClient(['token' => config('discord.token')]);
-        $discord_role = $discord->guild->deleteGuildRole([
+        $discord->guild->deleteGuildRole([
             'guild.id' => (int) $this->guild->discord_id,
             'role.id' => (int) $this->discord_id
+        ]);
+        $discord->channel->deleteMessage([
+            'channel.id' => (int) $this->category->channel_discord_id,
+            'message.id' => (int) $this->message_discord_id,
         ]);
 
         Role::destroy($this->id);

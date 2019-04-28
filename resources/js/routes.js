@@ -9,6 +9,7 @@ import AdminZone from './components/admin/Zone.vue'
 import AdminAccess from './components/admin/Acces.vue'
 import AdminBosses from './components/admin/Bosses.vue'
 import AdminRaids from './components/admin/RaidReporting.vue'
+import AdminRaidsEx from './components/admin/RaidsEx.vue'
 import AdminRolesHome from './components/admin/RolesHome.vue'
 import AdminRolesCategories from './components/admin/roles/Categories.vue'
 import AdminRolesCategorie from './components/admin/roles/Categorie.vue'
@@ -131,6 +132,15 @@ const routes = [
                       },
                       component: AdminRaids
                  },
+                 {
+                       path: ':id/raidsex',
+                       name: 'admin.raidsex',
+                       meta: {
+                           title: 'Signalement de raids EX',
+                           parent: 'admin'
+                       },
+                       component: AdminRaidsEx
+                  },
                 {
                       path: 'gyms',
                       name: 'admin.gyms',

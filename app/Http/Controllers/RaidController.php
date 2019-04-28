@@ -7,7 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\City;
 use App\Models\Raid;
 use App\Models\Stop;
+use App\Models\Guild;
 use App\Models\Announce;
+use RestCord\DiscordClient;
+use App\Models\raidChannel;
+use Illuminate\Support\Facades\Log;
 
 class RaidController extends Controller {
 
@@ -42,6 +46,29 @@ class RaidController extends Controller {
             $raid->ex = (isset($request->params['ex'])) ? $request->params['ex'] : false;
             $raid->save();
             $announceType = 'raid-create';
+
+            $guilds = Guild::where('city_id', $raid->city_id)->get();
+            $gym = Stop::find($raid->gym_id);
+            $startTime = new \DateTime($raid->start_time);
+            if( $guilds && $raid->egg_level == 6 ) {
+                $discord = new DiscordClient(['token' => config('discord.token')]);
+                foreach( $guilds as $guild ) {
+                    if( $guild->settings->raidsex_active && $guild->settings->raidsex_channels && $guild->settings->raidsex_channel_category_id ) {
+
+                        $channel = $discord->guild->createGuildChannel([
+                            'guild.id' => $guild->discord_id,
+                            'name' => $gym->name.'-'.$startTime->format('d').'-'.$startTime->format('m'),
+                            'type' => 0,
+                            'parent_id' => (int) $guild->settings->raidsex_channel_category_id
+                        ]);
+                        raidChannel::create([
+                            'raid_id' => $raid->id,
+                            'guild_id' => $guild->id,
+                            'channel_discord_id' => $channel->id,
+                        ]);
+                    }
+                }
+            }
         }
         if( $announceType ) {
             $announce = Announce::create([

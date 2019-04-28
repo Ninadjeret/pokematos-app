@@ -33,7 +33,7 @@
                     <ul>
                         <li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
                         <li v-if="raidStatus == 'none'"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
-                        <li v-if="raidStatus == 'none' && gym.ex === true"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
+                        <li v-if="raidStatus == 'none' && gym.ex === true && user.permissions.city.raidex_create"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
                         <li v-if="gym.google_maps_url"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
                     </ul>
@@ -174,6 +174,9 @@ export default {
         pokemons() {
             return this.$store.state.pokemons;
         },
+        user() {
+            return this.$store.state.user;
+        },
         raidStatus() {
             if( this.gym.raid ) {
                 var now = moment();
@@ -294,7 +297,7 @@ export default {
                 this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                 this.raidAnnonce = 'Un raid '+this.gym.raid.egg_level+' têtes est en cours...';
                 this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
-                if( this.gym.raid.ex ) this.raidAnnonce = 'Un raid EX est en cours...'; 
+                if( this.gym.raid.ex ) this.raidAnnonce = 'Un raid EX est en cours...';
             } else if( this.endTime ) {
                 this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                 this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.name_fr+' est en cours...';

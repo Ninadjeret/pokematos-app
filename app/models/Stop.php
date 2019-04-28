@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\City;
 use App\Models\Raid;
 use App\Models\Zone;
+use App\Models\raidChannel;
 
 class Stop extends Model {
 
@@ -25,6 +26,7 @@ class Stop extends Model {
     public function getCityAttribute() {
         return City::find($this->city_id);
     }
+
     public function getGoogleMapsUrlAttribute() {
         if( $this->lat && $this->lng ) {
             return 'https://www.google.com/maps/search/?api=1&query='.$this->lat.','.$this->lng;
