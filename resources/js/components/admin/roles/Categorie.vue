@@ -47,7 +47,7 @@
                       </v-flex>
                       </v-layout>
                       <div class="text-xs-center">
-                            <v-btn class="bt--small bt--secondary" @click="addPermission">Ajouter une règle</v-btn>
+                            <v-btn class="bt--small bt--secondary" @click="addPermission" round>Ajouter une règle</v-btn>
                       </div>
                 </div>
             </div>

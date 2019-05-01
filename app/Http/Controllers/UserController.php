@@ -6,6 +6,7 @@ use App\User;
 use App\Models\City;
 use App\Models\Role;
 use App\Models\Guild;
+use App\Models\Connector;
 use App\Models\RoleCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,49 @@ class UserController extends Controller {
         $guild->updateSettings($settings);
         return response()->json($guild, 200);
     }
+
+    /**
+    * ==================================================================
+    * GESTION DES CONNECTEURS
+    * ==================================================================
+    */
+
+   public function getConnectors( Request $request, Guild $guild ) {
+       $connecteurs = Connector::where('guild_id', $guild->id)->get();
+       return response()->json($connecteurs, 200);
+   }
+
+   public function createConnector( Request $request, Guild $guild ) {
+       $connector = Connector::create([
+           'name' => ( isset( $request->name ) ) ? $request->name : '' ,
+           'guild_id' => $guild->id,
+           'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : '' ,
+           'publish' => ( isset( $request->publish ) ) ? $request->publish : '' ,
+           'filter_gym_type' => ( isset( $request->filter_gym_type ) ) ? $request->filter_gym_type : '' ,
+           'filter_pokemon_type' => ( isset( $request->filter_pokemon_type ) ) ? $request->filter_pokemon_type : '' ,
+       ]);
+       return response()->json($connector, 200);
+   }
+
+   public function updateConnector( Request $request, Guild $guild, Connector $connector ) {
+       $connector->update([
+           'name' => ( isset( $request->name ) ) ? $request->name : $connector->name ,
+           'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : $connector->channel_discord_id ,
+           'publish' => ( isset( $request->publish ) ) ? $request->publish : $connector->publish ,
+           'filter_gym_type' => ( isset( $request->filter_gym_type ) ) ? $request->filter_gym_type : $connector->filter_gym_type ,
+           'filter_pokemon_type' => ( isset( $request->filter_pokemon_type ) ) ? $request->filter_pokemon_type : $connector->filter_pokemon_type ,
+       ]);
+       return response()->json($connector, 200);
+   }
+
+   public function getConnector( Request $request, Guild $guild, Connector $connector ) {
+       return response()->json($connector, 200);
+   }
+
+   public function deleteConnector(Request $request, City $city, Guild $guild, Connector $connector ) {
+       Connector::destroy($connector->id);
+       return response()->json(null, 204);
+   }
 
     /**
     * ==================================================================

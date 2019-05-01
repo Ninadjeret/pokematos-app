@@ -19,7 +19,9 @@ import VueRouter from 'vue-router';
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import Vuex from 'vuex'
 import appStore from './store/store';
-
+import Vue from 'vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 
 Vue.use(Vuex)
 Vue.use(Vuetify, {
@@ -37,6 +39,7 @@ Vue.component('l-map', LMap)
 Vue.component('l-tile-layer', LTileLayer)
 Vue.component('l-marker', LMarker)
 Vue.component(VueCountdown.name, VueCountdown)
+Vue.component('v-select', vSelect)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
