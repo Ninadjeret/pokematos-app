@@ -49,7 +49,7 @@
                         </div>
                         <div v-if="filter_gym_type == 'city'" class="setting">
                             <label>Zone(s)</label>
-                            <v-select v-model="filter_gym_zone" multiple label="name" :options="zones">
+                            <v-select v-model="filter_gym_zone" multiple label="name" :options="zones" :reduce="option => option.id">
                                 <template slot="option" slot-scope="option">
                                     {{ option.name }}
                                 </template>
@@ -57,8 +57,8 @@
                         </div>
                         <div v-if="filter_gym_type == 'gym'" class="setting">
                             <label>Arêne(s)</label>
-                            <v-select multiple label="name" :options="gyms">
-                                <template v-model="filter_gym_gym" slot="option" slot-scope="option">
+                            <v-select v-model="filter_gym_gym" multiple label="name" :options="gyms" :reduce="option => option.id">
+                                <template slot="option" slot-scope="option">
                                     <span v-if="option.zone">{{option.zone.name}} - </span>
                                     {{ option.name }}
                                 </template>
@@ -75,7 +75,7 @@
                         </div>
                         <div v-if="filter_pokemon_type == 'level'" class="setting">
                             <label>Niveau(x) de boss</label>
-                            <v-select multiple label="name" :options="levels">
+                            <v-select :value="filter_pokemon_level" v-model="filter_pokemon_level" multiple label="name" :options="levels" :reduce="option => option.id">
                                 <template slot="option" slot-scope="option">
                                     {{ option.name }}
                                 </template>
@@ -83,7 +83,7 @@
                         </div>
                         <div v-if="filter_pokemon_type == 'pokemon'" class="setting">
                             <label>Pokémon</label>
-                            <v-select multiple label="name_fr" :options="pokemons">
+                            <v-select :value="filter_pokemon_pokemon" v-model="filter_pokemon_pokemon" multiple label="name_fr" :options="pokemons" :reduce="option => option.id">
                                 <template slot="option" slot-scope="option">
                                     {{ option.name_fr }}
                                 </template>
