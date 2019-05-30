@@ -91,7 +91,11 @@
                         label = raidEndTime.diff(now, 'minutes') + ' min';
                         url = 'https://assets.profchen.fr/img/map/map_marker_active_'+gym.raid.egg_level+'.png';
                         if( gym.raid.pokemon != false ) {
-                            url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'.png';
+                            if( gym.raid.pokemon.form_id == '00' ) {
+                                url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'.png';
+                            } else {
+                                url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'_'+gym.raid.pokemon.form_id+'.png';    
+                            }
                         }
 
                     //Raids à venir
@@ -112,6 +116,10 @@
                     }
                     var html = '<img class="'+imgclassname+'" src="'+url+'"/>' + '<span class="map-marker__label">'+label+'</span>'
                     zindex = gym.raid.egg_level * 100;
+                }
+
+                if( gym.lat == null || gym.lng == null ) {
+                    return false;
                 }
 
                 if( this.$store.getters.getSetting('hideGyms') === false || gym.raid !== false ) {

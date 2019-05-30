@@ -62,6 +62,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@updateRoleCategory');
     Route::delete('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@deleteRoleCategory');
 
+    Route::get('user/guilds/{guild}/connectors', 'UserController@getConnectors');
+    Route::post('user/guilds/{guild}/connectors', 'UserController@createConnector');
+    Route::get('user/guilds/{guild}/connectors/{connector}', 'UserController@getConnector');
+    Route::put('user/guilds/{guild}/connectors/{connector}', 'UserController@updateConnector');
+    Route::delete('user/guilds/{guild}/connectors/{connector}', 'UserController@deleteConnector');
+
 
     Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');

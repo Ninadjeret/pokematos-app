@@ -119,6 +119,18 @@ class CreateCitiesTable extends Migration
             $table->foreign('guild_id')->references('id')->on('guilds');
         });
 
+        Schema::create('raid_messages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('raid_id');
+            $table->integer('guild_id');
+            $table->string('message_discord_id');
+            $table->string('channel_discord_id');
+            $table->timestamps();
+
+            $table->foreign('raid_id')->references('id')->on('raids');
+            $table->foreign('guild_id')->references('id')->on('guilds');
+        });
+
         Schema::create('raids', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('egg_level');
@@ -137,6 +149,8 @@ class CreateCitiesTable extends Migration
 
         Schema::create('connectors', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->boolean('publish')->default(false);
             $table->string('filter_pokemon_type')->default('none'); //none, level, pokemon
             $table->json('filter_pokemon_level')->nullable();
             $table->json('filter_pokemon_pokemon')->nullable();
@@ -146,9 +160,9 @@ class CreateCitiesTable extends Migration
             $table->string('format')->default('auto'); //auto, custom
             $table->string('custom_message_before')->nullable();
             $table->string('custom_message_after')->nullable();
-            $table->boolean('delete_after_end');
+            $table->boolean('delete_after_end')->default(false);
             $table->string('guild_id');
-            $table->string('channel_id');
+            $table->string('channel_discord_id');
             $table->timestamps();
 
             $table->foreign('guild_id')->references('id')->on('guilds');

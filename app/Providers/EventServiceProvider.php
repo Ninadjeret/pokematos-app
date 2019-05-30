@@ -21,6 +21,15 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\RaidEnded' => [
             'App\Listeners\DeleteRaidChannels',
         ],
+        'App\Events\RaidCreated' => [
+            'App\Listeners\PostRaidToDiscord',
+        ],
+        'App\Events\RaidUpdated' => [
+            'App\Listeners\PostRaidToDiscord',
+        ],
+        'App\Events\RaidDeleted' => [
+            'App\Listeners\PurgeDiscordRaidData',
+        ],
     ];
 
     /**

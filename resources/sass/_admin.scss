@@ -39,6 +39,16 @@
     a.v-list__tile:hover {
         text-decoration: none;
     }
+    .v-tabs {
+        background: $secondary;
+        .theme--light.v-tabs__bar .v-tabs__div {
+            color: #fff;
+        }
+        a:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+    }
 }
 .setting {
     border-top: 1px solid #eee;

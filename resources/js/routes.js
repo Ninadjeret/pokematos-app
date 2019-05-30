@@ -8,13 +8,16 @@ import AdminZones from './components/admin/Zones.vue'
 import AdminZone from './components/admin/Zone.vue'
 import AdminAccess from './components/admin/Acces.vue'
 import AdminBosses from './components/admin/Bosses.vue'
-import AdminRaids from './components/admin/RaidReporting.vue'
 import AdminRaidsEx from './components/admin/RaidsEx.vue'
 import AdminRolesHome from './components/admin/RolesHome.vue'
 import AdminRolesCategories from './components/admin/roles/Categories.vue'
 import AdminRolesCategorie from './components/admin/roles/Categorie.vue'
 import AdminRolesRoles from './components/admin/roles/Roles.vue'
 import AdminRolesRole from './components/admin/roles/Role.vue'
+
+import AdminRaidReportingHome from './components/admin/RaidReporting.vue'
+import AdminRaidsConnectors from './components/admin/raids/Connecteurs.vue'
+import AdminRaidsConnector from './components/admin/raids/Connecteur.vue'
 
 const routes = [
     {
@@ -130,7 +133,36 @@ const routes = [
                           title: 'Signalement de raids',
                           parent: 'admin'
                       },
-                      component: AdminRaids
+                      component: AdminRaidReportingHome,
+                      children: [
+                          {
+                                path: 'connectors',
+                                name: 'admin.raids.annonces',
+                                meta: {
+                                    title: 'Gérer les connecteurs',
+                                    parent: 'admin.raids'
+                                },
+                                component: AdminRaidsConnectors
+                           },
+                           {
+                                 path: 'connectors/add',
+                                 name: 'admin.raids.annonces.add',
+                                 meta: {
+                                     title: 'Nouveau connecteur',
+                                     parent: 'admin.raids.annonces'
+                                 },
+                                 component: AdminRaidsConnector
+                            },
+                           {
+                                 path: 'connectors/:connector_id',
+                                 name: 'admin.raids.annonces.edit',
+                                 meta: {
+                                     title: 'Modifier le connecteur',
+                                     parent: 'admin.raids.annonces'
+                                 },
+                                 component: AdminRaidsConnector
+                            },
+                       ]
                  },
                  {
                        path: ':id/raidsex',

@@ -11171,6 +11171,19 @@ a.text-dark:focus {
   text-decoration: none;
 }
 
+.settings-section .v-tabs {
+  background: #a8a7cf;
+}
+
+.settings-section .v-tabs .theme--light.v-tabs__bar .v-tabs__div {
+  color: #fff;
+}
+
+.settings-section .v-tabs a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
 .setting {
   border-top: 1px solid #eee;
   padding: 16px;
