@@ -119,6 +119,18 @@ class CreateCitiesTable extends Migration
             $table->foreign('guild_id')->references('id')->on('guilds');
         });
 
+        Schema::create('raid_messages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('raid_id');
+            $table->integer('guild_id');
+            $table->string('message_discord_id');
+            $table->string('channel_discord_id');
+            $table->timestamps();
+
+            $table->foreign('raid_id')->references('id')->on('raids');
+            $table->foreign('guild_id')->references('id')->on('guilds');
+        });
+
         Schema::create('raids', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('egg_level');

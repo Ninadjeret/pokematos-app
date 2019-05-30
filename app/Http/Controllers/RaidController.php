@@ -41,8 +41,8 @@ class RaidController extends Controller {
             $raid->city_id = $city->id;
             $raid->gym_id = $request->params['gym_id'];
             $raid->egg_level = $request->params['egg_level'];
-            $raid->pokemon_id = isset( $request->params['pokemon_id'] ) ? $request->params['pokemon_id'] : null ;
             $raid->start_time = $request->params['start_time'];
+            $raid->pokemon_id = ( isset( $request->params['pokemon_id']) && date('Y-m-d H:i:s') > $raid->start_time ) ? $request->params['pokemon_id'] : null ;
             $raid->ex = (isset($request->params['ex'])) ? $request->params['ex'] : false;
             $raid->save();
             $announceType = 'raid-create';
@@ -80,6 +80,13 @@ class RaidController extends Controller {
             ]);
         }
 
+        if( $announceType == 'raid-create' ) {
+            event( new \App\Events\RaidCreated( $raid, $announce ) );
+        } elseif( $announceType == 'raid-update') {
+            event( new \App\Events\RaidUpdated( $raid, $announce ) );
+        }
+
+
         return response()->json($raid, 200);
 
     }
@@ -91,6 +98,7 @@ class RaidController extends Controller {
     }*/
 
     public function delete(City $city, Raid $raid, Request $request) {
+        event( new \App\Events\RaidDeleted( $raid ) );
         Raid::destroy($raid->id);
         return response()->json(null, 204);
     }

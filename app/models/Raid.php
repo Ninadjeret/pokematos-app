@@ -7,12 +7,14 @@ use App\User;
 use App\Models\Stop;
 use App\Models\Pokemon;
 use App\Models\Announce;
+use App\Models\raidChannel;
+use App\Models\RaidMessage;
 
 class Raid extends Model {
 
     protected $fillable = ['status'];
     protected $hidden = ['gym_id', 'city_id', 'pokemon_id'];
-    protected $appends = ['end_time', 'pokemon', 'source', 'channels'];
+    protected $appends = ['end_time', 'pokemon', 'source', 'channels', 'messages', 'thumbnail_url'];
 
     /*public function getGymAttribute() {
         return Stop::find($this->gym_id);
@@ -29,6 +31,10 @@ class Raid extends Model {
             return false;
         }
         return Pokemon::find($this->pokemon_id);
+    }
+
+    public function getThumbnailUrlAttribute() {
+        return 'https://assets.profchen.fr/img/pokemon/pokemon_icon_'.$this->pokedex_id.'_'.$this->form_id.'.png';
     }
 
     public function getSourceAttribute() {
@@ -49,11 +55,23 @@ class Raid extends Model {
         return [];
     }
 
+    public function getMessagesAttribute() {
+        $messages = RaidMessage::where('raid_id', $this->id)->get();
+        if( $messages ) {
+            return $messages;
+        }
+        return [];
+    }
+
     public function getLastAnnounce() {
         $annonce = Announce::where('raid_id', $this->id)
             ->orderBy('created_at', 'desc')
             ->first();
         return $annonce;
+    }
+
+    public function getGym() {
+        return Stop::find( $this->gym_id );
     }
 
 }

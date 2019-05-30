@@ -43,26 +43,31 @@
                             <label>Filtrer les arènes</label>
                             <v-btn-toggle v-model="filter_gym_type" mandatory>
                                 <v-btn value="none">Aucun filtre</v-btn>
-                                <v-btn value="city">Par zone(s)</v-btn>
+                                <v-btn value="zone">Par zone(s)</v-btn>
                                 <v-btn value="gym">Par arêne(s)</v-btn>
                             </v-btn-toggle>
                         </div>
-                        <div v-if="filter_gym_type == 'city'" class="setting">
+                        <div v-if="filter_gym_type == 'zone'" class="setting">
                             <label>Zone(s)</label>
-                            <v-select v-model="filter_gym_zone" multiple label="name" :options="zones" :reduce="option => option.id">
-                                <template slot="option" slot-scope="option">
-                                    {{ option.name }}
-                                </template>
-                            </v-select>
+                            <multiselect
+                                v-model="filter_gym_zone"
+                                :options="zones"
+                                track-by="id"
+                                label="name"
+                                :multiple="true"
+                                placeholder="Ajouter une zone">
+                            </multiselect>
                         </div>
                         <div v-if="filter_gym_type == 'gym'" class="setting">
                             <label>Arêne(s)</label>
-                            <v-select v-model="filter_gym_gym" multiple label="name" :options="gyms" :reduce="option => option.id">
-                                <template slot="option" slot-scope="option">
-                                    <span v-if="option.zone">{{option.zone.name}} - </span>
-                                    {{ option.name }}
-                                </template>
-                            </v-select>
+                            <multiselect
+                                v-model="filter_gym_gym"
+                                :options="gyms"
+                                track-by="id"
+                                label="name"
+                                :multiple="true"
+                                placeholder="Ajouter une arêne">
+                            </multiselect>
                         </div>
                         <v-subheader>Boss</v-subheader>
                         <div class="setting">
@@ -75,19 +80,33 @@
                         </div>
                         <div v-if="filter_pokemon_type == 'level'" class="setting">
                             <label>Niveau(x) de boss</label>
-                            <v-select :value="filter_pokemon_level" v-model="filter_pokemon_level" multiple label="name" :options="levels" :reduce="option => option.id">
-                                <template slot="option" slot-scope="option">
-                                    {{ option.name }}
-                                </template>
-                            </v-select>
+                            <multiselect
+                                v-model="filter_pokemon_level"
+                                :options="levels"
+                                track-by="id"
+                                label="name"
+                                :multiple="true"
+                                placeholder="Ajouter un niveau de boss">
+                            </multiselect>
                         </div>
                         <div v-if="filter_pokemon_type == 'pokemon'" class="setting">
                             <label>Pokémon</label>
-                            <v-select :value="filter_pokemon_pokemon" v-model="filter_pokemon_pokemon" multiple label="name_fr" :options="pokemons" :reduce="option => option.id">
-                                <template slot="option" slot-scope="option">
-                                    {{ option.name_fr }}
-                                </template>
-                            </v-select>
+                            <multiselect
+                                v-model="filter_pokemon_pokemon"
+                                :options="pokemons"
+                                track-by="id"
+                                label="name_fr"
+                                :multiple="true"
+                                placeholder="Ajouter un Pokémon">
+                            </multiselect>
+                        </div>
+                        <v-subheader>Format de l'annonce</v-subheader>
+                        <div class="setting">
+                            <label>Format</label>
+                            <v-btn-toggle v-model="format" mandatory>
+                                <v-btn value="auto">Automatique</v-btn>
+                                <v-btn value="custom">Personnalisé</v-btn>
+                            </v-btn-toggle>
                         </div>
                     </div>
                 </v-tab-item>
@@ -116,6 +135,7 @@
 
     export default {
         name: 'AdminRolesCategoriesEdit',
+        components: { Multiselect },
         data() {
             return {
                 loading: false,
@@ -142,6 +162,7 @@
                 filter_pokemon_type: 'none',
                 filter_pokemon_level: [],
                 filter_pokemon_pokemon: [],
+                format: 'auto',
             }
         },
         created() {
@@ -165,7 +186,12 @@
                     this.channel_discord_id = res.data.channel_discord_id;
                     this.publish = res.data.publish;
                     this.filter_gym_type = res.data.filter_gym_type;
+                    this.filter_gym_zone = this.convertIdstoObjects(res.data.filter_gym_zone, this.zones);
+                    this.filter_gym_gym = this.convertIdstoObjects(res.data.filter_gym_gym, this.gyms);
                     this.filter_pokemon_type = res.data.filter_pokemon_type;
+                    this.filter_pokemon_level = this.convertIdstoObjects(res.data.filter_pokemon_level, this.levels);
+                    this.filter_pokemon_pokemon = this.convertIdstoObjects(res.data.filter_pokemon_pokemon, this.pokemons);
+                    this.format = res.data.format;
                 }).catch( err => {
                     //No error
                 });
@@ -196,7 +222,12 @@
                     channel_discord_id: this.channel_discord_id,
                     publish: this.publish,
                     filter_gym_type: this.filter_gym_type,
+                    filter_gym_zone: this.convertObjectsToIds(this.filter_gym_zone),
+                    filter_gym_gym: this.convertObjectsToIds(this.filter_gym_gym),
                     filter_pokemon_type: this.filter_pokemon_type,
+                    filter_pokemon_level: this.convertObjectsToIds(this.filter_pokemon_level),
+                    filter_pokemon_pokemon: this.convertObjectsToIds(this.filter_pokemon_pokemon),
+                    format: this.format,
                 };
                 if( this.$route.params.connector_id ) {
                     this.save(args);
@@ -254,6 +285,28 @@
                             timeout: 1500
                         })
                     });
+            },
+            convertObjectsToIds( array ) {
+                let arrayIds = [];
+                if( array.length === 0 ) return arrayIds;
+                array.forEach(function(item){
+                  arrayIds.push(item.id);
+                });
+                return arrayIds;
+            },
+            convertIdstoObjects( arrayIds, ObjectsReference ) {
+                let arrayObjects = [];
+                console.log(arrayIds);
+                console.log(ObjectsReference);
+                console.log( Array.isArray(arrayIds) );
+
+                if( arrayIds.length === 0 ) return arrayObjects;
+                arrayIds.forEach(function(id){
+                    console.log('tyty');
+                    let objectToAdd = ObjectsReference.find( el => el.id == id );
+                    if( objectToAdd ) arrayObjects.push(objectToAdd);
+                });
+                return arrayObjects;
             },
     }
 }
