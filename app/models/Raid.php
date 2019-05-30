@@ -74,4 +74,16 @@ class Raid extends Model {
         return Stop::find( $this->gym_id );
     }
 
+    public function isFuture() {
+        return ( $this->start_time > date('Y-m-d H:i:s') );
+    }
+
+    public function getStartTime() {
+        return new \DateTime( $this->start_time );
+    }
+
+    public function getEndTime() {
+        return new \DateTime( $this->end_time );
+    }
+
 }

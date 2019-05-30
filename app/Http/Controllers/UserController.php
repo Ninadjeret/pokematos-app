@@ -57,6 +57,8 @@ class UserController extends Controller {
            'filter_pokemon_level' => ( isset( $request->filter_pokemon_level ) ) ? $request->filter_pokemon_level : '' ,
            'filter_pokemon_pokemon' => ( isset( $request->filter_pokemon_pokemon ) ) ? $request->filter_pokemon_pokemon : '' ,
            'format' => ( isset( $request->format ) ) ? $request->format : 'auto' ,
+           'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : '' ,
+           'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : '' ,
        ]);
        return response()->json($connector, 200);
    }
@@ -73,6 +75,8 @@ class UserController extends Controller {
            'filter_pokemon_level' => ( isset( $request->filter_pokemon_level ) ) ? $request->filter_pokemon_level : $connector->filter_pokemon_level ,
            'filter_pokemon_pokemon' => ( isset( $request->filter_pokemon_pokemon ) ) ? $request->filter_pokemon_pokemon : $connector->filter_pokemon_pokemon ,
            'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
+           'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : $connector->custom_message_before ,
+           'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : $connector->custom_message_after ,
        ]);
        return response()->json($connector, 200);
    }

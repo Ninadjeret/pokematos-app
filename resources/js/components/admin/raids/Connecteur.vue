@@ -108,6 +108,39 @@
                                 <v-btn value="custom">Personnalisé</v-btn>
                             </v-btn-toggle>
                         </div>
+                        <div class="setting" v-if="format == 'custom'">
+                            <label>Message personnalisé avant pop</label>
+                            <p class="description">
+                                Utilisez les tags suivants pour afficher des propriétés du raid :<br>
+                                {arene_nom}<br>
+                                {arene_nom_custom}<br>
+                                {arene_zone}<br>
+                                {arene_description}<br>
+                                {arene_gmaps}<br>
+                                {raid_niveau}<br>
+                                {raid_debut}<br>
+                                {raid_fin}<br>
+                                {utilisateur}<br>
+                            </p>
+                            <input v-model="custom_message_before" type="text">
+                        </div>
+                        <div class="setting" v-if="format == 'custom'">
+                            <label>Message personalisé après pop</label>
+                            <p class="description">
+                                Utilisez les tags suivants pour afficher des propriétés du raid :<br>
+                                {arene_nom}<br>
+                                {arene_nom_custom}<br>
+                                {arene_zone}<br>
+                                {arene_description}<br>
+                                {arene_gmaps}<br>
+                                {raid_niveau}<br>
+                                {raid_pokemon}<br>
+                                {raid_debut}<br>
+                                {raid_fin}<br>
+                                {utilisateur}<br>
+                            </p>
+                            <input v-model="custom_message_after" type="text">
+                        </div>
                     </div>
                 </v-tab-item>
             </v-tabs-items>
@@ -163,6 +196,8 @@
                 filter_pokemon_level: [],
                 filter_pokemon_pokemon: [],
                 format: 'auto',
+                custom_message_before: '',
+                custom_message_after: '',
             }
         },
         created() {
@@ -192,6 +227,8 @@
                     this.filter_pokemon_level = this.convertIdstoObjects(res.data.filter_pokemon_level, this.levels);
                     this.filter_pokemon_pokemon = this.convertIdstoObjects(res.data.filter_pokemon_pokemon, this.pokemons);
                     this.format = res.data.format;
+                    this.custom_message_before = res.data.custom_message_before;
+                    this.custom_message_after = res.data.custom_message_after;
                 }).catch( err => {
                     //No error
                 });
@@ -228,6 +265,8 @@
                     filter_pokemon_level: this.convertObjectsToIds(this.filter_pokemon_level),
                     filter_pokemon_pokemon: this.convertObjectsToIds(this.filter_pokemon_pokemon),
                     format: this.format,
+                    custom_message_before: this.custom_message_before,
+                    custom_message_after: this.custom_message_after,
                 };
                 if( this.$route.params.connector_id ) {
                     this.save(args);
