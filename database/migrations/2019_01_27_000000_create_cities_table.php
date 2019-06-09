@@ -241,6 +241,51 @@ class CreateCitiesTable extends Migration
 
             $table->foreign('role_category_id')->references('id')->on('role_categories');
         });
+
+        Schema::create('quest_rewards', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->text('alternative_name');
+            $table->timestamps();
+        });
+
+        Schema::create('quest_missions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('quests', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('mission_id');
+            $table->string('reward_type');
+            $table->integer('reward_id');
+            $table->integer('pokemon_id');
+            $table->timestamps();
+
+            $table->foreign('mission_id')->references('id')->on('quest_missions');
+            $table->foreign('reward_id')->references('id')->on('quest_rewards');
+            $table->foreign('pokemon_id')->references('id')->on('pokemons');
+        });
+
+        Schema::create('quest_connectors', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('filter_reward_type')->default('none'); //none, level, pokemon
+            $table->json('filter_reward_reward')->nullable();
+            $table->json('filter_reward_pokemon')->nullable();
+            $table->string('filter_stop_type')->default('none'); //none, zone, gym
+            $table->json('filter_stop_zone')->nullable();
+            $table->json('filter_stop_stop')->nullable();
+            $table->string('format')->default('auto'); //auto, custom
+            $table->string('custom_message')->nullable();
+            $table->boolean('delete_after_end')->default(false);
+            $table->string('guild_id');
+            $table->string('channel_discord_id');
+            $table->timestamps();
+
+            $table->foreign('guild_id')->references('id')->on('guilds');
+        });
     }
 
     /**
