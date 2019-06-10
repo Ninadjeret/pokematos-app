@@ -68,7 +68,7 @@
             return {
                 generalItems: [
                     {
-                        label: 'Arènes',
+                        label: 'POI',
                         route: 'admin.gyms',
                         icon: 'place'
                     },

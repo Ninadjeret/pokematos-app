@@ -20,14 +20,6 @@
                 <textarea v-model="description"></textarea>
             </div>
 
-            <div class="setting d-flex switch">
-                <div>
-                    <label>Arêne Ex</label>
-                    <p class="description">Nom de l’arène, tel qu'il est présent dans le jeu</p>
-                </div>
-                <v-switch v-model="ex"></v-switch>
-            </div>
-
             <div class="setting">
                 <label>Ville / Zone géographique</label>
                 <select v-if="zones" v-model="zone_id">
@@ -43,6 +35,24 @@
             <div class="setting">
                 <label>Longitude</label>
                 <input v-model="lng" type="text">
+            </div>
+
+            <v-subheader>Arène</v-subheader>
+
+            <div class="setting d-flex switch">
+                <div>
+                    <label>Arène</label>
+                    <p class="description">Ce POI est-il une arêne ?</p>
+                </div>
+                <v-switch v-model="gym"></v-switch>
+            </div>
+
+            <div v-if="gym" class="setting d-flex switch">
+                <div>
+                    <label>Arêne Ex</label>
+                    <p class="description">Nom de l’arène, tel qu'il est présent dans le jeu</p>
+                </div>
+                <v-switch v-model="ex"></v-switch>
             </div>
 
             <div v-if="$route.params.id && Number.isInteger(parseInt(this.$route.params.id))">
@@ -83,6 +93,7 @@
                 ex: false,
                 lat: '',
                 lng: '',
+                gym: false,
             }
         },
         created() {
@@ -100,6 +111,7 @@
                     this.description = res.data.description;
                     this.zone_id = res.data.zone.id;
                     this.ex = res.data.ex;
+                    this.gym = res.data.gym;
                     this.lat = res.data.lat;
                     this.lng = res.data.lng;
                 }).catch( err => {
@@ -120,6 +132,7 @@
                     description: this.description,
                     zone_id: this.zone_id,
                     ex: this.ex,
+                    gym: this.gym,
                     lat: this.lat,
                     lng: this.lng,
                 };

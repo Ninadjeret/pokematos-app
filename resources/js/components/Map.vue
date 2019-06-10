@@ -3,8 +3,22 @@
         <l-map style="height: 100%; width: 100%" ref="map" :zoom=13 :center="[currentCity.lat, currentCity.lng]">
             <l-tile-layer :url="url"></l-tile-layer>
         </l-map>
-        <button-actions @localize="localize()"></button-actions>
+        <button-actions @localize="localize()" @showfilters="dialog = true"></button-actions>
         <gym-modal ref="gymModal"></gym-modal>
+
+        <v-dialog v-model="dialog" max-width="290" content-class="list-filters">
+            <v-card>
+                <v-subheader>Ordre d'affichage</v-subheader>
+                <v-card-text>
+                </v-card-text>
+                <v-subheader>Quels raids voir ?</v-subheader>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" flat @click="dialog = false">Fermer</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
@@ -20,6 +34,7 @@
               center: [47.413220, -1.219482],
               bounds: null,
               markers: [],
+              dialog:false,
             }
         },
         computed: mapState([
@@ -73,7 +88,7 @@
                 const that2 = this;
                 var zindex = 1;
                 var label = false;
-                var url = 'https://assets.profchen.fr/img/map/map_marker_default_01.png';
+                var url = (gym.gym) ? 'https://assets.profchen.fr/img/map/map_marker_default_01.png' : 'https://assets.profchen.fr/img/map/map_marker_stop.png' ;
                 var imgclassname = 'map-marker__img';
                 if(gym.ex) {
                     url = 'https://assets.profchen.fr/img/map/map_marker_default_ex_00.png';
@@ -94,7 +109,7 @@
                             if( gym.raid.pokemon.form_id == '00' ) {
                                 url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'.png';
                             } else {
-                                url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'_'+gym.raid.pokemon.form_id+'.png';    
+                                url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'_'+gym.raid.pokemon.form_id+'.png';
                             }
                         }
 

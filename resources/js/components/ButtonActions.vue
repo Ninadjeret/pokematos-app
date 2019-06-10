@@ -5,7 +5,7 @@
             <button v-if="this.$route.name == 'map'" v-on:click="localise()" class="action" id="findme">
                 <span>Localiser</span><i class="material-icons">gps_fixed</i>
             </button>
-            <button v-if="this.$route.name == 'list'" v-on:click="showFilters()" class="action" id="showfilters">
+            <button v-if="this.$route.name == 'list' || this.$route.name == 'map'" v-on:click="showFilters()" class="action" id="showfilters">
                 <span>Filtrer</span><i class="material-icons">filter_list</i>
             </button>
             <button v-on:click="refresh()" class="action" id="refresh">

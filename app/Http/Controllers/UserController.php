@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Models\City;
 use App\Models\Role;
+use App\Models\Stop;
 use App\Models\Guild;
 use App\Models\Connector;
 use App\Models\RoleCategory;
@@ -183,6 +184,18 @@ class UserController extends Controller {
     public function deleteRoleCategory(Request $request, City $city, Guild $guild, RoleCategory $categorie ) {
         RoleCategory::destroy($categorie->id);
         return response()->json(null, 204);
+    }
+
+    /**
+    * ==================================================================
+    * GESTION DES POI
+    * ==================================================================
+    */
+
+    public function getPOIs(City $city, Request $request){
+        $pois = Stop::where('city_id', '=', $city->id)
+            ->get();
+        return response()->json($pois, 200);
     }
 
 }

@@ -7,11 +7,14 @@
             <v-list>
             <template v-for="(gym, index) in filteredGyms">
               <v-list-tile :key="gym.id" :to="{ name: 'admin.gyms.edit', params: { id: gym.id } }">
-                <v-list-tile-content>
-                  <v-list-tile-title>
-                      {{gym.name}} <span v-if="gym.zone.name" class=""> // {{gym.zone.name}}</span>
-                  </v-list-tile-title>
-                </v-list-tile-content>
+                  <v-list-tile-avatar>
+                      <img :src="getPoiIcon(gym)">
+                  </v-list-tile-avatar>
+                  <v-list-tile-content>
+                      <v-list-tile-title>
+                          {{gym.name}} <span v-if="gym.zone.name" class=""> // {{gym.zone.name}}</span>
+                      </v-list-tile-title>
+                  </v-list-tile-content>
               </v-list-tile>
               <v-divider></v-divider>
             </template>
@@ -57,6 +60,11 @@
                     //No error
                 });
             },
+            getPoiIcon( gym ) {
+                let isGym = ( gym.gym ) ? '1' : '0' ;
+                let isEx = ( gym.ex ) ? '1' : '0' ;
+                return 'https://assets.profchen.fr/img/app/icon_poi_'+isGym+'_'+isEx+'_96.png'
+            }
         }
     }
 </script>
