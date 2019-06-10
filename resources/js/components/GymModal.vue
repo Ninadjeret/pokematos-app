@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" max-width="90%" content-class="gym-modal">
+    <v-dialog v-model="dialog" max-width="90%" :content-class="contentClass">
         <v-card v-if="gym">
             <div class="dialog__wrap">
 
@@ -32,10 +32,11 @@
                 <div class="dialog__content">
                     <ul>
                         <li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
-                        <li v-if="raidStatus == 'none'"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
+                        <li v-if="raidStatus == 'none' && gym.gym"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
                         <li v-if="raidStatus == 'none' && gym.ex === true && user.permissions.city.raidex_create"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
-                        <li v-if="gym.google_maps_url"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
+                        <li v-if="gym.google_maps_url && gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
+                        <li v-if="gym.google_maps_url && !gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers le Pokéstop</span></a></li>
                     </ul>
                 </div>
                 <div class="footer--actions">
@@ -197,6 +198,11 @@ export default {
         exEndDate () {
             return moment().add(14, 'days').format('YYYY-MM-DD')
         },
+        contentClass() {
+            let isGym = (this.gym.gym) ? 'gym' : 'stop' ;
+            let isEx = (this.gym.ex) ? 'ex' : '' ;
+            return 'gym-modal '+isGym+' '+isGym;
+        }
     },
     created() {
         this.updateTimeRange();
@@ -282,7 +288,7 @@ export default {
             if( this.raidStatus == 'none' ) {
                 this.timeLeft = false;
                 this.raidAnnonce = 'Rien pour le moment...';
-                this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_0.png';
+                this.raidUrl = 'https://assets.profchen.fr/img/app/egg_0.png';
             } else if( this.raidStatus == 'future' && this.startTime ) {
                 this.timeLeft = parseInt(this.startTime.diff(now, 'milliseconds'));
                 if( this.gym.raid.ex ) {

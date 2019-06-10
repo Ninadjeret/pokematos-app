@@ -12,7 +12,7 @@ use App\Models\raidChannel;
 class Stop extends Model {
 
     protected $fillable = ['name', 'niantic_name', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id', 'ex'];
-    protected $appends = ['zone', 'city', 'google_maps_url', 'raid'];
+    protected $appends = ['zone', 'city', 'google_maps_url', 'raid', 'quest'];
     protected $hidden = ['zone_id', 'city_id'];
     protected $casts = [
         'ex' => 'boolean',
@@ -42,6 +42,10 @@ class Stop extends Model {
         } else {
             return false;
         }
+    }
+
+    public function getQuestAttribute() {
+        return false;
     }
 
     public function getFutureRaid() {

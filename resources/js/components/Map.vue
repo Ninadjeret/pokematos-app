@@ -8,10 +8,13 @@
 
         <v-dialog v-model="dialog" max-width="290" content-class="list-filters">
             <v-card>
-                <v-subheader>Ordre d'affichage</v-subheader>
+                <v-subheader>Afficher seulement</v-subheader>
                 <v-card-text>
+                    <v-checkbox v-model="mapFilters" label="Arènes vierges" value="empty_gyms" @change="addMarkers()"></v-checkbox>
+                    <v-checkbox v-model="mapFilters" label="Raids en cours/à venir" value="active_gyms" @change="addMarkers()"></v-checkbox>
+                    <v-checkbox v-model="mapFilters" label="Pokéstop vierges" value="empty_stops" @change="addMarkers()"></v-checkbox>
+                    <v-checkbox v-model="mapFilters" label="Pokéstops avec quête" value="active_stops" @change="addMarkers()"></v-checkbox>
                 </v-card-text>
-                <v-subheader>Quels raids voir ?</v-subheader>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" flat @click="dialog = false">Fermer</v-btn>
@@ -35,6 +38,7 @@
               bounds: null,
               markers: [],
               dialog:false,
+              mapFilters: [],
             }
         },
         computed: mapState([
@@ -85,6 +89,27 @@
                 });
             },
             addMarker( gym ) {
+
+                let auth = true;
+                if( this.mapFilters.length > 0 ) {
+                    auth = false;
+                    if( this.mapFilters.includes( 'empty_gyms' ) && gym.gym && !gym.raid ) {
+                        auth = true;
+                    }
+                    if( this.mapFilters.includes( 'active_gyms' ) && gym.gym && gym.raid ) {
+                        auth = true;
+                    }
+                    if( this.mapFilters.includes( 'empty_stops' ) && !gym.gym && !gym.quest ) {
+                        auth = true;
+                    }
+                    if( this.mapFilters.includes( 'active_stops' ) && !gym.gym && gym.quest ) {
+                        auth = true;
+                    }
+                }
+                if( !auth ) {
+                    return false;
+                }
+
                 const that2 = this;
                 var zindex = 1;
                 var label = false;
