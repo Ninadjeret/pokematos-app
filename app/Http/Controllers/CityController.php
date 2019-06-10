@@ -63,6 +63,7 @@ class CityController extends Controller {
             'description' => $request->description,
             'zone_id' => $request->zone_id,
             'city_id' => $city->id,
+            'gym' => $request->gym,
             'ex' => $request->ex,
             'lat' => $request->lat,
             'lng' => $request->lng,
@@ -76,7 +77,8 @@ class CityController extends Controller {
             'niantic_name' => $request->niantic_name,
             'description' => $request->description,
             'zone_id' => $request->zone_id,
-            'ex' => $request->ex,
+            'ex' => ( $request->gym ) ? $request->ex : false,
+            'gym' => $request->gym,
             'lat' => $request->lat,
             'lng' => $request->lng,
 

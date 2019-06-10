@@ -177,7 +177,7 @@ const routes = [
                       path: 'gyms',
                       name: 'admin.gyms',
                       meta: {
-                          title: 'Gérer les arênes',
+                          title: 'Gérer les POIs',
                           parent: 'admin'
                       },
                       component: AdminGyms
@@ -186,7 +186,7 @@ const routes = [
                       path: 'gyms/add',
                       name: 'admin.gyms.add',
                       meta: {
-                          title: 'Nouvelle arêne',
+                          title: 'Nouveau POI',
                           parent: 'admin.gyms'
                       },
                       component: AdminGym
@@ -195,7 +195,7 @@ const routes = [
                       path: 'gyms/:id',
                       name: 'admin.gyms.edit',
                       meta: {
-                          title: 'Modifier l\'arêne',
+                          title: 'Modifier le POI',
                           parent: 'admin.gyms'
                       },
                       component: AdminGym

@@ -1,7 +1,7 @@
 <?php
 return [
-    'id' => '553675934570643467',
-    'secret' => 'YK0_QEXczCc5jLSNZQuNDRUqcyPrUpzd',
-    'token' => 'NTUzNjc1OTM0NTcwNjQzNDY3.D2Rywg.6lLAOszGGRoeZYQlpzWQq54GvDE',
+    'id' => '379369796023877632',
+    'secret' => '3X9XW5XWjEPollAIcyxxXtAvlvKkLdIh',
+    'token' => 'Mzc5MzY5Nzk2MDIzODc3NjMy.XPtKJA.96XZRRUIySDrmWW0k1IwjSZfxLk',
     'callback'  => 'http://127.0.0.1:8000/login/discord/callback'
 ];

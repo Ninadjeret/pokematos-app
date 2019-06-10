@@ -124,7 +124,7 @@
 }
 .v-dialog__content .dialog__egg {
     text-align: center;
-    color: #43696c;
+    color: #aaa;
 }
 
 .v-dialog__content .dialog__content {
@@ -222,5 +222,23 @@
 .list-filters {
     .v-input--selection-controls.v-input--checkbox {
         margin-top:0;
+    }
+}
+
+.gym-modal.stop {
+     h3 {
+        color: $primary_stop;
+    }
+    .dialog__city {
+        color: $primary_stop;
+    }
+    .dialog__wrap {
+        border-color: $secondary_stop;
+    }
+    .dialog__content {
+        color: $secondary_stop;
+    }
+    .dialog__content ul li a {
+        color: $secondary_stop;
     }
 }

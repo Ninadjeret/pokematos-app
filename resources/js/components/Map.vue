@@ -3,8 +3,25 @@
         <l-map style="height: 100%; width: 100%" ref="map" :zoom=13 :center="[currentCity.lat, currentCity.lng]">
             <l-tile-layer :url="url"></l-tile-layer>
         </l-map>
-        <button-actions @localize="localize()"></button-actions>
+        <button-actions @localize="localize()" @showfilters="dialog = true"></button-actions>
         <gym-modal ref="gymModal"></gym-modal>
+
+        <v-dialog v-model="dialog" max-width="290" content-class="list-filters">
+            <v-card>
+                <v-subheader>Afficher seulement</v-subheader>
+                <v-card-text>
+                    <v-checkbox v-model="mapFilters" label="Arènes vierges" value="empty_gyms" @change="addMarkers()"></v-checkbox>
+                    <v-checkbox v-model="mapFilters" label="Raids en cours/à venir" value="active_gyms" @change="addMarkers()"></v-checkbox>
+                    <v-checkbox v-model="mapFilters" label="Pokéstop vierges" value="empty_stops" @change="addMarkers()"></v-checkbox>
+                    <v-checkbox v-model="mapFilters" label="Pokéstops avec quête" value="active_stops" @change="addMarkers()"></v-checkbox>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" flat @click="dialog = false">Fermer</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
@@ -20,6 +37,8 @@
               center: [47.413220, -1.219482],
               bounds: null,
               markers: [],
+              dialog:false,
+              mapFilters: [],
             }
         },
         computed: mapState([
@@ -70,10 +89,31 @@
                 });
             },
             addMarker( gym ) {
+
+                let auth = true;
+                if( this.mapFilters.length > 0 ) {
+                    auth = false;
+                    if( this.mapFilters.includes( 'empty_gyms' ) && gym.gym && !gym.raid ) {
+                        auth = true;
+                    }
+                    if( this.mapFilters.includes( 'active_gyms' ) && gym.gym && gym.raid ) {
+                        auth = true;
+                    }
+                    if( this.mapFilters.includes( 'empty_stops' ) && !gym.gym && !gym.quest ) {
+                        auth = true;
+                    }
+                    if( this.mapFilters.includes( 'active_stops' ) && !gym.gym && gym.quest ) {
+                        auth = true;
+                    }
+                }
+                if( !auth ) {
+                    return false;
+                }
+
                 const that2 = this;
                 var zindex = 1;
                 var label = false;
-                var url = 'https://assets.profchen.fr/img/map/map_marker_default_01.png';
+                var url = (gym.gym) ? 'https://assets.profchen.fr/img/map/map_marker_default_01.png' : 'https://assets.profchen.fr/img/map/map_marker_stop.png' ;
                 var imgclassname = 'map-marker__img';
                 if(gym.ex) {
                     url = 'https://assets.profchen.fr/img/map/map_marker_default_ex_00.png';
@@ -94,7 +134,7 @@
                             if( gym.raid.pokemon.form_id == '00' ) {
                                 url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'.png';
                             } else {
-                                url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'_'+gym.raid.pokemon.form_id+'.png';    
+                                url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'_'+gym.raid.pokemon.form_id+'.png';
                             }
                         }
 
