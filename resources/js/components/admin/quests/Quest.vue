@@ -6,6 +6,24 @@
                 <label>Nom</label>
                 <input v-model="name" type="text">
             </div>
+            <div class="setting">
+                <label>Type de récompense</label>
+                <v-btn-toggle v-model="reward_type" mandatory>
+                    <v-btn value="object">Objet</v-btn>
+                    <v-btn value="pokemon">Pokémon</v-btn>
+                </v-btn-toggle>
+            </div>
+            <div v-if="reward_type == 'pokemon'" class="setting">
+                <label>Pokémon</label>
+                <multiselect
+                    v-model="pokemon"
+                    :options="pokemons"
+                    track-by="id"
+                    label="name_fr"
+                    :multiple="false"
+                    placeholder="Choisir un Pokémon">
+                </multiselect>
+            </div>
             <v-divider></v-divider>
             <div v-if="$route.params.id && Number.isInteger($route.params.id)">
                 <v-subheader v-if="">Autres actions</v-subheader>
@@ -31,17 +49,22 @@
 </template>
 
 <script>
+    import Multiselect from 'vue-multiselect'
     export default {
         name: 'AdminQuest',
+        components: { Multiselect },
         data() {
             return {
                 loading: false,
                 dialog: false,
-                name: ''
+                name: '',
+                reward_type: 'object',
+                pokemon: null,
+                pokemons: [],
             }
         },
         created() {
-            console.log(this.$route.params.id);
+            this.fetchPokemons();
             if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
                 this.fetch();
             }
@@ -50,13 +73,22 @@
             fetch() {
                 axios.get('/api/quests/'+this.$route.params.id).then( res => {
                     this.name = res.data.name;
+                    this.reward_type = res.data.reward_type;
+                    this.pokemon = this.convertIdtoObject(res.data.pokemon_id, this.pokemons);
                 }).catch( err => {
                     //No error
                 });
             },
+            fetchPokemons() {
+                axios.get('/api/pokemons').then( res => {
+                    this.pokemons = res.data;
+                });
+            },
             submit() {
                 const args = {
-                    name: this.name
+                    name: this.name,
+                    reward_type: this.reward_type,
+                    pokemon_id: this.pokemon.id,
                 };
                 if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
                     this.save(args);
@@ -114,7 +146,13 @@
                             timeout: 1500
                         })
                     });
-            }
+            },
+            convertIdtoObject( id, ObjectsReference ) {
+                if( id.length === 0 ) return false;
+                let item = ObjectsReference.find( el => el.id == id );
+                if( item ) return item;
+                return false;
+            },
         }
     }
 </script>

@@ -136,6 +136,8 @@ class PokemonController extends Controller {
     public function createQuest( Request $request ) {
         $connector = Quest::create([
             'name' => $request->name,
+            'reward_type' => $request->reward_type,
+            'pokemon_id' => $request->pokemon_id,
         ]);
         return response()->json($connector, 200);
     }
@@ -146,7 +148,9 @@ class PokemonController extends Controller {
 
     public function updateQuest( Request $request, Quest $quest ) {
         $quest->update([
-            'name' => ($request->name) ? $request->name : $categorie->name,
+            'name' => ($request->name) ? $request->name : $quest->name,
+            'reward_type' => ($request->reward_type) ? $request->reward_type : $quest->reward_type,
+            'pokemon_id' => ($request->pokemon_id) ? $request->pokemon_id : null,
         ]);
         return response()->json($quest, 200);
     }
