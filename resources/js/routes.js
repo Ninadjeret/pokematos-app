@@ -15,6 +15,9 @@ import AdminRolesCategorie from './components/admin/roles/Categorie.vue'
 import AdminRolesRoles from './components/admin/roles/Roles.vue'
 import AdminRolesRole from './components/admin/roles/Role.vue'
 
+import AdminQuests from './components/admin/quests/Quests.vue'
+import AdminQuest from './components/admin/quests/Quest.vue'
+
 import AdminRaidReportingHome from './components/admin/RaidReporting.vue'
 import AdminRaidsConnectors from './components/admin/raids/Connecteurs.vue'
 import AdminRaidsConnector from './components/admin/raids/Connecteur.vue'
@@ -235,6 +238,33 @@ const routes = [
                           parent: 'admin'
                       },
                       component: AdminBosses
+                },
+                {
+                      path: 'quests',
+                      name: 'admin.quests',
+                      meta: {
+                          title: 'Gérer les quêtes',
+                          parent: 'admin'
+                      },
+                      component: AdminQuests
+                },
+                {
+                      path: 'quests/add',
+                      name: 'admin.quests.add',
+                      meta: {
+                          title: 'Nouvelle quête',
+                          parent: 'admin.quests'
+                      },
+                      component: AdminQuest
+                },
+                {
+                      path: 'quests/:id',
+                      name: 'admin.quests.edit',
+                      meta: {
+                          title: 'Modifier la quête',
+                          parent: 'admin.quests'
+                      },
+                      component: AdminQuest
                 },
         ]
         },

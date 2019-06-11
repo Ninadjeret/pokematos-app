@@ -249,21 +249,14 @@ class CreateCitiesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('quest_missions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->timestamps();
-        });
-
         Schema::create('quests', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('mission_id');
-            $table->string('reward_type');
-            $table->integer('reward_id');
-            $table->integer('pokemon_id');
+            $table->string('name');
+            $table->string('reward_type')->default('pokemon');
+            $table->integer('reward_id')->nullable();
+            $table->integer('pokemon_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('mission_id')->references('id')->on('quest_missions');
             $table->foreign('reward_id')->references('id')->on('quest_rewards');
             $table->foreign('pokemon_id')->references('id')->on('pokemons');
         });
