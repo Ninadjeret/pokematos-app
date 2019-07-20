@@ -17,7 +17,7 @@
             <div class="setting">
                 <label>Ce role fait référence à</label>
                 <v-btn-toggle v-model="type" mandatory>
-                    <v-btn value="gym">Une arène</v-btn>
+                    <v-btn value="poi">Un POI</v-btn>
                     <v-btn value="zone">Une zone</v-btn>
                     <v-btn value="pokemon">Un Pokémon</v-btn>
                     <v-btn value="other">Autre chose</v-btn>

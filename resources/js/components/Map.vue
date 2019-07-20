@@ -116,8 +116,17 @@
                 var url = (gym.gym) ? 'https://assets.profchen.fr/img/map/map_marker_default_01.png' : 'https://assets.profchen.fr/img/map/map_marker_stop.png' ;
                 var imgclassname = 'map-marker__img';
                 if(gym.ex) {
-                    url = 'https://assets.profchen.fr/img/map/map_marker_default_ex_00.png';
+                    url = 'https://assets.profchen.fr/img/map/map_marker_default_ex_03.png';
                 }
+
+                if( gym.quest ) {
+                    console.log(gym);
+                    if( gym.quest.quest.pokemon ) {
+                        var imgclassname = 'map-marker__img quest';
+                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_pokemon_'+gym.quest.quest.pokemon.pokedex_id+'_'+gym.quest.quest.pokemon.form_id+'.png';
+                    }
+                }
+
                 var html = '<img class="'+imgclassname+'" src="'+url+'"/>';
 
                 if( gym.raid !== false ) {
@@ -157,6 +166,8 @@
                     var html = '<img class="'+imgclassname+'" src="'+url+'"/>' + '<span class="map-marker__label">'+label+'</span>'
                     zindex = gym.raid.egg_level * 100;
                 }
+
+
 
                 if( gym.lat == null || gym.lng == null ) {
                     return false;

@@ -8,9 +8,12 @@ use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Guild;
 use App\Models\Connector;
-use App\Models\RoleCategory;
 use Illuminate\Http\Request;
+use App\Models\RoleCategory;
+use App\Models\QuestInstance;
+use App\ImageAnalyzer\Engine;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller {
 
@@ -32,6 +35,29 @@ class UserController extends Controller {
         $settings = $request->settings;
         $guild->updateSettings($settings);
         return response()->json($guild, 200);
+    }
+
+    /**
+    * ==================================================================
+    * GESTION DES QUETES
+    * ==================================================================
+    */
+
+    public function createQuest( City $city, Request $request ) {
+        $gym = Stop::find($request->params['gym_id']);
+        $quest = new QuestInstance();
+        $quest->city_id = $city->id;
+        $quest->gym_id = $request->params['gym_id'];
+        $quest->quest_id = $request->params['quest_id'];
+        $quest->date = date('Y-m-d 00:00:00');
+        $quest->save();
+        return response()->json($quest, 200);
+    }
+
+    public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {
+        Log::debug( print_r( $questInstance->id, true ) );
+        QuestInstance::destroy($questInstance->id);
+        return response()->json(null, 204);
     }
 
     /**
@@ -196,6 +222,12 @@ class UserController extends Controller {
         $pois = Stop::where('city_id', '=', $city->id)
             ->get();
         return response()->json($pois, 200);
+    }
+
+    public function decodeImage( Request $request, City $city ) {
+        $engine = new Engine();
+        $result = $engine->run();
+        return response()->json($result, 200);
     }
 
 }

@@ -106,6 +106,11 @@
                         route: 'admin.bosses',
                         icon: 'fingerprint'
                     },
+                    {
+                        label: 'Gérer les quêtes',
+                        route: 'admin.quests',
+                        icon: 'explore'
+                    },
                 ]
             }
         },

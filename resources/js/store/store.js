@@ -18,6 +18,7 @@ const store = new Vuex.Store({
         cities: JSON.parse(localStorage.getItem('pokematos_cities') ),
         gyms: JSON.parse(localStorage.getItem('pokematos_gyms') ),
         pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons') ),
+        quests: JSON.parse(localStorage.getItem('pokematos_quests') ),
         settings: JSON.parse(localStorage.getItem('pokematos_settings') ),
         user: JSON.parse(localStorage.getItem('pokematos_user') ),
         snackbar: false,
@@ -52,6 +53,14 @@ const store = new Vuex.Store({
             axios.get('/api/pokemons/raidbosses').then( res => {
                 state.pokemons = res.data;
                 localStorage.setItem('pokematos_pokemons', JSON.stringify(state.pokemons));
+            }).catch( err => {
+                //No error
+            });
+        },
+        fetchQuests( state ) {
+            axios.get('/api/quests').then( res => {
+                state.quests = res.data;
+                localStorage.setItem('pokematos_quests', JSON.stringify(state.quests));
             }).catch( err => {
                 //No error
             });
@@ -108,7 +117,7 @@ const store = new Vuex.Store({
             } else {
                 state.settings[payload.setting] = payload.value;
                 localStorage.setItem('pokematos_settings', JSON.stringify(state.settings));
-            }            
+            }
         },
         setSnackbar( state, payload ) {
             state.snackbar = payload;
@@ -144,6 +153,7 @@ const store = new Vuex.Store({
         autoFetchData ({ commit }) {
             commit('fetchGyms')
             commit('fetchPokemon')
+            commit('fetchQuests')
         },
         fetchData ({ commit }) {
             commit('fetchGyms', true)
