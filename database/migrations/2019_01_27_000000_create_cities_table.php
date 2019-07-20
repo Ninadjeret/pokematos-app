@@ -279,6 +279,19 @@ class CreateCitiesTable extends Migration
 
             $table->foreign('guild_id')->references('id')->on('guilds');
         });
+
+        Schema::create('quest_instances', function (Blueprint $table) {
+            $table->increments('id');
+            $table->dateTime('date');
+            $table->integer('quest_id')->nullable();
+            $table->integer('city_id')->nullable();
+            $table->integer('gym_id')->nullable();
+            $table->timestamps();
+
+            $table->foreign('quest_id')->references('id')->on('quests');
+            $table->foreign('city_id')->references('id')->on('cities');
+            $table->foreign('gym_id')->references('id')->on('gyms');
+        });
     }
 
     /**

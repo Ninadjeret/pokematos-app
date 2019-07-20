@@ -31,6 +31,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/cities/{city}/raids/{raid}', 'RaidController@create');
     Route::delete('user/cities/{city}/raids/{raid}', 'RaidController@delete');
 
+    //Quests
+    Route::post('user/cities/{city}/quests', 'UserController@createQuest');
+    Route::delete('user/cities/{city}/quests/{questInstance}', 'UserController@deleteQuest');
+
     //Admin
     Route::get('user/cities/{city}/zones', 'CityController@getZones');
     Route::post('user/cities/{city}/zones', 'CityController@createZone');
@@ -84,6 +88,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::delete('quests/{quest}', 'PokemonController@deleteQuest');
 
 });
+
+Route::get('user/cities/{city}/ia/decode', 'UserController@decodeImage');
 
 Route::get('bot/roles', 'BotController@getRoles');
 Route::post('bot/roles', 'BotController@createRole');

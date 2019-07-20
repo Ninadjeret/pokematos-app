@@ -10705,7 +10705,8 @@ a.text-dark:focus {
   color: #5a6cae;
 }
 
-.map-marker__img.raid {
+.map-marker__img.raid,
+.map-marker__img.quest {
   max-width: 49px !important;
   width: 49px !important;
 }
@@ -11000,12 +11001,21 @@ a.text-dark:focus {
   color: #5bb0c4;
 }
 
+.gym-modal.stop .button--close,
+.gym-modal.stop .bt {
+  background: #5bb0c4;
+}
+
 .gym-modal.gym.ex h3 {
-  color: #B8AF8D;
+  color: #1C1030;
 }
 
 .gym-modal.gym.ex .dialog__city {
-  color: #B8AF8D;
+  color: #1C1030;
+}
+
+.gym-modal.gym.ex .gym__ex {
+  background: #B8AF8D;
 }
 
 .gym-modal.gym.ex .dialog__wrap {
@@ -11018,6 +11028,11 @@ a.text-dark:focus {
 
 .gym-modal.gym.ex .dialog__content ul li a {
   color: #B8AF8D;
+}
+
+.gym-modal.gym.ex .button--close,
+.gym-modal.gym.ex .bt {
+  background: #1C1030;
 }
 
 .map__actions {

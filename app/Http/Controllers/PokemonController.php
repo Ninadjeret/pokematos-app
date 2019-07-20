@@ -129,7 +129,7 @@ class PokemonController extends Controller {
     }
 
     public function getQuests( Request $request ) {
-        $quests = Quest::all();
+        $quests = Quest::orderBy('name', 'asc')->get();
         return response()->json($quests, 200);
     }
 

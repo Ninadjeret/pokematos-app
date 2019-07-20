@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\City;
 use App\Models\Raid;
+use App\Models\Quest;
+use App\Models\QuestInstance;
 use App\Models\Zone;
 use App\Models\raidChannel;
 
@@ -13,7 +15,7 @@ class Stop extends Model {
 
     protected $fillable = ['name', 'niantic_name', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id', 'ex'];
     protected $appends = ['zone', 'city', 'google_maps_url', 'raid', 'quest'];
-    protected $hidden = ['zone_id', 'city_id'];
+    protected $hidden = ['zone_id', 'city_id', 'quest_id'];
     protected $casts = [
         'ex' => 'boolean',
         'gym' => 'boolean',
@@ -45,6 +47,12 @@ class Stop extends Model {
     }
 
     public function getQuestAttribute() {
+        $questInstance = QuestInstance::where('gym_id', $this->id)
+            ->where('date', date('Y-m-d 00:00:00') )
+            ->first();
+        if( !empty($questInstance) ) {
+            return $questInstance;
+        }
         return false;
     }
 

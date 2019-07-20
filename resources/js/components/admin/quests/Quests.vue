@@ -12,6 +12,9 @@
                       {{quest.name}}
                   </v-list-tile-title>
                 </v-list-tile-content>
+                <v-avatar v-if="quest.pokemon">
+                    <img :src="quest.pokemon.thumbnail_url">
+                </v-avatar>
               </v-list-tile>
               <v-divider></v-divider>
             </template>

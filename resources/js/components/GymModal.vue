@@ -9,7 +9,15 @@
                 <h3 class="dialog__title">{{gym.name}}</h3>
                 <p v-if="gym.zone" class="dialog__city">{{gym.zone.name}}</p>
                 <hr>
-                <div :class="'dialog__egg '+raidStatus">
+                <div v-if="!gym.gym" class="dialog__egg quest">
+                    <p>
+                        <span v-if="!gym.quest" class="annonce">Aucune quête signalée</span>
+                        <span v-if="gym.quest" class="annonce">Quête <strong>{{gym.quest.quest.name}}</strong> en cours</span>
+                    </p>
+                    <img v-if="!gym.quest" src="https://assets.profchen.fr/img/app/egg_0.png">
+                    <img v-if="gym.quest" :src="gym.quest.quest.pokemon.thumbnail_url">
+                </div>
+                <div v-if="gym.gym" :class="'dialog__egg '+raidStatus">
                     <p>
                         <span class="annonce">{{raidAnnonce}}</span>
                         <span class="source"></span>
@@ -33,7 +41,8 @@
                     <ul>
                         <li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
                         <li v-if="raidStatus == 'none' && gym.gym"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
-                        <li v-if="raidStatus == 'none' && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">add_alert</i><span>Annoncer une quête</span></a></li>
+                        <li v-if="!gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">add_alert</i><span>Annoncer une quête</span></a></li>
+                        <li v-if="gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="deleteQuestConfirm()"><i class="material-icons">delete</i><span>Supprimer la quête</span></a></li>
                         <li v-if="raidStatus == 'none' && gym.ex === true && user.permissions.city.raidex_create"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
                         <li v-if="gym.google_maps_url && gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
@@ -94,7 +103,24 @@
 
             <div v-if="modalScreen == 'createQuest'" class="modal__screen create-quest">
                 <h3 class="">Annoncer une quête</h3>
-                <hr>
+                <div class="search__wrapper">
+                    <v-text-field single-line hide-details outline v-model="questSearch" label="Recherche"></v-text-field>
+                </div>
+                <v-list>
+                <template v-for="(quest, index) in filteredQuests">
+                  <v-list-tile :key="quest.id" v-on:click="postNewQuest(quest.id)">
+                    <v-list-tile-content>
+                      <v-list-tile-title>
+                          {{quest.name}}
+                      </v-list-tile-title>
+                    </v-list-tile-content>
+                    <v-avatar v-if="quest.pokemon">
+                        <img :src="quest.pokemon.thumbnail_url">
+                    </v-avatar>
+                  </v-list-tile>
+                  <v-divider></v-divider>
+                </template>
+              </v-list>
                 <div class="footer-action">
                     <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
                 </div>
@@ -178,6 +204,7 @@ export default {
             exDate: new Date().toISOString().substr(0, 10),
             exHour: 13,
             exMinutes: 0,
+            questSearch: null,
         }
     },
     computed: {
@@ -186,6 +213,20 @@ export default {
         },
         user() {
             return this.$store.state.user;
+        },
+        currentCity() {
+            return this.$store.state.currentCity;
+        },
+        filteredQuests() {
+            return this.$store.state.quests.filter((quest) => {
+                let matchingTitle = 1;
+                let matchingPokemon = 1;
+                if (this.questSearch != null) {
+                    matchingTitle = quest.name.toLowerCase().indexOf(this.questSearch.toLowerCase()) > -1;
+                    matchingPokemon = quest.pokemon && quest.pokemon.name_fr.toLowerCase().indexOf(this.questSearch.toLowerCase()) > -1;
+                }
+                return (matchingTitle || matchingPokemon);
+            });
         },
         raidStatus() {
             if( this.gym.raid ) {
@@ -326,10 +367,17 @@ export default {
             }
 
         },
+        deleteQuestConfirm() {
+            var result = confirm('Supprimer la quête actuelle au Pokéstop '+this.gym.name);
+            if( result ) {
+                this.deleteQuest();
+            }
+
+        },
         postNewRaid() {
             this.setScreenTo('default');
             this.hideModal();
-            axios.post('/api/user/cities/1/raids', {
+            axios.post('/api/user/cities/'+this.currentCity.id+'/raids', {
                  params: {
                      gym_id: this.gym.id,
                      pokemon_id: this.createRaidData.pokemon.id,
@@ -346,7 +394,7 @@ export default {
         postNewRaidEx() {
             this.setScreenTo('default');
             this.hideModal();
-            axios.post('/api/user/cities/1/raids', {
+            axios.post('/api/user/cities/'+this.currentCity.id+'/raids', {
                  params: {
                      gym_id: this.gym.id,
                      pokemon_id: false,
@@ -361,10 +409,32 @@ export default {
                 console.log(err)
             });
         },
+        postNewQuest(questId) {
+            var result = confirm('Confirmer le signalement de quete pour le pokéstop '+this.gym.name);
+            if( result ) {
+                this.setScreenTo('default');
+                this.hideModal();
+                this.$store.commit('setSnackbar', {
+                    message: 'Création de la quête',
+                    timeout: 1500
+                });
+                axios.post('/api/user/cities/'+this.currentCity.id+'/quests', {
+                     params: {
+                         gym_id: this.gym.id,
+                         quest_id: questId,
+                     },
+                }).then(res => {
+                    console.log(res.data);
+                    this.$store.dispatch('fetchData');
+                }).catch(err => {
+                    console.log(err)
+                });
+            }
+        },
         postUpdateRaid() {
             this.setScreenTo('default');
             this.hideModal();
-            axios.put('/api/user/cities/1/raids/'+this.gym.raid.id, {
+            axios.put('/api/user/cities/'+this.currentCity.id+'/raids/'+this.gym.raid.id, {
                  params: {
                      gym_id: this.gym.id,
                      pokemon_id: this.createRaidData.pokemon.id,
@@ -375,13 +445,27 @@ export default {
                 console.log(err)
             });
         },
+
         deleteRaid() {
             this.setScreenTo('default');
             this.hideModal();
-            axios.delete('/api/user/cities/1/raids/'+this.gym.raid.id).then(res => {
+            axios.delete('/api/user/cities/'+this.currentCity.id+'/raids/'+this.gym.raid.id).then(res => {
                 this.$store.dispatch('fetchData');
                 this.$store.commit('setSnackbar', {
                     message: 'Raid supprimé',
+                    timeout: 1500
+                });
+            }).catch(err => {
+                console.log(err)
+            });
+        },
+        deleteQuest() {
+            this.setScreenTo('default');
+            this.hideModal();
+            axios.delete('/api/user/cities/'+this.currentCity.id+'/quests/'+this.gym.quest.id).then(res => {
+                this.$store.dispatch('fetchData');
+                this.$store.commit('setSnackbar', {
+                    message: 'Quête supprimée',
                     timeout: 1500
                 });
             }).catch(err => {

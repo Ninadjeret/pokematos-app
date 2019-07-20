@@ -241,6 +241,10 @@
     .dialog__content ul li a {
         color: $secondary_stop;
     }
+    .button--close,
+    .bt {
+        background: $primary_stop;
+    }
 }
 .gym-modal.gym.ex {
      h3 {
@@ -248,6 +252,9 @@
     }
     .dialog__city {
         color: $primary_ex;
+    }
+    .gym__ex {
+        background: $secondary_ex;
     }
     .dialog__wrap {
         border-color: $secondary_ex;
@@ -257,5 +264,9 @@
     }
     .dialog__content ul li a {
         color: $secondary_ex;
+    }
+    .button--close,
+    .bt {
+        background: $primary_ex;
     }
 }
