@@ -72,6 +72,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/guilds/{guild}/connectors/{connector}', 'UserController@updateConnector');
     Route::delete('user/guilds/{guild}/connectors/{connector}', 'UserController@deleteConnector');
 
+    Route::get('user/guilds/{guild}/questconnectors', 'UserController@getQuestConnectors');
+    Route::post('user/guilds/{guild}/questconnectors', 'UserController@createQuestConnector');
+    Route::get('user/guilds/{guild}/questconnectors/{connector}', 'UserController@getQuestConnector');
+    Route::put('user/guilds/{guild}/questconnectors/{connector}', 'UserController@updateQuestConnector');
+    Route::delete('user/guilds/{guild}/questconnectors/{connector}', 'UserController@deleteQuestConnector');
+
 
     Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');

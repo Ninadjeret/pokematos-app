@@ -90,6 +90,11 @@
                         icon: 'star'
                     },
                     {
+                        label: 'Signalements de quêtes',
+                        route: 'admin.quests.home',
+                        icon: 'explore'
+                    },
+                    {
                         label: 'Roles personnalisés',
                         route: 'admin.roles',
                         icon: 'alternate_email'

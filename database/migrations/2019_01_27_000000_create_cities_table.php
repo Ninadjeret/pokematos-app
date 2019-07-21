@@ -91,7 +91,8 @@ class CreateCitiesTable extends Migration
 
         Schema::create('announces', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('raid_id');
+            $table->integer('raid_id')->nullable();
+            $table->integer('quest_instance_id')->nullable();
             $table->string('type');
             $table->string('source');
             $table->dateTime('date');
@@ -291,6 +292,18 @@ class CreateCitiesTable extends Migration
             $table->foreign('quest_id')->references('id')->on('quests');
             $table->foreign('city_id')->references('id')->on('cities');
             $table->foreign('gym_id')->references('id')->on('gyms');
+        });
+
+        Schema::create('quest_messages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('quest_instance_id');
+            $table->integer('guild_id');
+            $table->string('message_discord_id');
+            $table->string('channel_discord_id');
+            $table->timestamps();
+
+            $table->foreign('quest_instance_id')->references('id')->on('quest_instances');
+            $table->foreign('guild_id')->references('id')->on('guilds');
         });
     }
 

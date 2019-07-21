@@ -83,12 +83,15 @@ class Connector extends Model {
 
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $guild = Guild::find( $this->guild_id );
+        $username = ( $raid->getLastAnnounce()->getUser() ) ? $raid->getLastAnnounce()->getUser()->name : false ;
 
         if( $raid->isFuture() ) {
             $message = $this->custom_message_before;
         } else {
             $message = $this->custom_message_after;
         }
+
+
 
         //Gestion des tags
         $patterns = array(
@@ -105,7 +108,7 @@ class Connector extends Model {
             'arene_zone' => ( !empty(  $raid->getGym()->zone ) ) ?  $raid->getGym()->zone->name : false,
             'arene_gmaps' => ( !empty(  $raid->getGym()->google_maps_url ) ) ?  $raid->getGym()->google_maps_url : false,
 
-            'utilisateur' => ( $raid->getLastAnnounce()->getUser() ) ? $raid->getLastAnnounce()->getUser()->name : false,
+            'utilisateur' => $username,
         );
         foreach( $patterns as $pattern => $valeur ) {
             $message = str_replace( '{'.$pattern.'}', $valeur, $message );
@@ -121,6 +124,11 @@ class Connector extends Model {
                     $message = str_replace('@'.$role->name, '<@&'.$role->id.'>', $message);
                 }
             }
+        }
+
+        if( $username && strstr( $message, '@'.$username ) ) {
+            $user = $quest->getLastAnnounce()->getUser();
+            $message = str_replace('@'.$username, '<@!'.$user->discord_id.'>', $message);
         }
 
         //Gestion des salons #

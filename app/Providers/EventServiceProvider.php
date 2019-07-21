@@ -30,6 +30,12 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\RaidDeleted' => [
             'App\Listeners\PurgeDiscordRaidData',
         ],
+        'App\Events\QuestInstanceCreated' => [
+            'App\Listeners\PostQuestInstanceToDiscord',
+        ],
+        'App\Events\QuestInstanceDeleted' => [
+            'App\Listeners\PurgeDiscordQuestInstanceData',
+        ],
     ];
 
     /**
