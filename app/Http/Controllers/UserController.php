@@ -7,11 +7,13 @@ use App\Models\City;
 use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Guild;
+use App\Models\Announce;
 use App\Models\Connector;
 use Illuminate\Http\Request;
 use App\Models\RoleCategory;
 use App\Models\QuestInstance;
 use App\ImageAnalyzer\Engine;
+use App\Models\QuestConnector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -51,11 +53,22 @@ class UserController extends Controller {
         $quest->quest_id = $request->params['quest_id'];
         $quest->date = date('Y-m-d 00:00:00');
         $quest->save();
+
+        $announce = Announce::create([
+            'type' => 'quest-create',
+            'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
+            'date' => date('Y-m-d H:i:s'),
+            'user_id' => Auth::id(),
+            'quest_instance_id' => $quest->id,
+        ]);
+
+        event( new \App\Events\QuestInstanceCreated( $quest, $announce ) );
+
         return response()->json($quest, 200);
     }
 
     public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {
-        Log::debug( print_r( $questInstance->id, true ) );
+        event( new \App\Events\QuestInstanceDeleted( $questInstance ) );;
         QuestInstance::destroy($questInstance->id);
         return response()->json(null, 204);
     }
@@ -116,6 +129,59 @@ class UserController extends Controller {
        Connector::destroy($connector->id);
        return response()->json(null, 204);
    }
+
+   /**
+   * ==================================================================
+   * GESTION DES CONNECTEURS DE QUETES
+   * ==================================================================
+   */
+
+  public function getQuestConnectors( Request $request, Guild $guild ) {
+      $connecteurs = QuestConnector::where('guild_id', $guild->id)->get();
+      return response()->json($connecteurs, 200);
+  }
+
+  public function createQuestConnector( Request $request, Guild $guild ) {
+      $connector = QuestConnector::create([
+          'name' => ( isset( $request->name ) ) ? $request->name : '' ,
+          'guild_id' => $guild->id,
+          'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : '' ,
+          'filter_reward_type' => ( isset( $request->filter_reward_type ) ) ? $request->filter_reward_type : '' ,
+          'filter_reward_reward' => ( isset( $request->filter_reward_reward ) ) ? $request->filter_reward_reward : '' ,
+          'filter_reward_pokemon' => ( isset( $request->filter_reward_pokemon ) ) ? $request->filter_reward_pokemon : '' ,
+          'filter_stop_type' => ( isset( $request->filter_stop_type ) ) ? $request->filter_stop_type : '' ,
+          'filter_stop_zone' => ( isset( $request->filter_stop_zone ) ) ? $request->filter_stop_zone : '' ,
+          'filter_stop_stop' => ( isset( $request->filter_stop_stop ) ) ? $request->filter_stop_stop : '' ,
+          'format' => ( isset( $request->format ) ) ? $request->format : 'auto' ,
+          'custom_message' => ( isset( $request->custom_message ) ) ? $request->custom_message : '' ,
+      ]);
+      return response()->json($connector, 200);
+  }
+
+  public function updateQuestConnector( Request $request, Guild $guild, QuestConnector $connector ) {
+      $connector->update([
+          'name' => ( isset( $request->name ) ) ? $request->name : $connector->name ,
+          'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : $connector->channel_discord_id ,
+          'filter_reward_type' => ( isset( $request->filter_reward_type ) ) ? $request->filter_reward_type : $connector->filter_reward_type ,
+          'filter_reward_reward' => ( isset( $request->filter_reward_reward ) ) ? $request->filter_reward_reward : $connector->filter_reward_reward ,
+          'filter_reward_pokemon' => ( isset( $request->filter_reward_pokemon ) ) ? $request->filter_reward_pokemon : $connector->filter_reward_pokemon ,
+          'filter_stop_type' => ( isset( $request->filter_stop_type ) ) ? $request->filter_stop_type : $connector->filter_stop_type ,
+          'filter_stop_zone' => ( isset( $request->filter_stop_zone ) ) ? $request->filter_stop_zone : $connector->filter_stop_zone ,
+          'filter_stop_stop' => ( isset( $request->filter_stop_stop ) ) ? $request->filter_stop_stop : $connector->filter_stop_stop ,
+          'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
+          'custom_message' => ( isset( $request->custom_message ) ) ? $request->custom_message : $connector->custom_message ,
+      ]);
+      return response()->json($connector, 200);
+  }
+
+  public function getQuestConnector( Request $request, Guild $guild, QuestConnector $connector ) {
+      return response()->json($connector, 200);
+  }
+
+  public function deleteQuestConnector(Request $request, City $city, Guild $guild, QuestConnector $connector ) {
+      QuestConnector::destroy($connector->id);
+      return response()->json(null, 204);
+  }
 
     /**
     * ==================================================================

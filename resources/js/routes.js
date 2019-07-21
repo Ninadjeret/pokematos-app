@@ -22,6 +22,10 @@ import AdminRaidReportingHome from './components/admin/RaidReporting.vue'
 import AdminRaidsConnectors from './components/admin/raids/Connecteurs.vue'
 import AdminRaidsConnector from './components/admin/raids/Connecteur.vue'
 
+import AdminQuestReportingHome from './components/admin/quests/Home.vue'
+import AdminQuestsConnectors from './components/admin/quests/Connecteurs.vue'
+import AdminQuestsConnector from './components/admin/quests/Connecteur.vue'
+
 const routes = [
     {
         path: '/',
@@ -176,6 +180,44 @@ const routes = [
                        },
                        component: AdminRaidsEx
                   },
+                  {
+                        path: ':id/quests',
+                        name: 'admin.quests.home',
+                        meta: {
+                            title: 'Signalement de quêtes',
+                            parent: 'admin'
+                        },
+                        component: AdminQuestReportingHome,
+                        children: [
+                            {
+                                  path: 'connectors',
+                                  name: 'admin.quests.annonces',
+                                  meta: {
+                                      title: 'Gérer les connecteurs',
+                                      parent: 'admin.quests.home'
+                                  },
+                                  component: AdminQuestsConnectors
+                             },
+                             {
+                                   path: 'connectors/add',
+                                   name: 'admin.quests.annonces.add',
+                                   meta: {
+                                       title: 'Nouveau connecteur',
+                                       parent: 'admin.quests.annonces'
+                                   },
+                                   component: AdminQuestsConnector
+                              },
+                             {
+                                   path: 'connectors/:quest_connector_id',
+                                   name: 'admin.quests.annonces.edit',
+                                   meta: {
+                                       title: 'Modifier le connecteur',
+                                       parent: 'admin.quests.annonces'
+                                   },
+                                   component: AdminQuestsConnector
+                              },
+                         ]
+                   },
                 {
                       path: 'gyms',
                       name: 'admin.gyms',
