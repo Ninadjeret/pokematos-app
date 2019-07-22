@@ -39,7 +39,22 @@
         </div>
     </div>
     <div class="settings-section about">
+        <div class="section__title">Merci pour votre soutien</div>
+        <p class="donation">
+            Les frais de fonctionnement de Pokématos représentent pour l'instant <strong>{{totalCouts}}€</strong>. Grace à vous, nous avons déja récupéré <strong>{{totalDons}}€</strong> !
+            <v-progress-linear
+                color="#5a6cae"
+                height="20"
+                :value="pourcentageDons"
+            ></v-progress-linear>
+            <span class="text-center">
+                <v-btn href="#">Faire un don</v-btn>
+            </span>
+        </p>
+    </div>
+    <div class="settings-section about">
         <div class="section__title">A propos</div>
+
         <p class="credit">
             Prof Chen map, créé pour vous avec <i class="material-icons">favorite</i><br>
             Version <span id="version">1.4.12</span>
@@ -53,9 +68,14 @@
         name: 'Settings',
         data() {
             return {
+                totalCouts: 33,
+                totalDons: 5,
             }
         },
         computed: {
+            pourcentageDons() {
+                return ( this.totalDons > this.totalCouts ) ? 100 : this.totalDons/this.totalCouts*100 ;
+            },
             user() {
                 return this.$store.state.user;
             },
