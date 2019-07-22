@@ -95,7 +95,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 });
 
-Route::get('user/cities/{city}/ia/decode', 'UserController@decodeImage');
+Route::get('bot/imagedecode', 'BotController@decodeImage');
 
 Route::get('bot/roles', 'BotController@getRoles');
 Route::post('bot/roles', 'BotController@createRole');

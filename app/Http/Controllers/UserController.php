@@ -288,12 +288,6 @@ class UserController extends Controller {
         $pois = Stop::where('city_id', '=', $city->id)
             ->get();
         return response()->json($pois, 200);
-    }
-
-    public function decodeImage( Request $request, City $city ) {
-        $engine = new Engine();
-        $result = $engine->run();
-        return response()->json($result, 200);
-    }
+    }    
 
 }

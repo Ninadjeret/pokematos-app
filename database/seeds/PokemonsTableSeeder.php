@@ -129,18 +129,38 @@ class PokemonsTableSeeder extends Seeder {
             foreach( $game_master as $game_master_2 ) {
                 if( is_array($game_master_2) ) { foreach( $game_master_2 as $node ) {
                 if( !isset($node->pokemonSettings) || empty($node->pokemonSettings) ) continue;
-                if( strstr($node->templateId, 'ALOLA')) continue;
-                if( strstr($node->templateId, 'NORMAL')) continue;
 
                 $pokedex_id = substr($node->templateId, 2, 3);
-                $name_fr = ( isset($names_fr[(int)$pokedex_id]) ) ? $names_fr[(int)$pokedex_id - 1] : null;
+                $name_ocr = ( isset($names_fr[(int)$pokedex_id]) ) ? $names_fr[(int)$pokedex_id - 1] : null;
+                $form_id = ( isset($node->pokemonSettings->form) ) ? $node->pokemonSettings->form : '00';
+
+                $forms = [
+                    'ALOLA' => 'd\'Alola',
+                    'SPEED' => 'Vitesse',
+                    'ATTACK' => 'Attaque',
+                    'DEFENSE' => 'Défense',
+                    'PLANT' => 'Plante',
+                    'SANDY' => 'Sable',
+                    'TRASH' => 'test',
+                ];
+
+                $name_fr = $name_ocr;
+                if( !empty( $form_id ) && $form_id != '00' ) {
+                    foreach( $forms as $form => $label ) {
+                        if( strstr($node->templateId, $form) ) {
+                            $name_fr = $name_ocr.' '.$label;
+                        }
+                    }
+                }
 
                 error_log('Import de '.$node->pokemonSettings->pokemonId);
                 DB::table('pokemons')->insert([
                     [
                         'pokedex_id' => $pokedex_id,
-                        'niantic_id'  => $node->pokemonSettings->pokemonId,
+                        'niantic_id'  => $node->templateId,
                         'name_fr'   => $name_fr,
+                        'name_ocr'   => $name_ocr,
+                        'form_id'  => $form_id,
                         'base_att'  => $node->pokemonSettings->stats->baseAttack,
                         'base_def'  => $node->pokemonSettings->stats->baseDefense,
                         'base_sta'  => $node->pokemonSettings->stats->baseStamina,
