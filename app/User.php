@@ -14,7 +14,7 @@ class User extends Authenticatable
 {
      use HasApiTokens, Notifiable;
 
-    protected $fillable = ['name', 'email', 'password', 'guilds'];
+    protected $fillable = ['name', 'email', 'password', 'guilds', 'discord_id'];
     protected $hidden = ['password', 'remember_token',];
     protected $appends = ['permissions'];
 
@@ -48,7 +48,7 @@ class User extends Authenticatable
         return (object) [
             'city' => (object) [
                 'raidex_create' => $raid_ex,
-            ],        
+            ],
         ];
     }
 

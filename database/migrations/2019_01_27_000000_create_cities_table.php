@@ -50,6 +50,7 @@ class CreateCitiesTable extends Migration
             $table->string('pokedex_id');
             $table->string('niantic_id');
             $table->string('name_fr')->nullable();
+            $table->string('name_ocr')->nullable();
             $table->string('form_id')->default('00');
             $table->integer('base_att')->nullable();
             $table->integer('base_def')->nullable();

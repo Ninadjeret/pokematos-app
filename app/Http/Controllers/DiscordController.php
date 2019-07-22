@@ -46,7 +46,7 @@ class DiscordController extends Controller {
         $user_data = json_decode($res->getBody());
         Log::debug( print_r( $user_data, true ) );
         $user_guilds = json_decode($res_guilds->getBody());
-        $user = User::where('email',$user_data->email)->first();
+        $user = User::where('discord_id',$user_data->id)->first();
 
         if( $user ) {
             Auth::loginUsingId($user->id);

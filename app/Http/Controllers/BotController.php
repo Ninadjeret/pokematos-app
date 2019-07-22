@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use App\models\City;
 use App\models\Role;
+use App\models\Raid;
 use App\models\Guild;
 use RestCord\DiscordClient;
 use App\models\RoleCategory;
 use Illuminate\Http\Request;
+use App\ImageAnalyzer\Engine;
+use Illuminate\Support\Facades\Hash;
 
 class BotController extends Controller {
 
@@ -206,5 +211,51 @@ class BotController extends Controller {
         return response()->json(null, 204);
     }
 
+    /**
+     * [decodeImage description]
+     * @param  Request $request [description]
+     * @param  City    $city    [description]
+     * @return [type]           [description]
+     */
+    public function decodeImage( Request $request ) {
+
+        $url = $request->url;
+        $username = $request->user_name;
+        $userDiscordId = $request->user_discord_id;
+        $guild_discord_id = $request->guild_discord_id;
+
+        if( empty( $guild_discord_id ) ) {
+            return response()->json('L\'ID de Guild est obligatoire', 400);
+        }
+
+        $guild = Guild::where( 'discord_id', $guild_discord_id )->first();
+        $city = City::find( $guild->city->id );
+
+        $user = User::where('discord_id', $userDiscordId)->first();
+        if( !$user ) {
+            $user = User::create([
+                'name' => $username,
+                'password' => Hash::make( str_random(20) ),
+                'discord_name' => $username,
+                'discord_id' => $userDiscordId,
+            ]);
+        }
+
+        $engine = new Engine($url, $guild);
+        $result = $engine->result;
+
+        $args = [];
+        $args['city_id'] = $city->id;
+        $args['user_id'] = $user->id;
+        $args['gym_id'] = $result->gym->id;
+        $args['source_type'] = 'image';
+        if( isset( $result->pokemon->id ) ) $args['pokemon_id'] = $result->pokemon->id;
+        if( isset( $result->eggLevel ) ) $args['egg_level'] = $result->eggLevel;
+        if( isset( $result->date ) ) $args['start_time'] = $result->date;
+
+        $raid = Raid::add($args);
+        return response()->json($raid, 200);
+
+    }
 
 }
