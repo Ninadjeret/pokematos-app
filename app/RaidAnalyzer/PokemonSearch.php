@@ -1,5 +1,5 @@
 <?php
-namespace App\ImageAnalyzer;
+namespace App\RaidAnalyzer;
 
 use App\Models\Pokemon;
 use App\Helpers\Helpers;

@@ -217,9 +217,10 @@ class BotController extends Controller {
      * @param  City    $city    [description]
      * @return [type]           [description]
      */
-    public function decodeImage( Request $request ) {
+    public function addRaid( Request $request ) {
 
-        $url = $request->url;
+        $url = ( isset($request->url) && !empty($request->url) ) ? $request->url : false ;
+        $text = ( isset($request->text) && !empty($request->text) ) ? $request->text : false ;
         $username = $request->user_name;
         $userDiscordId = $request->user_discord_id;
         $guild_discord_id = $request->guild_discord_id;
@@ -241,8 +242,12 @@ class BotController extends Controller {
             ]);
         }
 
-        $engine = new Engine($url, $guild);
-        $result = $engine->result;
+        if( $url ) {
+            $imageAnalyzer = new ImageAnalyzer($url, $guild);
+            $result = $imageAnalyzer->result;
+        } else {
+
+        }
 
         $args = [];
         $args['city_id'] = $city->id;

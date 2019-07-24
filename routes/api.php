@@ -95,7 +95,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 });
 
-Route::get('bot/imagedecode', 'BotController@decodeImage');
+Route::get('bot/raids/add', 'BotController@addRaid');
 
 Route::get('bot/roles', 'BotController@getRoles');
 Route::post('bot/roles', 'BotController@createRole');
