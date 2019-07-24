@@ -31,6 +31,12 @@ class Guild extends Model
         'raidsex_channels' => false,
         'raidsex_channel_category_id' => '',
         'raidsex_access' => 'everyone',
+
+        'raidreporting_images_active' => false,
+        'raidreporting_images_delete' => false,
+        'raidreporting_text_active' => false,
+        'raidreporting_text_delete' => false,
+        'raidreporting_text_prefixes' => '+raid, +Raid',
     ];
 
     public function getCityAttribute() {

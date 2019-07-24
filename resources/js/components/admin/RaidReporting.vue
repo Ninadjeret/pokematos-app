@@ -26,6 +26,35 @@
 
             <div class="settings-section">
                 <v-subheader>Réglages</v-subheader>
+                <div class="setting d-flex switch">
+                    <div>
+                        <label>Analyser les captures d'écran publiées</label>
+                    </div>
+                    <v-switch v-model="raidreporting_images_active"></v-switch>
+                </div>
+                <div v-if="raidreporting_images_active" class="setting d-flex switch">
+                    <div>
+                        <label>Supprimer les captures après analyse ?</label>
+                    </div>
+                    <v-switch v-model="raidreporting_images_delete"></v-switch>
+                </div>
+                <div class="setting d-flex switch">
+                    <div>
+                        <label>Analyser les messages texte publiés</label>
+                    </div>
+                    <v-switch v-model="raidreporting_text_active"></v-switch>
+                </div>
+                <div v-if="raidreporting_text_active" class="setting d-flex switch">
+                    <div>
+                        <label>Supprimer les messages texte d'annonce de raid ?</label>
+                    </div>
+                    <v-switch v-model="raidreporting_text_delete"></v-switch>
+                </div>
+                <div v-if="raidreporting_text_active" class="setting">
+                    <label>Préfixes des messages texte</label>
+                    <p class="description">Indiquer par quoi doivent commencer les messages texte pour être analysés ?</p>
+                    <input v-model="raidreporting_text_prefixes" type="text">
+                </div>
                 <v-btn dark fixed bottom right fab @click="submit()">
                     <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
                     <v-icon v-else>save</v-icon>
@@ -56,7 +85,11 @@
                         icon: 'settings_input_component'
                     },
                 ],
-                roles_gym_color: '',
+                raidreporting_images_active: false,
+                raidreporting_images_delete: false,
+                raidreporting_text_active: false,
+                raidreporting_text_delete: false,
+                raidreporting_text_prefixes: '+raid, +Raid',
             }
         },
         computed: mapState([
@@ -68,7 +101,11 @@
         methods: {
             fetch() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/settings').then( res => {
-                    //this.roles_gym_color = res.data.roles_gym_color;
+                    this.raidreporting_images_active = parseInt(res.data.raidreporting_images_active);
+                    this.raidreporting_images_delete = parseInt(res.data.raidreporting_images_delete);
+                    this.raidreporting_text_active = parseInt(res.data.raidreporting_text_active);
+                    this.raidreporting_text_delete = parseInt(res.data.raidreporting_text_delete);
+                    this.raidreporting_text_prefixes = res.data.raidreporting_text_prefixes;
                 }).catch( err => {
                     //No error
                 });
@@ -76,7 +113,11 @@
             submit() {
                 const args = {
                     settings: {
-                        //roles_gym_color: this.roles_gym_color,
+                        raidreporting_images_active: this.raidreporting_images_active,
+                        raidreporting_images_delete: this.raidreporting_images_delete,
+                        raidreporting_text_active: this.raidreporting_text_active,
+                        raidreporting_text_delete: this.raidreporting_text_delete,
+                        raidreporting_text_prefixes: this.raidreporting_text_prefixes,
                     }
                 };
                 this.save(args);

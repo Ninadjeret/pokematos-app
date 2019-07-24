@@ -498,3 +498,20 @@ range_button:active {
     justify-content: center;
     height: -webkit-fill-available;
 }
+
+.donation {
+    padding: 10px 15px;
+    .v-progress-linear__background,
+    .v-progress-linear__bar__determinate {
+        border-radius: 50px;
+    }
+    .v-btn {
+        background: transparent !important;
+        border: 2px solid $primary;
+        border-radius: 50px;
+        box-shadow: none;
+        .v-btn__content {
+            color: $primary;
+        }
+    }
+}
