@@ -61,7 +61,7 @@ class ImageAnalyzer {
              $this->result->eggLevel = $this->getEggLevel();
          }
 
-        /*elseif( $this->imageData->type == 'pokemon' ) {
+        elseif( $this->imageData->type == 'pokemon' ) {
              $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
              $this->_log($this->ocr);
              $this->result->gym = $this->getGym();
@@ -70,7 +70,7 @@ class ImageAnalyzer {
              if( $this->result->pokemon ) {
                  $this->result->eggLevel = $this->result->pokemon->getRaidLevel();
              }
-         }*/
+         }
 
          $time_elapsed_secs = microtime(true) - $this->start;
          if( $this->debug ) $this->_log('========== Fin du traitement '.$this->imageData->source.' ('.round($time_elapsed_secs, 3).'s) ==========');
@@ -295,6 +295,33 @@ class ImageAnalyzer {
             return $gym;
         }
         if( $this->debug ) $this->_log('Nothing found in database :(' );
+
+    }
+
+    function getPokemon() {
+        $query = implode(' ', $this->ocr);
+        $pokemon = $this->pokemonSearch->findPokemon($query, 70);
+        if( $pokemon ) {
+            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->getNameFr() );
+            return $pokemon;
+        }
+
+        $ocr_count = count( $this->ocr );
+        $start = $this->ocr[ $ocr_count - 3 ];
+        $end = $this->ocr[ $ocr_count - 2 ];
+        if( strlen( $start ) <= 4 ) {
+            $pokemon = $this->pokemonSearch->findPokemonFromFragments(
+                    $this->ocr[ $ocr_count - 3 ],
+                    $this->ocr[ $ocr_count - 2 ]
+                    );
+            if( $pokemon ) {
+                if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->getNameFr() );
+                return $pokemon);
+            }
+        }
+
+        if( $this->debug ) $this->_log('Nothing found in database :(' );
+        return false;
 
     }
 

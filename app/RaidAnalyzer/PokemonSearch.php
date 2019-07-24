@@ -89,11 +89,9 @@ class PokemonSearch {
     function findPokemon( $query, $min = 50 ) {
         $this->query = $query;
         $sanitizedQuery = Helpers::sanitize($this->query);
-
         foreach( $this->getAllIdentifiers() as $pattern => $data ) {
 
             if( strstr($sanitizedQuery, $pattern) && $data->percent >= $min ) {
-                Log::debug($sanitizedQuery.' --- '.$pattern.' >> '.$data->percent);
                 return Pokemon::find($data->pokemonId);
             }
         }

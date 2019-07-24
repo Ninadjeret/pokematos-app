@@ -28,6 +28,9 @@ class GymSearch {
         $names = array();
         foreach( $this->gyms as $gym ) {
             $names[] = Helpers::sanitize($gym->niantic_name);
+            if( $gym->niantic_name != $gym->name ) {
+                $names[] = Helpers::sanitize($gym->name);
+            }
         }
         return $names;
     }
@@ -59,41 +62,44 @@ class GymSearch {
 
         foreach( $this->gyms as $gym ) {
 
-            $name = Helpers::sanitize($gym->niantic_name);
-            $nb_chars = strlen($name);
+            foreach( array( $gym->niantic_name, $gym->name ) as $name ) {
 
-            //Parcours
-            $debut = 0;
-            while( $debut < $nb_chars - 1) {
+                $name = Helpers::sanitize($name);
+                $nb_chars = strlen($name);
 
-                $fin = $nb_chars - $debut;
-                while( $fin > 2 ) {
-                    $pattern = mb_strimwidth($name, $debut, $fin);
-                    //echo $pattern.'<br>';
-                    $is_find = 0;
-                    foreach( $this->sanitizedNames as $sanitizedName ) {
-                        if( strstr($sanitizedName, $pattern) ) {
-                            $is_find++;
+                //Parcours
+                $debut = 0;
+                while( $debut < $nb_chars - 1) {
+
+                    $fin = $nb_chars - $debut;
+                    while( $fin > 2 ) {
+                        $pattern = mb_strimwidth($name, $debut, $fin);
+                        //echo $pattern.'<br>';
+                        $is_find = 0;
+                        foreach( $this->sanitizedNames as $sanitizedName ) {
+                            if( strstr($sanitizedName, $pattern) ) {
+                                $is_find++;
+                            }
                         }
+
+                        if( $is_find === 1 ) {
+                            //echo 'Identifiant OK<br>';
+                            $identifiers[$pattern] = (object) array(
+                                'gymId' => $gym->id,
+                                'percent' => round( strlen($pattern) * 100 / $nb_chars )
+                            );$gym->id;
+                        }
+
+                        $fin--;
                     }
 
-                    if( $is_find === 1 ) {
-                        //echo 'Identifiant OK<br>';
-                        $identifiers[$pattern] = (object) array(
-                            'gymId' => $gym->id,
-                            'percent' => round( strlen($pattern) * 100 / $nb_chars )
-                        );$gym->id;
-                    }
-
-                    $fin--;
+                    $debut++;
                 }
-
-                $debut++;
+                $identifiers[$name] = (object) array(
+                    'gymId' => $gym->id,
+                    'percent' => 100
+                );
             }
-            $identifiers[$name] = (object) array(
-                'gymId' => $gym->id,
-                'percent' => 100
-            );
         }
         $keys = array_map('strlen', array_keys($identifiers));
         array_multisort($keys, SORT_DESC, $identifiers);
@@ -115,7 +121,11 @@ class GymSearch {
             Log::debug('Query black listed');
             return false;
         }
-        foreach( $this->getAllIdentifiers() as $pattern => $data ) {
+        //Log::debug(print_r($min, true));
+        //Log::debug( print_r($this->getAllIdentifiers(), true) );
+        $identifiers = $this->getAllIdentifiers();
+        foreach($identifiers as $pattern => $data ) {
+            //Log::debug( print_r(strstr($sanitizedQuery, $pattern), true) );
             if( strstr($sanitizedQuery, $pattern) && $data->percent >= $min ) {
                 $gym = Stop::find($data->gymId);
                 return $gym;

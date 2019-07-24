@@ -10,7 +10,8 @@ use App\models\Guild;
 use RestCord\DiscordClient;
 use App\models\RoleCategory;
 use Illuminate\Http\Request;
-use App\ImageAnalyzer\Engine;
+use App\RaidAnalyzer\TextAnalyzer;
+use App\RaidAnalyzer\ImageAnalyzer;
 use Illuminate\Support\Facades\Hash;
 
 class BotController extends Controller {
@@ -245,21 +246,28 @@ class BotController extends Controller {
         if( $url ) {
             $imageAnalyzer = new ImageAnalyzer($url, $guild);
             $result = $imageAnalyzer->result;
+            $args['source_type'] = 'image';
         } else {
-
+            $textAnalyzer = new TextAnalyzer($text, $guild);
+            $result = $textAnalyzer->result;
+            $args['source_type'] = 'text';
         }
 
-        $args = [];
-        $args['city_id'] = $city->id;
-        $args['user_id'] = $user->id;
-        $args['gym_id'] = $result->gym->id;
-        $args['source_type'] = 'image';
-        if( isset( $result->pokemon->id ) ) $args['pokemon_id'] = $result->pokemon->id;
-        if( isset( $result->eggLevel ) ) $args['egg_level'] = $result->eggLevel;
-        if( isset( $result->date ) ) $args['start_time'] = $result->date;
+        if( empty( $result->error ) ) {
+            $args = [];
+            $args['city_id'] = $city->id;
+            $args['user_id'] = $user->id;
+            $args['gym_id'] = $result->gym->id;
+            if( isset( $result->pokemon->id ) ) $args['pokemon_id'] = $result->pokemon->id;
+            if( isset( $result->eggLevel ) ) $args['egg_level'] = $result->eggLevel;
+            if( isset( $result->date ) ) $args['start_time'] = $result->date;
 
-        $raid = Raid::add($args);
-        return response()->json($raid, 200);
+            $raid = Raid::add($args);
+            return response()->json($raid, 200);
+        }
+
+        return response()->json($result, 400);
+
 
     }
 
