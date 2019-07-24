@@ -3,14 +3,8 @@
 namespace App\RaidAnalyzer;
 
 use App\RaidAnalyzer\GymSearch;
-use App\RaidAnalyzer\Coordinates;
-use App\RaidAnalyzer\ColorPicker;
-use App\RaidAnalyzer\MicrosoftOCR;
 use App\RaidAnalyzer\PokemonSearch;
-
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class TextAnalyzer {
 
