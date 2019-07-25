@@ -66,15 +66,12 @@ class TextAnalyzer {
         $this->result->gym = $this->gymSearch->findGym($this->text, 70);
         $this->result->pokemon = $this->pokemonSearch->findPokemon($this->text, 70);
         if( $this->result->pokemon ) {
-            Log::debug('tutu');
             $this->result->eggLevel = $this->result->pokemon->boss_level;
         } else {
-            Log::debug('tata');
             $this->result->eggLevel = $this->getEggLevel();
         }
-        $this->getTime();
         $time_elapsed_secs = microtime(true) - $this->start;
-        //$this->result->error = 'demo';
+        $this->result->error = 'demo';
         if( $this->debug ) $this->_log('========== Fin du traitement '.$this->text.' ('.round($time_elapsed_secs, 3).'s) ==========');
     }
 
@@ -107,6 +104,18 @@ class TextAnalyzer {
             return $this->getTimeFromStartDate($dates_debut[0]);
         }
 
+        preg_match('/(d(e|é)pope?\sdans|reste(\sencore)?|pour(\sencore)?)\s\d?\d\s?(min|minute|minutes)/i', $this->text, $delais_fin);
+        Log::debug( print_r($delais_fin, true) );
+        if( !empty( $delais_fin ) ) {
+            return $this->getTimeFromEndDelay($delais_fin[0]);
+        }
+
+        preg_match('/(dans|d\'ici)\s\d?\d\s?(min|minute|minutes)/i', $this->text, $delais_debut);
+        if( !empty( $delais_debut ) ) {
+            return $this->getTimeFromStartDelay($delais_debut[0]);
+        }
+
+
     }
 
     public function getTimeFromStartDate( $date_string ) {
@@ -123,6 +132,21 @@ class TextAnalyzer {
         $minutes = preg_replace('`[^0-9]`', '', $dates[1]);
         $date = \DateTime::createFromFormat('H:i', $hours.':'.$minutes);
         $date->modify('- 45 minutes');
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    public function getTimeFromStartDelay( $date_string ) {
+        $minutes = preg_replace('`[^0-9]`', '', $date_string);
+        $date = new \DateTime();
+        $date->modify('+ '.$minutes.' minutes');
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    public function getTimeFromEndDelay( $date_string ) {
+        $minutes = preg_replace('`[^0-9]`', '', $date_string);
+        $minutes = 45 - $minutes;
+        $date = new \DateTime();
+        $date->modify('- '.$minutes.' minutes');
         return $date->format('Y-m-d H:i:s');
     }
 
