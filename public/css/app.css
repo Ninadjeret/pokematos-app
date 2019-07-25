@@ -4941,12 +4941,10 @@ input[type=button].btn-block {
 
 @media (min-width: 576px) {
   .card-columns {
-    -webkit-column-count: 3;
-       -moz-column-count: 3;
-            column-count: 3;
-    -webkit-column-gap: 1.25rem;
-       -moz-column-gap: 1.25rem;
-            column-gap: 1.25rem;
+    -moz-column-count: 3;
+         column-count: 3;
+    -moz-column-gap: 1.25rem;
+         column-gap: 1.25rem;
     orphans: 1;
     widows: 1;
   }
@@ -10658,30 +10656,40 @@ a.text-dark:focus {
   color: #5a6cae;
 }
 
-.v-toolbar__title {
+#app__container .v-toolbar__title {
   font-family: "Teko";
   color: #fff;
   font-size: 25px;
 }
 
-.v-toolbar__title img {
+#app__container .v-toolbar__title img {
   height: 54px;
 }
 
-.v-toolbar__title small {
+#app__container .v-toolbar__title small {
   font-family: "Roboto";
   font-style: italic;
   font-size: 16px;
   color: rgba(255, 255, 255, 0.6);
 }
 
-.template-map .v-toolbar__title:not(:first-child) {
+#app__container .template-map .v-toolbar__title:not(:first-child) {
   margin-left: 0;
 }
 
-.theme--dark.v-toolbar {
+#app__container .theme--dark.v-toolbar {
   background-color: #5a6cae;
   color: #fff;
+}
+
+#app__container .theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+  background: none;
+}
+
+#app__container .v-toolbar__content > .v-btn.v-btn--icon:first-child + .v-toolbar__title,
+#app__container .v-toolbar__extension > .v-btn.v-btn--icon:first-child + .v-toolbar__title {
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .v-bottom-nav {
@@ -11183,7 +11191,7 @@ a.text-dark:focus {
 }
 
 .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
-  background-color: #5a6cae;
+  background-color: #5a6cae !important;
 }
 
 .v-list__tile__title span {
@@ -11248,7 +11256,7 @@ a.text-dark:focus {
 
 .setting label {
   width: 100%;
-  font-size: 18px;
+  font-size: 16px;
   padding-bottom: 5px;
 }
 
@@ -11687,9 +11695,9 @@ body.logged-out .branding a.minor {
 
 .setting__desc {
   color: #bbb;
-  font-size: 1.4rem;
+  font-size: 1rem;
   margin: 0;
-  line-height: 1.7rem;
+  line-height: 1.3rem;
 }
 
 .setting__wrapper > a {
@@ -11893,7 +11901,8 @@ range_button:active {
   background: #fafafa;
   /*padding: 10px 15px !important;*/
   font-family: "Teko";
-  font-size: 20px;
+  font-size: 20px !important;
+  color: #212529 !important;
 }
 
 .theme--light.v-label.v-label--active {
@@ -11937,6 +11946,7 @@ range_button:active {
 
 .donation {
   padding: 10px 15px;
+  font-size: 1rem;
 }
 
 .donation .v-progress-linear__background,
@@ -11953,5 +11963,13 @@ range_button:active {
 
 .donation .v-btn .v-btn__content {
   color: #5a6cae;
+}
+
+.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+  background: none !important;
+}
+
+.v-btn:before {
+  background-color: inherit;
 }
 

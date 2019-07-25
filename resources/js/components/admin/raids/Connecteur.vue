@@ -4,7 +4,6 @@
 
             <v-tabs v-model="tabs" fixed-tabs grow color="transparent" slider-color="white">
                 <v-tab href="#general" class="primary--text">Général</v-tab>
-                <v-tab href="#detection" class="primary--text">Détection</v-tab>
                 <v-tab href="#annonces" class="primary--text">Annonces</v-tab>
             </v-tabs>
 
@@ -26,18 +25,7 @@
                         <v-list-tile color="pink" @click="dialog = true">Supprimer le connecteur</v-list-tile>
                     </div>
                 </v-tab-item>
-                <v-tab-item value="detection">
-                    <v-subheader>Description</v-subheader>
-                </v-tab-item>
                 <v-tab-item value="annonces">
-                    <div class="setting d-flex switch">
-                        <div>
-                            <label>Publier des annonces</label>
-                            <p class="description">Publier les annonces de certains raids dans le salon {{channelName}}</p>
-                        </div>
-                        <v-switch v-model="publish"></v-switch>
-                    </div>
-                    <div v-if="publish">
                         <v-subheader>Arênes</v-subheader>
                         <div class="setting">
                             <label>Filtrer les arènes</label>
@@ -141,7 +129,6 @@
                             </p>
                             <input v-model="custom_message_after" type="text">
                         </div>
-                    </div>
                 </v-tab-item>
             </v-tabs-items>
 
@@ -188,7 +175,6 @@
                 ],
                 name: '',
                 channel_discord_id: false,
-                publish: false,
                 filter_gym_type: 'none',
                 filter_gym_zone: [],
                 filter_gym_gym: [],
@@ -219,7 +205,6 @@
                 axios.get('/api/user/guilds/'+this.$route.params.id+'/connectors/'+this.$route.params.connector_id).then( res => {
                     this.name = res.data.name;
                     this.channel_discord_id = res.data.channel_discord_id;
-                    this.publish = res.data.publish;
                     this.filter_gym_type = res.data.filter_gym_type;
                     this.filter_gym_zone = this.convertIdstoObjects(res.data.filter_gym_zone, this.zones);
                     this.filter_gym_gym = this.convertIdstoObjects(res.data.filter_gym_gym, this.gyms);
@@ -257,7 +242,6 @@
                 const args = {
                     name: this.name,
                     channel_discord_id: this.channel_discord_id,
-                    publish: this.publish,
                     filter_gym_type: this.filter_gym_type,
                     filter_gym_zone: this.convertObjectsToIds(this.filter_gym_zone),
                     filter_gym_gym: this.convertObjectsToIds(this.filter_gym_gym),

@@ -105,7 +105,6 @@ class TextAnalyzer {
         }
 
         preg_match('/(d(e|é)pope?\sdans|reste(\sencore)?|pour(\sencore)?)\s\d?\d\s?(min|minute|minutes)/i', $this->text, $delais_fin);
-        Log::debug( print_r($delais_fin, true) );
         if( !empty( $delais_fin ) ) {
             return $this->getTimeFromEndDelay($delais_fin[0]);
         }

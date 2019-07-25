@@ -8,7 +8,7 @@
 }
 
 .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
-    background-color: $primary;
+    background-color: $primary !important;
 }
 
 .v-list__tile__title {
@@ -64,7 +64,7 @@
     }
     label {
         width: 100%;
-        font-size: 18px;
+        font-size: 16px;
         padding-bottom: 5px;
     }
     p.description {
