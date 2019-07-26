@@ -128,6 +128,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'bot_token' => env('BOT_TOKEN', false),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
