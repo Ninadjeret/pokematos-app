@@ -100,7 +100,8 @@ class CreateCitiesTable extends Migration
             $table->integer('user_id');
             $table->string('url')->nullable();
             $table->text('content')->nullable();
-            $table->integer('message_id')->nullable();
+            $table->integer('message_discord_id')->nullable();
+            $table->integer('channel_discord_id')->nullable();
             $table->integer('guild_id')->nullable();
             $table->boolean('confirmed')->default(true);
             $table->timestamps();

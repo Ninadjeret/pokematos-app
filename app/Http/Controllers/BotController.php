@@ -225,6 +225,8 @@ class BotController extends Controller {
         $username = $request->user_name;
         $userDiscordId = $request->user_discord_id;
         $guild_discord_id = $request->guild_discord_id;
+        $message_discord_id = $request->message_discord_id;
+        $channel_discord_id = $request->channel_discord_id;
 
         if( empty( $guild_discord_id ) ) {
             return response()->json('L\'ID de Guild est obligatoire', 400);
@@ -258,6 +260,9 @@ class BotController extends Controller {
             $args['city_id'] = $city->id;
             $args['user_id'] = $user->id;
             $args['gym_id'] = $result->gym->id;
+            $args['message_discord_id'] = $message_discord_id;
+            $args['channel_discord_id'] = $channel_discord_id;
+            $args['guild_id'] = $guild->id;
             if( isset( $result->pokemon->id ) ) $args['pokemon_id'] = $result->pokemon->id;
             if( isset( $result->eggLevel ) ) $args['egg_level'] = $result->eggLevel;
             if( isset( $result->date ) ) $args['start_time'] = $result->date;
