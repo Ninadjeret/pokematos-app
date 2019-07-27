@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('quests/{quest}', 'PokemonController@getQuest');
     Route::put('quests/{quest}', 'PokemonController@updateQuest');
     Route::delete('quests/{quest}', 'PokemonController@deleteQuest');
+    Route::get('quests/rewards', 'PokemonController@getQuestRewards');
 
 });
 

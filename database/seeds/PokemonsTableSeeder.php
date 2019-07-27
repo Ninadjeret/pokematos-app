@@ -83,8 +83,8 @@ class PokemonsTableSeeder extends Seeder {
             ]);
         } // end check if table users is empty
 
-        if(DB::table('zones')->get()->count() == 0){
-            DB::table('zones')->insert([
+        if(DB::table('quest_rewards')->get()->count() == 0){
+            DB::table('quest_rewards')->insert([
                 [
                     'name'  => '1 super bonbon',
                     'type'  => 'candy',

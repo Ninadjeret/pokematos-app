@@ -9,6 +9,7 @@ use App\Models\Stop;
 use App\Models\Guild;
 use App\Models\Announce;
 use App\Models\Connector;
+use App\Models\QuestReward;
 use Illuminate\Http\Request;
 use App\Models\RoleCategory;
 use App\Models\QuestInstance;
@@ -288,6 +289,6 @@ class UserController extends Controller {
         $pois = Stop::where('city_id', '=', $city->id)
             ->get();
         return response()->json($pois, 200);
-    }    
+    }
 
 }

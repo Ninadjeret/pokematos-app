@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quest;
 use App\Models\Pokemon;
+use App\Models\QuestReward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -126,6 +127,10 @@ class PokemonController extends Controller {
         $pokemons = Pokemon::where('boss', 1)
             ->get();
         return response()->json($pokemons, 200);
+    }
+
+    public function getQuestRewards( Request $request ) {
+        return response()->json(QuestReward::all(), 200);
     }
 
     public function getQuests( Request $request ) {
