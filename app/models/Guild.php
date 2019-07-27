@@ -3,13 +3,21 @@
 namespace App\models;
 
 use App\Models\City;
+use RestCord\DiscordClient;
 use App\Models\GuildSetting;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 
 class Guild extends Model
 {
-    protected $fillable = ['authorized_roles',];
+    protected $fillable = [
+        'token',
+        'discord_id',
+        'name',
+        'type',
+        'city_id',
+        'active',
+    ];
     protected $hidden = ['city_id'];
     protected $appends = ['city', 'settings'];
     protected $casts = [
@@ -77,6 +85,12 @@ class Guild extends Model
             }
         }
         return true;
+    }
+
+    public function getDiscordRoles() {
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+        $roles = $discord->guild->getGuildRoles(['guild.id' => (int) $this->discord_id]);
+        return $roles;
     }
 
 }

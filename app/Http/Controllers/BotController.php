@@ -13,8 +13,58 @@ use Illuminate\Http\Request;
 use App\RaidAnalyzer\TextAnalyzer;
 use App\RaidAnalyzer\ImageAnalyzer;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class BotController extends Controller {
+
+    /**
+    * ==================================================================
+    * GESTION DES GUILDS
+    * ==================================================================
+    */
+
+    public function addGuild( Request $request ) {
+
+        if( !isset($request->guild_id) || empty($request->guild_id) || !isset($request->name) || empty($request->name) ) {
+            return response()->json('Paramètres manquants', 400);
+        }
+
+        $token = $request->guild_token;
+        $guild = Guild::where('token', $token)
+            ->where('active', 0)
+            ->first();
+
+        if( $guild ) {
+            $guild->update([
+                'name' => $request->name,
+                'discord_id' => $request->guild_id,
+                //'active' => 1,
+            ]);
+
+            $roles_to_add = $guild->getDiscordRoles();
+            Log::debug( print_r($roles_to_add, true) );
+            if( !empty( $roles_to_add ) ) {
+                foreach( $roles_to_add as $role_to_add ) {
+                    Role::create([
+                        'discord_id' => $role_to_add->id,
+                        'guild_id' => $guild->id,
+                        'name' => $role_to_add->name,
+                    ]);
+                }
+            }
+
+            return response()->json($guild, 200);
+
+        }
+
+        return response()->json('Aucune guild en attente de création avec ce token', 400);
+    }
+
+    /**
+    * ==================================================================
+    * GESTION DES ROLES
+    * ==================================================================
+    */
 
     /**
      * [getRoles description]

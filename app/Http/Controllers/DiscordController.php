@@ -73,7 +73,9 @@ class DiscordController extends Controller {
 
                 $auth_discord = false;
                 $admin = false;
-                $guild = Guild::where( 'discord_id', $user_guild->id )->first();
+                $guild = Guild::where( 'discord_id', $user_guild->id )
+                    ->where('active', 1)
+                    ->first();
                 if( $guild ) {
 
                     try {
@@ -174,22 +176,7 @@ class DiscordController extends Controller {
     }
 
     public function getRoles( Request $request, City $city, Guild $guild ) {
-        $discord = new DiscordClient(['token' => config('discord.token')]);
-        $roles = $discord->guild->getGuildRoles(['guild.id' => $guild->discord_id]);
-        $return = array();
-        $order = array();
-        foreach ($roles as $key => $row) {
-            $role = Role::where('discord_id', $row->id)->first();
-            if( !$role ) {
-                $return[] = [
-                    'name' => $row->name,
-                    'id' => (string) $row->id
-                ];
-                $order[$key] = $row->name;
-            }
-        }
-        array_multisort($order, SORT_ASC|SORT_NATURAL|SORT_FLAG_CASE, $return);
-        return response()->json($return, 200);
+        return response()->json($guild->getDiscordRoles(), 200);
     }
 
     public function getChannels( Request $request, City $city, Guild $guild ) {
