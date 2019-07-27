@@ -250,7 +250,7 @@ class CreateCitiesTable extends Migration
         Schema::create('quest_rewards', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('alternative_name');
+            $table->string('type');
             $table->timestamps();
         });
 
