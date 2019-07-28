@@ -15,7 +15,8 @@
                         <span v-if="gym.quest" class="annonce">Quête <strong>{{gym.quest.quest.name}}</strong> en cours</span>
                     </p>
                     <img v-if="!gym.quest" src="https://assets.profchen.fr/img/app/egg_0.png">
-                    <img v-if="gym.quest" :src="gym.quest.quest.pokemon.thumbnail_url">
+                    <img v-if="gym.quest.quest.pokemon" :src="gym.quest.quest.pokemon.thumbnail_url">
+                    <img v-if="gym.quest.quest.reward" :src="gym.quest.quest.reward.thumbnail_url">
                 </div>
                 <div v-if="gym.gym" :class="'dialog__egg '+raidStatus">
                     <p>
@@ -116,6 +117,9 @@
                     </v-list-tile-content>
                     <v-avatar v-if="quest.pokemon">
                         <img :src="quest.pokemon.thumbnail_url">
+                    </v-avatar>
+                    <v-avatar v-if="quest.reward">
+                        <img :src="quest.reward.thumbnail_url">
                     </v-avatar>
                   </v-list-tile>
                   <v-divider></v-divider>
