@@ -142,7 +142,8 @@ class PokemonController extends Controller {
         $connector = Quest::create([
             'name' => $request->name,
             'reward_type' => $request->reward_type,
-            'pokemon_id' => $request->pokemon_id,
+            'pokemon_id' => ($request->pokemon_id) ? $request->pokemon_id : null,
+            'reward_id' => ($request->reward_id) ? $request->reward_id : null,
         ]);
         return response()->json($connector, 200);
     }
@@ -156,6 +157,7 @@ class PokemonController extends Controller {
             'name' => ($request->name) ? $request->name : $quest->name,
             'reward_type' => ($request->reward_type) ? $request->reward_type : $quest->reward_type,
             'pokemon_id' => ($request->pokemon_id) ? $request->pokemon_id : null,
+            'reward_id' => ($request->reward_id) ? $request->reward_id : null,
         ]);
         return response()->json($quest, 200);
     }

@@ -10694,16 +10694,32 @@ a.text-dark:focus {
   padding-left: 0;
 }
 
-.v-bottom-nav {
+#app__container nav.v-toolbar {
+  z-index: 1500;
+}
+
+#app__container .v-footer {
+  z-index: 1499;
+}
+
+footer .theme--light.v-bottom-nav {
   z-index: 5000;
 }
 
-.v-bottom-nav a.v-btn:hover {
+footer .theme--light.v-bottom-nav .v-btn:not(.v-btn--active) {
+  color: #a8a7cf !important;
+}
+
+footer .theme--light.v-bottom-nav a.v-btn:hover {
   text-decoration: none;
 }
 
-.v-bottom-nav a.v-btn--active {
+footer .theme--light.v-bottom-nav a.v-btn--active {
   color: #5a6cae;
+}
+
+footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
+  font-size: inherit 12px;
 }
 
 .map-marker__img.raid,
@@ -11042,7 +11058,7 @@ a.text-dark:focus {
   /*bottom: 10px;*/
   right: 0px;
   width: 78px;
-  z-index: 1000;
+  z-index: 1600;
   /*display: flex;
   flex-direction: column-reverse; */
 }
@@ -11194,6 +11210,10 @@ a.text-dark:focus {
 
 .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
   background-color: #5a6cae !important;
+}
+
+.v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed:hover {
+  text-decoration: none;
 }
 
 .v-list__tile__title span {
@@ -11393,6 +11413,10 @@ a.text-dark:focus {
   color: #aaa;
 }
 
+html {
+  font-size: 10px !important;
+}
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -11526,12 +11550,8 @@ h6 small {
   max-width: 100% !important;
 }
 
-.v-footer {
-  z-index: 4000;
-}
-
-.v-toolbar {
-  z-index: 4000;
+.v-content {
+  padding-bottom: 56px !important;
 }
 
 body.logged-out {

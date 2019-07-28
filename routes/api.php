@@ -87,12 +87,13 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
     Route::put('pokemons/raidbosses', 'PokemonController@updateRaidBosses');
 
+    Route::get('quests/rewards', 'PokemonController@getQuestRewards');
     Route::get('quests', 'PokemonController@getQuests');
     Route::post('quests', 'PokemonController@createQuest');
     Route::get('quests/{quest}', 'PokemonController@getQuest');
     Route::put('quests/{quest}', 'PokemonController@updateQuest');
     Route::delete('quests/{quest}', 'PokemonController@deleteQuest');
-    Route::get('quests/rewards', 'PokemonController@getQuestRewards');
+
 
 });
 

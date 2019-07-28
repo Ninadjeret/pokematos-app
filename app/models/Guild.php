@@ -45,6 +45,10 @@ class Guild extends Model
         'raidreporting_text_active' => false,
         'raidreporting_text_delete' => false,
         'raidreporting_text_prefixes' => '+raid, +Raid',
+
+        'welcome_active' => false,
+        'welcome_message' => 'Bievenue {utilisateur}, nous sommes ravis de te voir ici !',
+        'welcome_channel_discord_id' => false,
     ];
 
     public function getCityAttribute() {

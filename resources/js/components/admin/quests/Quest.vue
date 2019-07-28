@@ -88,8 +88,11 @@
                 axios.get('/api/quests/'+this.$route.params.id).then( res => {
                     this.name = res.data.name;
                     this.reward_type = res.data.reward_type;
-                    this.pokemon = this.convertIdtoObject(res.data.pokemon_id, this.pokemons);
-                    this.reward = this.convertIdtoObject(res.data.reward_id, this.rewards);
+                    if( this.reward_type == 'object' ) {
+                        this.reward = this.convertIdtoObject(res.data.reward_id, this.rewards);
+                    } else {
+                        this.pokemon = this.convertIdtoObject(res.data.pokemon_id, this.pokemons);
+                    }
                 }).catch( err => {
                     //No error
                 });

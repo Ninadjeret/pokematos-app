@@ -16,6 +16,9 @@
 @import 'buttonactions';
 @import 'admin';
 
+html {
+    font-size: 10px !important;
+}
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -130,11 +133,8 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     }
 }
 
-.v-footer {
-    z-index: 4000;
-}
-.v-toolbar {
-    z-index: 4000;
+.v-content {
+    padding-bottom: 56px !important;
 }
 
 body.logged-out {

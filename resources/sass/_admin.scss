@@ -9,6 +9,9 @@
 
 .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
     background-color: $primary !important;
+    &:hover {
+        text-decoration: none;
+    }
 }
 
 .v-list__tile__title {
