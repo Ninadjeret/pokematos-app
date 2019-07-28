@@ -17,17 +17,19 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('slug');
-            $table->float('lat', 10, 6)->nullable();
-            $table->float('lng', 10, 6)->nullable();
+            $table->float('lat', 10, 6)->default(48.045741);
+            $table->float('lng', 10, 6)->default(-1.6082411);
             $table->timestamps();
         });
 
         Schema::create('guilds', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('discord_id')->unique();
-            $table->string('name');
-            $table->string('type');
-            $table->integer('city_id');
+            $table->bigInteger('discord_id')->unique()->nullable();
+            $table->string('name')->nullable();
+            $table->string('type')->default('discord');
+            $table->integer('city_id')->nullable();
+            $table->string('token')->nullable();
+            $table->boolean('active')->default(0);
             $table->timestamps();
 
             $table->foreign('city_id')->references('id')->on('cities');
@@ -100,7 +102,8 @@ class CreateCitiesTable extends Migration
             $table->integer('user_id');
             $table->string('url')->nullable();
             $table->text('content')->nullable();
-            $table->integer('message_id')->nullable();
+            $table->integer('message_discord_id')->nullable();
+            $table->integer('channel_discord_id')->nullable();
             $table->integer('guild_id')->nullable();
             $table->boolean('confirmed')->default(true);
             $table->timestamps();
@@ -204,7 +207,7 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->bigInteger('discord_id');
             $table->integer('guild_id');
-            $table->integer('category_id');
+            $table->integer('category_id')->nullable();
             $table->string('name');
             $table->string('type')->nullable();
             $table->integer('gym_id')->nullable();
@@ -247,7 +250,7 @@ class CreateCitiesTable extends Migration
         Schema::create('quest_rewards', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('alternative_name');
+            $table->string('type');
             $table->timestamps();
         });
 
@@ -306,6 +309,7 @@ class CreateCitiesTable extends Migration
             $table->foreign('quest_instance_id')->references('id')->on('quest_instances');
             $table->foreign('guild_id')->references('id')->on('guilds');
         });
+
     }
 
     /**

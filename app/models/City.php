@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class City extends Model {
 
+    protected $fillable = [
+        'name',
+        'slug',
+        'lat',
+        'lng',
+    ];
+
     public function getGuildsIds() {
         $return = [];
         $guilds = Guild::where('city_id', $this->id)

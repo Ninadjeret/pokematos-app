@@ -1,21 +1,36 @@
-.v-toolbar__title {
-    font-family: "Teko";
-    color: #fff;
-    font-size: 25px;
-    img {
-        height: 54px;
+#app__container {
+    .v-toolbar__title {
+        font-family: "Teko";
+        color: #fff;
+        font-size: 25px;
+        img {
+            height: 54px;
+        }
+        small {
+            font-family: 'Roboto';
+            font-style: italic;
+            font-size: 16px;
+            color: rgba(255,255,255,0.6);
+        }
     }
-    small {
-        font-family: 'Roboto';
-        font-style: italic;
-        font-size: 16px;
-        color: rgba(255,255,255,0.6);
+    .template-map .v-toolbar__title:not(:first-child){
+        margin-left: 0;
     }
-}
-.template-map .v-toolbar__title:not(:first-child){
-    margin-left: 0;
-}
-.theme--dark.v-toolbar {
-    background-color: $primary;
-    color: #fff;
+    .theme--dark.v-toolbar {
+        background-color: $primary;
+        color: #fff;
+    }
+    .theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+        background: none;
+    }
+    .v-toolbar__content>.v-btn.v-btn--icon:first-child+.v-toolbar__title, .v-toolbar__extension>.v-btn.v-btn--icon:first-child+.v-toolbar__title {
+        margin-left: 0;
+        padding-left: 0;
+    }
+    nav.v-toolbar {
+        z-index: 1500;
+    }
+    .v-footer {
+        z-index: 1499;
+    }
 }

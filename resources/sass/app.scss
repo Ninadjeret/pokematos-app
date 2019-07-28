@@ -16,6 +16,9 @@
 @import 'buttonactions';
 @import 'admin';
 
+html {
+    font-size: 10px !important;
+}
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -130,11 +133,8 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     }
 }
 
-.v-footer {
-    z-index: 4000;
-}
-.v-toolbar {
-    z-index: 4000;
+.v-content {
+    padding-bottom: 56px !important;
 }
 
 body.logged-out {
@@ -281,9 +281,9 @@ body.logged-out .branding a.minor {
 }
 .setting__desc {
     color: #bbb;
-    font-size: 1.4rem;
+    font-size: 1rem;
     margin: 0;
-    line-height: 1.7rem;
+    line-height: 1.3rem;
 }
 .setting__wrapper > a {
     padding: 10px 0;
@@ -462,7 +462,8 @@ range_button:active {
     background: #fafafa;
     /*padding: 10px 15px !important;*/
     font-family: "Teko";
-    font-size: 20px;
+    font-size: 20px !important;
+    color:#212529 !important;
 }
 .theme--light.v-label.v-label--active {
     color: $primary;
@@ -501,6 +502,7 @@ range_button:active {
 
 .donation {
     padding: 10px 15px;
+    font-size: 1rem;
     .v-progress-linear__background,
     .v-progress-linear__bar__determinate {
         border-radius: 50px;
@@ -514,4 +516,11 @@ range_button:active {
             color: $primary;
         }
     }
+}
+
+.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+    background: none !important;
+}
+.v-btn:before {
+    background-color: inherit;
 }

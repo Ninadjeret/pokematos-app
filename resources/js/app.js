@@ -11,6 +11,7 @@ window.Vue = require('vue');
 import "leaflet/dist/leaflet.css"
 import 'es6-promise/auto'
 
+import Vue from 'vue'
 import Vuetify from 'vuetify';
 import fr from '../lang/fr/vuetify';
 import VModal from 'vue-js-modal'
@@ -19,9 +20,9 @@ import VueRouter from 'vue-router';
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import Vuex from 'vuex'
 import appStore from './store/store';
-import Vue from 'vue'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
+import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuex)
 Vue.use(Vuetify, {

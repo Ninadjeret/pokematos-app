@@ -87,29 +87,37 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
     Route::put('pokemons/raidbosses', 'PokemonController@updateRaidBosses');
 
+    Route::get('quests/rewards', 'PokemonController@getQuestRewards');
     Route::get('quests', 'PokemonController@getQuests');
     Route::post('quests', 'PokemonController@createQuest');
     Route::get('quests/{quest}', 'PokemonController@getQuest');
     Route::put('quests/{quest}', 'PokemonController@updateQuest');
     Route::delete('quests/{quest}', 'PokemonController@deleteQuest');
 
+
 });
 
-Route::get('bot/raids/add', 'BotController@addRaid');
+Route::group(['middleware' => ['auth.bot']], function () {
 
-Route::get('bot/roles', 'BotController@getRoles');
-Route::post('bot/roles', 'BotController@createRole');
-Route::delete('bot/roles/{role}', 'BotController@deleteRole');
-Route::get('bot/roles/{role}', 'BotController@getRole');
-Route::put('bot/roles/{role}', 'BotController@updateRole');
+    Route::post('bot/guilds', 'BotController@addGuild');
 
-Route::get('bot/rolecategories', 'BotController@getRoleCategories');
-Route::post('bot/rolecategories', 'BotController@createRoleCategory');
-Route::get('bot/rolecategories/{categorie}', 'BotController@getRoleCategory');
-Route::delete('bot/rolecategories/{categorie}', 'deleteRoleCategory@getRoleCategory');
+    Route::get('bot/raids/add', 'BotController@addRaid');
 
-Route::get('bot/rolecategories/{categorie}/permissions', 'BotController@getRoleCategoryPermissions');
-Route::post('bot/rolecategories/{categorie}/permissions', 'BotController@createRoleCategoryPermission');
-Route::get('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@getRoleCategoryPermission');
-Route::put('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@updateRoleCategoryPermission');
-Route::delete('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@deleteRoleCategoryPermission');
+    Route::get('bot/roles', 'BotController@getRoles');
+    Route::post('bot/roles', 'BotController@createRole');
+    Route::delete('bot/roles/{role}', 'BotController@deleteRole');
+    Route::get('bot/roles/{role}', 'BotController@getRole');
+    Route::put('bot/roles/{role}', 'BotController@updateRole');
+
+    Route::get('bot/rolecategories', 'BotController@getRoleCategories');
+    Route::post('bot/rolecategories', 'BotController@createRoleCategory');
+    Route::get('bot/rolecategories/{categorie}', 'BotController@getRoleCategory');
+    Route::delete('bot/rolecategories/{categorie}', 'deleteRoleCategory@getRoleCategory');
+
+    Route::get('bot/rolecategories/{categorie}/permissions', 'BotController@getRoleCategoryPermissions');
+    Route::post('bot/rolecategories/{categorie}/permissions', 'BotController@createRoleCategoryPermission');
+    Route::get('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@getRoleCategoryPermission');
+    Route::put('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@updateRoleCategoryPermission');
+    Route::delete('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@deleteRoleCategoryPermission');
+
+});

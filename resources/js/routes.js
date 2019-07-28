@@ -7,6 +7,7 @@ import AdminGym from './components/admin/Gym.vue'
 import AdminZones from './components/admin/Zones.vue'
 import AdminZone from './components/admin/Zone.vue'
 import AdminAccess from './components/admin/Acces.vue'
+import AdminWelcome from './components/admin/Welcome.vue'
 import AdminBosses from './components/admin/Bosses.vue'
 import AdminRaidsEx from './components/admin/RaidsEx.vue'
 import AdminRolesHome from './components/admin/RolesHome.vue'
@@ -68,6 +69,15 @@ const routes = [
                      },
                      component: AdminAccess
                 },
+                {
+                      path: ':id/welcome',
+                      name: 'admin.welcome',
+                      meta: {
+                          title: 'Message de bienvenue',
+                          parent: 'admin'
+                      },
+                      component: AdminWelcome
+                 },
                 {
                       path: ':id/roles',
                       name: 'admin.roles',

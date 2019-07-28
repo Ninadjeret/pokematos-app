@@ -13,6 +13,17 @@
                     <v-btn value="pokemon">Pokémon</v-btn>
                 </v-btn-toggle>
             </div>
+            <div v-if="reward_type == 'object'" class="setting">
+                <label>Pokémon</label>
+                <multiselect
+                    v-model="reward"
+                    :options="rewards"
+                    track-by="id"
+                    label="name"
+                    :multiple="false"
+                    placeholder="Choisir un objet">
+                </multiselect>
+            </div>
             <div v-if="reward_type == 'pokemon'" class="setting">
                 <label>Pokémon</label>
                 <multiselect
@@ -59,12 +70,15 @@
                 dialog: false,
                 name: '',
                 reward_type: 'object',
-                pokemon: null,
+                reward: false,
+                pokemon: false,
                 pokemons: [],
+                rewards: [],
             }
         },
         created() {
             this.fetchPokemons();
+            this.fetchRewards();
             if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
                 this.fetch();
             }
@@ -74,7 +88,11 @@
                 axios.get('/api/quests/'+this.$route.params.id).then( res => {
                     this.name = res.data.name;
                     this.reward_type = res.data.reward_type;
-                    this.pokemon = this.convertIdtoObject(res.data.pokemon_id, this.pokemons);
+                    if( this.reward_type == 'object' ) {
+                        this.reward = this.convertIdtoObject(res.data.reward_id, this.rewards);
+                    } else {
+                        this.pokemon = this.convertIdtoObject(res.data.pokemon_id, this.pokemons);
+                    }
                 }).catch( err => {
                     //No error
                 });
@@ -84,11 +102,17 @@
                     this.pokemons = res.data;
                 });
             },
+            fetchRewards() {
+                axios.get('/api/quests/rewards').then( res => {
+                    this.rewards = res.data;
+                });
+            },
             submit() {
                 const args = {
                     name: this.name,
                     reward_type: this.reward_type,
-                    pokemon_id: this.pokemon.id,
+                    pokemon_id: ( this.pokemon ) ? this.pokemon.id : null ,
+                    reward_id: ( this.reward ) ? this.reward.id : null ,
                 };
                 if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
                     this.save(args);

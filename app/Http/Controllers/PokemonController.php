@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quest;
 use App\Models\Pokemon;
+use App\Models\QuestReward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -128,6 +129,10 @@ class PokemonController extends Controller {
         return response()->json($pokemons, 200);
     }
 
+    public function getQuestRewards( Request $request ) {
+        return response()->json(QuestReward::all(), 200);
+    }
+
     public function getQuests( Request $request ) {
         $quests = Quest::orderBy('name', 'asc')->get();
         return response()->json($quests, 200);
@@ -137,7 +142,8 @@ class PokemonController extends Controller {
         $connector = Quest::create([
             'name' => $request->name,
             'reward_type' => $request->reward_type,
-            'pokemon_id' => $request->pokemon_id,
+            'pokemon_id' => ($request->pokemon_id) ? $request->pokemon_id : null,
+            'reward_id' => ($request->reward_id) ? $request->reward_id : null,
         ]);
         return response()->json($connector, 200);
     }
@@ -151,6 +157,7 @@ class PokemonController extends Controller {
             'name' => ($request->name) ? $request->name : $quest->name,
             'reward_type' => ($request->reward_type) ? $request->reward_type : $quest->reward_type,
             'pokemon_id' => ($request->pokemon_id) ? $request->pokemon_id : null,
+            'reward_id' => ($request->reward_id) ? $request->reward_id : null,
         ]);
         return response()->json($quest, 200);
     }

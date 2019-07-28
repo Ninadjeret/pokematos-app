@@ -13,8 +13,58 @@ use Illuminate\Http\Request;
 use App\RaidAnalyzer\TextAnalyzer;
 use App\RaidAnalyzer\ImageAnalyzer;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class BotController extends Controller {
+
+    /**
+    * ==================================================================
+    * GESTION DES GUILDS
+    * ==================================================================
+    */
+
+    public function addGuild( Request $request ) {
+
+        if( !isset($request->guild_id) || empty($request->guild_id) || !isset($request->name) || empty($request->name) ) {
+            return response()->json('Paramètres manquants', 400);
+        }
+
+        $token = $request->guild_token;
+        $guild = Guild::where('token', $token)
+            ->where('active', 0)
+            ->first();
+
+        if( $guild ) {
+            $guild->update([
+                'name' => $request->name,
+                'discord_id' => $request->guild_id,
+                //'active' => 1,
+            ]);
+
+            $roles_to_add = $guild->getDiscordRoles();
+            Log::debug( print_r($roles_to_add, true) );
+            if( !empty( $roles_to_add ) ) {
+                foreach( $roles_to_add as $role_to_add ) {
+                    Role::create([
+                        'discord_id' => $role_to_add->id,
+                        'guild_id' => $guild->id,
+                        'name' => $role_to_add->name,
+                    ]);
+                }
+            }
+
+            return response()->json($guild, 200);
+
+        }
+
+        return response()->json('Aucune guild en attente de création avec ce token', 400);
+    }
+
+    /**
+    * ==================================================================
+    * GESTION DES ROLES
+    * ==================================================================
+    */
 
     /**
      * [getRoles description]
@@ -225,6 +275,8 @@ class BotController extends Controller {
         $username = $request->user_name;
         $userDiscordId = $request->user_discord_id;
         $guild_discord_id = $request->guild_discord_id;
+        $message_discord_id = $request->message_discord_id;
+        $channel_discord_id = $request->channel_discord_id;
 
         if( empty( $guild_discord_id ) ) {
             return response()->json('L\'ID de Guild est obligatoire', 400);
@@ -258,6 +310,9 @@ class BotController extends Controller {
             $args['city_id'] = $city->id;
             $args['user_id'] = $user->id;
             $args['gym_id'] = $result->gym->id;
+            $args['message_discord_id'] = $message_discord_id;
+            $args['channel_discord_id'] = $channel_discord_id;
+            $args['guild_id'] = $guild->id;
             if( isset( $result->pokemon->id ) ) $args['pokemon_id'] = $result->pokemon->id;
             if( isset( $result->eggLevel ) ) $args['egg_level'] = $result->eggLevel;
             if( isset( $result->date ) ) $args['start_time'] = $result->date;

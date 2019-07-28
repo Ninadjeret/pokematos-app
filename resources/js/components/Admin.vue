@@ -100,6 +100,11 @@
                         icon: 'alternate_email'
                     },
                     {
+                        label: 'Message de bienvenue',
+                        route: 'admin.welcome',
+                        icon: 'insert_comment'
+                    },
+                    {
                         label: 'Droits d\'accès',
                         route: 'admin.access',
                         icon: 'lock_open'

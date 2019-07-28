@@ -57,6 +57,7 @@ class PokemonsTableSeeder extends Seeder {
                     'name'  => 'Pokématos',
                     'type'  => 'discord',
                     'city_id'  => 1,
+                    'active' => 1
                 ],
                 /*[
                     'discord_id' => '400277491941638147',
@@ -78,6 +79,51 @@ class PokemonsTableSeeder extends Seeder {
                 [
                     'name'  => 'Centre ville',
                     'city_id'  => 2,
+                ],
+            ]);
+        } // end check if table users is empty
+
+        if(DB::table('quest_rewards')->get()->count() == 0){
+            DB::table('quest_rewards')->insert([
+                [
+                    'name'  => '1 super bonbon',
+                    'type'  => 'candy',
+                ],
+                [
+                    'name'  => '3 super bonbons',
+                    'type'  => 'candy',
+                ],
+                [
+                    'name'  => '5 super bonbons',
+                    'type'  => 'candy',
+                ],
+                [
+                    'name'  => '200 poussières étoile',
+                    'type'  => 'stardust',
+                ],
+                [
+                    'name'  => '500 poussières étoile',
+                    'type'  => 'stardust',
+                ],
+                [
+                    'name'  => '1000 poussières étoile',
+                    'type'  => 'stardust',
+                ],
+                [
+                    'name'  => '3 Pokéballs',
+                    'type'  => 'pokeball',
+                ],
+                [
+                    'name'  => '5 Pokéballs',
+                    'type'  => 'pokeball',
+                ],
+                [
+                    'name'  => '10 Pokéballs',
+                    'type'  => 'pokeball',
+                ],
+                [
+                    'name'  => '2 Superballs',
+                    'type'  => 'superball',
                 ],
             ]);
         } // end check if table users is empty

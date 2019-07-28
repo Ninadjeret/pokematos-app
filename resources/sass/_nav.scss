@@ -1,9 +1,15 @@
-.v-bottom-nav {
+footer .theme--light.v-bottom-nav {
     z-index: 5000;
+    .v-btn:not(.v-btn--active){
+        color: $secondary !important;
+    }
     a.v-btn:hover {
         text-decoration: none;
     }
     a.v-btn--active {
         color: $primary;
+        .v-btn__content {
+            font-size: inherit 12px;
+        }
     }
 }
