@@ -120,10 +120,13 @@
                 }
 
                 if( gym.quest ) {
-                    console.log(gym);
                     if( gym.quest.quest.pokemon ) {
                         var imgclassname = 'map-marker__img quest';
                         url = 'https://assets.profchen.fr/img/map/map_marker_quest_pokemon_'+gym.quest.quest.pokemon.pokedex_id+'_'+gym.quest.quest.pokemon.form_id+'.png';
+                    }
+                    if( gym.quest.quest.reward ) {
+                        var imgclassname = 'map-marker__img quest';
+                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_reward_'+gym.quest.quest.type+'.png';
                     }
                 }
 

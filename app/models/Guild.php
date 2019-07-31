@@ -25,30 +25,30 @@ class Guild extends Model
     ];
 
     protected $allowedSettings = [
-        'map_access_rule' => 'everyone',
-        'map_access_roles' => [],
-        'map_access_admin_roles' => [],
-        'map_access_moderation_roles' => [],
+        'map_access_rule' => ['default' => 'everyone', 'type' => 'string'],
+        'map_access_roles' => ['default' => [], 'type' => 'array'],
+        'map_access_admin_roles' => ['default' => [], 'type' => 'array'],
+        'map_access_moderation_roles' => ['default' => [], 'type' => 'array'],
 
-        'roles_gym_color' => '#009688',
-        'roles_gymex_color' => '#E91E63',
-        'roles_zone_color' => '#2196F3',
-        'roles_pokemon_color' => '#4CAF50',
+        'roles_gym_color' => ['default' => '#009688', 'type' => 'string'],
+        'roles_gymex_color' => ['default' => '#E91E63', 'type' => 'string'],
+        'roles_zone_color' => ['default' => '#2196F3', 'type' => 'string'],
+        'roles_pokemon_color' => ['default' => '#4CAF50', 'type' => 'string'],
 
-        'raidsex_active' => false,
-        'raidsex_channels' => false,
-        'raidsex_channel_category_id' => '',
-        'raidsex_access' => 'everyone',
+        'raidsex_active' => ['default' => false, 'type' => 'boolean'],
+        'raidsex_channels' => ['default' => false, 'type' => 'boolean'],
+        'raidsex_channel_category_id' => ['default' => '', 'type' => 'string'],
+        'raidsex_access' => ['default' => 'everyone', 'type' => 'string'],
 
-        'raidreporting_images_active' => false,
-        'raidreporting_images_delete' => false,
-        'raidreporting_text_active' => false,
-        'raidreporting_text_delete' => false,
-        'raidreporting_text_prefixes' => '+raid, +Raid',
+        'raidreporting_images_active' => ['default' => false, 'type' => 'boolean'],
+        'raidreporting_images_delete' => ['default' => false, 'type' => 'boolean'],
+        'raidreporting_text_active' => ['default' => false, 'type' => 'boolean'],
+        'raidreporting_text_delete' => ['default' => false, 'type' => 'boolean'],
+        'raidreporting_text_prefixes' => ['default' => '+raid, +Raid', 'type' => 'string'],
 
-        'welcome_active' => false,
-        'welcome_message' => 'Bievenue {utilisateur}, nous sommes ravis de te voir ici !',
-        'welcome_channel_discord_id' => false,
+        'welcome_active' => ['default' => false, 'type' => 'boolean'],
+        'welcome_message' => ['default' => 'Bievenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],
+        'welcome_channel_discord_id' => ['default' => false, 'type' => 'boolean'],
     ];
 
     public function getCityAttribute() {
@@ -59,13 +59,23 @@ class Guild extends Model
         $return = [];
         $settings = GuildSetting::where('guild_id', $this->id)->get();
 
-        foreach( $this->allowedSettings as $settingKey => $value ) {
+        foreach( $this->allowedSettings as $settingKey => $setting_data ) {
+            $return[$settingKey] = $setting_data['default'];
             if( $settings ) {
                 foreach( $settings as $setting ) {
-                    if($setting->key == $settingKey) $value = ( json_decode($setting->value) ) ? json_decode($setting->value) : $setting->value ;
+                    if($setting->key == $settingKey) {
+                        switch($setting_data['type']) {
+                            case 'string':
+                                $return[$settingKey] = $setting->value;
+                                break;
+                            case 'boolean':
+                                $return[$settingKey] = (boolean) $setting->value;
+                            case 'array':
+                                $return[$settingKey] = json_decode($setting->value);
+                        }
+                    }
                 }
             }
-            $return[$settingKey] = (is_array($value)) ? $value : (string) $value;
         }
         return (object) $return;
     }

@@ -15,6 +15,9 @@
                 <v-avatar v-if="quest.pokemon">
                     <img :src="quest.pokemon.thumbnail_url">
                 </v-avatar>
+                <v-avatar v-if="quest.reward">
+                    <img :src="quest.reward.thumbnail_url">
+                </v-avatar>
               </v-list-tile>
               <v-divider></v-divider>
             </template>
