@@ -54,6 +54,9 @@ class GameMasterUpdate extends Command
         foreach( $game_master as $game_master_2 ) {
             if( is_array($game_master_2) ) { foreach( $game_master_2 as $node ) {
             if( !isset($node->pokemonSettings) || empty($node->pokemonSettings) ) continue;
+            if( strstr($node->templateId, '_NORMAL') ) continue;
+            if( strstr($node->templateId, '_PURIFIED') ) continue;
+            if( strstr($node->templateId, '_SHADOW') ) continue;
 
             $pokedex_id = substr($node->templateId, 2, 3);
             $name_ocr = ( isset($names_fr[(int)$pokedex_id]) ) ? $names_fr[(int)$pokedex_id - 1] : null;
