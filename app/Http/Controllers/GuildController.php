@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\models\Guild;
+use App\Models\Guild;
 use App\User;
 
 class GuildController extends Controller {

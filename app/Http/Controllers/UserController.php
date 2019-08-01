@@ -90,7 +90,6 @@ class UserController extends Controller {
            'name' => ( isset( $request->name ) ) ? $request->name : '' ,
            'guild_id' => $guild->id,
            'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : '' ,
-           'publish' => ( isset( $request->publish ) ) ? $request->publish : '' ,
            'filter_gym_type' => ( isset( $request->filter_gym_type ) ) ? $request->filter_gym_type : '' ,
            'filter_gym_zone' => ( isset( $request->filter_gym_zone ) ) ? $request->filter_gym_zone : '' ,
            'filter_gym_gym' => ( isset( $request->filter_gym_gym ) ) ? $request->filter_gym_gym : '' ,
@@ -108,7 +107,6 @@ class UserController extends Controller {
        $connector->update([
            'name' => ( isset( $request->name ) ) ? $request->name : $connector->name ,
            'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : $connector->channel_discord_id ,
-           'publish' => ( isset( $request->publish ) ) ? $request->publish : $connector->publish ,
            'filter_gym_type' => ( isset( $request->filter_gym_type ) ) ? $request->filter_gym_type : $connector->filter_gym_type ,
            'filter_gym_zone' => ( isset( $request->filter_gym_zone ) ) ? $request->filter_gym_zone : $connector->filter_gym_zone ,
            'filter_gym_gym' => ( isset( $request->filter_gym_gym ) ) ? $request->filter_gym_gym : $connector->filter_gym_gym ,

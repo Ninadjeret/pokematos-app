@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\models\City;
-use App\models\Role;
-use App\models\Raid;
-use App\models\Guild;
+use App\Models\City;
+use App\Models\Role;
+use App\Models\Raid;
+use App\Models\Guild;
 use RestCord\DiscordClient;
-use App\models\RoleCategory;
+use App\Models\RoleCategory;
 use Illuminate\Http\Request;
 use App\RaidAnalyzer\TextAnalyzer;
 use App\RaidAnalyzer\ImageAnalyzer;

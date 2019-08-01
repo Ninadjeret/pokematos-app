@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use App\models\Raid;
+use App\Models\Raid;
 
 class AppServiceProvider extends ServiceProvider
 {

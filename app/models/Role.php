@@ -1,11 +1,11 @@
 <?php
 
-namespace App\models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\models\Guild;
-use App\models\Stop;
-use App\models\RoleCategory;
+use App\Models\Guild;
+use App\Models\Stop;
+use App\Models\RoleCategory;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
 

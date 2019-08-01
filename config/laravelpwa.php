@@ -6,8 +6,8 @@ return [
         'name' => env('APP_NAME', 'Pokématos'),
         'short_name' => 'Pokématos',
         'start_url' => '/',
-        'background_color' => '$primary',
-        'theme_color' => '$primary',
+        'background_color' => '#5a6cae',
+        'theme_color' => '#5a6cae',
         'display' => 'standalone',
         'orientation'=> 'portrait',
         'icons' => [
