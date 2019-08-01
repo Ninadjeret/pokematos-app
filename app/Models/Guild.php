@@ -1,6 +1,6 @@
 <?php
 
-namespace App\models;
+namespace App\Models;
 
 use App\Models\City;
 use RestCord\DiscordClient;
@@ -48,7 +48,7 @@ class Guild extends Model
 
         'welcome_active' => ['default' => false, 'type' => 'boolean'],
         'welcome_message' => ['default' => 'Bievenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],
-        'welcome_channel_discord_id' => ['default' => false, 'type' => 'boolean'],
+        'welcome_channel_discord_id' => ['default' => false, 'type' => 'string'],
     ];
 
     public function getCityAttribute() {
@@ -68,6 +68,9 @@ class Guild extends Model
                             case 'string':
                                 $return[$settingKey] = $setting->value;
                                 break;
+                                case 'integer':
+                                    $return[$settingKey] = (int) $setting->value;
+                                    break;
                             case 'boolean':
                                 $return[$settingKey] = (boolean) $setting->value;
                             case 'array':

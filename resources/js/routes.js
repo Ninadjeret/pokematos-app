@@ -1,6 +1,6 @@
 import Map from './components/Map.vue'
 import List from './components/List.vue'
-import Settings from './components/Settings.vue'
+import Profile from './components/Profile.vue'
 import Admin from './components/Admin.vue'
 import AdminGyms from './components/admin/Gyms.vue'
 import AdminGym from './components/admin/Gym.vue'
@@ -45,12 +45,12 @@ const routes = [
          component: List
       },
       {
-          path: '/settings',
-          name: 'settings',
+          path: '/profile',
+          name: 'profile',
           meta: {
-              title: 'Réglages'
+              title: 'Profil'
           },
-          component: Settings
+          component: Profile
        },
        {
            path: '/admin',

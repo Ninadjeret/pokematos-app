@@ -106,6 +106,7 @@
                         auth = true;
                     }
                 }
+
                 if( !auth ) {
                     return false;
                 }
@@ -170,27 +171,23 @@
                     zindex = gym.raid.egg_level * 100;
                 }
 
-
-
                 if( gym.lat == null || gym.lng == null ) {
                     return false;
                 }
 
-                if( this.$store.getters.getSetting('hideGyms') === false || gym.raid !== false ) {
-                    var mapMarker = L.marker([gym.lat, gym.lng], {
-                        icon: new L.DivIcon({
-                            className: 'map-marker__wrapper',
-                            html: html,
-                            iconAnchor: [17, 35],
-                        }),
-                        zIndexOffset: zindex,
-                    }).addTo(this.$refs.map.mapObject).on('click', function(e){
-                        that2.showModal( e.target.gym );
-                    });
-                    mapMarker.gym = gym;
-                    this.markers.push(mapMarker);
-                }
 
+                var mapMarker = L.marker([gym.lat, gym.lng], {
+                    icon: new L.DivIcon({
+                        className: 'map-marker__wrapper',
+                        html: html,
+                        iconAnchor: [17, 35],
+                    }),
+                    zIndexOffset: zindex,
+                }).addTo(this.$refs.map.mapObject).on('click', function(e){
+                    that2.showModal( e.target.gym );
+                });
+                mapMarker.gym = gym;
+                this.markers.push(mapMarker);
             },
             localize() {
                 console.log('localize');

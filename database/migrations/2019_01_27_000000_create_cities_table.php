@@ -155,7 +155,6 @@ class CreateCitiesTable extends Migration
         Schema::create('connectors', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->boolean('publish')->default(false);
             $table->string('filter_pokemon_type')->default('none'); //none, level, pokemon
             $table->json('filter_pokemon_level')->nullable();
             $table->json('filter_pokemon_pokemon')->nullable();

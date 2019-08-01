@@ -32,5 +32,16 @@
     }
     .v-footer {
         z-index: 1499;
+        .v-item-group {
+            border-radius: 0px !important;
+        }
+        .v-btn:first-child {
+            border-bottom-left-radius: 0px !important;
+            border-top-left-radius: 0px !important;
+        }
+        .v-btn:last-child {
+            border-bottom-right-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
     }
 }

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\models\City;
-use App\models\Zone;
-use App\models\Stop;
-use App\models\Role;
+use App\Models\City;
+use App\Models\Zone;
+use App\Models\Stop;
+use App\Models\Role;
 use App\User;
 
 class CityController extends Controller {

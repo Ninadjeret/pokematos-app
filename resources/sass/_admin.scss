@@ -122,6 +122,18 @@
         .v-input__slot {
             margin-bottom: 0;
         }
+        .v-input {
+            flex: 0 0 0px !important;
+        }
+        .v-input--selection-controls {
+            margin-top: 0;
+        }
+        .v-input--selection-controls:not(.v-input--hide-details) .v-input__slot {
+            margin-bottom: 0;
+        }
+        .v-messages {
+            display: none;
+        }
     }
 
 }
@@ -183,5 +195,25 @@
         .theme--dark.v-btn {
             color: $grey;
         }
+    }
+}
+.v-item-group {
+    border-radius: 50px !important;
+    .theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+        background: #eee !important;
+    }
+    .v-btn--active.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+        background: $primary !important;
+    }
+    .v-btn:first-child {
+        border-bottom-left-radius: 50px !important;
+        border-top-left-radius: 50px !important;
+    }
+    .v-btn:last-child {
+        border-bottom-right-radius: 50px !important;
+        border-top-right-radius: 50px !important;
+    }
+    .v-btn__content {
+        font-size: 11px;
     }
 }

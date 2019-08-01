@@ -50,7 +50,7 @@ const store = new Vuex.Store({
             });
         },
         fetchPokemon( state ) {
-            axios.get('/api/pokemons/raidbosses').then( res => {
+            axios.get('/api/pokemons').then( res => {
                 state.pokemons = res.data;
                 localStorage.setItem('pokematos_pokemons', JSON.stringify(state.pokemons));
             }).catch( err => {
@@ -139,6 +139,12 @@ const store = new Vuex.Store({
                     var startTime = moment(gym.raid.start_time, '"YYYY-MM-DD HH:mm:ss"');
                 }
                 return gym.raid && startTime.isAfter(now);
+            });
+        },
+        getRaidBosses:state => {
+            if( !state.pokemons || state.pokemons.length === 0 ) return [];
+            return state.pokemons.filter((pokemon) => {
+                return pokemon.boss == true && pokemon.boss_level >= 0 && pokemon.boss_level <= 5;
             });
         },
         getSetting: state => (setting) => {

@@ -27,9 +27,9 @@ export default {
                     icon: 'notifications_active'
                 },
                 {
-                    text: 'Réglages',
-                    url: '/settings',
-                    icon: 'settings'
+                    text: 'Profil',
+                    url: '/profile',
+                    icon: 'person'
                 },
             ]
         }

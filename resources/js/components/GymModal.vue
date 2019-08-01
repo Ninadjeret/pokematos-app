@@ -15,8 +15,8 @@
                         <span v-if="gym.quest" class="annonce">Quête <strong>{{gym.quest.quest.name}}</strong> en cours</span>
                     </p>
                     <img v-if="!gym.quest" src="https://assets.profchen.fr/img/app/egg_0.png">
-                    <img v-if="gym.quest.quest.pokemon" :src="gym.quest.quest.pokemon.thumbnail_url">
-                    <img v-if="gym.quest.quest.reward" :src="gym.quest.quest.reward.thumbnail_url">
+                    <img v-if="gym.quest && gym.quest.quest.pokemon" :src="gym.quest.quest.pokemon.thumbnail_url">
+                    <img v-if="gym.quest && gym.quest.quest.reward" :src="gym.quest.quest.reward.thumbnail_url">
                 </div>
                 <div v-if="gym.gym" :class="'dialog__egg '+raidStatus">
                     <p>
@@ -213,7 +213,7 @@ export default {
     },
     computed: {
         pokemons() {
-            return this.$store.state.pokemons;
+            return this.$store.getters.getRaidBosses;
         },
         user() {
             return this.$store.state.user;

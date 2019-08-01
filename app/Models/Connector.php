@@ -1,6 +1,6 @@
 <?php
 
-namespace App\models;
+namespace App\Models;
 
 use RestCord\DiscordClient;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +11,6 @@ class Connector extends Model {
         'guild_id',
         'name',
         'channel_discord_id',
-        'publish',
         'filter_gym_type',
         'filter_pokemon_type',
         'filter_gym_zone',

@@ -13,20 +13,6 @@
                 </div>
             </div>
     </div>
-    <div class="settings-section map">
-        <div class="section__title">Map</div>
-            <div class="settings-section__wrapper">
-                        <div class="setting__wrapper toggle">
-                <div class="setting_label">
-                    <p class="setting__titre">Masquer les arênes vides</p>
-                    <p class="setting__desc">N'afficher sur la carte que les arênes avec un raid en cours ou à venir</p>
-                </div>
-                <div class="setting__value">
-                    <v-switch v-model="settingsHideGyms"></v-switch>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="settings-section help">
         <div class="section__title">Assistance</div>
         <div class="settings-section__wrapper">
@@ -34,7 +20,7 @@
                 <a href="https://www.profchen.fr/settings/policy/" class="setting-link">Politique de confidentialité</a>
             </div>
             <div class="setting__wrapper">
-                <a href="https://www.profchen.fr/loading/" class="setting-link">Re-télécharger les données</a>
+                <a href="https://www.pokematos.fr/documentation" class="setting-link">Documentation</a>
             </div>
         </div>
     </div>
@@ -56,8 +42,8 @@
         <div class="section__title">A propos</div>
 
         <p class="credit">
-            Prof Chen map, créé pour vous avec <i class="material-icons">favorite</i><br>
-            Version <span id="version">1.4.12</span>
+            Pokématos, créé pour vous avec <i class="material-icons">favorite</i><br>
+            Version <span id="version">2.0.0</span>
         </p>
     </div>
 </div>
@@ -65,7 +51,7 @@
 
 <script>
     export default {
-        name: 'Settings',
+        name: 'Profile',
         data() {
             return {
                 totalCouts: 33,
