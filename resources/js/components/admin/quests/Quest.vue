@@ -79,9 +79,6 @@
         created() {
             this.fetchPokemons();
             this.fetchRewards();
-            if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
-                this.fetch();
-            }
         },
         methods: {
             fetch() {
@@ -100,6 +97,9 @@
             fetchPokemons() {
                 axios.get('/api/pokemons').then( res => {
                     this.pokemons = res.data;
+                    if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
+                        this.fetch();
+                    }
                 });
             },
             fetchRewards() {
