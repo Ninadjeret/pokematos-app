@@ -10702,6 +10702,20 @@ a.text-dark:focus {
   z-index: 1499;
 }
 
+#app__container .v-footer .v-item-group {
+  border-radius: 0px !important;
+}
+
+#app__container .v-footer .v-btn:first-child {
+  border-bottom-left-radius: 0px !important;
+  border-top-left-radius: 0px !important;
+}
+
+#app__container .v-footer .v-btn:last-child {
+  border-bottom-right-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+}
+
 footer .theme--light.v-bottom-nav {
   z-index: 5000;
 }
@@ -12010,7 +12024,6 @@ range_button:active {
 
 .donation {
   padding: 10px 15px;
-  font-size: 1rem;
 }
 
 .donation .v-progress-linear__background,

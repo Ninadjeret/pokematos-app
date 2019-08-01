@@ -72,13 +72,19 @@
                 reward_type: 'object',
                 reward: false,
                 pokemon: false,
-                pokemons: [],
                 rewards: [],
             }
         },
         created() {
-            this.fetchPokemons();
             this.fetchRewards();
+            if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
+                this.fetch();
+            }
+        },
+        computed: {
+            pokemons() {
+                return this.$store.state.pokemons;
+            },
         },
         methods: {
             fetch() {
@@ -92,14 +98,6 @@
                     }
                 }).catch( err => {
                     //No error
-                });
-            },
-            fetchPokemons() {
-                axios.get('/api/pokemons').then( res => {
-                    this.pokemons = res.data;
-                    if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
-                        this.fetch();
-                    }
                 });
             },
             fetchRewards() {

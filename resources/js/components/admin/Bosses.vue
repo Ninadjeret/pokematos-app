@@ -230,12 +230,11 @@
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
                 axios.put('/api/pokemons/raidbosses', args).then( res => {
-                    console.log(res.data);
+                    this.$store.commit('fetchPokemon')
                     this.$store.commit('setSnackbar', {
                         message: 'Boss mis à jour',
                         timeout: 1500
                     })
-                    this.$store.commit('setPokemons', res.data)
                     this.loading = false
                 }).catch( err => {
                     this.$store.commit('setSnackbar', {

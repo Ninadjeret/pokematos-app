@@ -36,9 +36,9 @@
                   <v-icon>notifications_active</v-icon>
                 </v-btn>
 
-                <v-btn to="/settings" color="primary" flat value="recent" >
-                  <span>Réglages</span>
-                  <v-icon>settings</v-icon>
+                <v-btn to="/profile" color="primary" flat value="recent" >
+                  <span>Profil</span>
+                  <v-icon>person</v-icon>
                 </v-btn>
 
                 <v-btn v-if="currentCity.admin" to="/admin" color="primary" flat value="recent" >

@@ -159,4 +159,19 @@ class Raid extends Model {
 
     }
 
+    public static function arhiveRaids() {
+        $now = new \DateTime();
+        $now->modify( '- 45 minutes' );
+        $raids_ended = Raid::where('city_id', $city->id)
+            ->where('status', '!=', 'archived')
+            ->where('start_time', '<=', $now->format('Y-m-d H:i:s') )
+            ->get();
+        if( !empty( $raids_ended ) ) {
+            foreach( $raids_ended as $raid ) {
+                $raid->update(['status' => 'archived']);
+                event( new \App\Events\RaidEnded( $raid ) );
+            }
+        }
+    }
+
 }
