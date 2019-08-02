@@ -44,6 +44,10 @@ class User extends Authenticatable
                 'label' => 'Mettre à jour les quêtes',
                 'context' => 'global'
             ],
+            'guild_manage' => [
+                'label' => 'Gérer la guild',
+                'context' => 'guild'
+            ],
         ];
     }
 
