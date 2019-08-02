@@ -18,6 +18,35 @@ class User extends Authenticatable
     protected $hidden = ['password', 'remember_token',];
     protected $appends = ['permissions'];
 
+    public static function getPermissions() {
+        return [
+            'raid_delete' => [
+                'label' => 'Supprimer des raids',
+                'context' => 'city'
+            ],
+            'raidex_add' => [
+                'label' => 'Annoncer des Raids EX',
+                'context' => 'city'
+            ],
+            'poi_edit' => [
+                'label' => 'Gérer les POIs',
+                'context' => 'city'
+            ],
+            'zone_edit' => [
+                'label' => 'Gérer les zones',
+                'context' => 'city'
+            ],
+            'boss_edit' => [
+                'label' => 'Mettre à jour les boss de raid',
+                'context' => 'global'
+            ],
+            'quest_edit' => [
+                'label' => 'Mettre à jour les quêtes',
+                'context' => 'global'
+            ],
+        ];
+    }
+
     public function getGuilds() {
         $guilds = [];
 
@@ -30,7 +59,7 @@ class User extends Authenticatable
         foreach( $userGuilds as $userGuild ) {
             $guild_to_add = Guild::where('id', $userGuild->guild_id)->first();
             if( $guild_to_add ) {
-                $guild_to_add->admin = $userGuild->admin;
+                $guild_to_add->permissions = $userGuild->permissions;
                 $guilds[] = $guild_to_add;
             }
         }
@@ -39,17 +68,81 @@ class User extends Authenticatable
     }
 
     public function getPermissionsAttribute() {
-
-        $raid_ex = false;
+        $permissions = User::getPermissions();
+        $userPermissions = [];
         foreach( $this->getGuilds() as $guild ) {
-            if( $guild->settings->raidsex_active ) $raid_ex = true;
+            switch( $guild->permissions ) {
+                case 30:
+                    $userPermissions[$guild->id] = array_keys($permissions);
+                    break;
+                case 20:
+                    $userPermissions[$guild->id] = array_keys($permissions);
+                    break;
+                case 10:
+                    $userPermissions[$guild->id] = $guild->settings->access_moderation_permissions;
+                    break;
+                case 0:
+                    $userPermissions[$guild->id] = [];
+                    break;
+            }
         }
 
-        return (object) [
-            'city' => (object) [
-                'raidex_create' => $raid_ex,
-            ],
-        ];
+        return $userPermissions;
+    }
+
+    public function can($permission, $context = []) {
+        $permissions = User::getPermissions();
+        $userPermissions = $this->permissions;
+
+        if( !array_key_exists($permission, $permissions) ) {
+            return false;
+        }
+
+        if( empty( $userPermissions ) ) {
+            return false;
+        }
+
+        $permissionContext = $permissions[$permission]['context'];
+        switch( $permissionContext ) {
+            case 'global':
+                foreach( $userPermissions as $guild_id => $guild_permissions ) {
+                    $guild = Guild::find($guild_id);
+                    if( !$guild ) {
+                        continue;
+                    }
+                    if( in_array( $permission, $guild_permissions ) ) {
+                        return true;
+                    }
+                }
+                return false;
+                break;
+            case 'city':
+                foreach( $userPermissions as $guild_id => $guild_permissions ) {
+                    $guild = Guild::find($guild_id);
+                    if( !$guild ) {
+                        continue;
+                    }
+                    if( $guild->city_id == $context['city_id'] && in_array( $permission, $guild_permissions ) ) {
+                        return true;
+                    }
+                }
+                return false;
+                break;
+            case 'guild':
+            foreach( $userPermissions as $guild_id => $guild_permissions ) {
+                $guild = Guild::find($guild_id);
+                if( !$guild ) {
+                    continue;
+                }
+                if( $guild->id == $context['guild_id'] && in_array( $permission, $guild_permissions ) ) {
+                    return true;
+                }
+            }
+            return false;
+            break;
+        }
+
+        return false;
     }
 
     public function getCities() {
@@ -65,7 +158,7 @@ class User extends Authenticatable
                 $city_to_add = City::find($guild->city_id);
                 if( $city_to_add ) {
                     $city_to_add->guilds = [$guild];
-                    $city_to_add->admin = $guild->admin;
+                    $city_to_add->permissions = $guild->permissions;
                     $cities[] = $city_to_add;
                 }
             } else {
@@ -89,7 +182,7 @@ class User extends Authenticatable
                     $finded_guild = UserGuild::create([
                         'guild_id' => $guild['id'],
                         'user_id' => $this->id,
-                        'admin' => $guild['admin']
+                        'permissions' => $guild['permissions']
                     ]);
                 }
                 $old_guilds[] = $finded_guild->id;

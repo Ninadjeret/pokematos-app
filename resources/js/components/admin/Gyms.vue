@@ -61,7 +61,14 @@
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms').then( res => {
                     this.gyms = res.data;
                 }).catch( err => {
-                    //No error
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
                 });
             },
             getPoiIcon( gym ) {

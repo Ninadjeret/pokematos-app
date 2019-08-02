@@ -132,7 +132,14 @@
                     this.roles_zone_color = res.data.roles_zone_color;
                     this.roles_pokemon_color = res.data.roles_pokemon_color;
                 }).catch( err => {
-                    //No error
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
                 });
             },
             submit() {
@@ -156,8 +163,12 @@
                     })
                     this.loading = false
                 }).catch( err => {
+                    let message = 'Problème lors de l\'enregistrement';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
                     this.$store.commit('setSnackbar', {
-                        message: 'Problème lors de l\'enregistrement',
+                        message: message,
                         timeout: 1500
                     })
                     this.loading = false

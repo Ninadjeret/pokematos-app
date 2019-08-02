@@ -284,6 +284,10 @@ class UserController extends Controller {
     */
 
     public function getPOIs(City $city, Request $request){
+        $user = Auth::user();
+        if( !$user->can('poi_edit', ['city_id' => $city->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $pois = Stop::where('city_id', '=', $city->id)
             ->get();
         return response()->json($pois, 200);

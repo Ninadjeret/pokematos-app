@@ -7,6 +7,7 @@ use App\Models\Pokemon;
 use App\Models\QuestReward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class PokemonController extends Controller {
 
@@ -22,6 +23,10 @@ class PokemonController extends Controller {
     }
 
     public function updateRaidBosses(Request $request) {
+        $user = Auth::user();
+        if( !$user->can('boss_edit') ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $pokemon_ids = [];
         $bosses_1t = $request->bosses1t;
         if( $bosses_1t ) {

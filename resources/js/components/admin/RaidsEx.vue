@@ -11,15 +11,12 @@
         </div>
         <div v-if="raidsex_active" class="settings-section">
             <v-subheader>Droits d'accès</v-subheader>
-            <div class="setting">
+            <div class="setting d-flex switch">
                 <div>
-                    <label>Qui peut annoncer un raid Ex ?</label>
+                    <label>Autoriser tous les joueurs à annoncer des Raids EX depuis la map ?</label>
+                    <p class="description">Sinon seuls les modérateurs et/ou admins pourront l'effectuer</p>
                 </div>
-                <v-btn-toggle v-model="raidsex_access" mandatory>
-                    <v-btn value="everyone">Tout le monde</v-btn>
-                    <v-btn value="admins">Les modérateurs</v-btn>
-                    <v-btn value="modos">Les admins</v-btn>
-                </v-btn-toggle>
+                <v-switch v-model="raidsex_access_everyone"></v-switch>
             </div>
             <v-subheader>Salons temporaires</v-subheader>
             <div class="setting d-flex switch">
@@ -55,7 +52,7 @@
                 raidsex_active: false,
                 raidsex_channels: false,
                 raidsex_channel_category_id: '',
-                raidsex_access: 'everyone',
+                raidsex_access_everyone: true,
                 channels_categories: [],
 
             }
@@ -70,8 +67,8 @@
                     console.log(res.data);
                     this.raidsex_active = parseInt(res.data.raidsex_active);
                     this.raidsex_channels = parseInt(res.data.raidsex_channels);
-                    this.raidsex_channel_category_id = res.data.raidsex_channel_category_id.toString();
-                    this.raidsex_access = res.data.raidsex_access;
+                    this.raidsex_access_everyone = parseInt(res.data.raidsex_access_everyone);
+                    this.raidsex_channel_category_id = res.data.raidsex_channel_category_id.toString();                
                 }).catch( err => {
                     //No error
                 });
@@ -89,7 +86,7 @@
                         raidsex_active: this.raidsex_active,
                         raidsex_channels: this.raidsex_channels,
                         raidsex_channel_category_id: this.raidsex_channel_category_id,
-                        raidsex_access: this.raidsex_access,
+                        raidsex_access_everyone: this.raidsex_access_everyone,
                     }
                 };
                 this.save(args);

@@ -59,14 +59,13 @@ class PokemonsTableSeeder extends Seeder {
                     'city_id'  => 1,
                     'active' => 1
                 ],
-                /*[
-                    'discord_id' => '400277491941638147',
-                    'name'  => 'Pokemon GO - Dijon',
+                [
+                    'discord_id' => '606583247635349516',
+                    'name'  => 'Bac à sable 2',
                     'type'  => 'discord',
                     'city_id'  => 2,
-                    'access_rule' => 'everyone',
-                    'authorized_roles' => json_encode(['377449927321845771', '494618121366143027'])
-                ],*/
+                    'active' => 1
+                ],
             ]);
         } // end check if table users is empty
 

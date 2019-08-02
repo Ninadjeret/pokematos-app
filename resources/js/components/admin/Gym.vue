@@ -115,14 +115,28 @@
                     this.lat = res.data.lat;
                     this.lng = res.data.lng;
                 }).catch( err => {
-                    //No error
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
                 });
             },
             fetchZones() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/zones').then( res => {
                     this.zones = res.data;
                 }).catch( err => {
-                    //No error
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
                 });
             },
             submit() {
@@ -152,8 +166,12 @@
                     })
                     this.loading = false
                 }).catch( err => {
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
                     this.$store.commit('setSnackbar', {
-                        message: 'Problème lors de l\'enregistrement',
+                        message: message,
                         timeout: 1500
                     })
                     this.loading = false
@@ -170,8 +188,12 @@
                     this.loading = false
                     this.$router.push({ name: this.$route.meta.parent })
                 }).catch( err => {
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
                     this.$store.commit('setSnackbar', {
-                        message: 'Problème lors de l\'enregistrement',
+                        message: message,
                         timeout: 1500
                     })
                     this.loading = false

@@ -10662,6 +10662,7 @@ a.text-dark:focus {
   font-family: "Teko";
   color: #fff;
   font-size: 25px;
+  margin-left: 0 !important;
 }
 
 #app__container .v-toolbar__title img {
@@ -11373,6 +11374,23 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 
 .setting.switch .v-messages {
   display: none;
+}
+
+.setting.checkbox .v-messages {
+  display: none;
+}
+
+.setting.checkbox .v-input--selection-controls {
+  margin-top: 15px;
+}
+
+.setting.checkbox .v-input--selection-controls.v-input .v-label {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.setting.checkbox .v-input--selection-controls:not(.v-input--hide-details) .v-input__slot {
+  margin-bottom: 0;
 }
 
 .multiselect {

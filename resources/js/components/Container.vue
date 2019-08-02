@@ -7,10 +7,10 @@
                 <img src="https://assets.profchen.fr/img/logo_pokematos.png"> POKEMATOS <small v-if="this.$store.state.currentCity">{{ this.$store.state.currentCity.name }}</small>
             </v-toolbar-title>
             <v-toolbar-title v-if="$route.name != 'map'">{{$route.meta.title}}</v-toolbar-title>
-            <v-spacer></v-spacer>
             <v-btn v-if="cities &&  cities.length > 1 && $route.name == 'map'" icon @click.stop="dialogCities = true">
                 <v-icon>location_city</v-icon>
             </v-btn>
+            <v-spacer></v-spacer>
         </v-toolbar>
 
 
@@ -41,7 +41,7 @@
                   <v-icon>person</v-icon>
                 </v-btn>
 
-                <v-btn v-if="currentCity.admin" to="/admin" color="primary" flat value="recent" >
+                <v-btn v-if="parseInt(currentCity.permissions) >= 20" to="/admin" color="primary" flat value="recent" >
                   <span>Admin</span>
                   <v-icon>build</v-icon>
                 </v-btn>

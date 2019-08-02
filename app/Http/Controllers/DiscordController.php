@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Input;
 
 class DiscordController extends Controller {
 
-
-
     public function auth(Request $request) {
 
         $code = Input::get('code');
@@ -72,7 +70,7 @@ class DiscordController extends Controller {
             foreach( $user_guilds as $user_guild ) {
 
                 $auth_discord = false;
-                $admin = false;
+                $admin = 0;
                 $guild = Guild::where( 'discord_id', $user_guild->id )
                     ->where('active', 1)
                     ->first();
@@ -96,20 +94,25 @@ class DiscordController extends Controller {
                                 $auth = true;
                             }
 
+                            //Gestion des prvilèges de modo
+                            if ( !empty($guild->settings->map_access_moderation_roles) && !empty(array_intersect($guild->settings->map_access_moderation_roles, $result->roles))) {
+                                $admin = 10;
+                            }
+
                             //Gestion des prvilèges d'admin
                             if ( !empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $result->roles))) {
-                                $admin = true;
+                                $admin = 20;
                             }
 
                             //Si l'utilisateur a les permission d'admin sur Discrod, alors il les hérite sur la map
                             if( $user_guild->permissions >= 2146958847 ) {
-                                $admin = true;
+                                $admin = 30;
                             }
 
                             if( $auth_discord ) {
                                 $guilds[] = [
                                     'id' => $guild->id,
-                                    'admin' => $admin,
+                                    'permissions' => $admin,
                                 ];
                             }
 

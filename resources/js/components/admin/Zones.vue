@@ -48,8 +48,14 @@
             fetchZones() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/zones').then( res => {
                     this.zones = res.data;
-                }).catch( err => {
-                    //No error
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
                 });
             },
         }
