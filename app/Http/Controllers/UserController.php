@@ -242,7 +242,10 @@ class UserController extends Controller {
     }
 
     public function createRole(Request $request, City $city, Guild $guild ) {
-
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $roleCategory = RoleCategory::find($request->category_id);
         if( empty($roleCategory) ) return response()->json('La catégorie n\'existe pas', 400);
 
@@ -259,10 +262,18 @@ class UserController extends Controller {
     }
 
     public function getRole(Request $request, City $city, Guild $guild, Role $role ) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         return response()->json($role, 200);
     }
 
     public function updateRole(Request $request, City $city, Guild $guild, Role $role ) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $roleCategory = RoleCategory::find($request->category_id);
         if( empty($roleCategory) ) return response()->json('La catégorie n\'existe pas', 400);
 
@@ -278,6 +289,10 @@ class UserController extends Controller {
     }
 
     public function deleteRole(Request $request, City $city, Guild $guild, Role $role ) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $role->suppr();
         return response()->json(null, 204);
     }
@@ -294,6 +309,10 @@ class UserController extends Controller {
     }
 
     public function createRoleCategory(Request $request, City $city, Guild $guild ) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $categorie = RoleCategory::create([
             'guild_id' => $guild->id,
             'name' => $request->name,
@@ -306,10 +325,18 @@ class UserController extends Controller {
     }
 
     public function getRoleCategory(Request $request, City $city, Guild $guild, RoleCategory $categorie ) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         return response()->json($categorie, 200);
     }
 
     public function updateRoleCategory(Request $request, City $city, Guild $guild, RoleCategory $categorie ) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $categorie->update([
             'name' => ($request->name) ? $request->name : $categorie->name,
             'channel_discord_id' => ($request->channel_discord_id) ? $request->channel_discord_id : $categorie->channel_discord_id,
@@ -321,6 +348,10 @@ class UserController extends Controller {
     }
 
     public function deleteRoleCategory(Request $request, City $city, Guild $guild, RoleCategory $categorie ) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         RoleCategory::destroy($categorie->id);
         return response()->json(null, 204);
     }

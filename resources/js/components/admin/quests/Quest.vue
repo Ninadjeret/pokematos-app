@@ -97,7 +97,14 @@
                         this.pokemon = this.convertIdtoObject(res.data.pokemon_id, this.pokemons);
                     }
                 }).catch( err => {
-                    //No error
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
                 });
             },
             fetchRewards() {
@@ -128,8 +135,12 @@
                     })
                     this.loading = false
                 }).catch( err => {
+                    let message = 'Problème lors de l\'enregistrement';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
                     this.$store.commit('setSnackbar', {
-                        message: 'Problème lors de l\'enregistrement',
+                        message: message,
                         timeout: 1500
                     })
                     this.loading = false
@@ -146,8 +157,12 @@
                     this.loading = false
                     this.$router.push({ name: this.$route.meta.parent })
                 }).catch( err => {
+                    let message = 'Problème lors de l\'enregistrement';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
                     this.$store.commit('setSnackbar', {
-                        message: 'Problème lors de l\'enregistrement',
+                        message: message,
                         timeout: 1500
                     })
                     this.loading = false
@@ -163,8 +178,12 @@
                         })
                         this.$router.push({ name: this.$route.meta.parent })
                     }).catch( err => {
+                        let message = 'Problème lors de la suppression';
+                        if( err.response.data ) {
+                            message = err.response.data;
+                        }
                         this.$store.commit('setSnackbar', {
-                            message: 'Problème lors de la suppression',
+                            message: message,
                             timeout: 1500
                         })
                     });
