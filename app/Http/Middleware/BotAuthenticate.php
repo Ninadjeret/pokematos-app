@@ -15,9 +15,9 @@ class BotAuthenticate
      */
     public function handle($request, Closure $next)
     {
-        $token = $request->query('token');
+        $token = $request->bearerToken();
         if( empty($token) || $token != config('app.bot_token') ) {
-            return response()->json('Wrong token', 400); 
+            return response()->json('Wrong token', 400);
         }
         return $next($request);
     }
