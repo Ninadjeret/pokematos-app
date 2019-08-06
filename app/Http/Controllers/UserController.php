@@ -22,6 +22,7 @@ class UserController extends Controller {
 
     public function getUSer() {
         $user = Auth::user();
+        $user->refreshDiscordToken();
         return response()->json($user, 200);
     }
 

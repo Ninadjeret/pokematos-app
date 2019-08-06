@@ -1,5 +1,5 @@
 <?php
-
+use App\User;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,17 +20,8 @@ Route::get('/logout', function () {
 });
 
 Route::get('/', function () {
-    if( Auth::user() ) {
+    if( User::isValid() ) {
         return view('map');
     }
     return view('login');
 })->name('home');
-
-Route::group(['middleware' => ['auth']], function () {
-    Route::get('/list', function () {
-        return view('list');
-    });
-    Route::get('/settings', function () {
-        return view('settings');
-    });
-});
