@@ -105,7 +105,7 @@
                     this.raidreporting_images_delete = parseInt(res.data.raidreporting_images_delete);
                     this.raidreporting_text_active = parseInt(res.data.raidreporting_text_active);
                     this.raidreporting_text_delete = parseInt(res.data.raidreporting_text_delete);
-                    this.raidreporting_text_prefixes = res.data.raidreporting_text_prefixes;
+                    this.raidreporting_text_prefixes = res.data.raidreporting_text_prefixes.join(', ');
                 }).catch( err => {
                     //No error
                 });
@@ -117,7 +117,7 @@
                         raidreporting_images_delete: this.raidreporting_images_delete,
                         raidreporting_text_active: this.raidreporting_text_active,
                         raidreporting_text_delete: this.raidreporting_text_delete,
-                        raidreporting_text_prefixes: this.raidreporting_text_prefixes,
+                        raidreporting_text_prefixes: this.raidreporting_text_prefixes.split(', '),
                     }
                 };
                 this.save(args);

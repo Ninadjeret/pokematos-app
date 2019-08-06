@@ -45,7 +45,7 @@ class Guild extends Model
         'raidreporting_images_delete' => ['default' => false, 'type' => 'boolean'],
         'raidreporting_text_active' => ['default' => false, 'type' => 'boolean'],
         'raidreporting_text_delete' => ['default' => false, 'type' => 'boolean'],
-        'raidreporting_text_prefixes' => ['default' => '+raid, +Raid', 'type' => 'string'],
+        'raidreporting_text_prefixes' => ['default' => ["+raid","+Raid"], 'type' => 'array'],
 
         'welcome_active' => ['default' => false, 'type' => 'boolean'],
         'welcome_message' => ['default' => 'Bievenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],

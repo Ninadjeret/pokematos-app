@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 Route::group(['middleware' => ['auth.bot']], function () {
 
+    Route::get('bot/guilds', 'BotController@getGuilds');
     Route::post('bot/guilds', 'BotController@addGuild');
 
     Route::post('bot/raids', 'BotController@addRaid');
