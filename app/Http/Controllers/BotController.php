@@ -23,6 +23,12 @@ class BotController extends Controller {
     * ==================================================================
     */
 
+   public function getGuilds( Request $request ) {
+       $return = [];
+       $guilds = Guild::where('active', 1)->get();
+       return response()->json($guilds, 200);
+   }
+
     public function addGuild( Request $request ) {
 
         if( !isset($request->guild_id) || empty($request->guild_id) || !isset($request->name) || empty($request->name) ) {
