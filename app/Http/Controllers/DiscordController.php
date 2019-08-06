@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Input;
 
 class DiscordController extends Controller {
 
-
-
     public function auth(Request $request) {
 
         $code = Input::get('code');
@@ -33,7 +31,7 @@ class DiscordController extends Controller {
         }
 
         $data = json_decode($res->getBody());
-        Log::debug( print_r( $data, true ) );
+        //Log::debug( print_r( $data, true ) );
         $res = $this->getDiscordMe($data);
         if( $res->getStatusCode() != 200 ) {
             return redirect('/?access=denied&code=1');
@@ -44,12 +42,11 @@ class DiscordController extends Controller {
         $res_guilds = $this->getDiscordMeGuilds($data);
 
         $user_data = json_decode($res->getBody());
-        Log::debug( print_r( $user_data, true ) );
         $user_guilds = json_decode($res_guilds->getBody());
         $user = User::where('discord_id',$user_data->id)->first();
 
         if( $user ) {
-            Auth::loginUsingId($user->id);
+            //Auth::loginUsingId($user->id);
         } else {
             $user = new User();
         }
@@ -63,76 +60,11 @@ class DiscordController extends Controller {
         $user->discord_discriminator = $user_data->discriminator;
         $user->discord_access_token = $data->access_token;
         $user->discord_refresh_token = $data->refresh_token;
-
-        //Gestion de l'attribution des droits d'accès
-        $auth = false;
-        $discord = new DiscordClient(['token' => config('discord.token')]);
-        $guilds = [];
-        if(  !empty( $user_guilds ) ) {
-            foreach( $user_guilds as $user_guild ) {
-
-                $auth_discord = false;
-                $admin = false;
-                $guild = Guild::where( 'discord_id', $user_guild->id )
-                    ->where('active', 1)
-                    ->first();
-                if( $guild ) {
-
-                    try {
-                        $result = $discord->guild->getGuildMember(array(
-                            'guild.id' => (int) $guild->discord_id,
-                            'user.id' => (int) $user->discord_id,
-                        ));
-
-                        if( $result ) {
-
-                            //Gestion des droits d'accès
-                            if( empty($guild->settings->map_access_rule) || $guild->settings->map_access_rule == 'everyone' ) {
-                                $auth = true;
-                                $auth_discord = true;
-                                Log::debug(print_r($guild->name, true));
-                            } elseif( $guild->settings->map_access_rule == 'specific_roles' && !empty(array_intersect($guild->settings->map_access_roles, $result->roles))) {
-                                $auth_discord = false;
-                                $auth = true;
-                            }
-
-                            //Gestion des prvilèges d'admin
-                            if ( !empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $result->roles))) {
-                                $admin = true;
-                            }
-
-                            //Si l'utilisateur a les permission d'admin sur Discrod, alors il les hérite sur la map
-                            if( $user_guild->permissions >= 2146958847 ) {
-                                $admin = true;
-                            }
-
-                            if( $auth_discord ) {
-                                $guilds[] = [
-                                    'id' => $guild->id,
-                                    'admin' => $admin,
-                                ];
-                            }
-
-
-                        }
-
-                        //Gestion des prvilèges d'admin
-                        /***/
-                    } catch (Exception $e) {
-                        error_log('Exception reçue : ' . $e->getMessage());
-                    }
-
-
-                }
-
-            }
-        }
-
-
         $user->save();
-        $user->saveGuilds($guilds);
+
 
         //Login
+        $auth = $user->checkGuilds($user_guilds);
         if( $auth ) {
             Auth::loginUsingId($user->id, true);
             return redirect('/');
@@ -149,7 +81,6 @@ class DiscordController extends Controller {
         $res = $client->post('https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code='.$code.'&redirect_uri='.urlencode(config('discord.callback')), [
             'headers' => [
                 'Authorization' => 'Basic '.$creds,
-
             ]
         ]);
         return $res;

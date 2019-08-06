@@ -170,7 +170,14 @@
                 axios.get('/api/pokemons').then( res => {
                     this.pokemons = res.data;
                 }).catch( err => {
-                    //No error
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
                 });
             },
             addBossTo1t(selectedOption, id) {
@@ -237,8 +244,12 @@
                     })
                     this.loading = false
                 }).catch( err => {
+                    let message = 'Problème lors de la mise à jour';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
                     this.$store.commit('setSnackbar', {
-                        message: 'Problème lors de l\'enregistrement',
+                        message: message,
                         timeout: 1500
                     })
                     this.loading = false

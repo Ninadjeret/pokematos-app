@@ -7,16 +7,52 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Guild;
 use App\Models\City;
+use GuzzleHttp\Client;
 use App\Models\UserGuild;
+use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
      use HasApiTokens, Notifiable;
 
-    protected $fillable = ['name', 'email', 'password', 'guilds', 'discord_id'];
+    protected $fillable = ['name', 'email', 'password', 'guilds', 'discord_id', 'discord_access_token', 'discord_refresh_token'];
     protected $hidden = ['password', 'remember_token',];
     protected $appends = ['permissions'];
+
+    public static function getPermissions() {
+        return [
+            'raid_delete' => [
+                'label' => 'Supprimer des raids',
+                'context' => 'city'
+            ],
+            'raidex_add' => [
+                'label' => 'Annoncer des Raids EX',
+                'context' => 'city'
+            ],
+            'poi_edit' => [
+                'label' => 'Gérer les POIs',
+                'context' => 'city'
+            ],
+            'zone_edit' => [
+                'label' => 'Gérer les zones',
+                'context' => 'city'
+            ],
+            'boss_edit' => [
+                'label' => 'Mettre à jour les boss de raid',
+                'context' => 'global'
+            ],
+            'quest_edit' => [
+                'label' => 'Mettre à jour les quêtes',
+                'context' => 'global'
+            ],
+            'guild_manage' => [
+                'label' => 'Gérer la guild',
+                'context' => 'guild'
+            ],
+        ];
+    }
 
     public function getGuilds() {
         $guilds = [];
@@ -30,7 +66,7 @@ class User extends Authenticatable
         foreach( $userGuilds as $userGuild ) {
             $guild_to_add = Guild::where('id', $userGuild->guild_id)->first();
             if( $guild_to_add ) {
-                $guild_to_add->admin = $userGuild->admin;
+                $guild_to_add->permissions = $userGuild->permissions;
                 $guilds[] = $guild_to_add;
             }
         }
@@ -39,17 +75,81 @@ class User extends Authenticatable
     }
 
     public function getPermissionsAttribute() {
-
-        $raid_ex = false;
+        $permissions = User::getPermissions();
+        $userPermissions = [];
         foreach( $this->getGuilds() as $guild ) {
-            if( $guild->settings->raidsex_active ) $raid_ex = true;
+            switch( $guild->permissions ) {
+                case 30:
+                    $userPermissions[$guild->id] = array_keys($permissions);
+                    break;
+                case 20:
+                    $userPermissions[$guild->id] = array_keys($permissions);
+                    break;
+                case 10:
+                    $userPermissions[$guild->id] = $guild->settings->access_moderation_permissions;
+                    break;
+                case 0:
+                    $userPermissions[$guild->id] = [];
+                    break;
+            }
         }
 
-        return (object) [
-            'city' => (object) [
-                'raidex_create' => $raid_ex,
-            ],
-        ];
+        return $userPermissions;
+    }
+
+    public function can($permission, $context = []) {
+        $permissions = User::getPermissions();
+        $userPermissions = $this->permissions;
+
+        if( !array_key_exists($permission, $permissions) ) {
+            return false;
+        }
+
+        if( empty( $userPermissions ) ) {
+            return false;
+        }
+
+        $permissionContext = $permissions[$permission]['context'];
+        switch( $permissionContext ) {
+            case 'global':
+                foreach( $userPermissions as $guild_id => $guild_permissions ) {
+                    $guild = Guild::find($guild_id);
+                    if( !$guild ) {
+                        continue;
+                    }
+                    if( in_array( $permission, $guild_permissions ) ) {
+                        return true;
+                    }
+                }
+                return false;
+                break;
+            case 'city':
+                foreach( $userPermissions as $guild_id => $guild_permissions ) {
+                    $guild = Guild::find($guild_id);
+                    if( !$guild ) {
+                        continue;
+                    }
+                    if( $guild->city_id == $context['city_id'] && in_array( $permission, $guild_permissions ) ) {
+                        return true;
+                    }
+                }
+                return false;
+                break;
+            case 'guild':
+            foreach( $userPermissions as $guild_id => $guild_permissions ) {
+                $guild = Guild::find($guild_id);
+                if( !$guild ) {
+                    continue;
+                }
+                if( $guild->id == $context['guild_id'] && in_array( $permission, $guild_permissions ) ) {
+                    return true;
+                }
+            }
+            return false;
+            break;
+        }
+
+        return false;
     }
 
     public function getCities() {
@@ -65,7 +165,7 @@ class User extends Authenticatable
                 $city_to_add = City::find($guild->city_id);
                 if( $city_to_add ) {
                     $city_to_add->guilds = [$guild];
-                    $city_to_add->admin = $guild->admin;
+                    $city_to_add->permissions = $guild->permissions;
                     $cities[] = $city_to_add;
                 }
             } else {
@@ -73,6 +173,72 @@ class User extends Authenticatable
             }
         }
         return $cities;
+    }
+
+    public function checkGuilds( $user_guilds ) {
+        $auth = false;
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+
+        if(  !empty( $user_guilds ) ) {
+            foreach( $user_guilds as $user_guild ) {
+
+                $auth_discord = false;
+                $admin = 0;
+                $guild = Guild::where( 'discord_id', $user_guild->id )
+                    ->where('active', 1)
+                    ->first();
+                if( $guild ) {
+
+                    try {
+                        $result = $discord->guild->getGuildMember(array(
+                            'guild.id' => (int) $guild->discord_id,
+                            'user.id' => (int) $this->discord_id,
+                        ));
+
+                        if( $result ) {
+
+                            //Gestion des droits d'accès
+                            if( empty($guild->settings->map_access_rule) || $guild->settings->map_access_rule == 'everyone' ) {
+                                $auth = true;
+                                $auth_discord = true;
+                                Log::debug(print_r($guild->name, true));
+                            } elseif( $guild->settings->map_access_rule == 'specific_roles' && !empty(array_intersect($guild->settings->map_access_roles, $result->roles))) {
+                                $auth_discord = false;
+                                $auth = true;
+                            }
+
+                            //Gestion des prvilèges de modo
+                            if ( !empty($guild->settings->map_access_moderation_roles) && !empty(array_intersect($guild->settings->map_access_moderation_roles, $result->roles))) {
+                                $admin = 10;
+                            }
+
+                            //Gestion des prvilèges d'admin
+                            if ( !empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $result->roles))) {
+                                $admin = 20;
+                            }
+
+                            //Si l'utilisateur a les permission d'admin sur Discrod, alors il les hérite sur la map
+                            if( $user_guild->permissions >= 2146958847 ) {
+                                $admin = 30;
+                            }
+
+                            if( $auth_discord ) {
+                                $guilds[] = [
+                                    'id' => $guild->id,
+                                    'permissions' => $admin,
+                                ];
+                            }
+
+                        }
+                    } catch (Exception $e) {
+                        error_log('Exception reçue : ' . $e->getMessage());
+                    }
+                }
+            }
+        }
+
+        $this->saveGuilds($guilds);
+        return $auth;
     }
 
     public function saveGuilds( $guilds ) {
@@ -83,13 +249,13 @@ class User extends Authenticatable
                     ->where('guild_id', $guild['id'])
                     ->first();
                 if( $finded_guild ) {
-                    $finded_guild->admin = $guild['admin'];
+                    $finded_guild->permissions = $guild['permissions'];
                     $finded_guild->save();
                 } else {
                     $finded_guild = UserGuild::create([
                         'guild_id' => $guild['id'],
                         'user_id' => $this->id,
-                        'admin' => $guild['admin']
+                        'permissions' => $guild['permissions']
                     ]);
                 }
                 $old_guilds[] = $finded_guild->id;
@@ -105,6 +271,69 @@ class User extends Authenticatable
             }
         }
 
+    }
+
+    public static function isValid() {
+        $user = Auth::user();
+
+        if( !$user ) {
+            return false;
+        }
+
+        $user->refreshDiscordToken();
+        $user_guilds = $user->getDiscordMeGuilds();
+
+        if( !$user_guilds ) {
+            return false;
+        }
+
+        $auth = $user->checkGuilds($user_guilds);
+
+        if( $auth ) {
+            return true;
+        } else {
+            Auth::logout();
+            return false;
+        }
+
+    }
+
+    public function refreshDiscordToken() {
+        $creds = base64_encode( config('discord.id') . ':' . config('discord.secret') );
+        $client = new Client();
+        $res = $client->post('https://discordapp.com/api/oauth2/token?grant_type=refresh_token&scope=identify%20email%20guilds&refresh_token='.$this->discord_refresh_token.'&redirect_uri='.urlencode(config('discord.callback')), [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'Authorization' => 'Basic '.$creds,
+
+            ]
+        ]);
+        if( $res->getStatusCode() == '200' ) {
+            $body = json_decode($res->getBody());
+            $this->update([
+                'discord_access_token' => $body->access_token,
+                'discord_refresh_token' => $body->refresh_token,
+            ]);
+            return $body->access_token;
+        }
+
+        return false;
+    }
+
+    public function getDiscordMeGuilds() {
+
+        $client = new Client();
+        $res = $client->get('https://discordapp.com/api/users/@me/guilds', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->discord_access_token,
+            ]
+        ]);
+
+        if( $res->getStatusCode() == '200' ) {
+            return json_decode($res->getBody());
+        }
+
+        return false;
     }
 
 }

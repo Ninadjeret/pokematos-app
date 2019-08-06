@@ -22,6 +22,16 @@
                     <option v-for="role in roles" :value="role.id">{{role.name}}</option>
                 </select>
             </div>
+            <div class="setting checkbox">
+                <label>Autorisations des modérateurs</label>
+                <v-checkbox
+                    v-for="(autorisation, index) in autorisations"
+                    v-model="access_moderation_permissions"
+                    :key="autorisation.value"
+                    :label="autorisation.label"
+                    :value="autorisation.value">
+                </v-checkbox>
+            </div>
             <v-subheader>Administration</v-subheader>
             <div class="setting">
                 <label>Roles des administrateurs</label>
@@ -53,6 +63,33 @@
                 map_access_admin_roles: [],
                 map_access_moderation_roles: [],
                 roles: [],
+                access_moderation_permissions: [],
+                autorisations: [
+                    {
+                        label: 'Supprimer des raids',
+                        value: 'raid_delete',
+                    },
+                    {
+                        label: 'Annoncer des Raids EX',
+                        value: 'raidex_add',
+                    },
+                    {
+                        label: 'Gérer les POIs',
+                        value: 'poi_edit',
+                    },
+                    {
+                        label: 'Gérer les zones',
+                        value: 'zone_edit',
+                    },
+                    {
+                        label: 'Mettre à jour les boss de raid',
+                        value: 'boss_edit',
+                    },
+                    {
+                        label: 'Mettre à jour les quêtes',
+                        value: 'quest_edit',
+                    }
+                ],
             }
         },
         created() {
@@ -66,6 +103,7 @@
                     if( res.data.map_access_roles ) this.map_access_roles = res.data.map_access_roles;
                     if( res.data.map_access_admin_roles ) this.map_access_admin_roles = res.data.map_access_admin_roles;
                     if( res.data.map_access_moderation_roles ) this.map_access_moderation_roles = res.data.map_access_moderation_roles;
+                    if( res.data.access_moderation_permissions ) this.access_moderation_permissions = res.data.access_moderation_permissions;
                 }).catch( err => {
                     //No error
                 });
@@ -84,7 +122,8 @@
                         map_access_rule: this.map_access_rule,
                         map_access_roles: this.map_access_roles,
                         map_access_admin_roles: this.map_access_admin_roles,
-                        map_access_moderation_roles: this.map_access_moderation_roles
+                        map_access_moderation_roles: this.map_access_moderation_roles,
+                        access_moderation_permissions: this.access_moderation_permissions,
                     }
                 };
                 this.save(args);

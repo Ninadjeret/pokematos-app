@@ -135,6 +135,21 @@
             display: none;
         }
     }
+    &.checkbox {
+        .v-messages {
+            display: none;
+        }
+        .v-input--selection-controls {
+            margin-top: 15px;
+        }
+        .v-input--selection-controls.v-input .v-label {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        .v-input--selection-controls:not(.v-input--hide-details) .v-input__slot {
+            margin-bottom: 0;
+        }
+    }
 
 }
 .multiselect {

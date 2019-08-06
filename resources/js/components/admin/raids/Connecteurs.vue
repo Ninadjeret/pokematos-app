@@ -49,7 +49,14 @@
                 axios.get('/api/user/guilds/'+this.$route.params.id+'/connectors').then( res => {
                     this.items = res.data;
                 }).catch( err => {
-                    //No error
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
                 });
             },
         }

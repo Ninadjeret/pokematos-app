@@ -40,7 +40,7 @@ class CreateCitiesTable extends Migration
             $table->integer('guild_id');
             $table->integer('user_id');
             $table->string('user_roles')->nullable();
-            $table->boolean('admin')->default(false);
+            $table->integer('permissions')->default(0);
             $table->timestamps();
 
             $table->foreign('guild_id')->references('id')->on('guilds');

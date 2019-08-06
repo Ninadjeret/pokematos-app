@@ -7,6 +7,7 @@ use App\Models\Pokemon;
 use App\Models\QuestReward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class PokemonController extends Controller {
 
@@ -22,6 +23,10 @@ class PokemonController extends Controller {
     }
 
     public function updateRaidBosses(Request $request) {
+        $user = Auth::user();
+        if( !$user->can('boss_edit') ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $pokemon_ids = [];
         $bosses_1t = $request->bosses1t;
         if( $bosses_1t ) {
@@ -139,6 +144,10 @@ class PokemonController extends Controller {
     }
 
     public function createQuest( Request $request ) {
+        $user = Auth::user();
+        if( !$user->can('quest_edit') ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $connector = Quest::create([
             'name' => $request->name,
             'reward_type' => $request->reward_type,
@@ -149,10 +158,18 @@ class PokemonController extends Controller {
     }
 
     public function getQuest( Request $request, Quest $quest ) {
+        $user = Auth::user();
+        if( !$user->can('quest_edit') ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         return response()->json($quest, 200);
     }
 
     public function updateQuest( Request $request, Quest $quest ) {
+        $user = Auth::user();
+        if( !$user->can('quest_edit') ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $quest->update([
             'name' => ($request->name) ? $request->name : $quest->name,
             'reward_type' => ($request->reward_type) ? $request->reward_type : $quest->reward_type,
@@ -163,6 +180,10 @@ class PokemonController extends Controller {
     }
 
     public function deleteQuest( Request $request, Quest $quest ) {
+        $user = Auth::user();
+        if( !$user->can('quest_edit') ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         Quest::destroy($quest->id);
         return response()->json(null, 204);
     }

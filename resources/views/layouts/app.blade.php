@@ -28,6 +28,7 @@
     <!-- Scripts -->
     <!--<script src="{{ asset('js/manifest.js') }}"></script>
     <script src="{{ asset('js/vendor.js') }}"></script>-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&libraries=places"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 </body>
 </html>

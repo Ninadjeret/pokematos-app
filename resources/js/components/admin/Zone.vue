@@ -51,7 +51,14 @@
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/zones/'+this.$route.params.id).then( res => {
                     this.name = res.data.name;
                 }).catch( err => {
-                    //No error
+                    let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
                 });
             },
             submit() {
@@ -74,8 +81,12 @@
                     })
                     this.loading = false
                 }).catch( err => {
+                    let message = 'Problème lors de l\'enregistrement';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
                     this.$store.commit('setSnackbar', {
-                        message: 'Problème lors de l\'enregistrement',
+                        message: message,
                         timeout: 1500
                     })
                     this.loading = false
@@ -92,8 +103,12 @@
                     this.loading = false
                     this.$router.push({ name: this.$route.meta.parent })
                 }).catch( err => {
+                    let message = 'Problème lors de la création';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
                     this.$store.commit('setSnackbar', {
-                        message: 'Problème lors de l\'enregistrement',
+                        message: message,
                         timeout: 1500
                     })
                     this.loading = false
