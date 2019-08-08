@@ -45,7 +45,7 @@ class TextAnalyzer {
     }
 
     public function isValid() {
-        $prefixes = explode( ',', $this->guild->settings->raidreporting_text_prefixes );
+        $prefixes = $this->guild->settings->raidreporting_text_prefixes;
         if( empty( $prefixes ) ) {
             $this->result->error = 'Aucun préfixe n \'est renseigné';
             return false;
@@ -71,7 +71,7 @@ class TextAnalyzer {
             $this->result->eggLevel = $this->getEggLevel();
         }
         $time_elapsed_secs = microtime(true) - $this->start;
-        $this->result->error = 'demo';
+        //$this->result->error = 'demo';
         if( $this->debug ) $this->_log('========== Fin du traitement '.$this->text.' ('.round($time_elapsed_secs, 3).'s) ==========');
     }
 

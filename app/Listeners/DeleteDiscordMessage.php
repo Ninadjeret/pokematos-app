@@ -2,9 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\RaidUpdated;
+use App\Models\Guild;
+use App\Events\Event;
+use App\Events\RaidCreated;
+use RestCord\DiscordClient;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 class DeleteDiscordMessage
 {
@@ -24,7 +28,7 @@ class DeleteDiscordMessage
      * @param  RaidUpdated  $event
      * @return void
      */
-    public function handle(Event $event)
+    public function handle($event)
     {
         if( $event->announce->type == 'map' ) {
             return ;
@@ -35,8 +39,10 @@ class DeleteDiscordMessage
             return;
         }
 
-        if( $event->announce->type == 'text' && $guild->settings->raidreporting_text_delete != true ) return;
-        if( $event->announce->type == 'image' && $guild->settings->raidreporting_image_delete != true ) return;
+        Log::debug( print_r($guild->settings, true) );
+
+        if( $event->announce->source == 'text' && $guild->settings->raidreporting_text_delete == false ) return;
+        if( $event->announce->source == 'image' && $guild->settings->raidreporting_image_delete == false ) return;
 
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $discord->channel->deleteMessage([
@@ -44,4 +50,7 @@ class DeleteDiscordMessage
             'message.id' => (int) $event->announce->message_discord_id,
         ]);
     }
+
+
+
 }

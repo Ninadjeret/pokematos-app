@@ -102,9 +102,10 @@ Route::group(['middleware' => ['auth.bot']], function () {
     Route::get('bot/guilds', 'BotController@getGuilds');
     Route::post('bot/guilds', 'BotController@addGuild');
 
+    Route::get('bot/guilds/{guild_id}/roles', 'BotController@getRoles');
+
     Route::post('bot/raids', 'BotController@addRaid');
 
-    Route::get('bot/roles', 'BotController@getRoles');
     Route::post('bot/roles', 'BotController@createRole');
     Route::delete('bot/roles/{role}', 'BotController@deleteRole');
     Route::get('bot/roles/{role}', 'BotController@getRole');

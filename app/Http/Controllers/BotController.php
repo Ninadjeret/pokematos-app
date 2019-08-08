@@ -44,7 +44,7 @@ class BotController extends Controller {
             $guild->update([
                 'name' => $request->name,
                 'discord_id' => $request->guild_id,
-                //'active' => 1,
+                'active' => 1,
             ]);
 
             $roles_to_add = $guild->getDiscordRoles();
@@ -77,9 +77,14 @@ class BotController extends Controller {
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function getRoles( Request $request ) {
-        $guild = Guild::where('discord_id', $request->guild_id)->first();
-        if( empty($guild) ) return response()->json('L\'ID de la guild n\'existe pas', 400);
+    public function getRoles( Request $request, $guild_id ) {
+        $guild = Guild::where('discord_id', $guild_id)
+            ->where('active', 1)
+            ->first();
+
+        if( !$guild ) {
+            return response()->json('La guild n\'a pas été trouvée', 400);
+        }
 
         $roles = Role::where('guild_id', $guild->id)->get();
         return response()->json($roles, 200);
@@ -304,11 +309,11 @@ class BotController extends Controller {
         if( $url ) {
             $imageAnalyzer = new ImageAnalyzer($url, $guild);
             $result = $imageAnalyzer->result;
-            $args['source_type'] = 'image';
+            $source_type = 'image';
         } else {
             $textAnalyzer = new TextAnalyzer($text, $guild);
             $result = $textAnalyzer->result;
-            $args['source_type'] = 'text';
+            $source_type = 'text';
         }
 
         if( empty( $result->error ) ) {
@@ -319,6 +324,7 @@ class BotController extends Controller {
             $args['message_discord_id'] = $message_discord_id;
             $args['channel_discord_id'] = $channel_discord_id;
             $args['guild_id'] = $guild->id;
+            $args['source_type'] = $source_type;
             if( isset( $result->pokemon->id ) ) $args['pokemon_id'] = $result->pokemon->id;
             if( isset( $result->eggLevel ) ) $args['egg_level'] = $result->eggLevel;
             if( isset( $result->date ) ) $args['start_time'] = $result->date;
