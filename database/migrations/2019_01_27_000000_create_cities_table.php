@@ -24,7 +24,7 @@ class CreateCitiesTable extends Migration
 
         Schema::create('guilds', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('discord_id')->unique()->nullable();
+            $table->string('discord_id')->unique()->nullable();
             $table->string('name')->nullable();
             $table->string('type')->default('discord');
             $table->integer('city_id')->nullable();
@@ -102,8 +102,8 @@ class CreateCitiesTable extends Migration
             $table->integer('user_id');
             $table->string('url')->nullable();
             $table->text('content')->nullable();
-            $table->integer('message_discord_id')->nullable();
-            $table->integer('channel_discord_id')->nullable();
+            $table->string('message_discord_id')->nullable();
+            $table->string('channel_discord_id')->nullable();
             $table->integer('guild_id')->nullable();
             $table->boolean('confirmed')->default(true);
             $table->timestamps();
@@ -183,7 +183,7 @@ class CreateCitiesTable extends Migration
 
         Schema::create('channels', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('discord_id');
+            $table->string('discord_id');
             $table->integer('guild_id');
             $table->integer('type_id');
             $table->timestamps();
@@ -204,7 +204,7 @@ class CreateCitiesTable extends Migration
 
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('discord_id');
+            $table->string('discord_id');
             $table->integer('guild_id');
             $table->integer('category_id')->nullable();
             $table->string('name');

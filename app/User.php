@@ -177,6 +177,7 @@ class User extends Authenticatable
 
     public function checkGuilds( $user_guilds ) {
         $auth = false;
+        $guilds = [];
         $discord = new DiscordClient(['token' => config('discord.token')]);
 
         if(  !empty( $user_guilds ) ) {

@@ -52,7 +52,7 @@ class PokemonsTableSeeder extends Seeder {
 
         if(DB::table('guilds')->get()->count() == 0){
             DB::table('guilds')->insert([
-                [
+                /*[
                     'discord_id' => '377559922214305792',
                     'name'  => 'Pokématos',
                     'type'  => 'discord',
@@ -65,7 +65,7 @@ class PokemonsTableSeeder extends Seeder {
                     'type'  => 'discord',
                     'city_id'  => 2,
                     'active' => 1
-                ],
+                ],*/
             ]);
         } // end check if table users is empty
 

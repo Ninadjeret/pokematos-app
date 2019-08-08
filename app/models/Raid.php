@@ -10,6 +10,7 @@ use App\Models\Announce;
 use App\Models\raidChannel;
 use App\Models\RaidMessage;
 use RestCord\DiscordClient;
+use Illuminate\Support\Facades\Log;
 
 class Raid extends Model {
 
@@ -66,9 +67,17 @@ class Raid extends Model {
 
     public function getLastAnnounce() {
         $annonce = Announce::where('raid_id', $this->id)
+            ->where('type', '!=', 'raid-duplicate')
             ->orderBy('created_at', 'desc')
             ->first();
         return $annonce;
+    }
+
+    public function getAnnounces() {
+        $annonces = Announce::where('raid_id', $this->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        return $annonces;
     }
 
     public function getGym() {
@@ -100,6 +109,8 @@ class Raid extends Model {
                 $raid->pokemon_id = $args['pokemon_id'];
                 $raid->save();
                 $announceType = 'raid-update';
+            } else {
+                $announceType = 'raid-duplicate';
             }
         }
 
@@ -139,7 +150,7 @@ class Raid extends Model {
         if( $announceType ) {
             $announce = Announce::create([
                 'type' => $announceType,
-                'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
+                'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map2',
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => $args['user_id'],
                 'raid_id' => $raid->id,
@@ -152,6 +163,8 @@ class Raid extends Model {
                 event( new \App\Events\RaidCreated( $raid, $announce ) );
             } elseif( $announceType == 'raid-update') {
                 event( new \App\Events\RaidUpdated( $raid, $announce ) );
+            } elseif( $announceType == 'raid-duplicate') {
+                event( new \App\Events\RaidDuplicate( $raid, $announce ) );
             }
         }
 

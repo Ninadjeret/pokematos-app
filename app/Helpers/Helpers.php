@@ -7,7 +7,7 @@ class Helpers {
     public static function sanitize( $string ) {
         $string = str_replace(' ', '-', $string);
         $string = self::remove_accents($string);
-        return strtolower($string);
+        return trim(strtolower($string));
     }
 
     public static function remove_accents( $string ) {

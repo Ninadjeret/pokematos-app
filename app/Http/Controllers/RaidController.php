@@ -45,6 +45,12 @@ class RaidController extends Controller {
 
     public function delete(City $city, Raid $raid, Request $request) {
         event( new \App\Events\RaidDeleted( $raid ) );
+        $announces = $raid->getAnnounces();
+        if( !empty($announces) ) {
+            foreach( $announces as $announce ) {
+                Announce::destroy($announce->id);
+            }
+        }
         Raid::destroy($raid->id);
         return response()->json(null, 204);
     }
