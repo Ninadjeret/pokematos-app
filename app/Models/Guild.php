@@ -48,7 +48,7 @@ class Guild extends Model
         'raidreporting_text_prefixes' => ['default' => ["+raid","+Raid"], 'type' => 'array'],
 
         'welcome_active' => ['default' => false, 'type' => 'boolean'],
-        'welcome_message' => ['default' => 'Bievenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],
+        'welcome_message' => ['default' => 'Bienvenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],
         'welcome_channel_discord_id' => ['default' => false, 'type' => 'string'],
     ];
 

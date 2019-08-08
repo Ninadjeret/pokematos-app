@@ -4,19 +4,18 @@
             <v-subheader>Message de bienvenue</v-subheader>
             <div class="setting d-flex switch">
                 <div>
-                    <label>Activer le message de bievenue ?</label>
+                    <label>Activer le message de bienvenue ?</label>
                     <p class="description">Celui-ci apparaitra dans le salon choisi lors de l'arrivée d'un nouvel utilisateur</p>
                 </div>
                 <v-switch v-model="welcome_active"></v-switch>
             </div>
             <div v-if="welcome_active" class="setting">
-                <label>Message de bievenue</label>
+                <label>Message de bienvenue</label>
                 <p class="description">{utilisateur} permet d'indiquer le nom du nouvel arrivant.</p>
                 <input v-model="welcome_message" type="text">
             </div>
             <div v-if="welcome_active" class="setting">
                 <label>Salon</label>
-                <p class="description">C'est dans ce salon que le bot affichera les messages permettant aux joueurs de s'inscrire à un role</p>
                 <select v-if="channels" v-model="welcome_channel_discord_id">
                     <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
                 </select>
