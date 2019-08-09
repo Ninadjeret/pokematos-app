@@ -103,7 +103,7 @@ class Role extends Model {
         }
 
         $color = $args['color'];
-        if( isset($args['color_type']) && $args['color_type'] == 'category' && $roleCategory ) {
+        if( isset($args['color_type']) && $args['color_type'] == 'category' && $newCategory ) {
             $color = $newCategory->color;
         }
 

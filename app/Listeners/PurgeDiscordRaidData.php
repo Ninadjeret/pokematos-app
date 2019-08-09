@@ -4,6 +4,8 @@ namespace App\Listeners;
 
 use App\Events\RaidDeleted;
 use RestCord\DiscordClient;
+use App\Models\RaidMessage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -25,14 +27,22 @@ class PurgeDiscordRaidData
      * @param  RaidDeleted  $event
      * @return void
      */
-    public function handle(RaidDeleted $event)
+    public function handle( $event)
     {
-        if( !empty( $event->raid->channels ) ) {
-            foreach( $event->raid->channels as $channel ) {
-                $discord = new DiscordClient(['token' => config('discord.token')]);
-                $discord->channel->deleteOrcloseChannel(['channel.id' => (int) $channel->channel_discord_id]);
+        $force_delete = false;
+        if( $event instanceof \App\Events\RaidDeleted || $event instanceof \App\Events\Raidended ) {
+            $force_delete = true;
+        }
+
+        if( $force_delete ) {
+            if( !empty( $event->raid->channels ) ) {
+                foreach( $event->raid->channels as $channel ) {
+                    $discord = new DiscordClient(['token' => config('discord.token')]);
+                    $discord->channel->deleteOrcloseChannel(['channel.id' => (int) $channel->channel_discord_id]);
+                }
             }
         }
+
 
         if( !empty( $event->raid->messages ) ) {
             foreach( $event->raid->messages as $message ) {
@@ -41,6 +51,7 @@ class PurgeDiscordRaidData
                     'channel.id' => (int) $message->channel_discord_id,
                     'message.id' => (int) $message->message_discord_id
                 ]);
+                RaidMessage::destroy($message->id);
             }
         }
     }

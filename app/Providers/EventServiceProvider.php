@@ -26,6 +26,7 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\DeleteDiscordMessage',
         ],
         'App\Events\RaidUpdated' => [
+            'App\Listeners\PurgeDiscordRaidData',
             'App\Listeners\PostRaidToDiscord',
             'App\Listeners\DeleteDiscordMessage'
         ],

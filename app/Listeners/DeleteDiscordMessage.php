@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Models\Guild;
 use App\Events\Event;
+use App\Events\RaidMessage;
 use App\Events\RaidCreated;
 use RestCord\DiscordClient;
 use Illuminate\Queue\InteractsWithQueue;
@@ -30,7 +31,7 @@ class DeleteDiscordMessage
      */
     public function handle($event)
     {
-        if( $event->announce->type == 'map' ) {
+        if( empty($event->announce->message_discord_id) ) {
             return ;
         }
 
