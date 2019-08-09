@@ -17,6 +17,7 @@ class Connector extends Model {
         'filter_gym_gym',
         'filter_pokemon_level',
         'filter_pokemon_pokemon',
+        'filter_source_type',
         'format',
         'custom_message_before',
         'custom_message_after',

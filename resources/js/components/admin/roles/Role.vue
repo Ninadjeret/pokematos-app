@@ -11,8 +11,29 @@
             <div class="setting">
                 <label>Catégorie</label>
                 <select v-if="categories" v-model="category_id">
+                    <option value="">Aucune</option>
                     <option v-for="categorie in categories" :value="categorie.id">{{categorie.name}}</option>
                 </select>
+                <p v-if="category && category.notifications" class="commentaire">L'attribution de la catégorie <strong>{{category.name}}</strong> générera un message d'inscription sur Discord dans le salon défini dans la catégorie.</p>
+            </div>
+            <div class="setting">
+                <label>Choix de la couleur</label>
+                <v-btn-toggle v-model="color_type" mandatory>
+                    <v-btn value="specific">Spécifique à ce role</v-btn>
+                    <v-btn v-if="category_id" value="category">Celle de la catégorie</v-btn>
+                </v-btn-toggle>
+            </div>
+            <div v-if="color_type == 'specific'" class="setting colorpicker">
+                <label>Couleur du role</label>
+                <swatches
+                    v-model="color"
+                    colors="material-basic"
+                    show-fallback
+                    shapes="circles"
+                    swatch-size="30"
+                    popover-to="left"
+                    :trigger-style="{ width: '32px', height: '32px' }">
+                </swatches>
             </div>
             <div class="setting">
                 <label>Ce role fait référence à</label>
@@ -66,13 +87,19 @@
 </template>
 
 <script>
+    import Swatches from 'vue-swatches'
+    import "vue-swatches/dist/vue-swatches.min.css"
+
     export default {
         name: 'AdminRolesEdit',
+        components: { Swatches },
         data() {
             return {
                 loading: false,
                 dialog: false,
                 name: '',
+                color_type: 'specific',
+                color: '#000000',
                 type: 'other',
                 gym_id: '',
                 zone_id: '',
@@ -91,10 +118,17 @@
                 this.fetch();
             }
         },
+        computed: {
+            category: function() {
+                return this.categories.find(cat => cat.id == this.category_id);
+            }
+        },
         methods: {
             fetch() {
                 axios.get('/api/user/guilds/'+this.$route.params.id+'/roles/'+this.$route.params.role_id).then( res => {
                     this.name = res.data.name;
+                    this.color_type = res.data.color_type;
+                    this.color = res.data.color;
                     this.type = res.data.type,
                     this.gym_id = res.data.gym_id;
                     this.zone_id = res.data.zone_id;
@@ -128,6 +162,8 @@
             submit() {
                 const args = {
                     name: this.name,
+                    color_type: this.color_type,
+                    color: this.color,
                     type: this.type,
                     gym_id: this.gym_id,
                     zone_id: this.zone_id,
@@ -150,6 +186,7 @@
                     })
                     this.loading = false
                 }).catch( err => {
+                    console.log(args)
                     this.$store.commit('setSnackbar', {
                         message: 'Problème lors de l\'enregistrement',
                         timeout: 1500

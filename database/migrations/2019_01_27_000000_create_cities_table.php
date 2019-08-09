@@ -162,6 +162,7 @@ class CreateCitiesTable extends Migration
             $table->json('filter_gym_zone')->nullable();
             $table->json('filter_gym_gym')->nullable();
             $table->string('format')->default('auto'); //auto, custom
+            $table->string('filter_source_type')->default('none');
             $table->string('custom_message_before')->nullable();
             $table->string('custom_message_after')->nullable();
             $table->boolean('delete_after_end')->default(false);
@@ -208,6 +209,8 @@ class CreateCitiesTable extends Migration
             $table->integer('guild_id');
             $table->integer('category_id')->nullable();
             $table->string('name');
+            $table->string('color_type')->default('category');
+            $table->string('color')->default('#000000');
             $table->string('type')->nullable();
             $table->integer('gym_id')->nullable();
             $table->integer('zone_id')->nullable();
@@ -227,6 +230,7 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->integer('guild_id');
             $table->string('name');
+            $table->string('color')->default('#000000');
             $table->boolean('notifications')->default(false);
             $table->string('channel_discord_id')->nullable();
             $table->boolean('restricted')->default(false);

@@ -52,14 +52,14 @@ class PokemonsTableSeeder extends Seeder {
 
         if(DB::table('guilds')->get()->count() == 0){
             DB::table('guilds')->insert([
-                /*[
+                [
                     'discord_id' => '377559922214305792',
                     'name'  => 'Pokématos',
                     'type'  => 'discord',
                     'city_id'  => 1,
                     'active' => 1
                 ],
-                [
+                /*[
                     'discord_id' => '606583247635349516',
                     'name'  => 'Bac à sable 2',
                     'type'  => 'discord',

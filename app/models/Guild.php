@@ -31,10 +31,10 @@ class Guild extends Model
         'map_access_moderation_roles' => ['default' => [], 'type' => 'array'],
         'access_moderation_permissions' => ['default' => [], 'type' => 'array'],
 
-        'roles_gym_color' => ['default' => '#009688', 'type' => 'string'],
+        /*'roles_gym_color' => ['default' => '#009688', 'type' => 'string'],
         'roles_gymex_color' => ['default' => '#E91E63', 'type' => 'string'],
         'roles_zone_color' => ['default' => '#2196F3', 'type' => 'string'],
-        'roles_pokemon_color' => ['default' => '#4CAF50', 'type' => 'string'],
+        'roles_pokemon_color' => ['default' => '#4CAF50', 'type' => 'string'],*/
 
         'raidsex_active' => ['default' => false, 'type' => 'boolean'],
         'raidsex_channels' => ['default' => false, 'type' => 'boolean'],
@@ -48,7 +48,7 @@ class Guild extends Model
         'raidreporting_text_prefixes' => ['default' => ["+raid","+Raid"], 'type' => 'array'],
 
         'welcome_active' => ['default' => false, 'type' => 'boolean'],
-        'welcome_message' => ['default' => 'Bievenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],
+        'welcome_message' => ['default' => 'Bienvenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],
         'welcome_channel_discord_id' => ['default' => false, 'type' => 'string'],
     ];
 

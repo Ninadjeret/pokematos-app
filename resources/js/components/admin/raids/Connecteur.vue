@@ -88,6 +88,15 @@
                                 placeholder="Ajouter un Pokémon">
                             </multiselect>
                         </div>
+                        <div class="setting">
+                            <label>Filtrer la source</label>
+                            <v-btn-toggle v-model="filter_source_type" mandatory>
+                                <v-btn value="none">Toutes les sources</v-btn>
+                                <v-btn value="map">Map</v-btn>
+                                <v-btn value="image">Image</v-btn>
+                                <v-btn value="text">Texte</v-btn>
+                            </v-btn-toggle>
+                        </div>
                         <v-subheader>Format de l'annonce</v-subheader>
                         <div class="setting">
                             <label>Format</label>
@@ -181,6 +190,7 @@
                 filter_pokemon_type: 'none',
                 filter_pokemon_level: [],
                 filter_pokemon_pokemon: [],
+                filter_source_type: 'none',
                 format: 'auto',
                 custom_message_before: '',
                 custom_message_after: '',
@@ -212,6 +222,7 @@
                     this.filter_pokemon_level = this.convertIdstoObjects(res.data.filter_pokemon_level, this.levels);
                     this.filter_pokemon_pokemon = this.convertIdstoObjects(res.data.filter_pokemon_pokemon, this.pokemons);
                     this.format = res.data.format;
+                    this.filter_source_type = res.data.filter_source_type;
                     this.custom_message_before = res.data.custom_message_before;
                     this.custom_message_after = res.data.custom_message_after;
                 }).catch( err => {
@@ -255,6 +266,7 @@
                     filter_pokemon_type: this.filter_pokemon_type,
                     filter_pokemon_level: this.convertObjectsToIds(this.filter_pokemon_level),
                     filter_pokemon_pokemon: this.convertObjectsToIds(this.filter_pokemon_pokemon),
+                    filter_source_type: this.filter_source_type,
                     format: this.format,
                     custom_message_before: this.custom_message_before,
                     custom_message_after: this.custom_message_after,

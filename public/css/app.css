@@ -11301,6 +11301,11 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   font-size: 14px;
 }
 
+.setting p.commentaire {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
 .setting input[type=text],
 .setting select {
   height: 40px;
