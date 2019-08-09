@@ -129,7 +129,7 @@ class DiscordController extends Controller {
 
     public function getChannelCategories( Request $request, City $city, Guild $guild ) {
         $discord = new DiscordClient(['token' => config('discord.token')]);
-        $channels = $discord->guild->getGuildChannels(['guild.id' => $guild->discord_id]);
+        $channels = $discord->guild->getGuildChannels(['guild.id' => (int) $guild->discord_id]);
 
         $return = [];
         foreach($channels as $channel) {

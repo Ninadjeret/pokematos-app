@@ -132,7 +132,7 @@ class Raid extends Model {
                 foreach( $guilds as $guild ) {
                     if( $guild->settings->raidsex_active && $guild->settings->raidsex_channels && $guild->settings->raidsex_channel_category_id ) {
                         $channel = $discord->guild->createGuildChannel([
-                            'guild.id' => $guild->discord_id,
+                            'guild.id' => (int) $guild->discord_id,
                             'name' => $gym->name.'-'.$startTime->format('d').'-'.$startTime->format('m'),
                             'type' => 0,
                             'parent_id' => (int) $guild->settings->raidsex_channel_category_id

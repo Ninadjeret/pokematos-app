@@ -8,29 +8,6 @@ class PokemonsTableSeeder extends Seeder {
      */
     public function run()
     {
-        // check if table users is empty
-        if(DB::table('users')->get()->count() == 0){
-            DB::table('users')->insert([
-                [
-                    'name' => 'florian',
-                    'email' => 'florian@voyelle.fr',
-                    'password' => bcrypt('florian'),
-                    'discord_id' => 539079553813839873,
-                    'discord_name' => 'Ninadjeret',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ],
-                [
-                    'name' => 'kisulov',
-                    'email' => 'kisulov@kisulov.fr',
-                    'password' => bcrypt('kisulov'),
-                    'discord_id' => 484022213507547152,
-                    'discord_name' => 'Kisulov',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ],
-            ]);
-        } // end check if table users is empty
 
         // check if table users is empty
         if(DB::table('cities')->get()->count() == 0){
