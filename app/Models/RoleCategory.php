@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class RoleCategory extends Model {
 
-    protected $fillable = ['guild_id', 'name', 'restricted', 'channel_discord_id', 'notifications'];
+    protected $fillable = ['guild_id', 'name', 'restricted', 'channel_discord_id', 'notifications', 'color'];
     protected $appends = ['guild', 'permissions'];
     protected $hidden = ['guild_id'];
     protected $casts = [

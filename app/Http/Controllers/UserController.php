@@ -113,6 +113,7 @@ class UserController extends Controller {
            'filter_pokemon_type' => ( isset( $request->filter_pokemon_type ) ) ? $request->filter_pokemon_type : '' ,
            'filter_pokemon_level' => ( isset( $request->filter_pokemon_level ) ) ? $request->filter_pokemon_level : '' ,
            'filter_pokemon_pokemon' => ( isset( $request->filter_pokemon_pokemon ) ) ? $request->filter_pokemon_pokemon : '' ,
+           'filter_source_type' => ( isset( $request->filter_source_type ) ) ? $request->filter_source_type : '' ,
            'format' => ( isset( $request->format ) ) ? $request->format : 'auto' ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : '' ,
            'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : '' ,
@@ -134,6 +135,7 @@ class UserController extends Controller {
            'filter_pokemon_type' => ( isset( $request->filter_pokemon_type ) ) ? $request->filter_pokemon_type : $connector->filter_pokemon_type ,
            'filter_pokemon_level' => ( isset( $request->filter_pokemon_level ) ) ? $request->filter_pokemon_level : $connector->filter_pokemon_level ,
            'filter_pokemon_pokemon' => ( isset( $request->filter_pokemon_pokemon ) ) ? $request->filter_pokemon_pokemon : $connector->filter_pokemon_pokemon ,
+           'filter_source_type' => ( isset( $request->filter_source_type ) ) ? $request->filter_source_type : $connector->filter_source_type ,
            'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : $connector->custom_message_before ,
            'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : $connector->custom_message_after ,
@@ -247,18 +249,19 @@ class UserController extends Controller {
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
-        $roleCategory = RoleCategory::find($request->category_id);
-        if( empty($roleCategory) ) return response()->json('La catégorie n\'existe pas', 400);
 
-        $role = Role::add([
+        $args = [
             'guild_id' => $guild->id,
-            'category_id' => $roleCategory->id,
+            'category_id' => $request->category_id,
             'name' => $request->name,
+            'color_type' => $request->color_type,
+            'color' => $request->color,
             'type' => ( $request->type ) ? $request->type : null,
             'gym_id' => ( $request->gym_id ) ? $request->gym_id : null,
             'zone_id' => ( $request->zone_id ) ? $request->zone_id : null,
             'pokemon_id' => ( $request->pokemon_id ) ? $request->pokemon_id : null,
-        ]);
+        ];
+        $role = Role::add($args);
         return response()->json($role, 200);
     }
 
@@ -275,12 +278,12 @@ class UserController extends Controller {
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
-        $roleCategory = RoleCategory::find($request->category_id);
-        if( empty($roleCategory) ) return response()->json('La catégorie n\'existe pas', 400);
 
         $role->change([
             'name' => ($request->name) ? $request->name : $role->name,
-            'category_id' => $roleCategory->id,
+            'category_id' => $request->category_id,
+            'color_type' => ( $request->color_type ) ? $request->color_type : $role->color_type,
+            'color' => ( $request->color ) ? $request->color : $role->color,
             'type' => ( $request->type ) ? $request->type : $role->type,
             'gym_id' => ( $request->gym_id ) ? $request->gym_id : $role->gym_id,
             'zone_id' => ( $request->zone_id ) ? $request->zone_id : $role->zone_id,
@@ -314,13 +317,14 @@ class UserController extends Controller {
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
-        $categorie = RoleCategory::create([
-            'guild_id' => $guild->id,
-            'name' => $request->name,
-            'channel_discord_id' => $request->channel_discord_id,
-            'restricted' => ($request->restricted) ? $request->restricted : 0,
-            'notifications' => ($request->notifications) ? $request->notifications : 0,
-        ]);
+        $args = [];
+        $args['guild_id'] = $guild->id;
+        $args['name'] = $request->name;
+        $args['color'] = $request->color;
+        $args['notifications'] = ($request->notifications) ? $request->notifications : 0;
+        $args['restricted'] = ($request->restricted) ? $request->restricted : 0;
+        if( isset($request->channel_discord_id) ) $args['channel_discord_id'] = $request->channel_discord_id;
+        $categorie = RoleCategory::create($args);
         $categorie->savePermissions($request->permissions, $request->permissions_to_delete);
         return response()->json($categorie, 200);
     }
@@ -340,6 +344,7 @@ class UserController extends Controller {
         }
         $categorie->update([
             'name' => ($request->name) ? $request->name : $categorie->name,
+            'color' => ($request->color) ? $request->color : $categorie->color,
             'channel_discord_id' => ($request->channel_discord_id) ? $request->channel_discord_id : $categorie->channel_discord_id,
             'restricted' => ($request->restricted) ? $request->restricted : $categorie->restricted,
             'notifications' => ($request->notifications) ? $request->notifications : 0,

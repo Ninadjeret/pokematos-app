@@ -129,6 +129,7 @@ return [
     'cipher' => 'AES-256-CBC',
 
     'bot_token' => env('BOT_TOKEN', false),
+    'bot_sync_url' => env('BOT_SYNC_URL', false),
 
     /*
     |--------------------------------------------------------------------------

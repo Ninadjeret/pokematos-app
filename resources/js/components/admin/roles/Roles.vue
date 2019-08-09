@@ -8,7 +8,7 @@
             <template v-for="(item, index) in filteredItems">
               <v-list-tile :key="item.id" :to="{ name: 'admin.roles.roles.edit', params: { id: $route.params.id, role_id:item.id } }">
                 <v-list-tile-content>
-                  <v-list-tile-title>
+                  <v-list-tile-title :style="'color:'+item.color">
                       @{{item.name}} <span v-if="item.category" class=""> // {{item.category.name}}</span>
                   </v-list-tile-title>
                 </v-list-tile-content>

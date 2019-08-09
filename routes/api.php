@@ -103,14 +103,13 @@ Route::group(['middleware' => ['auth.bot']], function () {
     Route::post('bot/guilds', 'BotController@addGuild');
 
     Route::get('bot/guilds/{guild_id}/roles', 'BotController@getRoles');
+    Route::post('bot/guilds/{guild_id}/roles', 'BotController@createRole');
+    Route::delete('bot/guilds/{guild_id}/roles/{role}', 'BotController@deleteRole');
+    Route::get('bot/guilds/{guild_id}/roles/{role}', 'BotController@getRole');
+    Route::put('bot/guilds/{guild_id}/roles/{role}', 'BotController@updateRole');
 
     Route::post('bot/raids', 'BotController@addRaid');
-
-    Route::post('bot/roles', 'BotController@createRole');
-    Route::delete('bot/roles/{role}', 'BotController@deleteRole');
-    Route::get('bot/roles/{role}', 'BotController@getRole');
-    Route::put('bot/roles/{role}', 'BotController@updateRole');
-
+    
     Route::get('bot/rolecategories', 'BotController@getRoleCategories');
     Route::post('bot/rolecategories', 'BotController@createRoleCategory');
     Route::get('bot/rolecategories/{categorie}', 'BotController@getRoleCategory');

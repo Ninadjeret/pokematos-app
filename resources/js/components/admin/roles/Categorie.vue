@@ -6,6 +6,18 @@
                 <label>Nom</label>
                 <input v-model="name" type="text">
             </div>
+            <div class="setting colorpicker">
+                <label>Couleur</label>
+                <swatches
+                    v-model="color"
+                    colors="material-basic"
+                    show-fallback
+                    shapes="circles"
+                    swatch-size="30"
+                    popover-to="left"
+                    :trigger-style="{ width: '32px', height: '32px' }">
+                </swatches>
+            </div>
             <v-subheader>Notifications</v-subheader>
             <div class="setting d-flex switch">
                 <div>
@@ -75,8 +87,12 @@
 </template>
 
 <script>
+    import Swatches from 'vue-swatches'
+    import "vue-swatches/dist/vue-swatches.min.css"
+
     export default {
         name: 'AdminRolesCategoriesEdit',
+        components: { Swatches },
         data() {
             return {
                 loading: false,
@@ -89,6 +105,7 @@
                 restricted: false,
                 permissions: [],
                 permissions_to_delete: [],
+                color: '#000000',
             }
         },
         created() {
@@ -102,6 +119,7 @@
             fetch() {
                 axios.get('/api/user/guilds/'+this.$route.params.id+'/rolecategories/'+this.$route.params.category_id).then( res => {
                     this.name = res.data.name;
+                    this.color = res.data.color;
                     this.notifications = res.data.notifications;
                     this.channel_id = res.data.channel_discord_id;
                     this.restricted = res.data.restricted;
@@ -124,6 +142,7 @@
             submit() {
                 const args = {
                     name: this.name,
+                    color: this.color,
                     notifications: this.notifications,
                     channel_discord_id: this.channel_id,
                     restricted: this.restricted,
