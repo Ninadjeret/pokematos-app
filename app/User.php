@@ -18,7 +18,7 @@ class User extends Authenticatable
      use HasApiTokens, Notifiable;
 
     protected $fillable = ['name', 'email', 'password', 'guilds', 'discord_id', 'discord_access_token', 'discord_refresh_token'];
-    protected $hidden = ['password', 'remember_token',];
+    protected $hidden = ['password', 'remember_token','discord_access_token', 'discord_refresh_token'];
     protected $appends = ['permissions'];
 
     public static function getPermissions() {
@@ -209,6 +209,12 @@ class User extends Authenticatable
                             }
 
                             //Gestion des prvilèges de modo
+                            Log::debug('===============================');
+                            Log::debug(print_r($guild->settings->map_access_moderation_roles, true));
+                            Log::debug('===============================');
+                            Log::debug(print_r($result->roles, true));
+                            Log::debug('===============================');
+                            Log::debug(print_r(array_intersect($guild->settings->map_access_moderation_roles, $result->roles), true));
                             if ( !empty($guild->settings->map_access_moderation_roles) && !empty(array_intersect($guild->settings->map_access_moderation_roles, $result->roles))) {
                                 $admin = 10;
                             }
@@ -263,9 +269,9 @@ class User extends Authenticatable
             }
         }
 
-        Log::debug( print_r($old_guilds, true) );
-
-        $guilds_to_delete = UserGuild::whereNotIn('id', $old_guilds)->get();
+        $guilds_to_delete = UserGuild::where('user_id', $this->id)
+            ->whereNotIn('id', $old_guilds)
+            ->get();
         if( !empty($guilds_to_delete) ) {
             foreach( $guilds_to_delete as $guild_to_delete ) {
                 UserGuild::destroy($guild_to_delete->id);

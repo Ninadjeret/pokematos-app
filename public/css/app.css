@@ -11336,10 +11336,6 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   -webkit-appearance: menulist;
 }
 
-.setting [multiple=multiple] {
-  height: 100px;
-}
-
 .setting .v-btn-toggle .v-btn {
   text-transform: none;
 }

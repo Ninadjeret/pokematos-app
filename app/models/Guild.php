@@ -108,6 +108,10 @@ class Guild extends Model
     public function getDiscordRoles() {
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $roles = $discord->guild->getGuildRoles(['guild.id' => (int) $this->discord_id]);
+        foreach( $roles as &$role ) {
+            $role->id = (string) $role->id;
+        }
+        Log::debug( print_r($roles, true) );
         return $roles;
     }
 

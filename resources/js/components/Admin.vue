@@ -3,10 +3,10 @@
         <div class="parent_view" v-if="$route.name == 'admin'">
             <div class="settings-section">
 
-                <div v-for="guild in currentCity.guilds">
+                <div v-if="user.permissions[guild.id].find(val => val === 'guild_manage')" v-for="guild in currentCity.guilds">
                     <v-subheader>Discord {{guild.name}}</v-subheader>
                     <v-list>
-                    <template v-for="(item, index) in discordItems">
+                    <template v-if="user.permissions[guild.id].find(val => val === item.permission)" v-for="(item, index) in discordItems">
                         <v-list-tile :key="item.route" :to="{ name: item.route, params: { id: guild.id }}">
                             <v-list-tile-action>
                                 <v-icon>{{item.icon}}</v-icon>
@@ -20,37 +20,40 @@
                   </v-list>
               </div>
 
-                <v-subheader>Général</v-subheader>
-                <v-list>
-                <template v-for="(item, index) in generalItems">
-                    <v-list-tile :key="item.route" :to="{ name: item.route}">
-                        <v-list-tile-action>
-                            <v-icon>{{item.icon}}</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>{{item.label}}</v-list-tile-title>
-                        </v-list-tile-content>
-                  </v-list-tile>
-                  <v-divider></v-divider>
-                </template>
-              </v-list>
+              <div v-if="user.permissions[currentCity.guilds[0].id].find(val => val === 'zone_edit' || val === 'poi_edit' )">
+                    <v-subheader>Général</v-subheader>
+                    <v-list>
+                    <template v-for="(item, index) in generalItems">
+                        <v-list-tile v-if="user.permissions[currentCity.guilds[0].id].find(val => val === item.permission)" :key="item.route" :to="{ name: item.route}">
+                            <v-list-tile-action>
+                                <v-icon>{{item.icon}}</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                            </v-list-tile-content>
+                      </v-list-tile>
+                      <v-divider></v-divider>
+                    </template>
+                  </v-list>
+              </div>
 
 
-
-            <v-subheader>Commun</v-subheader>
-            <v-list>
-            <template v-for="(item, index) in commonItems">
-                <v-list-tile :key="item.route" :to="{ name: item.route}">
-                    <v-list-tile-action>
-                        <v-icon>{{item.icon}}</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>{{item.label}}</v-list-tile-title>
-                    </v-list-tile-content>
-              </v-list-tile>
-              <v-divider></v-divider>
-            </template>
-          </v-list>
+              <div v-if="user.permissions[currentCity.guilds[0].id].find(val => val === 'boss_edit' || val === 'quest_edit' )">
+                    <v-subheader>Commun</v-subheader>
+                    <v-list>
+                    <template v-for="(item, index) in commonItems">
+                        <v-list-tile v-if="user.permissions[currentCity.guilds[0].id].find(val => val === item.permission)" :key="item.route" :to="{ name: item.route}">
+                            <v-list-tile-action>
+                                <v-icon>{{item.icon}}</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                            </v-list-tile-content>
+                      </v-list-tile>
+                      <v-divider></v-divider>
+                    </template>
+                  </v-list>
+              </div>
 
             </div>
         </div>
@@ -70,62 +73,73 @@
                     {
                         label: 'POI',
                         route: 'admin.gyms',
-                        icon: 'place'
+                        icon: 'place',
+                        permission: 'poi_edit'
                     },
                     {
                         label: 'Zones géographiques',
                         route: 'admin.zones',
-                        icon: 'map'
+                        icon: 'map',
+                        permission: 'zone_edit'
                     }
                 ],
                 discordItems: [
                     {
                         label: 'Signalements de raids',
                         route: 'admin.raids',
-                        icon: 'add_alert'
+                        icon: 'add_alert',
+                        permission: 'guild_manage'
                     },
                     {
                         label: 'Signalements de raids EX',
                         route: 'admin.raidsex',
-                        icon: 'star'
+                        icon: 'star',
+                        permission: 'guild_manage'
                     },
                     {
                         label: 'Signalements de quêtes',
                         route: 'admin.quests.home',
-                        icon: 'explore'
+                        icon: 'explore',
+                        permission: 'guild_manage',
+                        permission: 'guild_manage'
                     },
                     {
                         label: 'Roles personnalisés',
                         route: 'admin.roles',
-                        icon: 'alternate_email'
+                        icon: 'alternate_email',
+                        permission: 'guild_manage'
                     },
                     {
                         label: 'Message de bienvenue',
                         route: 'admin.welcome',
-                        icon: 'insert_comment'
+                        icon: 'insert_comment',
+                        permission: 'guild_manage'
                     },
                     {
                         label: 'Droits d\'accès',
                         route: 'admin.access',
-                        icon: 'lock_open'
+                        icon: 'lock_open',
+                        permission: 'guild_manage'
                     },
                 ],
                 commonItems: [
                     {
                         label: 'Gérer les boss',
                         route: 'admin.bosses',
-                        icon: 'fingerprint'
+                        icon: 'fingerprint',
+                        permission: 'boss_edit'
                     },
                     {
                         label: 'Gérer les quêtes',
                         route: 'admin.quests',
-                        icon: 'explore'
+                        icon: 'explore',
+                        permission: 'quest_edit'
                     },
                 ]
             }
         },
         computed: mapState([
-                'currentCity'
+                'currentCity', 'user'
         ]),
         watch: {
         },
