@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Role;
 use App\Models\Raid;
 use App\Models\Guild;
+use GuzzleHttp\Client;
 use RestCord\DiscordClient;
 use App\Models\RoleCategory;
 use Illuminate\Http\Request;
@@ -57,6 +58,13 @@ class BotController extends Controller {
                         'name' => $role_to_add->name,
                     ]);
                 }
+            }
+
+            //On avertit le bot de la MAJ
+            $client = new Client();
+            $url = config('app.bot_sync_url');
+            if( !empty($url) ) {
+                $res = $client->post($url);
             }
 
             return response()->json($guild, 200);

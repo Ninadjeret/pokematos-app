@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\City;
+use GuzzleHttp\Client;
 use RestCord\DiscordClient;
 use App\Models\GuildSetting;
 use Illuminate\Support\Facades\Log;
@@ -102,6 +103,13 @@ class Guild extends Model
                 ]);
             }
         }
+
+        //On avertit le bot de la MAJ
+        $client = new Client();
+        $url = config('app.bot_sync_url');
+        if( !empty($url) ) {
+            $res = $client->post($url);
+        }
         return true;
     }
 
@@ -111,7 +119,6 @@ class Guild extends Model
         foreach( $roles as &$role ) {
             $role->id = (string) $role->id;
         }
-        Log::debug( print_r($roles, true) );
         return $roles;
     }
 
