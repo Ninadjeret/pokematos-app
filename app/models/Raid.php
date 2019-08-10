@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class Raid extends Model {
 
-    protected $fillable = ['status'];
+    protected $fillable = ['status', 'pokemon_id'];
     protected $hidden = ['gym_id', 'city_id', 'pokemon_id'];
     protected $appends = ['end_time', 'pokemon', 'source', 'channels', 'messages', 'thumbnail_url'];
 
@@ -68,6 +68,7 @@ class Raid extends Model {
     public function getLastAnnounce() {
         $annonce = Announce::where('raid_id', $this->id)
             ->where('type', '!=', 'raid-duplicate')
+            ->where('source', '!=', 'auto')
             ->orderBy('created_at', 'desc')
             ->first();
         return $annonce;
@@ -82,6 +83,14 @@ class Raid extends Model {
 
     public function getGym() {
         return Stop::find( $this->gym_id );
+    }
+
+    public function isActive() {
+        return ( !$this->isPassed() && !$this->isFuture() );
+    }
+
+    public function isPassed() {
+        return ( $this->end_time < date('Y-m-d H:i:s') );
     }
 
     public function isFuture() {
@@ -115,15 +124,31 @@ class Raid extends Model {
         }
 
         else {
+
+            //Gestion du level
+            $egg_level = $args['egg_level'];
+            if( isset( $args['pokemon_id']) ) {
+                $pokemon = Pokemon::find($args['pokemon_id']);
+                if($pokemon) $egg_level = $pokemon->boss_level;
+            }
+
+            //Enregistrement
             $raid = new Raid();
             $raid->city_id = $city->id;
             $raid->gym_id = $gym->id;
-            $raid->egg_level =$args['egg_level'];
+            $raid->egg_level = $egg_level;
             $raid->start_time = $args['start_time'];
             $raid->pokemon_id = ( isset( $args['pokemon_id']) && date('Y-m-d H:i:s') > $raid->start_time ) ? $args['pokemon_id'] : null ;
             $raid->ex = (isset($args['ex'])) ? $args['ex'] : false;
             $raid->save();
             $announceType = 'raid-create';
+
+            //Gestion du statut
+            if( $raid->isFuture() ) {
+                $raid->update(['status' => 'future']);
+            } elseif( $raid->isActive() ) {
+                $raid->update(['status' => 'active']);
+            }
 
             $guilds = Guild::where('city_id', $raid->city_id)->get();
             $startTime = new \DateTime($raid->start_time);
@@ -132,7 +157,7 @@ class Raid extends Model {
                 foreach( $guilds as $guild ) {
                     if( $guild->settings->raidsex_active && $guild->settings->raidsex_channels && $guild->settings->raidsex_channel_category_id ) {
                         $channel = $discord->guild->createGuildChannel([
-                            'guild.id' => $guild->discord_id,
+                            'guild.id' => (int) $guild->discord_id,
                             'name' => $gym->name.'-'.$startTime->format('d').'-'.$startTime->format('m'),
                             'type' => 0,
                             'parent_id' => (int) $guild->settings->raidsex_channel_category_id
@@ -150,7 +175,7 @@ class Raid extends Model {
         if( $announceType ) {
             $announce = Announce::create([
                 'type' => $announceType,
-                'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map2',
+                'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => $args['user_id'],
                 'raid_id' => $raid->id,
@@ -172,16 +197,37 @@ class Raid extends Model {
 
     }
 
-    public static function archiveRaids() {
+    public static function updateStatuses() {
         $now = new \DateTime();
-        $now->modify( '- 45 minutes' );
+        $before = new \DateTime();
+        $before->modify( '- 45 minutes' );
         $raids_ended = Raid::where('status', '!=', 'archived')
-            ->where('start_time', '<=', $now->format('Y-m-d H:i:s') )
+            ->where('start_time', '<=', $before->format('Y-m-d H:i:s') )
             ->get();
         if( !empty( $raids_ended ) ) {
             foreach( $raids_ended as $raid ) {
                 $raid->update(['status' => 'archived']);
                 event( new \App\Events\RaidEnded( $raid ) );
+            }
+        }
+        $raids_active = Raid::where('status', 'future')
+            ->where('start_time', '<=', $now->format('Y-m-d H:i:s') )
+            ->get();
+        if( !empty( $raids_active ) ) {
+            foreach( $raids_active as $raid ) {
+                $raid->update(['status' => 'active']);
+                $bosses = Pokemon::where('boss_level', $raid->egg_level)->get();
+                if( count($bosses) === 1 ) {
+                    $raid->update(['pokemon_id' => $bosses[0]->id ]);
+                    $announce = Announce::create([
+                        'type' => 'raid-update',
+                        'source' => 'auto',
+                        'date' => date('Y-m-d H:i:s'),
+                        'user_id' => 0,
+                        'raid_id' => $raid->id,
+                    ]);
+                    event( new \App\Events\RaidUpdated( $raid, $announce ) );
+                }
             }
         }
     }

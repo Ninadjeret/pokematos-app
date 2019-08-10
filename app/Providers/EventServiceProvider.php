@@ -19,13 +19,14 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         'App\Events\RaidEnded' => [
-            'App\Listeners\DeleteRaidChannels',
+            'App\Listeners\PurgeDiscordRaidData',
         ],
         'App\Events\RaidCreated' => [
             'App\Listeners\PostRaidToDiscord',
             'App\Listeners\DeleteDiscordMessage',
         ],
         'App\Events\RaidUpdated' => [
+            'App\Listeners\PurgeDiscordRaidData',
             'App\Listeners\PostRaidToDiscord',
             'App\Listeners\DeleteDiscordMessage'
         ],

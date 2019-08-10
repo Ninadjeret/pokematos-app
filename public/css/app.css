@@ -11071,7 +11071,7 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   /*bottom: 10px;*/
   right: 0px;
   width: 78px;
-  z-index: 1600;
+  z-index: 3000;
   /*display: flex;
   flex-direction: column-reverse; */
 }
@@ -11336,10 +11336,6 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   -webkit-appearance: menulist;
 }
 
-.setting [multiple=multiple] {
-  height: 100px;
-}
-
 .setting .v-btn-toggle .v-btn {
   text-transform: none;
 }
@@ -11488,6 +11484,102 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 
 .v-item-group .v-btn__content {
   font-size: 11px;
+}
+
+.user__card {
+  background: url("https://assets.profchen.fr/img/app/user_bg.png") top right #5a6cae;
+  background-size: cover;
+  z-index: 2000;
+  position: relative;
+  padding: 10px 20px;
+}
+
+.user__card .user__summary {
+  display: flex;
+  align-items: center;
+}
+
+.user__card .user__summary .user__img img {
+  border-radius: 50%;
+  width: 90px;
+}
+
+.user__card .user__summary .user__info {
+  padding-left: 20px;
+}
+
+.user__card .user__summary .user__info h3 {
+  color: #fff;
+  font-family: "Teko";
+  font-size: 32px;
+}
+
+.user__card .user__summary .user__info h3 small {
+  font-size: 12px;
+}
+
+.user__card .user__summary .user__info a.logout {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 5px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.user__card .user__summary .user__info a.logout:hover {
+  background: rgba(255, 255, 255, 0.4);
+  color: #5a6cae;
+  text-decoration: none;
+}
+
+.user__card .user__stats h3 {
+  overflow: hidden;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 10px;
+  top: 20px;
+}
+
+.user__card .user__stats h3:before,
+.user__card .user__stats h3:after {
+  background-color: rgba(255, 255, 255, 0.4);
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 50%;
+}
+
+.user__card .user__stats h3:before {
+  right: 0.5em;
+  margin-left: -50%;
+}
+
+.user__card .user__stats h3:after {
+  left: 0.5em;
+  margin-right: -50%;
+}
+
+.user__card .user__stats .stats {
+  display: flex;
+  align-items: center;
+}
+
+.user__card .user__stats .stats .stat {
+  padding: 0 10px 10px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+  text-align: center;
+}
+
+.user__card .user__stats .stats .stat span {
+  color: #fff;
+  font-size: 28px;
+  float: left;
+  display: block;
+  width: 100%;
 }
 
 html {
@@ -12069,5 +12161,19 @@ range_button:active {
 
 .v-btn:before {
   background-color: inherit;
+}
+
+.v-tabs {
+  background: #5a6cae;
+  z-index: 2000;
+}
+
+.v-tabs .theme--light.v-tabs__bar .v-tabs__div {
+  color: #fff;
+}
+
+.v-tabs a:hover {
+  color: #fff;
+  text-decoration: none;
 }
 

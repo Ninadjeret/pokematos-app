@@ -41,7 +41,12 @@
                   <v-icon>person</v-icon>
                 </v-btn>
 
-                <v-btn v-if="parseInt(currentCity.permissions) >= 20" to="/admin" color="primary" flat value="recent" >
+                <v-btn
+                    v-if="parseInt(currentCity.permissions) >= 10 && user.permissions[currentCity.guilds[0].id].find(val => val != 'raid_delete' && val != 'raidex_add' )"
+                    to="/admin"
+                    color="primary"
+                    flat value="recent"
+                >
                   <span>Admin</span>
                   <v-icon>build</v-icon>
                 </v-btn>
@@ -82,7 +87,7 @@
             setInterval( this.fetch, 60000, 'auto' );
         },
         computed: mapState([
-                'cities', 'currentCity'
+                'cities', 'currentCity', 'user'
         ]),
         watch: {
             currentCity: function( val ) {

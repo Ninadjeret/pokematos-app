@@ -15,6 +15,7 @@
 @import 'dialog';
 @import 'buttonactions';
 @import 'admin';
+@import 'user';
 
 html {
     font-size: 10px !important;
@@ -522,4 +523,16 @@ range_button:active {
 }
 .v-btn:before {
     background-color: inherit;
+}
+
+.v-tabs {
+    background: $primary;
+    z-index: 2000;
+    .theme--light.v-tabs__bar .v-tabs__div {
+        color: #fff;
+    }
+    a:hover {
+        color: #fff;
+        text-decoration: none;
+    }
 }

@@ -271,13 +271,8 @@ export default {
             this.dialog = false;
         },
         canDeleteRaid() {
-            if( this.$store.state.currentCity.admin == true ) {
-                return true;
-            } else if( this.$store.state.user.id == this.gym.raid.source.user.id ) {
-                return true;
-            } else {
-                return false;
-            }
+            let permissions = this.user.permissions;
+            return ( permissions[this.currentCity.guilds[0].id].find(val => val === 'raid_delete' ) );
         },
         setScreenTo( value ) {
             console.log(value);

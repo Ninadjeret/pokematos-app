@@ -38,12 +38,31 @@
               bounds: null,
               markers: [],
               dialog:false,
-              mapFilters: [],
             }
         },
-        computed: mapState([
-                'gyms', 'currentCity'
-        ]),
+        computed: {
+            mapFilters: {
+                get: function () {
+                    let filters = this.$store.getters.getSetting('mapFilters');
+                    if( !filters || typeof filters === 'string' ) {
+                        return [];
+                    }
+                    return filters;
+                },
+                set: function (newValue) {
+                    this.$store.commit('setSetting', {
+                        setting: 'mapFilters',
+                        value: newValue
+                    });
+                }
+            },
+            gyms() {
+                return this.$store.state.gyms
+            },
+            currentCity() {
+                return this.$store.state.currentCity
+            }
+        },
         watch: {
             gyms: function updateMarkers() {
                 this.addMarkers();
@@ -91,18 +110,19 @@
             addMarker( gym ) {
 
                 let auth = true;
-                if( this.mapFilters.length > 0 ) {
+                let filters = this.$store.getters.getSetting('mapFilters');
+                if( filters && filters.length > 0 ) {
                     auth = false;
-                    if( this.mapFilters.includes( 'empty_gyms' ) && gym.gym && !gym.raid ) {
+                    if( filters.includes( 'empty_gyms' ) && gym.gym && !gym.raid ) {
                         auth = true;
                     }
-                    if( this.mapFilters.includes( 'active_gyms' ) && gym.gym && gym.raid ) {
+                    if( filters.includes( 'active_gyms' ) && gym.gym && gym.raid ) {
                         auth = true;
                     }
-                    if( this.mapFilters.includes( 'empty_stops' ) && !gym.gym && !gym.quest ) {
+                    if( filters.includes( 'empty_stops' ) && !gym.gym && !gym.quest ) {
                         auth = true;
                     }
-                    if( this.mapFilters.includes( 'active_stops' ) && !gym.gym && gym.quest ) {
+                    if( filters.includes( 'active_stops' ) && !gym.gym && gym.quest ) {
                         auth = true;
                     }
                 }

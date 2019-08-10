@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(Raid::archiveRaids())->everyMinute();
+        $schedule->command(Raid::updateStatuses())->everyMinute();
         // $schedule->command('inspire')
         //          ->hourly();
     }

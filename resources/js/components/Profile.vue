@@ -1,17 +1,30 @@
 <template>
 <div>
-    <div class="section__title">Connecté en tant que</div>
-    <div class="settings-section__wrapper">
-            <div v-if="user" class="setting__wrapper user">
-                <div class="user__img">
-                    <img v-if="user.discord_avatar_id" :src="'https://cdn.discordapp.com/avatars/'+user.discord_id+'/'+user.discord_avatar_id+'.png'">
-                    <img v-else src="https://assets.profchen.fr/img/avatar_default.png">
+    <div v-if="user" class="user__card">
+        <div class="user__summary">
+            <div class="user__img">
+                <img v-if="user.discord_avatar_id" :src="'https://cdn.discordapp.com/avatars/'+user.discord_id+'/'+user.discord_avatar_id+'.png'">
+                <img v-else src="https://assets.profchen.fr/img/avatar_default.png">
+            </div>
+            <div class="user__info">
+                <h3>{{user.name}} <small>//via Discord</small></h3>
+                <a href="/logout" class="logout">SE DECONNECTER</a>
+            </div>
+        </div>
+        <div class="user__stats">
+            <h3>Performances</h3>
+            <div class="stats">
+                <div class="stat">
+                    <span>{{user.stats.total.raidCreate}}</span> Raids annoncés
                 </div>
-                <div class="user__info">
-                    <h3>{{user.name}} <small>//via Discord</small></h3>
-                    <a href="/logout" class="logout">SE DECONNECTER</a>
+                <div class="stat">
+                    <span>{{user.stats.total.raidUpdate}}</span> Raids mis à jour
+                </div>
+                <div class="stat">
+                    <span>{{user.stats.total.questCreate}}</span> quêtes annoncées
                 </div>
             </div>
+        </div>
     </div>
     <div class="settings-section help">
         <div class="section__title">Assistance</div>
@@ -65,17 +78,9 @@
             user() {
                 return this.$store.state.user;
             },
-            settingsHideGyms: {
-                get: function () {
-                    return this.$store.getters.getSetting('hideGyms')
-                },
-                set: function (newValue) {
-                    this.$store.commit('setSetting', {
-                        setting: 'hideGyms',
-                        value: newValue
-                    });
-                }
-            }
+        },
+        created() {
+            this.$store.commit('fetchUser');
         }
     }
 </script>

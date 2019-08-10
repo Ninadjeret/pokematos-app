@@ -141,6 +141,13 @@ const store = new Vuex.Store({
                 return gym.raid && startTime.isAfter(now);
             });
         },
+        activeQuests: state => {
+            if( !state.gyms || state.gyms.length === 0 ) return [];
+            return state.gyms.filter((gym) => {
+                var now = moment();
+                return (gym.quest);
+            });
+        },
         getRaidBosses:state => {
             if( !state.pokemons || state.pokemons.length === 0 ) return [];
             return state.pokemons.filter((pokemon) => {

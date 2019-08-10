@@ -20,7 +20,6 @@
         color: $grey;
     }
 }
-
 .search__wrapper {
     background: #fafafa;
     padding: 20px 10px 20px 10px;
@@ -103,9 +102,6 @@
     select:not([multiple="multiple"]) {
         -moz-appearance:menulist;
         -webkit-appearance: menulist;
-    }
-    [multiple="multiple"] {
-        height: 100px;
     }
     .v-btn-toggle {
         .v-btn {

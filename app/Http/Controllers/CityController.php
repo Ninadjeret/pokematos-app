@@ -22,7 +22,7 @@ class CityController extends Controller {
 
     public function getZones(Request $request, City $city) {
         $user = Auth::user();
-        if( !$user->can('poi_edit', ['city_id' => $city->id]) ) {
+        if( !$user->can('zone_edit', ['city_id' => $city->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $zones = Zone::where('city_id', $city->id)
