@@ -1,0 +1,83 @@
+.user__card {
+    background: url('https://assets.profchen.fr/img/app/user_bg.png') top right $primary;
+    background-size: cover;
+    z-index: 2000;
+    position: relative;
+    padding: 10px 20px;
+    .user__summary {
+        display: flex;
+        align-items: center;
+        .user__img img {
+            border-radius: 50%;
+            width:90px;
+        }
+        .user__info {
+            padding-left: 20px;
+            h3 {
+                color: #fff;
+                font-family: 'Teko';
+                font-size: 32px;
+                small {
+                    font-size: 12px;
+                }
+            }
+            a.logout {
+                display: inline-block;
+                color: rgba(255, 255, 255, 0.4);
+                padding: 5px 20px;
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                border-radius: 10px;
+                font-size: 12px;
+                &:hover {
+                    background: rgba(255, 255, 255, 0.4);
+                    color: $primary;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+    .user__stats {
+        h3 {
+            overflow: hidden;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 10px;
+            top: 20px;
+        }
+        h3:before,
+        h3:after {
+            background-color: rgba(255, 255, 255, 0.4);
+            content: "";
+            display: inline-block;
+            height: 1px;
+            position: relative;
+            vertical-align: middle;
+            width: 50%;
+        }
+        h3:before {
+            right: 0.5em;
+            margin-left: -50%;
+        }
+        h3:after {
+            left: 0.5em;
+            margin-right: -50%;
+        }
+        .stats {
+            display: flex;
+            align-items: center;
+            .stat {
+                padding: 0 10px 10px;
+                color: rgba(255, 255, 255, 0.4);
+                font-size: 11px;
+                text-align: center;
+                span {
+                    color: #fff;
+                    font-size: 28px;
+                    float:left;
+                    display: block;
+                    width: 100%
+                }
+            }
+        }
+    }
+}

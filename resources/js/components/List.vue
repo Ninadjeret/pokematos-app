@@ -1,66 +1,102 @@
 <template>
     <div>
-        <div v-if="activeRaids.length > 0" class="raids__active">
-            <div class="section__title">Raids en cours</div>
-            <div class="raids__wrapper">
-                <div v-on:click="showModal(gym)" v-for="gym in activeRaids" class="raid__wrapper">
-                    <div class="raid__img">
-                        <img :src="getRaidImgUrl(gym.raid)">
-                    </div>
-                    <div class="raid__content">
-                        <h3>
-                            <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
-                            <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
-                            <span class="raid__timer active">
-                                <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
-                                    <template slot-scope="props">Reste {{ props.totalMinutes }} min</template>
-                                </countdown>
-                            </span>
-                        </h3>
-                        <div class="raid__gym">
-                            <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
+
+        <v-tabs v-model="tabs" fixed-tabs grow color="transparent" slider-color="white" class="">
+            <v-tab href="#raids" class="primary--text">Raids</v-tab>
+            <v-tab href="#quetes" class="primary--text">Quêtes</v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tabs">
+            <v-tab-item value="raids">
+                <div v-if="activeRaids.length > 0" class="raids__active">
+                    <div class="section__title">Raids en cours</div>
+                    <div class="raids__wrapper">
+                        <div v-on:click="showModal(gym)" v-for="gym in activeRaids" class="raid__wrapper">
+                            <div class="raid__img">
+                                <img :src="getRaidImgUrl(gym.raid)">
+                            </div>
+                            <div class="raid__content">
+                                <h3>
+                                    <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                                    <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                                    <span class="raid__timer active">
+                                        <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                            <template slot-scope="props">Reste {{ props.totalMinutes }} min</template>
+                                        </countdown>
+                                    </span>
+                                </h3>
+                                <div class="raid__gym">
+                                    <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div v-if="futureRaids.length > 0" class="raids__future">
-            <div class="section__title">Raids à venir</div>
-            <div class="raids__wrapper">
-                <div v-on:click="showModal(gym)" v-for="gym in futureRaids" class="raid__wrapper">
-                    <div class="raid__img">
-                        <img :src="getRaidImgUrl(gym.raid)">
-                    </div>
-                    <div class="raid__content">
-                        <h3>
-                            <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
-                            <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
-                            <span class="raid__timer future">
-                                <countdown v-if="gym.raid.ex" :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
-                                    <template slot-scope="props">{{ props.days }}j et {{ props.hours }}h</template>
-                                </countdown>
-                                <countdown v-else :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
-                                    <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
-                                </countdown>
-                            </span>
-                        </h3>
-                        <div class="raid__gym">
-                            <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
+                <div v-if="futureRaids.length > 0" class="raids__future">
+                    <div class="section__title">Raids à venir</div>
+                    <div class="raids__wrapper">
+                        <div v-on:click="showModal(gym)" v-for="gym in futureRaids" class="raid__wrapper">
+                            <div class="raid__img">
+                                <img :src="getRaidImgUrl(gym.raid)">
+                            </div>
+                            <div class="raid__content">
+                                <h3>
+                                    <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                                    <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                                    <span class="raid__timer future">
+                                        <countdown v-if="gym.raid.ex" :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                            <template slot-scope="props">{{ props.days }}j et {{ props.hours }}h</template>
+                                        </countdown>
+                                        <countdown v-else :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                            <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
+                                        </countdown>
+                                    </span>
+                                </h3>
+                                <div class="raid__gym">
+                                    <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div v-if="futureRaids.length === 0 &  activeRaids.length === 0" class="raids__empty hide">
-            <h3>Aucun raid pour le moment...</h3>
-            <div class="wrapper" v-if="raidsListFilters.length < 5">
-                <p>Elargissez vos critères pour voir s'il y a d'autres raids dans les environs</p>
-                <v-btn depressed @click="dialog = true">Modifier mes filtres</v-btn>
-            </div>
-            <img src="https://assets.profchen.fr/img/empty.png" />
-        </div>
+                <div v-if="futureRaids.length === 0 &  activeRaids.length === 0" class="raids__empty hide">
+                    <h3>Aucun raid pour le moment...</h3>
+                    <div class="wrapper" v-if="raidsListFilters.length < 5">
+                        <p>Elargissez vos critères pour voir s'il y a d'autres raids dans les environs</p>
+                        <v-btn depressed @click="dialog = true">Modifier mes filtres</v-btn>
+                    </div>
+                    <img src="https://assets.profchen.fr/img/empty.png" />
+                </div>
+
+            </v-tab-item>
+            <v-tab-item value="quetes">
+                <div v-if="activeQuests.length > 0" class="raids__active">
+                    <div class="section__title">Quêtes en cours</div>
+                    <div class="raids__wrapper">
+                        <div v-on:click="showModal(gym)" v-for="gym in activeQuests" class="raid__wrapper">
+                            <div class="raid__img">
+                                <img :src="gym.quest.quest.pokemon.thumbnail_url">
+                            </div>
+                            <div class="raid__content">
+                                <h3>
+                                    <span>{{gym.quest.quest.name}}</span>
+                                </h3>
+                                <div class="raid__gym">
+                                    <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="activeQuests.length === 0" class="raids__empty hide">
+                    <h3>Aucune quête pour le moment...</h3>
+                    <img src="https://assets.profchen.fr/img/empty.png" />
+                </div>
+            </v-tab-item>
+        </v-tabs-items>
+
 
         <v-dialog v-model="dialog" max-width="290" content-class="list-filters">
             <v-card>
@@ -99,6 +135,7 @@
         data() {
             return {
                 dialog:false,
+                tabs: 'raids',
                 orderOptions: [{id:'date', name:'Date'}, {id:'level', name:'Niveau de Boss'}]
             }
         },
@@ -118,6 +155,15 @@
                     let inArray = ( that.raidsListFilters.includes( gym.raid.egg_level.toString()) ) ? true : false;
                     return isEmpty || inArray;
                 });
+            },
+            activeQuests() {
+                const that = this;
+                return this.$store.getters.activeQuests.filter(function(gym) {
+                    return true;
+                    let isEmpty = ( that.raidsListFilters.length == 0 ) ? true : false;
+                    let inArray = ( that.raidsListFilters.includes( gym.raid.egg_level.toString()) ) ? true : false;
+                    return isEmpty || inArray;
+                });;
             },
             raidsListOrder: {
                 get: function () {
