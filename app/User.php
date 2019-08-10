@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Guild;
 use App\Models\City;
 use GuzzleHttp\Client;
+use App\Models\Announce;
 use App\Models\UserGuild;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,7 @@ class User extends Authenticatable
 
     protected $fillable = ['name', 'email', 'password', 'guilds', 'discord_id', 'discord_access_token', 'discord_refresh_token'];
     protected $hidden = ['password', 'remember_token','discord_access_token', 'discord_refresh_token'];
-    protected $appends = ['permissions'];
+    protected $appends = ['permissions', 'stats'];
 
     public static function getPermissions() {
         return [
@@ -72,6 +73,28 @@ class User extends Authenticatable
         }
 
         return $guilds;
+    }
+
+    public function getStatsAttribute() {
+        $stats = ['total' => []];
+
+        $stats['total']['raidCreate'] = Announce::where('user_id', $this->id)
+            ->where('confirmed', 1)
+            ->where('type', 'raid-create')
+            ->count();
+
+        $stats['total']['raidUpdate'] = Announce::where('user_id', $this->id)
+            ->where('confirmed', 1)
+            ->where('type', 'raid-update')
+            ->count();
+
+        $stats['total']['questCreate'] = Announce::where('user_id', $this->id)
+            ->where('confirmed', 1)
+            ->where('type', 'quest-create')
+            ->count();
+
+        return $stats;
+
     }
 
     public function getPermissionsAttribute() {
@@ -209,12 +232,6 @@ class User extends Authenticatable
                             }
 
                             //Gestion des prvilèges de modo
-                            Log::debug('===============================');
-                            Log::debug(print_r($guild->settings->map_access_moderation_roles, true));
-                            Log::debug('===============================');
-                            Log::debug(print_r($result->roles, true));
-                            Log::debug('===============================');
-                            Log::debug(print_r(array_intersect($guild->settings->map_access_moderation_roles, $result->roles), true));
                             if ( !empty($guild->settings->map_access_moderation_roles) && !empty(array_intersect($guild->settings->map_access_moderation_roles, $result->roles))) {
                                 $admin = 10;
                             }

@@ -15,13 +15,13 @@
             <h3>Performances</h3>
             <div class="stats">
                 <div class="stat">
-                    <span>122</span> Raids annoncés
+                    <span>{{user.stats.total.raidCreate}}</span> Raids annoncés
                 </div>
                 <div class="stat">
-                    <span>28</span> Raids mis à jour
+                    <span>{{user.stats.total.raidUpdate}}</span> Raids mis à jour
                 </div>
                 <div class="stat">
-                    <span>89</span> quêtes annoncées
+                    <span>{{user.stats.total.questCreate}}</span> quêtes annoncées
                 </div>
             </div>
         </div>
@@ -78,17 +78,9 @@
             user() {
                 return this.$store.state.user;
             },
-            settingsHideGyms: {
-                get: function () {
-                    return this.$store.getters.getSetting('hideGyms')
-                },
-                set: function (newValue) {
-                    this.$store.commit('setSetting', {
-                        setting: 'hideGyms',
-                        value: newValue
-                    });
-                }
-            }
+        },
+        created() {
+            this.$store.commit('fetchUser');
         }
     }
 </script>
