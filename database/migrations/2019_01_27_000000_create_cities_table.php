@@ -162,7 +162,7 @@ class CreateCitiesTable extends Migration
             $table->json('filter_gym_zone')->nullable();
             $table->json('filter_gym_gym')->nullable();
             $table->string('format')->default('auto'); //auto, custom
-            $table->string('filter_source_type')->default('none');
+            $table->json('filter_source_type')->nullable();
             $table->string('custom_message_before')->nullable();
             $table->string('custom_message_after')->nullable();
             $table->boolean('delete_after_end')->default(false);
