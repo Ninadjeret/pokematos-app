@@ -16,6 +16,7 @@
 @import 'buttonactions';
 @import 'admin';
 @import 'user';
+@import 'login';
 
 html {
     font-size: 10px !important;
@@ -138,62 +139,6 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     padding-bottom: 56px !important;
 }
 
-body.logged-out {
-    background: url(https://assets.profchen.fr/img/splash_bg.jpg) top right;
-    background-size: cover;
-}
-body.logged-out .branding img {
-    width: 200px;
-    display: block;
-    position: fixed;
-    bottom: 0;
-    left: calc( 50% - 100px );
-}
-body.logged-out .branding h1 {
-    color: #fff;
-    font-family: 'Teko';
-    font-size: 36px;
-    margin-top: 10px;
-    font-weight: 500;
-    text-align: center;
-}
-body.logged-out .branding a.login {
-    background: transparent;
-    border: 1px solid #fff;
-    color: #fff;
-    font-family: 'Teko';
-    font-size: 24px;
-    padding: 10px 40px;
-    margin: auto;
-    display: block;
-    text-decoration: none;
-    border-radius: 4px !important;
-}
-body.logged-out .branding a.login:hover {
-    color: $primary;
-    background: #fff;
-}
-body.logged-out .branding a.login:before {
-    content: "";
-    width: 30px;
-    height: 30px;
-    background: url('https://assets.profchen.fr/img/discord_logo_white.png') center center no-repeat;
-    background-size: contain;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-body.logged-out .branding a.minor {
-    color: rgba(255, 255, 255, 0.7);
-    padding-top: 50px;
-    width:250px;
-    margin: auto;
-    display: block;
-    text-align: center;
-    font-size: 16px;
-    position: fixed;
-    bottom: 120px;
-}
 
 .section__title {
     background: #fafafa;
