@@ -76,7 +76,7 @@
         data() {
             return {
                 dialogCities: false,
-                transitionName: 'fade',
+                transitionName: 'fade_old',
             }
         },
         mounted() {

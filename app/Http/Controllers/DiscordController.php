@@ -64,12 +64,12 @@ class DiscordController extends Controller {
 
 
         //Login
-        $auth = $user->checkGuilds($user_guilds);
-        if( $auth ) {
+        $result = $user->checkGuilds($user_guilds);
+        if( $result->auth ) {
             Auth::loginUsingId($user->id, true);
             return redirect('/');
         } else {
-            return redirect('/?access=denied&code=1');
+            return redirect('/?access=denied&code='.$result->error);
         }
         die();
 

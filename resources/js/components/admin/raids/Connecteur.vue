@@ -88,14 +88,15 @@
                                 placeholder="Ajouter un Pokémon">
                             </multiselect>
                         </div>
-                        <div class="setting">
+                        <div class="setting checkbox">
                             <label>Filtrer la source</label>
-                            <v-btn-toggle v-model="filter_source_type" mandatory>
-                                <v-btn value="none">Toutes les sources</v-btn>
-                                <v-btn value="map">Map</v-btn>
-                                <v-btn value="image">Image</v-btn>
-                                <v-btn value="text">Texte</v-btn>
-                            </v-btn-toggle>
+                            <v-checkbox
+                                v-for="(source, index) in sources"
+                                v-model="filter_source_type"
+                                :key="source.value"
+                                :label="source.label"
+                                :value="source.value">
+                            </v-checkbox>
                         </div>
                         <v-subheader>Format de l'annonce</v-subheader>
                         <div class="setting">
@@ -190,7 +191,13 @@
                 filter_pokemon_type: 'none',
                 filter_pokemon_level: [],
                 filter_pokemon_pokemon: [],
-                filter_source_type: 'none',
+                filter_source_type: ['auto', 'map', 'image', 'text'],
+                sources: [
+                    {value: 'auto', label: 'Auto'},
+                    {value: 'map', label: 'Map'},
+                    {value: 'image', label: 'Image'},
+                    {value: 'text', label: 'Texte'},
+                ],
                 format: 'auto',
                 custom_message_before: '',
                 custom_message_after: '',

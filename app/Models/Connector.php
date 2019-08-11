@@ -27,6 +27,7 @@ class Connector extends Model {
         'filter_gym_gym' => 'array',
         'filter_pokemon_level' => 'array',
         'filter_pokemon_pokemon' => 'array',
+        'filter_source_type' => 'array',
     ];
 
     public function postMessage( $raid, $announce ) {

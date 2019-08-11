@@ -205,7 +205,7 @@ class User extends Authenticatable
 
         if(  !empty( $user_guilds ) ) {
             foreach( $user_guilds as $user_guild ) {
-
+                $error = 2;
                 $auth_discord = false;
                 $admin = 0;
                 $guild = Guild::where( 'discord_id', $user_guild->id )
@@ -229,6 +229,8 @@ class User extends Authenticatable
                             } elseif( $guild->settings->map_access_rule == 'specific_roles' && !empty(array_intersect($guild->settings->map_access_roles, $result->roles))) {
                                 $auth_discord = false;
                                 $auth = true;
+                            } else {
+                                $error = 3;
                             }
 
                             //Gestion des prvilèges de modo
@@ -260,9 +262,13 @@ class User extends Authenticatable
                 }
             }
         }
-
+        
+        if( $auth ) $error = false;
         $this->saveGuilds($guilds);
-        return $auth;
+        return (object) [
+            'auth' => $auth,
+            'error' => $error,
+        ];
     }
 
     public function saveGuilds( $guilds ) {

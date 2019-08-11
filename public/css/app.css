@@ -11582,6 +11582,95 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   width: 100%;
 }
 
+body.logged-out {
+  background: url(https://assets.profchen.fr/img/splash_bg.jpg) top right;
+  background-size: cover;
+}
+
+body.logged-out .branding img {
+  width: 200px;
+  display: block;
+  position: fixed;
+  bottom: 0;
+  left: calc( 50% - 100px );
+}
+
+body.logged-out .branding h1 {
+  color: #fff;
+  font-family: "Teko";
+  font-size: 36px;
+  margin-top: 10px;
+  font-weight: 500;
+  text-align: center;
+}
+
+body.logged-out .branding a.login {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  font-family: "Teko";
+  font-size: 24px;
+  padding: 10px 40px;
+  margin: auto;
+  display: block;
+  text-decoration: none;
+  border-radius: 4px !important;
+  text-align: center;
+}
+
+body.logged-out .branding a.login:hover {
+  color: #5a6cae;
+  background: #fff;
+}
+
+body.logged-out .branding a.login:before {
+  content: "";
+  width: 30px;
+  height: 30px;
+  background: url("https://assets.profchen.fr/img/discord_logo_white.png") center center no-repeat;
+  background-size: contain;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+body.logged-out .branding a.minor {
+  color: rgba(255, 255, 255, 0.7);
+  padding-top: 50px;
+  width: 250px;
+  margin: auto;
+  display: block;
+  text-align: center;
+  font-size: 16px;
+  position: fixed;
+  bottom: 120px;
+  margin-left: calc(50% - 140px);
+}
+
+body.logged-out .denied {
+  color: #5a6cae;
+  margin: 15px -15px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.5);
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+body.logged-out .denied i {
+  font-size: 36px;
+  padding: 10px 5px 10px 15px;
+  color: #f39847;
+}
+
+body.logged-out .denied span {
+  display: inline-block;
+  padding: 10px 15px 10px 0;
+}
+
+body.logged-out .denied a {
+  text-decoration: underline;
+}
+
 html {
   font-size: 10px !important;
 }
@@ -11721,68 +11810,6 @@ h6 small {
 
 .v-content {
   padding-bottom: 56px !important;
-}
-
-body.logged-out {
-  background: url(https://assets.profchen.fr/img/splash_bg.jpg) top right;
-  background-size: cover;
-}
-
-body.logged-out .branding img {
-  width: 200px;
-  display: block;
-  position: fixed;
-  bottom: 0;
-  left: calc( 50% - 100px );
-}
-
-body.logged-out .branding h1 {
-  color: #fff;
-  font-family: "Teko";
-  font-size: 36px;
-  margin-top: 10px;
-  font-weight: 500;
-  text-align: center;
-}
-
-body.logged-out .branding a.login {
-  background: transparent;
-  border: 1px solid #fff;
-  color: #fff;
-  font-family: "Teko";
-  font-size: 24px;
-  padding: 10px 40px;
-  margin: auto;
-  display: block;
-  text-decoration: none;
-  border-radius: 4px !important;
-}
-
-body.logged-out .branding a.login:hover {
-  color: #5a6cae;
-  background: #fff;
-}
-
-body.logged-out .branding a.login:before {
-  content: "";
-  width: 30px;
-  height: 30px;
-  background: url("https://assets.profchen.fr/img/discord_logo_white.png") center center no-repeat;
-  background-size: contain;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-body.logged-out .branding a.minor {
-  color: rgba(255, 255, 255, 0.7);
-  padding-top: 50px;
-  width: 250px;
-  margin: auto;
-  display: block;
-  text-align: center;
-  font-size: 16px;
-  position: fixed;
-  bottom: 120px;
 }
 
 .section__title {

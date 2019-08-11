@@ -62,8 +62,8 @@ class PostRaidToDiscord
                 if( !in_array( $pokemon_id, $connector->filter_pokemon_pokemon ) ) continue;
             }
 
-            if( $connector->filter_source_type != 'none' ) {
-                if( $event->raid->getLastAnnounce()->source != $connector->filter_source_type ) continue;
+            if( !empty($connector->filter_source_type) ) {
+                if( !in_array( $event->raid->getLastAnnounce()->source, $connector->filter_source_type ) ) continue;
             }
 
             $connector->postMessage( $event->raid, $event->announce );
