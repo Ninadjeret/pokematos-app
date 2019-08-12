@@ -11430,9 +11430,13 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .permissions .theme--light.bt--small.bt--secondary {
-  background-color: #5a6cae;
+  background-color: #5a6cae !important;
   color: #fff;
   margin-top: 20px;
+}
+
+.permission .v-card {
+  background: #a8a7cf;
 }
 
 .permission .v-card__title--primary {
@@ -12182,9 +12186,9 @@ range_button:active {
   color: #5a6cae;
 }
 
-.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
-  background: none !important;
-}
+/*.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+    background: none !important;
+}*/
 
 .v-btn:before {
   background-color: inherit;

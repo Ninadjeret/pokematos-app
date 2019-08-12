@@ -185,12 +185,15 @@
 }
 .permissions {
     .theme--light.bt--small.bt--secondary {
-        background-color: $primary;
+        background-color: $primary !important;
         color: #fff;
         margin-top: 20px;
     }
 }
 .permission {
+    .v-card {
+        background: $secondary;
+    }
     .v-card__title--primary {
         padding: 10px;
     }

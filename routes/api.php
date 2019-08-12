@@ -108,17 +108,10 @@ Route::group(['middleware' => ['auth.bot']], function () {
     Route::get('bot/guilds/{guild_id}/roles/{role}', 'BotController@getRole');
     Route::put('bot/guilds/{guild_id}/roles/{role}', 'BotController@updateRole');
 
-    Route::post('bot/raids', 'BotController@addRaid');
-    
-    Route::get('bot/rolecategories', 'BotController@getRoleCategories');
-    Route::post('bot/rolecategories', 'BotController@createRoleCategory');
-    Route::get('bot/rolecategories/{categorie}', 'BotController@getRoleCategory');
-    Route::delete('bot/rolecategories/{categorie}', 'deleteRoleCategory@getRoleCategory');
+    Route::get('bot/guilds/{guild_id}/role-categories', 'BotController@getRoleCategories');
+    Route::get('bot/guilds/{guild_id}/role-categories/{categorie}', 'BotController@getRoleCategory');
+    Route::delete('bot/guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
 
-    Route::get('bot/rolecategories/{categorie}/permissions', 'BotController@getRoleCategoryPermissions');
-    Route::post('bot/rolecategories/{categorie}/permissions', 'BotController@createRoleCategoryPermission');
-    Route::get('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@getRoleCategoryPermission');
-    Route::put('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@updateRoleCategoryPermission');
-    Route::delete('bot/rolecategories/{categorie}/permissions/{permission}', 'BotController@deleteRoleCategoryPermission');
+    Route::post('bot/raids', 'BotController@addRaid');
 
 });

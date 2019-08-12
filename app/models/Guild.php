@@ -20,7 +20,7 @@ class Guild extends Model
         'active',
     ];
     protected $hidden = ['city_id'];
-    protected $appends = ['city', 'settings'];
+    protected $appends = ['city', 'settings', 'watched_channels'];
     protected $casts = [
         'authorized_roles' => 'array',
     ];
@@ -55,6 +55,11 @@ class Guild extends Model
 
     public function getCityAttribute() {
         return City::find($this->city_id);
+    }
+
+    public function getWatchedChannelsAttribute() {
+        $watched_channels = RoleCategory::where('guild_id', $this->id)->pluck('channel_discord_id')->toArray();
+        return $watched_channels;
     }
 
     public function getSettingsAttribute() {

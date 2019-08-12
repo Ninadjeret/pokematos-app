@@ -230,12 +230,21 @@ class BotController extends Controller {
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function getRoleCategories( Request $request) {
+    public function getRoleCategories( Request $request, $guild_id) {
 
-        $guild = Guild::where('discord_id', $request->guild_id)->first();
-        if( empty($guild) ) return response()->json('L\'ID de la guild n\'existe pas', 400);
+        $guild = Guild::where('discord_id', $guild_id)
+            ->where('active', 1)
+            ->first();
 
-        $roleCategories = RoleCategory::where('guild_id', $guild->id);
+        if( !$guild ) {
+            return response()->json('La guild n\'a pas été trouvée', 400);
+        }
+        $roleCategories = RoleCategory::where('guild_id', $guild->id)->get();
+        if( !empty($roleCategories) ) {
+            foreach( $roleCategories as &$roleCategorie ) {
+                $roleCategorie->addHidden('guild');
+            }
+        }
         return response()->json($roleCategories, 200);
     }
 
@@ -279,7 +288,16 @@ class BotController extends Controller {
      * @param  RoleCategory $categorie [description]
      * @return [type]                  [description]
      */
-    public function getRoleCategory( Request $request, RoleCategory $categorie ) {
+    public function getRoleCategory( Request $request, $guild_id, RoleCategory $categorie ) {
+
+        $guild = Guild::where('discord_id', $guild_id)
+            ->where('active', 1)
+            ->first();
+
+        if( !$guild ) {
+            return response()->json('La guild n\'a pas été trouvée', 400);
+        }
+
         return response()->json($categorie, 200);
     }
 
@@ -290,7 +308,7 @@ class BotController extends Controller {
      * @param  RoleCategory $categorie [description]
      * @return [type]                  [description]
      */
-    public function deleteRoleCategory( Request $request, RoleCategory $categorie ) {
+    public function deleteRoleCategory( Request $request, $guild_id, RoleCategory $categorie ) {
         RoleCategoy::destroy($categorie->id);
         return response()->json(null, 204);
     }
