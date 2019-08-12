@@ -79,6 +79,12 @@ class UserController extends Controller {
 
     public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {
         event( new \App\Events\QuestInstanceDeleted( $questInstance ) );;
+        $announces = $questInstance->getAnnounces();
+        if( !empty($announces) ) {
+            foreach( $announces as $announce ) {
+                Announce::destroy($announce->id);
+            }
+        }
         QuestInstance::destroy($questInstance->id);
         return response()->json(null, 204);
     }

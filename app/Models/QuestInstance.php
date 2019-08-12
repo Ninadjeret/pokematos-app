@@ -29,6 +29,13 @@ class QuestInstance extends Model
         return $annonce;
     }
 
+    public function getAnnounces() {
+        $annonces = Announce::where('quest_instance_id', $this->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        return $annonces;
+    }
+
     public function getMessagesAttribute() {
         $messages = QuestMessage::where('quest_instance_id', $this->id)->get();
         if( $messages ) {
