@@ -42,18 +42,16 @@
         methods: {
             submit() {
                 const args = {
-                    settings: {
-                        welcome_active: this.welcome_active,
-                        welcome_message: this.welcome_message,
-                        welcome_channel_discord_id: this.welcome_channel_discord_id,
-                    }
+                    lat: this.coordinates.lat,
+                    lng: this.coordinates.lng,
                 };
                 this.save(args);
             },
             save( args ) {
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
-                axios.put('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/settings', args).then( res => {
+                axios.put('/api/user/cities/'+this.$store.state.currentCity.id, args).then( res => {
+                    this.$store.commit('fetchCities');
                     this.$store.commit('setSnackbar', {
                         message: 'Enregistrement effectué',
                         timeout: 1500

@@ -31,6 +31,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/cities/{city}/raids/{raid}', 'RaidController@create');
     Route::delete('user/cities/{city}/raids/{raid}', 'RaidController@delete');
 
+    //City
+    Route::put('user/cities/{city}', 'UserController@updateCity');
+
     //Quests
     Route::post('user/cities/{city}/quests', 'UserController@createQuest');
     Route::delete('user/cities/{city}/quests/{questInstance}', 'UserController@deleteQuest');
