@@ -71,6 +71,12 @@
             return {
                 generalItems: [
                     {
+                        label: 'Carte',
+                        route: 'admin.map',
+                        icon: 'map',
+                        permission: 'guild_manage'
+                    },
+                    {
                         label: 'POI',
                         route: 'admin.gyms',
                         icon: 'place',

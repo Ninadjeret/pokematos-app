@@ -130,6 +130,7 @@ return [
 
     'bot_token' => env('BOT_TOKEN', false),
     'bot_sync_url' => env('BOT_SYNC_URL', false),
+    'maps_api_key' => env('MAPS_API_KEY', false),
 
     /*
     |--------------------------------------------------------------------------
