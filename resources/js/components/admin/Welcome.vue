@@ -40,6 +40,7 @@
                 welcome_message: '',
                 welcome_channel_discord_id: false,
                 channels: [],
+                coordinates: {},
             }
         },
         created() {

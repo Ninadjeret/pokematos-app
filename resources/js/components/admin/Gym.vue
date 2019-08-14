@@ -26,15 +26,9 @@
                     <option v-for="zone in zones" :value="zone.id">{{zone.name}}</option>
                 </select>
             </div>
-
-            <div class="setting">
-                <label>Latitude</label>
-                <input v-model="lat" type="text">
-            </div>
-
-            <div class="setting">
-                <label>Longitude</label>
-                <input v-model="lng" type="text">
+            <div class="setting map">
+                <label>Position</label>
+                <map-field id="gym-coordinates" v-model="coordinates"></map-field>
             </div>
 
             <v-subheader>Arène</v-subheader>
@@ -79,8 +73,11 @@
 </template>
 
 <script>
+    import VueGoogleAutocomplete from 'vue-google-autocomplete'
+    import MapField from '../../components/parts/MapField.vue'
     export default {
         name: 'AdminGym',
+        components: { VueGoogleAutocomplete, MapField },
         data() {
             return {
                 loading: false,
@@ -91,9 +88,8 @@
                 description: '',
                 zone_id: '',
                 ex: false,
-                lat: '',
-                lng: '',
                 gym: false,
+                coordinates:{lat: 1, lng: 1},
             }
         },
         created() {
@@ -112,8 +108,8 @@
                     this.zone_id = res.data.zone.id;
                     this.ex = res.data.ex;
                     this.gym = res.data.gym;
-                    this.lat = res.data.lat;
-                    this.lng = res.data.lng;
+                    this.coordinates.lat = res.data.lat;
+                    this.coordinates.lng = res.data.lng;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response.data ) {
@@ -147,8 +143,8 @@
                     zone_id: this.zone_id,
                     ex: this.ex,
                     gym: this.gym,
-                    lat: this.lat,
-                    lng: this.lng,
+                    lat: this.coordinates.lat,
+                    lng: this.coordinates.lng,
                 };
                 if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
                     this.save(args);

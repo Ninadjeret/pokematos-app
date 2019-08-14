@@ -31,6 +31,14 @@ class UserController extends Controller {
         return response()->json($user->getCities(), 200);
     }
 
+    public function updateCity( Request $request, City $city ) {
+        $city->update([
+            'lat' => $request->lat,
+            'lng' => $request->lng,
+        ]);
+        return response()->json($city, 200);
+    }
+
     public static function getGuildOptions( Request $request, City $city, Guild $guild ) {
         $user = Auth::user();
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
@@ -79,6 +87,12 @@ class UserController extends Controller {
 
     public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {
         event( new \App\Events\QuestInstanceDeleted( $questInstance ) );;
+        $announces = $questInstance->getAnnounces();
+        if( !empty($announces) ) {
+            foreach( $announces as $announce ) {
+                Announce::destroy($announce->id);
+            }
+        }
         QuestInstance::destroy($questInstance->id);
         return response()->json(null, 204);
     }

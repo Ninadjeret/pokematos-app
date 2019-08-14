@@ -21,7 +21,7 @@
               </div>
 
               <div v-if="user.permissions[currentCity.guilds[0].id].find(val => val === 'zone_edit' || val === 'poi_edit' )">
-                    <v-subheader>Général</v-subheader>
+                    <v-subheader v-if="currentCity">{{currentCity.name}}</v-subheader>
                     <v-list>
                     <template v-for="(item, index) in generalItems">
                         <v-list-tile v-if="user.permissions[currentCity.guilds[0].id].find(val => val === item.permission)" :key="item.route" :to="{ name: item.route}">
@@ -39,7 +39,7 @@
 
 
               <div v-if="user.permissions[currentCity.guilds[0].id].find(val => val === 'boss_edit' || val === 'quest_edit' )">
-                    <v-subheader>Commun</v-subheader>
+                    <v-subheader>Global</v-subheader>
                     <v-list>
                     <template v-for="(item, index) in commonItems">
                         <v-list-tile v-if="user.permissions[currentCity.guilds[0].id].find(val => val === item.permission)" :key="item.route" :to="{ name: item.route}">
@@ -70,6 +70,12 @@
         data() {
             return {
                 generalItems: [
+                    {
+                        label: 'Carte',
+                        route: 'admin.map',
+                        icon: 'map',
+                        permission: 'guild_manage'
+                    },
                     {
                         label: 'POI',
                         route: 'admin.gyms',

@@ -8,6 +8,7 @@ import AdminZones from './components/admin/Zones.vue'
 import AdminZone from './components/admin/Zone.vue'
 import AdminAccess from './components/admin/Acces.vue'
 import AdminWelcome from './components/admin/Welcome.vue'
+import AdminMap from './components/admin/Map.vue'
 import AdminBosses from './components/admin/Bosses.vue'
 import AdminRaidsEx from './components/admin/RaidsEx.vue'
 import AdminRolesHome from './components/admin/RolesHome.vue'
@@ -227,6 +228,15 @@ const routes = [
                                    component: AdminQuestsConnector
                               },
                          ]
+                   },
+                   {
+                         path: 'map',
+                         name: 'admin.map',
+                         meta: {
+                             title: 'Paramètres de la carte',
+                             parent: 'admin'
+                         },
+                         component: AdminMap
                    },
                 {
                       path: 'gyms',
