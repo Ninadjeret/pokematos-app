@@ -31,7 +31,6 @@ class DiscordController extends Controller {
         }
 
         $data = json_decode($res->getBody());
-        //Log::debug( print_r( $data, true ) );
         $res = $this->getDiscordMe($data);
         if( $res->getStatusCode() != 200 ) {
             return redirect('/?access=denied&code=1');

@@ -3,6 +3,8 @@
 namespace App\Listeners;
 
 use RestCord\DiscordClient;
+use App\Models\QuestMessage;
+use Illuminate\Support\Facades\Log;
 use App\Events\QuestInstanceDeleted;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,8 +27,11 @@ class PurgeDiscordQuestInstanceData
      * @param  QuestInstanceDeleted  $event
      * @return void
      */
-    public function handle(QuestInstanceDeleted $event)
+    public function handle($event)
     {
+
+        Log::debug( 'Coucou' );
+
         if( !empty( $event->quest->messages ) ) {
             foreach( $event->quest->messages as $message ) {
                 $discord = new DiscordClient(['token' => config('discord.token')]);
@@ -35,6 +40,11 @@ class PurgeDiscordQuestInstanceData
                     'message.id' => (int) $message->message_discord_id
                 ]);
             }
+        }
+
+        elseif( $event instanceof \App\Events\DayChanged ) {
+                $messagesToDelete = QuestMessage::whereNotNull('message_discord_id')->get()->toArray();
+                Log::debug( print_r($messagesToDelete, true) );
         }
     }
 }

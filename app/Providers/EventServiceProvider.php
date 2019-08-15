@@ -42,6 +42,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\QuestInstanceDeleted' => [
             'App\Listeners\PurgeDiscordQuestInstanceData',
         ],
+        'App\Events\DayChanged' => [
+            'App\Listeners\PurgeDiscordQuestInstanceData',
+        ],
     ];
 
     /**

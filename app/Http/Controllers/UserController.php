@@ -48,6 +48,7 @@ class UserController extends Controller {
     }
 
     public static function updateGuildOptions( Request $request, City $city, Guild $guild ) {
+        event( new \App\Events\DayChanged() );
         $user = Auth::user();
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);

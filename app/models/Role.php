@@ -93,8 +93,6 @@ class Role extends Model {
 
     public function change($args, $fromDiscord = false) {
 
-        Log::debug( print_r($args, true) );
-
         $guild = Guild::find($this->guild_id);
         $oldCategory = $this->category;
         $newCategory = false;
