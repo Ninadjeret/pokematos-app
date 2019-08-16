@@ -21,6 +21,7 @@ class Connector extends Model {
         'format',
         'custom_message_before',
         'custom_message_after',
+        'delete_after_end',
     ];
     protected $casts = [
         'filter_gym_zone' => 'array',
@@ -55,6 +56,7 @@ class Connector extends Model {
                 'guild_id' => $this->guild_id,
                 'message_discord_id' => $message['id'],
                 'channel_discord_id' => $message['channel_id'],
+                'delete_after_end' => $this->delete_after_end,
             ]);
         } catch (Exception $e) {
             return false;
@@ -74,6 +76,7 @@ class Connector extends Model {
                 'guild_id' => $this->guild_id,
                 'message_discord_id' => $message['id'],
                 'channel_discord_id' => $message['channel_id'],
+                'delete_after_end' => $this->delete_after_end,
             ]);
         } catch (Exception $e) {
             return false;

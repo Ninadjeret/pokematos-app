@@ -130,6 +130,7 @@ class CreateCitiesTable extends Migration
             $table->integer('guild_id');
             $table->string('message_discord_id');
             $table->string('channel_discord_id');
+            $table->boolean('delete_after_end')->default(false);
             $table->timestamps();
 
             $table->foreign('raid_id')->references('id')->on('raids');
@@ -307,6 +308,7 @@ class CreateCitiesTable extends Migration
             $table->integer('guild_id');
             $table->string('message_discord_id');
             $table->string('channel_discord_id');
+            $table->boolean('delete_after_end')->default(false);
             $table->timestamps();
 
             $table->foreign('quest_instance_id')->references('id')->on('quest_instances');

@@ -58,7 +58,7 @@ class Guild extends Model
     }
 
     public function getWatchedChannelsAttribute() {
-        $watched_channels = RoleCategory::where('guild_id', $this->id)->pluck('channel_discord_id')->toArray();
+        $watched_channels = RoleCategory::where('guild_id', $this->id)->pluck('channel_discord_id')->unique()->toArray();
         return $watched_channels;
     }
 
@@ -110,11 +110,12 @@ class Guild extends Model
         }
 
         //On avertit le bot de la MAJ
-        $client = new Client();
+        /*$client = new Client();
         $url = config('app.bot_sync_url');
         if( !empty($url) ) {
-            $res = $client->post($url);
-        }
+            $res = $client->get($url);
+        }*/
+
         return true;
     }
 

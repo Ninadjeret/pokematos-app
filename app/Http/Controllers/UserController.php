@@ -131,6 +131,7 @@ class UserController extends Controller {
            'format' => ( isset( $request->format ) ) ? $request->format : 'auto' ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : '' ,
            'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : '' ,
+           'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : '' ,
        ]);
        return response()->json($connector, 200);
    }
@@ -153,6 +154,7 @@ class UserController extends Controller {
            'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : $connector->custom_message_before ,
            'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : $connector->custom_message_after ,
+           'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : $connector->delete_after_end ,
        ]);
        return response()->json($connector, 200);
    }
@@ -206,6 +208,7 @@ class UserController extends Controller {
           'filter_stop_stop' => ( isset( $request->filter_stop_stop ) ) ? $request->filter_stop_stop : '' ,
           'format' => ( isset( $request->format ) ) ? $request->format : 'auto' ,
           'custom_message' => ( isset( $request->custom_message ) ) ? $request->custom_message : '' ,
+          'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : '' ,
       ]);
       return response()->json($connector, 200);
   }
@@ -226,6 +229,7 @@ class UserController extends Controller {
           'filter_stop_stop' => ( isset( $request->filter_stop_stop ) ) ? $request->filter_stop_stop : $connector->filter_stop_stop ,
           'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
           'custom_message' => ( isset( $request->custom_message ) ) ? $request->custom_message : $connector->custom_message ,
+          'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : $connector->delete_after_end ,
       ]);
       return response()->json($connector, 200);
   }

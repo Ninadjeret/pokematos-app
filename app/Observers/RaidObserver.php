@@ -16,7 +16,6 @@ class RaidObserver
      * @return void
      */
     public function created(Raid $raid) {
-        Log::debug('coucou');
         $guilds = Guild::where('city_id', $raid->city_id)->get();
         if( !$guilds ) return;
         if( $raid->egg_level != 6 ) return;

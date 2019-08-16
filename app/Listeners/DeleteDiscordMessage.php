@@ -40,8 +40,6 @@ class DeleteDiscordMessage
             return;
         }
 
-        Log::debug( print_r($guild->settings, true) );
-
         if( $event->announce->source == 'text' && $guild->settings->raidreporting_text_delete == false ) return;
         if( $event->announce->source == 'image' && $guild->settings->raidreporting_image_delete == false ) return;
 

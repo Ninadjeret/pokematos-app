@@ -139,6 +139,13 @@
                             </p>
                             <input v-model="custom_message_after" type="text">
                         </div>
+                        <div class="setting d-flex switch">
+                            <div>
+                                <label>Spprimer les messages à la fin du raid</label>
+                                <p class="description">Tous les messages d'annonces seront supprimés à la fin des raids concernés</p>
+                            </div>
+                            <v-switch v-model="delete_after_end"></v-switch>
+                        </div>
                 </v-tab-item>
             </v-tabs-items>
 
@@ -201,6 +208,7 @@
                 format: 'auto',
                 custom_message_before: '',
                 custom_message_after: '',
+                delete_after_end: false,
             }
         },
         created() {
@@ -232,6 +240,7 @@
                     this.filter_source_type = res.data.filter_source_type;
                     this.custom_message_before = res.data.custom_message_before;
                     this.custom_message_after = res.data.custom_message_after;
+                    this.delete_after_end = res.data.delete_after_end;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response.data ) {
@@ -277,6 +286,7 @@
                     format: this.format,
                     custom_message_before: this.custom_message_before,
                     custom_message_after: this.custom_message_after,
+                    delete_after_end: this.delete_after_end,
                 };
                 if( this.$route.params.connector_id ) {
                     this.save(args);
