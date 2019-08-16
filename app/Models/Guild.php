@@ -58,7 +58,7 @@ class Guild extends Model
     }
 
     public function getWatchedChannelsAttribute() {
-        $watched_channels = RoleCategory::where('guild_id', $this->id)->pluck('channel_discord_id')->toArray();
+        $watched_channels = RoleCategory::where('guild_id', $this->id)->pluck('channel_discord_id')->unique()->toArray();
         return $watched_channels;
     }
 

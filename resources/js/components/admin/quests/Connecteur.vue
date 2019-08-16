@@ -111,6 +111,13 @@
                             </p>
                             <input v-model="custom_message" type="text">
                         </div>
+                        <div class="setting d-flex switch">
+                            <div>
+                                <label>Spprimer les messages à la fin de la journée</label>
+                                <p class="description">Tous les messages d'annonces de quête liés à ce connecteurs seront supprimés dans la nuit</p>
+                            </div>
+                            <v-switch v-model="delete_after_end"></v-switch>
+                        </div>
                 </v-tab-item>
             </v-tabs-items>
 
@@ -165,6 +172,7 @@
                 filter_stop_stop: [],
                 format: 'auto',
                 custom_message: '',
+                delete_after_end: false,
             }
         },
         created() {
@@ -196,6 +204,7 @@
                     this.filter_reward_pokemon = this.convertIdstoObjects(res.data.filter_reward_pokemon, this.pokemons);
                     this.format = res.data.format;
                     this.custom_message = res.data.custom_message;
+                    this.delete_after_end = res.data.delete_after_end;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response.data ) {
@@ -239,6 +248,7 @@
                     filter_reward_pokemon: this.convertObjectsToIds(this.filter_reward_pokemon),
                     format: this.format,
                     custom_message: this.custom_message,
+                    delete_after_end: this.delete_after_end
                 };
                 if( this.$route.params.quest_connector_id ) {
                     this.save(args);

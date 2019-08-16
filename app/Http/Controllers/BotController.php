@@ -143,18 +143,20 @@ class BotController extends Controller {
             return response()->json('La guild n\'a pas été trouvée', 400);
         }
 
-        //$fromDiscord = ($request->discord_event) ? true : false;
-        $fromDiscord = true;
+        $role = Role::where('discord_id', $request->discord_id)->first();
+        if( empty($role) ) {
+            //$fromDiscord = ($request->discord_event) ? true : false;
+            $fromDiscord = true;
 
-        $args = [
-            'guild_id' => $guild->id,
-            'discord_id' => $request->discord_id,
-            'name' => $request->name,
-            'color_type' => 'specific',
-            'color' => '#'.dechex($request->color),
-        ];
-        $role = Role::add($args, $fromDiscord);
-
+            $args = [
+                'guild_id' => $guild->id,
+                'discord_id' => $request->discord_id,
+                'name' => $request->name,
+                'color_type' => 'specific',
+                'color' => '#'.dechex($request->color),
+            ];
+            $role = Role::add($args, $fromDiscord);
+        };
         return response()->json($role, 200);
     }
 
@@ -203,8 +205,8 @@ class BotController extends Controller {
             return response()->json('La guild n\'a pas été trouvée', 400);
         }
 
-        $role = Role::where('discord_id', $role)->first();
-        if( empty($role) ) return response()->json('Le role n\'a pas été trouvé', 400);
+        $app_role = Role::where('discord_id', $role)->first();
+        if( empty($app_role) ) return response()->json('Le role n\'a pas été trouvé', 400);
 
         //$fromDiscord = ($request->discord_event) ? true : false;
         $fromDiscord = true;
@@ -214,9 +216,9 @@ class BotController extends Controller {
             'color' => '#'.dechex($request->color),
         ];
 
-        $role->change($args, $fromDiscord);
+        $app_role->change($args, $fromDiscord);
 
-        return response()->json($role, 200);
+        return response()->json($app_role, 200);
     }
 
     /**

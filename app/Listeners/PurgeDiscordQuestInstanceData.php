@@ -32,10 +32,14 @@ class PurgeDiscordQuestInstanceData
     {
 
         $discord = new DiscordClient(['token' => config('discord.token')]);
+        $force_delete = false;
+        if( $event instanceof \App\Events\QuestInstanceDeleted ) {
+            $force_delete = true;
+        }
 
         if( !empty( $event->quest->messages ) ) {
             foreach( $event->quest->messages as $message ) {
-                if( !$message->delete_after_end ) continue;
+                if( !$message->delete_after_end && !$force_delete ) continue;
                 $discord->channel->deleteMessage([
                     'channel.id' => (int) $message->channel_discord_id,
                     'message.id' => (int) $message->message_discord_id

@@ -33,12 +33,17 @@ class PurgeDiscordRaidData
         $discord = new DiscordClient(['token' => config('discord.token')]);
 
         //Si l'event est une mise à joru du raid, on ne supprime pas le channel
-        $force_delete = false;
+        $delete_channel = false;
         if( $event instanceof \App\Events\RaidDeleted || $event instanceof \App\Events\Raidended ) {
+            $delete_channel = true;
+        }
+
+        $force_delete = false;
+        if( $event instanceof \App\Events\RaidDeleted ) {
             $force_delete = true;
         }
 
-        if( $force_delete ) {
+        if( $delete_channel ) {
             if( !empty( $event->raid->channels ) ) {
                 foreach( $event->raid->channels as $channel ) {
                     $discord->channel->deleteOrcloseChannel(['channel.id' => (int) $channel->channel_discord_id]);
@@ -49,7 +54,7 @@ class PurgeDiscordRaidData
         if( !empty( $event->raid->messages ) ) {
             foreach( $event->raid->messages as $message ) {
                 $discord = new DiscordClient(['token' => config('discord.token')]);
-                if( !$message->delete_after_end ) continue;
+                if( !$message->delete_after_end && !$force_delete ) continue;
                 $discord->channel->deleteMessage([
                     'channel.id' => (int) $message->channel_discord_id,
                     'message.id' => (int) $message->message_discord_id

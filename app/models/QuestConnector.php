@@ -55,6 +55,7 @@ class QuestConnector extends Model
                 'guild_id' => $this->guild_id,
                 'message_discord_id' => $message['id'],
                 'channel_discord_id' => $message['channel_id'],
+                'delete_after_end' => $this->delete_after_end,
             ]);
         } catch (Exception $e) {
             return false;
@@ -74,6 +75,7 @@ class QuestConnector extends Model
                 'guild_id' => $this->guild_id,
                 'message_discord_id' => $message['id'],
                 'channel_discord_id' => $message['channel_id'],
+                'delete_after_end' => $this->delete_after_end,
             ]);
         } catch (Exception $e) {
             return false;
