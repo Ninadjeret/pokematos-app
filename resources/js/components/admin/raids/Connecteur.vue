@@ -141,8 +141,8 @@
                         </div>
                         <div class="setting d-flex switch">
                             <div>
-                                <label>Spprimer les messages à la fin de la journée</label>
-                                <p class="description">Tous les messages d'annonces de quête liés à ce connecteurs seront supprimés dans la nuit</p>
+                                <label>Spprimer les messages à la fin du raid</label>
+                                <p class="description">Tous les messages d'annonces seront supprimés à la fin des raids concernés</p>
                             </div>
                             <v-switch v-model="delete_after_end"></v-switch>
                         </div>
