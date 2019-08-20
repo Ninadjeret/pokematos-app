@@ -147,7 +147,7 @@
                     }
                     if( gym.quest.quest.reward ) {
                         var imgclassname = 'map-marker__img quest';
-                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_reward_'+gym.quest.quest.type+'.png';
+                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_reward_'+gym.quest.quest.reward.type+'.png';
                     }
                 }
 

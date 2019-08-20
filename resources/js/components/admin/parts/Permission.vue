@@ -63,6 +63,8 @@
         },
         computed: {
             message() {
+                if( this.roles.length == 0 ) return '';
+                if( this.channels.length == 0 ) return '';
                 let that = this;
                 let debut = ( this.permission.type == 'auth' ) ? 'Les utilisateurs ayant' : 'Tous les utilisants, sauf ceux ayant' ;
                 let roles = ( this.permission.roles.length > 1 ) ? ' les roles ' : ' le role ';
