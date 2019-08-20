@@ -19,7 +19,7 @@
               <v-divider></v-divider>
             </template>
           </v-list>
-            <v-btn dark fixed bottom right fab><v-icon>add</v-icon></v-btn>
+            <v-btn dark fixed bottom right fab :to="{ name: 'admin.gyms.add' }"><v-icon>add</v-icon></v-btn>
         </div>
     </div>
 </template>
@@ -31,7 +31,6 @@
         data() {
             return {
                 search: null,
-                gyms: [],
             }
         },
         computed: {
@@ -52,25 +51,14 @@
                     return (matchingTitle || matchingZone || matchingEx || matchingGym || matchingStop);
                 });
             },
+            gyms() {
+                return this.$store.state.gyms;
+            }
         },
         created() {
-            this.fetchGyms();
+            this.$store.commit('fetchGyms');
         },
         methods: {
-            fetchGyms() {
-                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms').then( res => {
-                    this.gyms = res.data;
-                }).catch( err => {
-                    let message = 'Problème lors de la récupération';
-                    if( err.response.data ) {
-                        message = err.response.data;
-                    }
-                    this.$store.commit('setSnackbar', {
-                        message: message,
-                        timeout: 1500
-                    })
-                });
-            },
             getPoiIcon( gym ) {
                 let isGym = ( gym.gym ) ? '1' : '0' ;
                 let isEx = ( gym.ex ) ? '1' : '0' ;
