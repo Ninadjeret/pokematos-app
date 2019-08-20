@@ -388,6 +388,7 @@ class UserController extends Controller {
 
     public function getPOIs(City $city, Request $request){
         $pois = Stop::where('city_id', '=', $city->id)
+            ->orderBy('name', 'asc')
             ->get();
         return response()->json($pois, 200);
     }
