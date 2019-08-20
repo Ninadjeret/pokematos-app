@@ -144,8 +144,19 @@ const store = new Vuex.Store({
         activeQuests: state => {
             if( !state.gyms || state.gyms.length === 0 ) return [];
             return state.gyms.filter((gym) => {
-                var now = moment();
                 return (gym.quest);
+            });
+        },
+        rewardQuests: state => {
+            if( !state.quests || state.quests.length === 0 ) return [];
+            return state.quests.filter((quest) => {
+                return (quest.reward);
+            });
+        },
+        pokemonQuests: state => {
+            if( !state.quests || state.quests.length === 0 ) return [];
+            return state.quests.filter((quest) => {
+                return (quest.pokemon);
             });
         },
         getRaidBosses:state => {

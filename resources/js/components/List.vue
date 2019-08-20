@@ -92,6 +92,10 @@
                 </div>
                 <div v-if="activeQuests.length === 0" class="raids__empty hide">
                     <h3>Aucune quête pour le moment...</h3>
+                    <div class="wrapper" v-if="raidsListFilters.length > 1">
+                        <p>Elargissez vos critères pour voir s'il y a d'autres quêtes dans les environs</p>
+                        <v-btn depressed @click="dialog = true">Modifier mes filtres</v-btn>
+                    </div>
                     <img src="https://assets.profchen.fr/img/empty.png" />
                 </div>
             </v-tab-item>
@@ -99,7 +103,7 @@
 
 
         <v-dialog v-model="dialog" max-width="290" content-class="list-filters">
-            <v-card>
+            <v-card v-if="tabs == 'raids'">
                 <v-subheader>Ordre d'affichage</v-subheader>
                 <v-card-text>
                     <select v-model="raidsListOrder">
@@ -120,6 +124,20 @@
                     <v-btn color="primary" flat @click="dialog = false">Fermer</v-btn>
                 </v-card-actions>
             </v-card>
+            <v-card v-if="tabs == 'quetes'" max-width="290" content-class="list-filters">
+                <v-subheader>Quels Pokémon voir ?</v-subheader>
+                <v-card-text>
+                    <v-checkbox v-model="questsListFilters" v-for="quest in pokemonQuests" :key="quest.id" :label="quest.pokemon.name_fr" :value="quest.id"></v-checkbox>
+                </v-card-text>
+                <v-subheader>Quels objets voir ?</v-subheader>
+                <v-card-text>
+                    <v-checkbox v-model="questsListFilters" v-for="quest in rewardQuests" :key="quest.id" :label="quest.reward.name" :value="quest.id"></v-checkbox>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" flat @click="dialog = false">Fermer</v-btn>
+                </v-card-actions>
+            </v-card>
         </v-dialog>
 
         <button-actions @showfilters="dialog = true"></button-actions>
@@ -134,12 +152,19 @@
         props: ['gyms'],
         data() {
             return {
+                toto: [],
                 dialog:false,
                 tabs: 'raids',
                 orderOptions: [{id:'date', name:'Date'}, {id:'level', name:'Niveau de Boss'}]
             }
         },
         computed: {
+            pokemonQuests() {
+                return this.$store.getters.pokemonQuests;
+            },
+            rewardQuests() {
+                return this.$store.getters.rewardQuests;
+            },
             activeRaids() {
                 const that = this;
                 return this.$store.getters.activeRaids.sort(this.compare).filter(function(gym) {
@@ -159,9 +184,8 @@
             activeQuests() {
                 const that = this;
                 return this.$store.getters.activeQuests.filter(function(gym) {
-                    return true;
-                    let isEmpty = ( that.raidsListFilters.length == 0 ) ? true : false;
-                    let inArray = ( that.raidsListFilters.includes( gym.raid.egg_level.toString()) ) ? true : false;
+                    let isEmpty = ( that.questsListFilters.length == 0 ) ? true : false;
+                    let inArray = ( that.questsListFilters.includes(gym.quest.quest.id) ) ? true : false;
                     return isEmpty || inArray;
                 });;
             },
@@ -186,12 +210,27 @@
                         value: newValue
                     });
                 }
+            },
+            questsListFilters: {
+                get: function () {
+                    return this.$store.getters.getSetting('questsListFilters');
+                },
+                set: function (newValue) {
+                    this.$store.commit('setSetting', {
+                        setting: 'questsListFilters',
+                        value: newValue
+                    });
+                }
             }
         },
         created() {
             this.$store.commit('initSetting', {
                 setting: 'raidsListFilters',
                 value: ["1","2","3","4","5","6"]
+            });
+            this.$store.commit('initSetting', {
+                setting: 'questsListFilters',
+                value: []
             });
             this.$store.commit('initSetting', {
                 setting: 'raidsListOrder',

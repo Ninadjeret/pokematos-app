@@ -121,7 +121,9 @@ class GameMasterUpdate extends Command
         }
 
         if( count( $to_update ) > 0 || count( $to_add ) > 0 ) {
-            if ($this->confirm('Mettre à jour selon le dernier GameMaster ?')) {
+            $count_to_add = count($to_add);
+            $count_to_update = count($to_update);
+            if ($this->confirm("Mettre à jour selon le dernier GameMaster ? ({$count_to_add} Pokémon à ajouter, {$count_to_update} à mettre à jour)")) {
                 $this->perform( $to_add, $to_update );
             }
         } else {
