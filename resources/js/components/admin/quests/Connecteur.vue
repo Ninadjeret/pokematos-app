@@ -152,7 +152,6 @@
                 tabs: null,
                 channels: [],
                 pokemons: [],
-                gyms: [],
                 zones: [],
                 levels: [
                     {id:1,name: '1 tête'},
@@ -178,7 +177,6 @@
         created() {
             this.fetchChannels();
             this.fetchPokemons();
-            this.fetchPokestops();
             this.fetchZones();
             if( this.$route.params.quest_connector_id ) {
                 this.fetch();
@@ -188,6 +186,9 @@
             channelName() {
                 return 'Toto';
             },
+            gyms() {
+                return this.$store.state.gyms;
+            }
         },
         methods: {
             fetch() {
@@ -224,11 +225,6 @@
             fetchPokemons() {
                 axios.get('/api/pokemons').then( res => {
                     this.pokemons = res.data;
-                });
-            },
-            fetchPokestops() {
-                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms').then( res => {
-                    this.gyms = res.data;
                 });
             },
             fetchZones() {
