@@ -32,7 +32,7 @@
                 </v-btn>
 
                 <v-btn to="/list" color="primary" flat value="recent" >
-                  <span>Liste</span>
+                  <span>Listes</span>
                   <v-icon>notifications_active</v-icon>
                 </v-btn>
 
