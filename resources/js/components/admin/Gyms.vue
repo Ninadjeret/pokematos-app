@@ -12,7 +12,7 @@
                   </v-list-tile-avatar>
                   <v-list-tile-content>
                       <v-list-tile-title>
-                          {{gym.name}} <span v-if="gym.zone.name" class=""> // {{gym.zone.name}}</span>
+                          {{gym.name}} <span v-if="gym.zone" class=""> // {{gym.zone.name}}</span>
                       </v-list-tile-title>
                   </v-list-tile-content>
               </v-list-tile>

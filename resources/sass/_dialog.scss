@@ -250,6 +250,9 @@
      h3 {
         color: $primary_ex;
     }
+    .step__title {
+        color: $primary_ex;
+    }
     .dialog__city {
         color: $primary_ex;
     }
@@ -268,5 +271,23 @@
     .button--close,
     .bt {
         background: $primary_ex;
+    }
+    .v-date-picker-table {
+        .v-btn--active {
+            color: $primary_ex !important;
+        }
+    }
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        &.hour {
+            text-align: right;
+            border-left: 0;
+        }
+        &.minutes {
+            border-right: 0;
+            border-left: 0;
+        }
     }
 }

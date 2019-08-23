@@ -97,8 +97,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('quests/{quest}', 'PokemonController@updateQuest');
     Route::delete('quests/{quest}', 'PokemonController@deleteQuest');
 
-
 });
+
+Route::get('version', 'Controller@getVersion');
 
 Route::group(['middleware' => ['auth.bot']], function () {
 

@@ -19,7 +19,7 @@
 
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}?version={{config('app.version.current')}}" rel="stylesheet">
 </head>
 <body>
 
@@ -29,6 +29,6 @@
     <!--<script src="{{ asset('js/manifest.js') }}"></script>
     <script src="{{ asset('js/vendor.js') }}"></script>-->
     <script src="https://maps.googleapis.com/maps/api/js?key={{config('app.maps_api_key')}}&libraries=places"></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}?version={{config('app.version.current')}}" defer></script>
 </body>
 </html>

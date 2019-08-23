@@ -41,7 +41,7 @@ const routes = [
          path: '/list',
          name: 'list',
          meta: {
-             title: 'Liste'
+             title: 'Listes'
          },
          component: List
       },

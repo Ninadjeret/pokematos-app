@@ -32,7 +32,7 @@
                 </v-btn>
 
                 <v-btn to="/list" color="primary" flat value="recent" >
-                  <span>Liste</span>
+                  <span>Listes</span>
                   <v-icon>notifications_active</v-icon>
                 </v-btn>
 
@@ -65,14 +65,18 @@
               </v-dialog>
           </v-footer>
 
+          <updater></updater>
+
 </div>
 </template>
 
 <script>
     import { mapState } from 'vuex'
     import VueRouter from 'vue-router'
+    import Updater from './parts/Updater.vue'
     export default {
         name: 'Container',
+        components: { Updater },
         data() {
             return {
                 dialogCities: false,

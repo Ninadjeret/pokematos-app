@@ -85,12 +85,12 @@
                     <p class="step__title">A quelle heure ?</p>
                     <v-layout>
                         <v-flex xs6>
-                            <select v-if="exAllowedHours" v-model="exHour">
+                            <select dir="rtl" class="hour" v-if="exAllowedHours" v-model="exHour">
                                 <option v-for="hour in exAllowedHours" :value="hour">{{hour}}h</option>
                             </select>
                         </v-flex>
                         <v-flex xs6>
-                            <select v-if="exAllowedMinutes" v-model="exMinutes">
+                            <select class="minutes" v-if="exAllowedMinutes" v-model="exMinutes">
                                 <option v-for="minutes in exAllowedMinutes" :value="minutes">{{minutes}}</option>
                             </select>
                         </v-flex>
@@ -143,7 +143,7 @@
                         <span v-if="createRaidHoraires" class="step__timer--horaires">{{createRaidHoraires}}</span>
                     </p>
                     <button v-on:click="addToTimeRange()" class="range_button" id="range__plus"><i class="material-icons">add</i></button>
-                    <input v-model="createRaidData.delai" v-on:change="updateTimeRange()" type="range" class="range" min="-60" max="45" step="1" data-orientation="horizontal">
+                    <input v-model="createRaidData.delai" v-on:change="updateTimeRange()" @input="updateTimeRange()" type="range" class="range" min="-60" max="45" step="1" data-orientation="horizontal">
                 </div>
 
                 <hr>

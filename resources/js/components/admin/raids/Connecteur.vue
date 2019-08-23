@@ -55,6 +55,12 @@
                                 label="name"
                                 :multiple="true"
                                 placeholder="Ajouter une arêne">
+                                <template slot="option" slot-scope="props">
+                                    <div class="option__desc">
+                                        <span class="option__title">{{ props.option.name }}</span>
+                                        <span v-if="props.option.ex" class="option__small"> [EX]</span>
+                                    </div>
+                                </template>
                             </multiselect>
                         </div>
                         <v-subheader>Boss</v-subheader>
@@ -141,7 +147,7 @@
                         </div>
                         <div class="setting d-flex switch">
                             <div>
-                                <label>Spprimer les messages à la fin du raid</label>
+                                <label>Supprimer les messages à la fin du raid</label>
                                 <p class="description">Tous les messages d'annonces seront supprimés à la fin des raids concernés</p>
                             </div>
                             <v-switch v-model="delete_after_end"></v-switch>
@@ -180,7 +186,6 @@
                 tabs: null,
                 channels: [],
                 pokemons: [],
-                gyms: [],
                 zones: [],
                 levels: [
                     {id:1,name: '1 tête'},
@@ -214,7 +219,7 @@
         created() {
             this.fetchChannels();
             this.fetchPokemons();
-            this.fetchGyms();
+            //this.fetchGyms();
             this.fetchZones();
             if( this.$route.params.connector_id ) {
                 this.fetch();
@@ -224,6 +229,9 @@
             channelName() {
                 return 'Toto';
             },
+            gyms() {
+                return this.$store.state.gyms;
+            }
         },
         methods: {
             fetch() {
@@ -260,11 +268,6 @@
             fetchPokemons() {
                 axios.get('/api/pokemons').then( res => {
                     this.pokemons = res.data;
-                });
-            },
-            fetchGyms() {
-                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms').then( res => {
-                    this.gyms = res.data;
                 });
             },
             fetchZones() {
@@ -367,13 +370,8 @@
             },
             convertIdstoObjects( arrayIds, ObjectsReference ) {
                 let arrayObjects = [];
-                console.log(arrayIds);
-                console.log(ObjectsReference);
-                console.log( Array.isArray(arrayIds) );
-
                 if( arrayIds.length === 0 ) return arrayObjects;
                 arrayIds.forEach(function(id){
-                    console.log('tyty');
                     let objectToAdd = ObjectsReference.find( el => el.id == id );
                     if( objectToAdd ) arrayObjects.push(objectToAdd);
                 });

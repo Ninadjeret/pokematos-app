@@ -1,8 +1,9 @@
-var staticCacheName = "pwa-v" + new Date().getTime();
+var version ='2.0.0-alpha.2';
+var staticCacheName = "pwa-v" + version;
 var filesToCache = [
     '/offline',
-    '/css/app.css',
-    '/js/app.js',
+    '/css/app.css?version='+version,
+    '/js/app.js?version='+version,
     '/images/icons/icon-72x72.png',
     '/images/icons/icon-96x96.png',
     '/images/icons/icon-128x128.png',

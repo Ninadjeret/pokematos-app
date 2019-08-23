@@ -113,7 +113,7 @@
                         </div>
                         <div class="setting d-flex switch">
                             <div>
-                                <label>Spprimer les messages à la fin de la journée</label>
+                                <label>Supprimer les messages à la fin de la journée</label>
                                 <p class="description">Tous les messages d'annonces de quête liés à ce connecteurs seront supprimés dans la nuit</p>
                             </div>
                             <v-switch v-model="delete_after_end"></v-switch>
@@ -152,7 +152,6 @@
                 tabs: null,
                 channels: [],
                 pokemons: [],
-                gyms: [],
                 zones: [],
                 levels: [
                     {id:1,name: '1 tête'},
@@ -178,7 +177,6 @@
         created() {
             this.fetchChannels();
             this.fetchPokemons();
-            this.fetchPokestops();
             this.fetchZones();
             if( this.$route.params.quest_connector_id ) {
                 this.fetch();
@@ -188,6 +186,9 @@
             channelName() {
                 return 'Toto';
             },
+            gyms() {
+                return this.$store.state.gyms;
+            }
         },
         methods: {
             fetch() {
@@ -224,11 +225,6 @@
             fetchPokemons() {
                 axios.get('/api/pokemons').then( res => {
                     this.pokemons = res.data;
-                });
-            },
-            fetchPokestops() {
-                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms').then( res => {
-                    this.gyms = res.data;
                 });
             },
             fetchZones() {
