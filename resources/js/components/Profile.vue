@@ -56,7 +56,7 @@
 
         <p class="credit">
             Pokématos, créé pour vous avec <i class="material-icons">favorite</i><br>
-            Version <span id="version">2.0.0</span>
+            Version <span id="version">{{appVersion}}</span>
         </p>
     </div>
 </div>
@@ -78,6 +78,9 @@
             user() {
                 return this.$store.state.user;
             },
+            appVersion() {
+                return this.$store.getters.getSetting('appVersion');
+            }
         },
         created() {
             this.$store.commit('fetchUser');

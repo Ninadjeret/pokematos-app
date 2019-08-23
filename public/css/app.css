@@ -11040,6 +11040,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   color: #1C1030;
 }
 
+.gym-modal.gym.ex .step__title {
+  color: #1C1030;
+}
+
 .gym-modal.gym.ex .dialog__city {
   color: #1C1030;
 }
@@ -11063,6 +11067,26 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 .gym-modal.gym.ex .button--close,
 .gym-modal.gym.ex .bt {
   background: #1C1030;
+}
+
+.gym-modal.gym.ex .v-date-picker-table .v-btn--active {
+  color: #1C1030 !important;
+}
+
+.gym-modal.gym.ex select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.gym-modal.gym.ex select.hour {
+  text-align: right;
+  border-left: 0;
+}
+
+.gym-modal.gym.ex select.minutes {
+  border-right: 0;
+  border-left: 0;
 }
 
 .map__actions {

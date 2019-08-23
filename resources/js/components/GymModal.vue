@@ -85,12 +85,12 @@
                     <p class="step__title">A quelle heure ?</p>
                     <v-layout>
                         <v-flex xs6>
-                            <select v-if="exAllowedHours" v-model="exHour">
+                            <select dir="rtl" class="hour" v-if="exAllowedHours" v-model="exHour">
                                 <option v-for="hour in exAllowedHours" :value="hour">{{hour}}h</option>
                             </select>
                         </v-flex>
                         <v-flex xs6>
-                            <select v-if="exAllowedMinutes" v-model="exMinutes">
+                            <select class="minutes" v-if="exAllowedMinutes" v-model="exMinutes">
                                 <option v-for="minutes in exAllowedMinutes" :value="minutes">{{minutes}}</option>
                             </select>
                         </v-flex>

@@ -1,5 +1,5 @@
 <template>
-    <div>Toto</div>
+
 </template>
 
 <script>
@@ -29,16 +29,10 @@ export default {
     methods: {
         fetchVersion() {
             axios.get('/api/version').then( res => {
-                console.log(res.data.current)
-                let serverVersion = res.data
-                if( typeof appVersion === "undefined" || !appVersion || appVersion == '' ) {
-                    this.$store.commit('initSetting', {
-                        setting: 'appVersion',
-                        value: serverVersion.current
-                    });
-                } else {
-
-                }
+                this.$store.commit('setSetting', {
+                    setting: 'appVersion',
+                    value: res.data.current
+                });
             }).catch();
         }
     },

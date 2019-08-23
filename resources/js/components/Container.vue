@@ -65,6 +65,8 @@
               </v-dialog>
           </v-footer>
 
+          <updater></updater>
+
 </div>
 </template>
 
