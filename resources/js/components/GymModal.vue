@@ -143,7 +143,7 @@
                         <span v-if="createRaidHoraires" class="step__timer--horaires">{{createRaidHoraires}}</span>
                     </p>
                     <button v-on:click="addToTimeRange()" class="range_button" id="range__plus"><i class="material-icons">add</i></button>
-                    <input v-model="createRaidData.delai" v-on:change="updateTimeRange()" type="range" class="range" min="-60" max="45" step="1" data-orientation="horizontal">
+                    <input v-model="createRaidData.delai" v-on:change="updateTimeRange()" @input="updateTimeRange()" type="range" class="range" min="-60" max="45" step="1" data-orientation="horizontal">
                 </div>
 
                 <hr>

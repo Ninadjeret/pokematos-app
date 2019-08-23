@@ -71,8 +71,10 @@
 <script>
     import { mapState } from 'vuex'
     import VueRouter from 'vue-router'
+    import Updater from './parts/Updater.vue'
     export default {
         name: 'Container',
+        components: { Updater },
         data() {
             return {
                 dialogCities: false,

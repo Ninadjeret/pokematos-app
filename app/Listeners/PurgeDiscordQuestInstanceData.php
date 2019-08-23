@@ -49,7 +49,14 @@ class PurgeDiscordQuestInstanceData
         }
 
         elseif( $event instanceof \App\Events\DayChanged ) {
-            $messagesToDelete = QuestMessage::whereNotNull('message_discord_id')->where('delete_after_end', 1)->get();
+
+            $date = new \DateTime();
+            $date->modify('- 1 day');
+
+            $messagesToDelete = QuestMessage::whereNotNull('message_discord_id')
+                ->where('delete_after_end', 1)
+                ->whereDate('created_at', '<=', $date->format('Y-m-d'))
+                ->get();
             //Log::debug( print_r($messagesToDelete->toArray(), true) );
 
             if( empty($messagesToDelete) ) {

@@ -55,6 +55,12 @@
                                 label="name"
                                 :multiple="true"
                                 placeholder="Ajouter une arêne">
+                                <template slot="option" slot-scope="props">
+                                    <div class="option__desc">
+                                        <span class="option__title">{{ props.option.name }}</span>
+                                        <span v-if="props.option.ex" class="option__small"> [EX]</span>
+                                    </div>
+                                </template>
                             </multiselect>
                         </div>
                         <v-subheader>Boss</v-subheader>

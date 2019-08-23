@@ -14,8 +14,8 @@ return [
     */
 
     'version' => [
-        'current' => '1.5.0',
-        'forceUpadte' => false,
+        'current' => '2.0.0',
+        'min' => '2.0.0',
     ],
 
     'name' => env('APP_NAME', 'Pokématos'),
