@@ -43,7 +43,7 @@
                     let matchingStop = 1;
                     if (this.search != null) {
                         matchingTitle = gym.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-                        matchingZone = gym.zone.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+                        matchingZone = gym.zone && gym.zone.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
                         matchingEx = gym.ex && this.search.toLowerCase() == ':ex';
                         matchingGym = gym.gym && this.search.toLowerCase() == ':arene';
                         matchingStop = !gym.gym && this.search.toLowerCase() == ':pokestop';
