@@ -10969,7 +10969,7 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .modal__screen [data-step-name=level] .step__wrapper ul li button {
-  padding: 3px 11px;
+  padding: 3px 5px;
   display: block;
   border-radius: 100px;
   border: none;
