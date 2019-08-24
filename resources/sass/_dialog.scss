@@ -183,7 +183,7 @@
     padding: 0 5px;
 }
 .modal__screen [data-step-name="level"] .step__wrapper ul li button {
-    padding: 3px 11px;
+    padding: 3px 5px;
     display: block;
     border-radius: 100px;
     border: none;
@@ -220,6 +220,13 @@
 }
 
 .list-filters {
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        font-size: 12px;
+        -webkit-appearance: menulist;
+    }
     .v-input--selection-controls.v-input--checkbox {
         margin-top:0;
     }
@@ -281,6 +288,7 @@
         width: 100%;
         padding: 10px;
         border: 1px solid #ddd;
+        -webkit-appearance: menulist;
         &.hour {
             text-align: right;
             border-left: 0;

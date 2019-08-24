@@ -10969,7 +10969,7 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .modal__screen [data-step-name=level] .step__wrapper ul li button {
-  padding: 3px 11px;
+  padding: 3px 5px;
   display: block;
   border-radius: 100px;
   border: none;
@@ -11005,6 +11005,14 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   width: 100%;
   text-align: center;
   left: 0;
+}
+
+.list-filters select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  font-size: 12px;
+  -webkit-appearance: menulist;
 }
 
 .list-filters .v-input--selection-controls.v-input--checkbox {
@@ -11077,6 +11085,7 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
+  -webkit-appearance: menulist;
 }
 
 .gym-modal.gym.ex select.hour {
