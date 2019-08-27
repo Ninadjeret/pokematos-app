@@ -8,14 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuestInstance extends Model
 {
-    protected $fillable = ['date', 'quest_id', 'city_id', 'gym_id'];
-    protected $appends = ['quest', 'messages'];
-    protected $hidden = ['quest_id'];
+    protected $fillable = ['date', 'quest_id', 'city_id', 'gym_id', 'name'];
+    protected $appends = ['quest', 'messages', 'reward_type'];
+    protected $hidden = ['quest_id', 'reward_id'];
 
     public function getQuestAttribute() {
         $quest = Quest::find($this->quest_id);
         if( !empty( $quest ) ) return $quest;
         return false;
+    }
+
+    public function getRewardAttribute() {
+        if( $this->reward_type == 'pokemon' ) {
+            return Pokemon::find($this->reward_id);
+        }
+        return QuestReward::find($this->reward_id);
     }
 
     public function getStop() {

@@ -226,7 +226,8 @@
                 custom_message_after: '',
                 auto_settings: [],
                 autoSettingsChoices: [
-                    {value: 'cp', label: 'Afficher les CP min et max'}
+                    {value: 'cp', label: 'Afficher les CP min et max'},
+                    {value: 'arene_desc', label: 'Affiche la description de l\'arene'}
                 ],
                 delete_after_end: true,
             }
