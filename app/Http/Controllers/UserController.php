@@ -131,6 +131,7 @@ class UserController extends Controller {
            'format' => ( isset( $request->format ) ) ? $request->format : 'auto' ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : '' ,
            'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : '' ,
+           'auto_settings' => ( isset( $request->auto_settings ) ) ? $request->auto_settings : '' ,
            'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : '' ,
        ]);
        return response()->json($connector, 200);
@@ -154,6 +155,7 @@ class UserController extends Controller {
            'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : $connector->custom_message_before ,
            'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : $connector->custom_message_after ,
+           'auto_settings' => ( isset( $request->auto_settings ) ) ? $request->auto_settings : $connector->auto_settings ,
            'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : $connector->delete_after_end ,
        ]);
        return response()->json($connector, 200);

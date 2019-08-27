@@ -21,6 +21,7 @@ class Connector extends Model {
         'format',
         'custom_message_before',
         'custom_message_after',
+        'auto_settings',
         'delete_after_end',
     ];
     protected $casts = [
@@ -29,6 +30,7 @@ class Connector extends Model {
         'filter_pokemon_level' => 'array',
         'filter_pokemon_pokemon' => 'array',
         'filter_source_type' => 'array',
+        'auto_settings' => 'array',
     ];
 
     public function postMessage( $raid, $announce ) {

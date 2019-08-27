@@ -110,9 +110,20 @@
                             <v-btn-toggle v-model="format" mandatory>
                                 <v-btn value="auto">Automatique</v-btn>
                                 <v-btn value="custom">Personnalisé</v-btn>
+                                <v-btn value="both">Les deux</v-btn>
                             </v-btn-toggle>
                         </div>
-                        <div class="setting" v-if="format == 'custom'">
+                        <div class="setting checkbox" v-if="format != 'custom'">
+                            <label>Options de l'annonce auto</label>
+                            <v-checkbox
+                                v-for="(choice, index) in autoSettingsChoices"
+                                v-model="auto_settings"
+                                :key="choice.value"
+                                :label="choice.label"
+                                :value="choice.value">
+                            </v-checkbox>
+                        </div>
+                        <div class="setting" v-if="format != 'auto'">
                             <label>Message personnalisé avant pop</label>
                             <p class="description">
                                 Utilisez les tags suivants pour afficher des propriétés du raid :<br>
@@ -128,7 +139,7 @@
                             </p>
                             <input v-model="custom_message_before" type="text">
                         </div>
-                        <div class="setting" v-if="format == 'custom'">
+                        <div class="setting" v-if="format != 'auto'">
                             <label>Message personalisé après pop</label>
                             <p class="description">
                                 Utilisez les tags suivants pour afficher des propriétés du raid :<br>
@@ -213,7 +224,11 @@
                 format: 'auto',
                 custom_message_before: '',
                 custom_message_after: '',
-                delete_after_end: false,
+                auto_settings: [],
+                autoSettingsChoices: [
+                    {value: 'cp', label: 'Afficher les CP min et max'}
+                ],
+                delete_after_end: true,
             }
         },
         created() {
@@ -248,6 +263,7 @@
                     this.filter_source_type = res.data.filter_source_type;
                     this.custom_message_before = res.data.custom_message_before;
                     this.custom_message_after = res.data.custom_message_after;
+                    this.auto_settings = res.data.auto_settings;
                     this.delete_after_end = res.data.delete_after_end;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
@@ -289,6 +305,7 @@
                     format: this.format,
                     custom_message_before: this.custom_message_before,
                     custom_message_after: this.custom_message_after,
+                    auto_settings: this.auto_settings,
                     delete_after_end: this.delete_after_end,
                 };
                 if( this.$route.params.connector_id ) {
