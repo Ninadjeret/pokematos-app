@@ -235,3 +235,15 @@
         font-size: 11px;
     }
 }
+
+.rewards_badge {
+    background: $secondary;
+    width: 30px;
+    height: 30px;
+    display: block !important;
+    border-radius: 50%;
+    line-height: 30px;
+    position: absolute;
+    right: -5px;
+    color: #fff;
+}

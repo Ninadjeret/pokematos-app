@@ -30,45 +30,42 @@ class QuestConnector extends Model
         'filter_stop_stop' => 'array',
     ];
 
+    public $roles, $emojis, $channels;
+
     public function postMessage( $quest, $announce ) {
         if( empty( $this->channel_discord_id ) ) return false;
+        $guild = Guild::find( $this->guild_id );
 
+        //On initialise les infos discord
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+        $this->roles = $discord->guild->getGuildRoles(array(
+            'guild.id' => intval($guild->discord_id)
+        ));
+        $this->channels = $discord->guild->getGuildChannels(array(
+            'guild.id' => intval($guild->discord_id)
+        ));
+        $this->emojis = $discord->emoji->listGuildEmojis(array(
+            'guild.id' => intval($guild->discord_id)
+        ));
+
+        //Récupération du message selon le format choisi
         if( $this->format == 'auto' ) {
-            $this->postEmbedMessage( $quest, $announce );
-        } else {
-            $this->postCustomMessage( $quest, $announce );
+            $content = '';
+            $embed = $this->getEmbedMessage($quest, $announce);
+        } elseif( $this->format == 'custom' ) {
+            $content = $this->getCustomMessage( $quest, $announce );
+            $embed = false;
+        } elseif( $this->format == 'both' ) {
+            $content = $this->getCustomMessage( $quest, $announce );
+            $embed = $this->getEmbedMessage($quest, $announce);
         }
 
-    }
-
-    public function postEmbedMessage( $quest, $announce ) {
-        $quest_embed = $this->getEmbedMessage($quest, $announce);
-        $discord = new DiscordClient(['token' => config('discord.token')]);
-        try {
-            $message = $discord->channel->createMessage(array(
-                'channel.id' => intval($this->channel_discord_id),
-                'content' => '',
-                'embed' => $quest_embed,
-            ));
-            QuestMessage::create([
-                'quest_instance_id' => $quest->id,
-                'guild_id' => $this->guild_id,
-                'message_discord_id' => $message['id'],
-                'channel_discord_id' => $message['channel_id'],
-                'delete_after_end' => $this->delete_after_end,
-            ]);
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-
-    public function postCustomMessage( $quest, $announce ) {
-        $discord = new DiscordClient(['token' => config('discord.token')]);
-        $content = $this->getCustomMessage( $quest, $announce );
+        //On poste le message sur Discord et on log
         try {
             $message = $discord->channel->createMessage(array(
                 'channel.id' => intval($this->channel_discord_id),
                 'content' => $content,
+                'embed' => $embed,
             ));
             QuestMessage::create([
                 'quest_instance_id' => $quest->id,
@@ -80,13 +77,14 @@ class QuestConnector extends Model
         } catch (Exception $e) {
             return false;
         }
+
     }
 
     public function getCustomMessage( $quest, $announce ) {
+        return $this->translate( $this->custom_message, $quest );
+    }
 
-        $discord = new DiscordClient(['token' => config('discord.token')]);
-        $guild = Guild::find( $this->guild_id );
-        $message = $this->custom_message;
+    public function translate( $message, $quest ) {
         $username = ( $quest->getLastAnnounce()->getUser() ) ? $quest->getLastAnnounce()->getUser()->name : false;
 
         //Gestion des tags
@@ -154,13 +152,24 @@ class QuestConnector extends Model
 
     public function getEmbedMessage( $quest, $announce ) {
 
-        //Gestion des infos du raid
-        $img_url = ( isset( $quest->quest->pokemon ) && !empty( $quest->quest->pokemon ) ) ? $quest->quest->pokemon->thumbnail_url : false ;
+
+        $description = '';
+        if( !empty($quest->reward_type) ) {
+            $title = "Quête {$quest->reward->name} en cours";
+            $img_url = $quest->reward->thumbnail_url;
+            if( !empty($quest->name) ) {
+                $description = $quest->name;
+            }
+        } else {
+            $title = "Quête {$quest->name} en cours";
+            $img_url = 'https://assets.profchen.fr/img/app/unknown.png';
+            $description = 'On ne connait pas encore la récompense';
+        }
 
         //On formatte le embed
         $data = array(
-            'title' => 'Quête '.$quest->quest->name. ' au Pokéstop '.$quest->getStop()->name,
-            'description' => '',
+            'title' => $title,
+            'description' => $description,
             'color' => hexdec('5bb0c4'),
             'thumbnail' => array(
                 'url' => $img_url

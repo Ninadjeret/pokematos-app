@@ -6,34 +6,27 @@
                 <label>Nom</label>
                 <input v-model="name" type="text">
             </div>
-            <div class="setting">
-                <label>Type de récompense</label>
-                <v-btn-toggle v-model="reward_type" mandatory>
-                    <v-btn value="object">Objet</v-btn>
-                    <v-btn value="pokemon">Pokémon</v-btn>
-                </v-btn-toggle>
-            </div>
-            <div v-if="reward_type == 'object'" class="setting">
-                <label>Pokémon</label>
+            <div class="settings-section">
+                <v-subheader>Récompenses</v-subheader>
                 <multiselect
-                    v-model="reward"
+                    :reset-after="true"
+                    v-model="value"
                     :options="rewards"
-                    track-by="id"
+                    track-by="name"
                     label="name"
-                    :multiple="false"
-                    placeholder="Choisir un objet">
+                    placeholder="Ajouter une récompense"
+                    @select="addReward">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                        <strong>{{ option.name }}</strong>
+                    </template>
                 </multiselect>
-            </div>
-            <div v-if="reward_type == 'pokemon'" class="setting">
-                <label>Pokémon</label>
-                <multiselect
-                    v-model="pokemon"
-                    :options="pokemons"
-                    track-by="id"
-                    label="name_fr"
-                    :multiple="false"
-                    placeholder="Choisir un Pokémon">
-                </multiselect>
+                <div v-for="(reward, index) in rewards_selected" class="setting pokemon">
+                    <img :src="reward.thumbnail_url">
+                    <p>{{reward.name}}</p>
+                    <v-btn flat icon color="deep-orange" @click="removeReward(index)">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                </div>
             </div>
             <v-divider></v-divider>
             <div v-if="$route.params.id && Number.isInteger($route.params.id)">
@@ -68,11 +61,10 @@
             return {
                 loading: false,
                 dialog: false,
+                value: null,
                 name: '',
-                reward_type: 'object',
-                reward: false,
-                pokemon: false,
-                rewards: [],
+                objects: [],
+                rewards_selected: [],
             }
         },
         created() {
@@ -85,17 +77,16 @@
             pokemons() {
                 return this.$store.state.pokemons;
             },
+            rewards() {
+                return this.objects.concat(this.pokemons);
+            }
         },
         methods: {
             fetch() {
                 axios.get('/api/quests/'+this.$route.params.id).then( res => {
+                    console.log(res.data)
                     this.name = res.data.name;
-                    this.reward_type = res.data.reward_type;
-                    if( this.reward_type == 'object' ) {
-                        this.reward = this.convertIdtoObject(res.data.reward_id, this.rewards);
-                    } else {
-                        this.pokemon = this.convertIdtoObject(res.data.pokemon_id, this.pokemons);
-                    }
+                    this.rewards_selected = res.data.rewards;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response.data ) {
@@ -109,16 +100,32 @@
             },
             fetchRewards() {
                 axios.get('/api/quests/rewards').then( res => {
-                    this.rewards = res.data;
+                    this.objects = res.data;
                 });
             },
+            addReward(selectedOption, id) {
+                if( this.rewards_selected.lentgh > 0 && this.rewards_selected.filter( reward => reward.name == selectedOption.name ).length > 0 ) return;
+                this.rewards_selected.push(selectedOption);
+            },
+            removeReward(index) {
+                this.rewards_selected.splice(index, 1);
+            },
             submit() {
+                let reward_ids = [];
+                let pokemon_ids = [];
+                this.rewards_selected.forEach((item, index) => {
+                    if( item.pokedex_id ) {
+                        pokemon_ids.push(item.id);
+                    } else {
+                        reward_ids.push(item.id);
+                    }
+                })
                 const args = {
                     name: this.name,
-                    reward_type: this.reward_type,
-                    pokemon_id: ( this.pokemon ) ? this.pokemon.id : null ,
-                    reward_id: ( this.reward ) ? this.reward.id : null ,
+                    reward_ids: reward_ids,
+                    pokemon_ids: pokemon_ids
                 };
+                console.log(args);
                 if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
                     this.save(args);
                 } else {

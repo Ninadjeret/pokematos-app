@@ -12,11 +12,11 @@
                       {{quest.name}}
                   </v-list-tile-title>
                 </v-list-tile-content>
-                <v-avatar v-if="quest.pokemon">
-                    <img :src="quest.pokemon.thumbnail_url">
-                </v-avatar>
-                <v-avatar v-if="quest.reward">
-                    <img :src="quest.reward.thumbnail_url">
+                <v-avatar v-if="quest.rewards.length >= 1">
+                    <img :src="quest.rewards[0].thumbnail_url">
+                    <span v-if="quest.rewards.length > 1" class="rewards_badge">
+                        +{{quest.rewards.length - 1}}
+                    </span>
                 </v-avatar>
               </v-list-tile>
               <v-divider></v-divider>

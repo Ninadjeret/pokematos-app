@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuestInstance extends Model
 {
-    protected $fillable = ['date', 'quest_id', 'city_id', 'gym_id', 'name'];
-    protected $appends = ['quest', 'messages', 'reward_type'];
-    protected $hidden = ['quest_id', 'reward_id'];
+    protected $fillable = ['date', 'quest_id', 'name', 'reward_id', 'reward_type', 'city_id', 'gym_id'];
+    protected $appends = ['messages', 'reward'];
+    protected $hidden = ['reward_id'];
 
     public function getQuestAttribute() {
         $quest = Quest::find($this->quest_id);
@@ -49,5 +49,9 @@ class QuestInstance extends Model
             return $messages;
         }
         return [];
+    }
+
+    public static function add() {
+        
     }
 }

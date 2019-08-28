@@ -6,6 +6,7 @@ use App\User;
 use App\Models\City;
 use App\Models\Role;
 use App\Models\Stop;
+use App\Models\Quest;
 use App\Models\Guild;
 use App\Models\Announce;
 use App\Models\Connector;
@@ -65,24 +66,38 @@ class UserController extends Controller {
 
     public function createQuest( City $city, Request $request ) {
         $gym = Stop::find($request->params['gym_id']);
-        $quest = new QuestInstance();
-        $quest->city_id = $city->id;
-        $quest->gym_id = $request->params['gym_id'];
-        $quest->quest_id = $request->params['quest_id'];
-        $quest->date = date('Y-m-d 00:00:00');
-        $quest->save();
+        $instance = new QuestInstance();
+        $instance->city_id = $city->id;
+        $instance->gym_id = $request->params['gym_id'];
+        $instance->date = date('Y-m-d 00:00:00');
+        $instance->save();
+
+        if( $request->params['quest_id'] ) {
+            $quest = Quest::find($request->params['quest_id']);
+            $instance->update([
+                'quest_id' => $request->params['quest_id'],
+                'name' => $quest->name,
+            ]);
+        }
+
+        if( $request->params['reward_type'] && $request->params['reward_id'] ) {
+            $instance->update([
+                'reward_type' => $request->params['reward_type'],
+                'reward_id' => $request->params['reward_id'],
+            ]);
+        }
 
         $announce = Announce::create([
             'type' => 'quest-create',
             'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
             'date' => date('Y-m-d H:i:s'),
             'user_id' => Auth::id(),
-            'quest_instance_id' => $quest->id,
+            'quest_instance_id' => $instance->id,
         ]);
 
-        event( new \App\Events\QuestInstanceCreated( $quest, $announce ) );
+        event( new \App\Events\QuestInstanceCreated( $instance, $announce ) );
 
-        return response()->json($quest, 200);
+        return response()->json($instance, 200);
     }
 
     public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {

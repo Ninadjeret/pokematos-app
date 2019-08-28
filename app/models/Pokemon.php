@@ -9,11 +9,15 @@ class Pokemon extends Model {
 
     protected $fillable = [ 'pokedex_id', 'niantic_id', 'name_fr', 'name_ocr', 'base_att', 'base_def', 'base_sta', 'parent_id', 'boss', 'boss_level'];
     protected $table = 'pokemons';
-    protected $appends = ['thumbnail_url', 'cp'];
+    protected $appends = ['thumbnail_url', 'cp', 'name'];
     protected $casts = [
         'boss' => 'boolean',
         'shiny' => 'boolean',
     ];
+
+    public function getNameAttribute() {
+        return $this->name_fr;
+    }
 
     public function getThumbnailUrlAttribute() {
         return 'https://assets.profchen.fr/img/pokemon/pokemon_icon_'.$this->pokedex_id.'_'.$this->form_id.'.png';

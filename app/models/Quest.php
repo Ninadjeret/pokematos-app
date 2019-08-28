@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 class Quest extends Model
 {
     protected $fillable = ['name', 'reward_ids', 'pokemon_ids'];
-    protected $appends = ['pokemon', 'pokemons', 'rewards'];
+    protected $appends = ['rewards'];
+    protected $casts = [
+        'reward_ids' => 'array',
+        'pokemon_ids' => 'array',
+    ];
 
     public function getPokemonsAttribute() {
         if( empty( $this->pokemon_ids ) || !is_array($this->pokemon_ids) ) return false;
@@ -24,7 +28,7 @@ class Quest extends Model
         return $pokemons;
     }
 
-    public function getRewardsAttribute() {
+    public function getObjectsAttribute() {
         if( empty( $this->reward_ids ) || !is_array($this->reward_ids) ) return false;
 
         $rewards = [];
@@ -35,5 +39,20 @@ class Quest extends Model
             }
         }
         return $rewards;
+    }
+
+    public function getRewardsAttribute() {
+        $objects = $this->objects;
+        $pokemons = $this->pokemons;
+        if( empty($objects) && empty($pokemons) ) {
+            return [];
+        }
+        if( empty($objects) ) {
+            return $pokemons;
+        }
+        if( empty($pokemons) ) {
+            return $objects;
+        }
+        return array_merge($objects, $pokemons);
     }
 }
