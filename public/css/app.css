@@ -11523,6 +11523,18 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   font-size: 11px;
 }
 
+.rewards_badge {
+  background: #a8a7cf;
+  width: 30px;
+  height: 30px;
+  display: block !important;
+  border-radius: 50%;
+  line-height: 30px;
+  position: absolute;
+  right: -5px;
+  color: #fff;
+}
+
 .user__card {
   background: url("https://assets.profchen.fr/img/app/user_bg.png") top right #5a6cae;
   background-size: cover;

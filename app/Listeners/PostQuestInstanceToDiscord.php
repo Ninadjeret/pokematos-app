@@ -28,14 +28,14 @@ class PostQuestInstanceToDiscord
      * @param  QuestInstanceCreated  $event
      * @return void
      */
-    public function handle(QuestInstanceCreated $event)
+    public function handle($event)
     {
         $city = City::find( $event->quest->city_id );
 
         $gym = Stop::find( $event->quest->gym_id );
         $zone_id = ( $gym->zone_id ) ? $gym->zone_id : false ;
         $gym_id = $gym->id ;
-        $pokemon_id = ( $event->quest->quest->pokemon_id ) ? $event->quest->quest->pokemon_id : false;
+        $pokemon_id = ( $event->quest->reward_type == 'pokemon' ) ? $event->quest->reward_id : false;
 
         $connectors = QuestConnector::whereIn( 'guild_id', $city->getGuildsIds() )
             ->get();

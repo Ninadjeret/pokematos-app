@@ -148,11 +148,13 @@ class PokemonController extends Controller {
         if( !$user->can('quest_edit') ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
+
+        Log::debug( print_r($request->pokemon_ids, true) );
+
         $connector = Quest::create([
             'name' => $request->name,
-            'reward_type' => $request->reward_type,
-            'pokemon_id' => ($request->pokemon_id) ? $request->pokemon_id : null,
-            'reward_id' => ($request->reward_id) ? $request->reward_id : null,
+            'pokemon_ids' => ($request->pokemon_ids) ? $request->pokemon_ids : null,
+            'reward_ids' => ($request->reward_ids) ? $request->reward_ids : null,
         ]);
         return response()->json($connector, 200);
     }
@@ -172,9 +174,8 @@ class PokemonController extends Controller {
         }
         $quest->update([
             'name' => ($request->name) ? $request->name : $quest->name,
-            'reward_type' => ($request->reward_type) ? $request->reward_type : $quest->reward_type,
-            'pokemon_id' => ($request->pokemon_id) ? $request->pokemon_id : null,
-            'reward_id' => ($request->reward_id) ? $request->reward_id : null,
+            'pokemon_ids' => ($request->pokemon_ids) ? $request->pokemon_ids : null,
+            'reward_ids' => ($request->reward_ids) ? $request->reward_ids : null,
         ]);
         return response()->json($quest, 200);
     }

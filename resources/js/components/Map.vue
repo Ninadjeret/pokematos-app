@@ -143,13 +143,16 @@
 
                 if( gym.quest ) {
                     zindex = 2000;
-                    if( gym.quest.quest.pokemon ) {
+                    if( gym.quest.reward_type && gym.quest.reward_type == 'pokemon' ) {
                         var imgclassname = 'map-marker__img quest';
-                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_pokemon_'+gym.quest.quest.pokemon.pokedex_id+'_'+gym.quest.quest.pokemon.form_id+'.png';
+                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_pokemon_'+gym.quest.reward.pokedex_id+'_'+gym.quest.reward.form_id+'.png';
                     }
-                    if( gym.quest.quest.reward ) {
+                    else if( gym.quest.reward_type && gym.quest.reward_type == 'reward' ) {
                         var imgclassname = 'map-marker__img quest';
-                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_reward_'+gym.quest.quest.reward.type+'.png';
+                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_reward_'+gym.quest.reward.type+'.png';
+                    } else {
+                        var imgclassname = 'map-marker__img quest';
+                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_unknown.png';
                     }
                 }
 

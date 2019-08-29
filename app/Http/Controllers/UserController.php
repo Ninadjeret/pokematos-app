@@ -6,6 +6,7 @@ use App\User;
 use App\Models\City;
 use App\Models\Role;
 use App\Models\Stop;
+use App\Models\Quest;
 use App\Models\Guild;
 use App\Models\Announce;
 use App\Models\Connector;
@@ -15,8 +16,8 @@ use App\Models\RoleCategory;
 use App\Models\QuestInstance;
 use App\ImageAnalyzer\Engine;
 use App\Models\QuestConnector;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller {
 
@@ -64,25 +65,18 @@ class UserController extends Controller {
     */
 
     public function createQuest( City $city, Request $request ) {
-        $gym = Stop::find($request->params['gym_id']);
-        $quest = new QuestInstance();
-        $quest->city_id = $city->id;
-        $quest->gym_id = $request->params['gym_id'];
-        $quest->quest_id = $request->params['quest_id'];
-        $quest->date = date('Y-m-d 00:00:00');
-        $quest->save();
 
-        $announce = Announce::create([
-            'type' => 'quest-create',
-            'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
-            'date' => date('Y-m-d H:i:s'),
-            'user_id' => Auth::id(),
-            'quest_instance_id' => $quest->id,
-        ]);
+        $params = [
+            'city_id' => $city->id,
+            'gym_id'  => $request->params['gym_id'],
+        ];
+        if( $request->params['quest_id'] ) $params['quest_id'] = $request->params['quest_id'];
+        if( $request->params['reward_type'] ) $params['reward_type'] = $request->params['reward_type'];
+        if( $request->params['reward_id'] ) $params['reward_id'] = $request->params['reward_id'];
 
-        event( new \App\Events\QuestInstanceCreated( $quest, $announce ) );
+        $instance = QuestInstance::add($params);
 
-        return response()->json($quest, 200);
+        return response()->json($instance, 200);
     }
 
     public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {
@@ -95,6 +89,43 @@ class UserController extends Controller {
         }
         QuestInstance::destroy($questInstance->id);
         return response()->json(null, 204);
+    }
+
+    public function updateQuest( Request $request, City $city, QuestInstance $questInstance ) {
+
+        $updated = false;
+
+        if(  isset($request->params['reward_type']) &&  isset($request->params['reward_id']) && $request->params['reward_type'] && $request->params['reward_id'] && empty($quest->reward_type) ) {
+            $questInstance->update([
+                'reward_type' => $request->params['reward_type'],
+                'reward_id' => $request->params['reward_id'],
+            ]);
+            $updated = true;
+        }
+
+        if( isset($request->params['quest_id']) && $request->params['quest_id'] && empty($quest->quest_id) ) {
+            $questRef = Quest::find($request->params['quest_id']);
+            if( $questRef ) {
+                $questInstance->update([
+                    'quest_id' => $request->params['quest_id'],
+                    'name' => $questRef->name,
+                ]);
+            }
+            $updated = true;
+        }
+
+        if( $updated ) {
+            $announce = Announce::create([
+                'type' => 'quest-update',
+                'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
+                'date' => date('Y-m-d H:i:s'),
+                'user_id' => Auth::id(),
+                'quest_instance_id' => $questInstance->id,
+            ]);
+            event( new \App\Events\QuestInstanceUpdated( $questInstance, $announce ) );
+        }
+
+        return response()->json($questInstance, 200);
     }
 
     /**
@@ -131,6 +162,7 @@ class UserController extends Controller {
            'format' => ( isset( $request->format ) ) ? $request->format : 'auto' ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : '' ,
            'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : '' ,
+           'auto_settings' => ( isset( $request->auto_settings ) ) ? $request->auto_settings : '' ,
            'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : '' ,
        ]);
        return response()->json($connector, 200);
@@ -154,6 +186,7 @@ class UserController extends Controller {
            'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : $connector->custom_message_before ,
            'custom_message_after' => ( isset( $request->custom_message_after ) ) ? $request->custom_message_after : $connector->custom_message_after ,
+           'auto_settings' => ( isset( $request->auto_settings ) ) ? $request->auto_settings : $connector->auto_settings ,
            'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : $connector->delete_after_end ,
        ]);
        return response()->json($connector, 200);

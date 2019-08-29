@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     //Quests
     Route::post('user/cities/{city}/quests', 'UserController@createQuest');
+    Route::put('user/cities/{city}/quests/{questInstance}', 'UserController@updateQuest');
     Route::delete('user/cities/{city}/quests/{questInstance}', 'UserController@deleteQuest');
 
     //Admin
@@ -99,8 +100,6 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 });
 
-Route::get('version', 'Controller@getVersion');
-
 Route::group(['middleware' => ['auth.bot']], function () {
 
     Route::get('bot/guilds', 'BotController@getGuilds');
@@ -119,3 +118,5 @@ Route::group(['middleware' => ['auth.bot']], function () {
     Route::post('bot/raids', 'BotController@addRaid');
 
 });
+
+Route::get('version', 'Controller@getVersion');

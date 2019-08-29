@@ -51,7 +51,7 @@
 
             <div v-if="$route.params.id && Number.isInteger(parseInt(this.$route.params.id))">
                 <v-subheader v-if="">Autres actions</v-subheader>
-                <v-list-tile color="pink" @click="dialog = true">Supprimer l'arêne</v-list-tile>
+                <v-list-tile color="pink" @click="dialog = true">Supprimer le POI</v-list-tile>
             </div>
 
             <v-btn dark fixed bottom right fab @click="submit()">

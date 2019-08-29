@@ -12,11 +12,11 @@
                 <div v-if="!gym.gym" class="dialog__egg quest">
                     <p>
                         <span v-if="!gym.quest" class="annonce">Aucune quête signalée</span>
-                        <span v-if="gym.quest" class="annonce">Quête <strong>{{gym.quest.quest.name}}</strong> en cours</span>
+                        <span v-if="gym.quest && gym.quest.name" class="annonce">Quête <strong>{{gym.quest.name}}</strong> en cours</span>
                     </p>
                     <img v-if="!gym.quest" src="https://assets.profchen.fr/img/app/egg_0.png">
-                    <img v-if="gym.quest && gym.quest.quest.pokemon" :src="gym.quest.quest.pokemon.thumbnail_url">
-                    <img v-if="gym.quest && gym.quest.quest.reward" :src="gym.quest.quest.reward.thumbnail_url">
+                    <img v-if="gym.quest && gym.quest.reward" :src="gym.quest.reward.thumbnail_url">
+                    <img v-if="gym.quest && !gym.quest.reward" src="https://assets.profchen.fr/img/app/unknown.png">
                 </div>
                 <div v-if="gym.gym" :class="'dialog__egg '+raidStatus">
                     <p>
@@ -43,6 +43,7 @@
                         <li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
                         <li v-if="raidStatus == 'none' && gym.gym"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
                         <li v-if="!gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">explore</i><span>Annoncer une quête</span></a></li>
+                        <li v-if="gym.quest && ( !gym.quest.quest_id || !gym.quest.reward_type )"><a class="modal__action update-quest" v-on:click="setScreenTo('updateQuest')"><i class="material-icons">fingerprint</i><span>Préciser la quête</span></a></li>
                         <li v-if="gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="deleteQuestConfirm()"><i class="material-icons">delete</i><span>Supprimer la quête</span></a></li>
                         <li v-if="raidStatus == 'none' && gym.ex === true"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
@@ -104,32 +105,73 @@
 
             <div v-if="modalScreen == 'createQuest'" class="modal__screen create-quest">
                 <h3 class="">Annoncer une quête</h3>
-                <div class="search__wrapper">
+                <div v-if="!questToSubmit" class="search__wrapper">
                     <v-text-field single-line hide-details outline v-model="questSearch" label="Recherche"></v-text-field>
                 </div>
+                <p v-if="questToSubmit" class="step__title">Quelle est la quête ?</p>
                 <v-list>
                 <template v-for="(quest, index) in filteredQuests">
-                  <v-list-tile :key="quest.id" v-on:click="postNewQuest(quest.id)">
+                  <v-list-tile :key="quest.id" @click="clickQuest(quest)">
                     <v-list-tile-content>
                       <v-list-tile-title>
                           {{quest.name}}
                       </v-list-tile-title>
                     </v-list-tile-content>
-                    <v-avatar v-if="quest.pokemon">
-                        <img :src="quest.pokemon.thumbnail_url">
+                    <v-avatar v-if="!questToSubmit">
+                        <img :src="quest.rewards[0].thumbnail_url">
+                        <span v-if="quest.rewards.length > 1" class="rewards_badge">
+                            +{{quest.rewards.length - 1}}
+                        </span>
                     </v-avatar>
-                    <v-avatar v-if="quest.reward">
-                        <img :src="quest.reward.thumbnail_url">
+                    <v-avatar v-if="questToSubmit">
+                        <v-btn flat icon>
+                            <v-icon>close</v-icon>
+                        </v-btn>
                     </v-avatar>
                   </v-list-tile>
                   <v-divider></v-divider>
                 </template>
               </v-list>
+              <hr>
+              <div v-if="questToSubmit" class="step quest_rewards" data-step-name="boss">
+                  <p class="step__title">Quelle est la récompense ?</p>
+                  <div class="step__wrapper">
+                      <ul>
+                          <li v-for="reward in questToSubmit.rewards" :key="reward.id">
+                              <a @click="postNewQuest(questToSubmit.id, reward)">
+                                  <img :src="reward.thumbnail_url">
+                              </a>
+                          </li>
+                      </ul>
+                      <a class="bt" @click="postNewQuest(questToSubmit.id, false)">Je ne sais pas encore</a>
+                  </div>
+              </div>
+
                 <div class="footer-action">
                     <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
                 </div>
             </div>
 
+            <div v-if="modalScreen == 'updateQuest'" class="modal__screen update-quest">
+                <div v-if="!gym.quest.reward_id">
+                    <h3 class="">Préciser la récompense</h3>
+                    <p class="dialog__city">{{gym.quest.name}}</p>
+                    <hr>
+                    <div class="update-raid__wrapper">
+                        <ul v-if="pokemons">
+                            <li v-for="reward in gym.quest.quest.rewards" :key="reward.name">
+                                <a v-on:click="updateQuest(gym.quest.id, reward, false)">
+                                    <img :src="reward.thumbnail_url">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+                <div class="footer-action">
+                    <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
+                </div>
+            </div>
 
             <div v-if="modalScreen == 'createRaid'" class="modal__screen create-raid">
                 <h3 class="">Annoncer un raid</h3>
@@ -209,6 +251,7 @@ export default {
             exHour: 13,
             exMinutes: 0,
             questSearch: null,
+            questToSubmit: false,
         }
     },
     computed: {
@@ -223,11 +266,18 @@ export default {
         },
         filteredQuests() {
             return this.$store.state.quests.filter((quest) => {
+                if( quest.rewards.length == 0 ) return false;
+                if( this.questToSubmit && this.questToSubmit.id != quest.id ) return false;
                 let matchingTitle = 1;
                 let matchingPokemon = 1;
                 if (this.questSearch != null) {
                     matchingTitle = quest.name.toLowerCase().indexOf(this.questSearch.toLowerCase()) > -1;
-                    matchingPokemon = quest.pokemon && quest.pokemon.name_fr.toLowerCase().indexOf(this.questSearch.toLowerCase()) > -1;
+                    matchingPokemon = false;
+                    quest.rewards.forEach((reward, index) => {
+                        if( reward.name.toLowerCase().indexOf(this.questSearch.toLowerCase()) > -1 ) {
+                            matchingPokemon = true;
+                        }
+                    })
                 }
                 return (matchingTitle || matchingPokemon);
             });
@@ -408,11 +458,18 @@ export default {
                 console.log(err)
             });
         },
-        postNewQuest(questId) {
+        postNewQuest(questId, reward) {
             var result = confirm('Confirmer le signalement de quete pour le pokéstop '+this.gym.name);
             if( result ) {
                 this.setScreenTo('default');
                 this.hideModal();
+                let reward_type = false;
+                if( reward.pokedex_id ) {
+                    reward_type = 'pokemon';
+                } else if( reward.name ) {
+                    reward_type = 'reward';
+                }
+                let reward_id = ( reward ) ? reward.id : false;
                 this.$store.commit('setSnackbar', {
                     message: 'Création de la quête',
                     timeout: 1500
@@ -421,6 +478,8 @@ export default {
                      params: {
                          gym_id: this.gym.id,
                          quest_id: questId,
+                         reward_type: reward_type,
+                         reward_id: reward_id,
                      },
                 }).then(res => {
                     console.log(res.data);
@@ -470,6 +529,34 @@ export default {
             }).catch(err => {
                 console.log(err)
             });
+        },
+        clickQuest(quest) {
+            if( !this.questToSubmit  ) {
+                if( quest.rewards.length === 1 ) {
+                    this.postNewQuest(quest.id, quest.rewards[0])
+                } else {
+                    this.questToSubmit = quest;
+                }
+            } else {
+                this.questToSubmit = false;
+            }
+        },
+        updateQuest( instanceId, reward, quest ) {
+            console.log(instanceId)
+            console.log(reward)
+            console.log(quest)
+            if( reward ) {
+                axios.put('/api/user/cities/'+this.currentCity.id+'/quests/'+instanceId, {
+                    params: {
+                        reward_type: (reward.pokedex_id) ? 'pokemon' : 'reward' ,
+                        reward_id: reward.id,
+                    }
+                }).then(res => {
+                    this.$store.dispatch('fetchData');
+                }).catch(err => {
+                    console.log(err)
+                });
+            }
         }
     }
 }
