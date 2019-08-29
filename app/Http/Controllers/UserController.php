@@ -16,8 +16,8 @@ use App\Models\RoleCategory;
 use App\Models\QuestInstance;
 use App\ImageAnalyzer\Engine;
 use App\Models\QuestConnector;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller {
 
@@ -65,37 +65,16 @@ class UserController extends Controller {
     */
 
     public function createQuest( City $city, Request $request ) {
-        $gym = Stop::find($request->params['gym_id']);
-        $instance = new QuestInstance();
-        $instance->city_id = $city->id;
-        $instance->gym_id = $request->params['gym_id'];
-        $instance->date = date('Y-m-d 00:00:00');
-        $instance->save();
 
-        if( $request->params['quest_id'] ) {
-            $quest = Quest::find($request->params['quest_id']);
-            $instance->update([
-                'quest_id' => $request->params['quest_id'],
-                'name' => $quest->name,
-            ]);
-        }
+        $params = [
+            'city_id' => $city->id,
+            'gym_id'  => $request->params['gym_id'],
+        ];
+        if( $request->params['quest_id'] ) $params['quest_id'] = $request->params['quest_id'];
+        if( $request->params['reward_type'] ) $params['reward_type'] = $request->params['reward_type'];
+        if( $request->params['reward_id'] ) $params['reward_id'] = $request->params['reward_id'];
 
-        if( $request->params['reward_type'] && $request->params['reward_id'] ) {
-            $instance->update([
-                'reward_type' => $request->params['reward_type'],
-                'reward_id' => $request->params['reward_id'],
-            ]);
-        }
-
-        $announce = Announce::create([
-            'type' => 'quest-create',
-            'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
-            'date' => date('Y-m-d H:i:s'),
-            'user_id' => Auth::id(),
-            'quest_instance_id' => $instance->id,
-        ]);
-
-        event( new \App\Events\QuestInstanceCreated( $instance, $announce ) );
+        $instance = QuestInstance::add($params);
 
         return response()->json($instance, 200);
     }
@@ -110,6 +89,43 @@ class UserController extends Controller {
         }
         QuestInstance::destroy($questInstance->id);
         return response()->json(null, 204);
+    }
+
+    public function updateQuest( Request $request, City $city, QuestInstance $questInstance ) {
+
+        $updated = false;
+
+        if(  isset($request->params['reward_type']) &&  isset($request->params['reward_id']) && $request->params['reward_type'] && $request->params['reward_id'] && empty($quest->reward_type) ) {
+            $questInstance->update([
+                'reward_type' => $request->params['reward_type'],
+                'reward_id' => $request->params['reward_id'],
+            ]);
+            $updated = true;
+        }
+
+        if( isset($request->params['quest_id']) && $request->params['quest_id'] && empty($quest->quest_id) ) {
+            $questRef = Quest::find($request->params['quest_id']);
+            if( $questRef ) {
+                $questInstance->update([
+                    'quest_id' => $request->params['quest_id'],
+                    'name' => $questRef->name,
+                ]);
+            }
+            $updated = true;
+        }
+
+        if( $updated ) {
+            $announce = Announce::create([
+                'type' => 'quest-update',
+                'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
+                'date' => date('Y-m-d H:i:s'),
+                'user_id' => Auth::id(),
+                'quest_instance_id' => $questInstance->id,
+            ]);
+            event( new \App\Events\QuestInstanceUpdated( $questInstance, $announce ) );
+        }
+
+        return response()->json($questInstance, 200);
     }
 
     /**

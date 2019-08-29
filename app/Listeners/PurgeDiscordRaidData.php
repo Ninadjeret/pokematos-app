@@ -39,7 +39,7 @@ class PurgeDiscordRaidData
         }
 
         $force_delete = false;
-        if( $event instanceof \App\Events\RaidDeleted ) {
+        if( $event instanceof \App\Events\RaidDeleted || $event instanceof \App\Events\RaidUpdated ) {
             $force_delete = true;
         }
 

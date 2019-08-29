@@ -28,7 +28,7 @@ class PostQuestInstanceToDiscord
      * @param  QuestInstanceCreated  $event
      * @return void
      */
-    public function handle(QuestInstanceCreated $event)
+    public function handle($event)
     {
         $city = City::find( $event->quest->city_id );
 

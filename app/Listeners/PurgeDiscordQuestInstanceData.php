@@ -33,7 +33,7 @@ class PurgeDiscordQuestInstanceData
 
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $force_delete = false;
-        if( $event instanceof \App\Events\QuestInstanceDeleted ) {
+        if( $event instanceof \App\Events\QuestInstanceDeleted || $event instanceof \App\Events\QuestInstanceUpdated ) {
             $force_delete = true;
         }
 
