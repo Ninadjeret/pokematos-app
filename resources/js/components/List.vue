@@ -77,8 +77,8 @@
                     <div class="raids__wrapper">
                         <div v-on:click="showModal(gym)" v-for="gym in activeQuests" class="raid__wrapper">
                             <div class="raid__img">
-                                <img v-if="gym.quest.quest.pokemon" :src="gym.quest.quest.pokemon.thumbnail_url">
-                                <img v-if="gym.quest.quest.reward" :src="gym.quest.quest.reward.thumbnail_url">
+                                <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnail_url">
+                                <img v-if="!gym.quest.reward" src="https://assets.profchen.fr/img/app/unknown.png">
                             </div>
                             <div class="raid__content">
                                 <h3>
