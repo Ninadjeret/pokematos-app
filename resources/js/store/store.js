@@ -21,6 +21,7 @@ const store = new Vuex.Store({
         quests: JSON.parse(localStorage.getItem('pokematos_quests') ),
         settings: JSON.parse(localStorage.getItem('pokematos_settings') ),
         user: JSON.parse(localStorage.getItem('pokematos_user') ),
+        zones: JSON.parse(localStorage.getItem('pokematos_zones') ),
         snackbar: false,
     },
     mutations: {
@@ -61,6 +62,14 @@ const store = new Vuex.Store({
             axios.get('/api/quests').then( res => {
                 state.quests = res.data;
                 localStorage.setItem('pokematos_quests', JSON.stringify(state.quests));
+            }).catch( err => {
+                //No error
+            });
+        },
+        fetchZones( state ) {
+            axios.get('/api/user/cities/'+state.currentCity.id+'/zones').then( res => {
+                state.zones = res.data;
+                localStorage.setItem('pokematos_zones', JSON.stringify(state.zones));
             }).catch( err => {
                 //No error
             });
@@ -181,6 +190,7 @@ const store = new Vuex.Store({
         },
         fetchData ({ commit }) {
             commit('fetchGyms', true)
+            commit('fetchZones')
         },
         changeCity ({ dispatch, commit }, payload) {
             commit('setCity', payload)

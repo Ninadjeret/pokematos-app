@@ -315,6 +315,7 @@ export default {
         showModal( gym ) {
             this.gym = gym;
             this.dialog = true;
+            this.createRaidData.pokemon = false;
             this.getRaidData();
         },
         hideModal() {
@@ -542,9 +543,12 @@ export default {
             }
         },
         updateQuest( instanceId, reward, quest ) {
-            console.log(instanceId)
-            console.log(reward)
-            console.log(quest)
+            this.setScreenTo('default');
+            this.hideModal();
+            this.$store.commit('setSnackbar', {
+                message: 'Mise à jour de la quête',
+                timeout: 1500
+            });
             if( reward ) {
                 axios.put('/api/user/cities/'+this.currentCity.id+'/quests/'+instanceId, {
                     params: {
@@ -553,6 +557,7 @@ export default {
                     }
                 }).then(res => {
                     this.$store.dispatch('fetchData');
+
                 }).catch(err => {
                     console.log(err)
                 });

@@ -54,7 +54,7 @@ class QuestConnector extends Model
             $embed = $this->getEmbedMessage($quest, $announce);
         } elseif( $this->format == 'custom' ) {
             $content = $this->getCustomMessage( $quest, $announce );
-            $embed = false;
+            $embed = [];
         } elseif( $this->format == 'both' ) {
             $content = $this->getCustomMessage( $quest, $announce );
             $embed = $this->getEmbedMessage($quest, $announce);
