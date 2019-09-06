@@ -158,9 +158,17 @@ const store = new Vuex.Store({
         },
         rewardQuests: state => {
             if( !state.quests || state.quests.length === 0 ) return [];
-            return state.quests.filter((quest) => {
-                return (quest.reward);
+            let rewardQuests = [];
+            state.quests.forEach(function(quest) {
+                if( quest.rewards ) {
+                    quest.rewards.forEach(function(reward) {
+                        if( !rewardQuests.includes(reward) ) {
+                            rewardQuests.push(reward);
+                        }
+                    });
+                }
             });
+            return rewardQuests;
         },
         pokemonQuests: state => {
             if( !state.quests || state.quests.length === 0 ) return [];

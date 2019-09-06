@@ -132,7 +132,7 @@
                 </v-card-text>
                 <v-subheader>Quels objets voir ?</v-subheader>
                 <v-card-text>
-                    <v-checkbox v-model="questsListFilters" v-for="quest in rewardQuests" :key="quest.id" :label="quest.reward.name" :value="quest.id"></v-checkbox>
+                    <v-checkbox v-model="questsListFilters" v-for="quest in rewardQuests" :key="quest.id" :label="quest.name" :value="quest.id"></v-checkbox>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
