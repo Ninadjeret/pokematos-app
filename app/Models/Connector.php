@@ -201,6 +201,7 @@ class Connector extends Model {
         }
 
         //On formatte le embed
+        $icon_url = ( $raid->getGym()->ex ) ? 'https://assets.profchen.fr/img/map/map_marker_default_ex_03.png' : 'https://assets.profchen.fr/img/map/map_marker_default_01.png' ;
         $data = array(
             'title' => $title,
             'description' => ( !empty($description) ) ? implode("\r\n\r\n", $description) : '',
@@ -211,7 +212,7 @@ class Connector extends Model {
             'author' => array(
                 'name' => $gymName,
                 'url' => $raid->getGym()->google_maps_url,
-                'icon_url' => 'https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png'
+                'icon_url' => $icon_url
             ),
         );
 

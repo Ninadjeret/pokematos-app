@@ -168,7 +168,7 @@ class QuestConnector extends Model
             'author' => array(
                 'name' => $quest->getStop()->name,
                 'url' => $quest->getStop()->google_maps_url,
-                'icon_url' => 'https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png'
+                'icon_url' => 'https://assets.profchen.fr/img/map/map_marker_stop.png'
             ),
         );
 
