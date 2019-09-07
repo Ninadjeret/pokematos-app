@@ -316,6 +316,7 @@ export default {
             this.gym = gym;
             this.dialog = true;
             this.createRaidData.pokemon = false;
+            this.questToSubmit = false;
             this.getRaidData();
         },
         hideModal() {

@@ -104,7 +104,7 @@
                 });
             },
             addReward(selectedOption, id) {
-                if( this.rewards_selected.lentgh > 0 && this.rewards_selected.filter( reward => reward.name == selectedOption.name ).length > 0 ) return;
+                if( this.rewards_selected.length > 0 && this.rewards_selected.filter( reward => reward.name == selectedOption.name ).length > 0 ) return;
                 this.rewards_selected.push(selectedOption);
             },
             removeReward(index) {

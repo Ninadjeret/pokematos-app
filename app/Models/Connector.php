@@ -201,7 +201,7 @@ class Connector extends Model {
         }
 
         //On formatte le embed
-        $icon_url = ( $raid->getGym()->ex ) ? 'https://assets.profchen.fr/img/map/map_marker_default_ex_03.png' : 'https://assets.profchen.fr/img/map/map_marker_default_01.png' ;
+        $icon_url = ( $raid->getGym()->ex ) ? 'https://assets.profchen.fr/img/app/connector_gym_ex.png' : 'https://assets.profchen.fr/img/app/connector_gym.png' ;
         $data = array(
             'title' => $title,
             'description' => ( !empty($description) ) ? implode("\r\n\r\n", $description) : '',

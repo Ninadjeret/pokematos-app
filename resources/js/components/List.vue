@@ -54,7 +54,8 @@
                                     </span>
                                 </h3>
                                 <div class="raid__gym">
-                                    <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
+                                    <img v-if="gym.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
+                                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">{{gym.zone.name}} - {{gym.name}}
                                 </div>
                             </div>
                         </div>
@@ -85,7 +86,8 @@
                                     <span>{{gym.quest.quest.name}}</span>
                                 </h3>
                                 <div class="raid__gym">
-                                    <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
+                                    <img src="https://assets.profchen.fr/img/app/connector_pokestop.png">
+                                    {{gym.zone.name}} - {{gym.name}}
                                 </div>
                             </div>
                         </div>
@@ -127,13 +129,25 @@
             </v-card>
             <v-card v-if="tabs == 'quetes'" max-width="290" content-class="list-filters">
                 <v-subheader>Quels Pokémon voir ?</v-subheader>
-                <v-card-text>
-                    <v-checkbox v-model="questsRewardFilters" v-for="quest in pokemonQuests" :key="quest.id" :label="quest.name" :value="quest.id"></v-checkbox>
-                </v-card-text>
-                <v-subheader>Quels objets voir ?</v-subheader>
-                <v-card-text>
-                    <v-checkbox v-model="questsPokemonFilters" v-for="quest in rewardQuests" :key="quest.id" :label="quest.name" :value="quest.id"></v-checkbox>
-                </v-card-text>
+                <multiselect
+                    :reset-after="true"
+                    v-model="value"
+                    :options="rewards"
+                    track-by="name"
+                    label="name"
+                    placeholder="Ajouter une récompense"
+                    @select="addReward">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                        <strong>{{ option.name }}</strong>
+                    </template>
+                </multiselect>
+                <div v-for="(reward, index) in questsListFilters" class="setting pokemon">
+                    <img :src="reward.thumbnail_url">
+                    <p>{{reward.name}}</p>
+                    <v-btn flat icon color="deep-orange" @click="removeReward(index)">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                </div>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" flat @click="dialog = false">Fermer</v-btn>
@@ -148,18 +162,28 @@
 
 <script>
     import moment from 'moment';
+    import Multiselect from 'vue-multiselect'
     export default {
         name: 'List',
+        components: { Multiselect },
         props: ['gyms'],
         data() {
             return {
                 toto: [],
                 dialog:false,
                 tabs: 'raids',
-                orderOptions: [{id:'date', name:'Date'}, {id:'level', name:'Niveau de Boss'}]
+                orderOptions: [{id:'date', name:'Date'}, {id:'level', name:'Niveau de Boss'}],
+                objects: [],
+                value: false,
             }
         },
         computed: {
+            pokemons() {
+                return this.$store.state.pokemons;
+            },
+            rewards() {
+                return this.objects.concat(this.pokemons);
+            },
             pokemonQuests() {
                 return this.$store.getters.pokemonQuests;
             },
@@ -186,7 +210,7 @@
                 const that = this;
                 return this.$store.getters.activeQuests.filter(function(gym) {
                     let isEmpty = ( that.questsListFilters.length == 0 ) ? true : false;
-                    let inArray = ( that.questsListFilters.includes(gym.quest.quest.id) ) ? true : false;
+                    let inArray = ( gym.quest.reward && that.questsListFilters.filter( reward => reward.name == gym.quest.reward.name ).length > 0 ) ? true : false;
                     return isEmpty || inArray;
                 });;
             },
@@ -212,40 +236,26 @@
                     });
                 }
             },
-            questsPokemonFilters: {
+            questsListFilters: {
                 get: function () {
-                    return this.$store.getters.getSetting('questsPokemonFilters');
+                    return this.$store.getters.getSetting('questsListFilters');
                 },
                 set: function (newValue) {
                     this.$store.commit('setSetting', {
-                        setting: 'questsPokemonFilters',
-                        value: newValue
-                    });
-                }
-            },
-            questsRewardFilters: {
-                get: function () {
-                    return this.$store.getters.getSetting('questsRewardFilters');
-                },
-                set: function (newValue) {
-                    this.$store.commit('setSetting', {
-                        setting: 'questsRewardFilters',
+                        setting: 'questsListFilters',
                         value: newValue
                     });
                 }
             }
         },
         created() {
+            this.fetchRewards();
             this.$store.commit('initSetting', {
                 setting: 'raidsListFilters',
                 value: ["1","2","3","4","5","6"]
             });
             this.$store.commit('initSetting', {
-                setting: 'questsRewardFilters',
-                value: []
-            });
-            this.$store.commit('initSetting', {
-                setting: 'questsPokemonFilters',
+                setting: 'questsListFilters',
                 value: []
             });
             this.$store.commit('initSetting', {
@@ -254,8 +264,12 @@
             });
         },
         methods: {
+            fetchRewards() {
+                axios.get('/api/quests/rewards').then( res => {
+                    this.objects = res.data;
+                });
+            },
             compare(a, b) {
-                console.log(this.raidsListOrder);
                 if( this.raidsListOrder == 'date' ) {
                     return (a.raid.start_time > b.raid.start_time) ? 1 : -1;
                 } else {
@@ -299,7 +313,18 @@
                 } else {
                     return parseInt(end_time.diff(now, 'milliseconds'));
                 }
-            }
+            },
+            addReward(selectedOption, id) {
+                let filters = this.questsListFilters;
+                if( this.questsListFilters.length > 0 && this.questsListFilters.filter( reward => reward.name == selectedOption.name ).length > 0 ) return;
+                filters.push(selectedOption);
+                this.questsListFilters = filters;
+            },
+            removeReward(index) {
+                let filters = this.questsListFilters;
+                filters.splice(index, 1);
+                this.questsListFilters = filters;
+            },
         }
     }
 </script>

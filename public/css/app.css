@@ -11098,6 +11098,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   border-left: 0;
 }
 
+.v-dialog.list-filters .v-card {
+  min-height: 450px;
+}
+
 .map__actions {
   position: fixed;
   bottom: 65px;
