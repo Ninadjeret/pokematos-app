@@ -176,13 +176,17 @@ const store = new Vuex.Store({
             state.quests.forEach(function(quest) {
                 if( quest.rewards ) {
                     quest.rewards.forEach(function(reward) {
-                        if( !pokemonQuests.includes(reward) && reward.pokedex_id ) {
+                        if( pokemonQuests.filter(item => (item.id == reward.id)).length === 0 && reward.pokedex_id ) {
                             pokemonQuests.push(reward);
                         }
                     });
                 }
             });
-            return pokemonQuests;
+            return pokemonQuests.sort(function(a, b){
+                if(a.name < b.name) { return -1; }
+                if(a.name > b.name) { return 1; }
+                return 0;
+            })
         },
         getRaidBosses:state => {
             if( !state.pokemons || state.pokemons.length === 0 ) return [];
