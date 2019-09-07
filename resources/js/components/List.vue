@@ -77,8 +77,8 @@
                     <div class="raids__wrapper">
                         <div v-on:click="showModal(gym)" v-for="gym in activeQuests" class="raid__wrapper">
                             <div class="raid__img">
-                                <img v-if="gym.quest.quest.pokemon" :src="gym.quest.quest.pokemon.thumbnail_url">
-                                <img v-if="gym.quest.quest.reward" :src="gym.quest.quest.reward.thumbnail_url">
+                                <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnail_url">
+                                <img v-if="!gym.quest.reward" src="https://assets.profchen.fr/img/app/unknown.png">
                             </div>
                             <div class="raid__content">
                                 <h3>
@@ -128,11 +128,11 @@
             <v-card v-if="tabs == 'quetes'" max-width="290" content-class="list-filters">
                 <v-subheader>Quels Pokémon voir ?</v-subheader>
                 <v-card-text>
-                    <v-checkbox v-model="questsListFilters" v-for="quest in pokemonQuests" :key="quest.id" :label="quest.pokemon.name_fr" :value="quest.id"></v-checkbox>
+                    <v-checkbox v-model="questsRewardFilters" v-for="quest in pokemonQuests" :key="quest.id" :label="quest.name" :value="quest.id"></v-checkbox>
                 </v-card-text>
                 <v-subheader>Quels objets voir ?</v-subheader>
                 <v-card-text>
-                    <v-checkbox v-model="questsListFilters" v-for="quest in rewardQuests" :key="quest.id" :label="quest.reward.name" :value="quest.id"></v-checkbox>
+                    <v-checkbox v-model="questsPokemonFilters" v-for="quest in rewardQuests" :key="quest.id" :label="quest.name" :value="quest.id"></v-checkbox>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -212,13 +212,24 @@
                     });
                 }
             },
-            questsListFilters: {
+            questsPokemonFilters: {
                 get: function () {
-                    return this.$store.getters.getSetting('questsListFilters');
+                    return this.$store.getters.getSetting('questsPokemonFilters');
                 },
                 set: function (newValue) {
                     this.$store.commit('setSetting', {
-                        setting: 'questsListFilters',
+                        setting: 'questsPokemonFilters',
+                        value: newValue
+                    });
+                }
+            },
+            questsRewardFilters: {
+                get: function () {
+                    return this.$store.getters.getSetting('questsRewardFilters');
+                },
+                set: function (newValue) {
+                    this.$store.commit('setSetting', {
+                        setting: 'questsRewardFilters',
                         value: newValue
                     });
                 }
@@ -230,7 +241,11 @@
                 value: ["1","2","3","4","5","6"]
             });
             this.$store.commit('initSetting', {
-                setting: 'questsListFilters',
+                setting: 'questsRewardFilters',
+                value: []
+            });
+            this.$store.commit('initSetting', {
+                setting: 'questsPokemonFilters',
                 value: []
             });
             this.$store.commit('initSetting', {

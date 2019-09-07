@@ -56,6 +56,7 @@ class BotController extends Controller {
                         'discord_id' => $role_to_add->id,
                         'guild_id' => $guild->id,
                         'name' => $role_to_add->name,
+                        'color' => '#'.dechex($role_to_add->color),
                     ]);
                 }
             }

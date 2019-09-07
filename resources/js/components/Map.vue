@@ -1,6 +1,6 @@
 <template>
     <div style="height: 100%;">
-        <l-map style="height: 100%; width: 100%" ref="map" :zoom=13 :center="[currentCity.lat, currentCity.lng]">
+        <l-map style="height: 100%; width: 100%" ref="map" :zoom=13>
             <l-tile-layer :url="url"></l-tile-layer>
         </l-map>
         <button-actions @localize="localize()" @showfilters="dialog = true"></button-actions>
@@ -72,7 +72,9 @@
             this.$nextTick(() => {
               this.map = this.$refs.map.mapObject // work as expected
               this.addMarkers();
-            })
+
+          });
+          this.localize();
         },
         methods: {
             displayPlayerOnMap() {

@@ -70,11 +70,11 @@
                             <label>Objet(s)</label>
                             <multiselect
                                 v-model="filter_reward_reward"
-                                :options="levels"
+                                :options="rewards"
                                 track-by="id"
                                 label="name"
                                 :multiple="true"
-                                placeholder="Ajouter un niveau de boss">
+                                placeholder="Ajouter un objet">
                             </multiselect>
                         </div>
                         <div v-if="filter_reward_type == 'pokemon'" class="setting">
@@ -94,9 +94,10 @@
                             <v-btn-toggle v-model="format" mandatory>
                                 <v-btn value="auto">Automatique</v-btn>
                                 <v-btn value="custom">Personnalisé</v-btn>
+                                <v-btn value="both">Les deux</v-btn>
                             </v-btn-toggle>
                         </div>
-                        <div class="setting" v-if="format == 'custom'">
+                        <div class="setting" v-if="format != 'auto'">
                             <label>Message personnalisé</label>
                             <p class="description">
                                 Utilisez les tags suivants pour afficher des propriétés du raid :<br>
@@ -153,14 +154,7 @@
                 channels: [],
                 pokemons: [],
                 zones: [],
-                levels: [
-                    {id:1,name: '1 tête'},
-                    {id:2,name: '2 têtes'},
-                    {id:3,name: '3 têtes'},
-                    {id:4,name: '4 têtes'},
-                    {id:5,name: '5 têtes'},
-                    {id:6,name: 'EX'},
-                ],
+                rewards: [],
                 name: '',
                 channel_discord_id: false,
                 filter_reward_type: 'none',
@@ -178,6 +172,7 @@
             this.fetchChannels();
             this.fetchPokemons();
             this.fetchZones();
+            this.fetchRewards();
             if( this.$route.params.quest_connector_id ) {
                 this.fetch();
             }
@@ -201,7 +196,7 @@
                     this.filter_stop_zone = this.convertIdstoObjects(res.data.filter_stop_zone, this.zones);
                     this.filter_stop_stop = this.convertIdstoObjects(res.data.filter_stop_stop, this.gyms);
                     this.filter_reward_type = res.data.filter_reward_type;
-                    this.filter_reward_reward = this.convertIdstoObjects(res.data.filter_reward_reward, this.levels);
+                    this.filter_reward_reward = this.convertIdstoObjects(res.data.filter_reward_reward, this.rewards);
                     this.filter_reward_pokemon = this.convertIdstoObjects(res.data.filter_reward_pokemon, this.pokemons);
                     this.format = res.data.format;
                     this.custom_message = res.data.custom_message;
@@ -230,6 +225,11 @@
             fetchZones() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/zones').then( res => {
                     this.zones = res.data;
+                });
+            },
+            fetchRewards() {
+                axios.get('/api/quests/rewards').then( res => {
+                    this.rewards = res.data;
                 });
             },
             submit() {
