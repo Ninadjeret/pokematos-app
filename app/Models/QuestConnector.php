@@ -54,7 +54,7 @@ class QuestConnector extends Model
             $embed = $this->getEmbedMessage($quest, $announce);
         } elseif( $this->format == 'custom' ) {
             $content = $this->getCustomMessage( $quest, $announce );
-            $embed = false;
+            $embed = [];
         } elseif( $this->format == 'both' ) {
             $content = $this->getCustomMessage( $quest, $announce );
             $embed = $this->getEmbedMessage($quest, $announce);
@@ -89,8 +89,8 @@ class QuestConnector extends Model
 
         //Gestion des tags
         $patterns = array(
-            'quete_recompense' => ( !$quest->quest->pokemon ) ? false : html_entity_decode( $quest->quest->pokemon->name_fr ),
-            'quete_nom' => $quest->quest->name,
+            'quete_recompense' => ( !$quest->reward ) ? false : html_entity_decode( $quest->reward->name ),
+            'quete_nom' => $quest->name,
 
             'pokestop_nom' => $quest->getStop()->niantic_name,
             'pokestop_nom_custom' => $quest->getStop()->name,
@@ -106,10 +106,7 @@ class QuestConnector extends Model
 
         //Gestion des mentions
         if( strstr( $message, '@' ) ) {
-            $roles = $discord->guild->getGuildRoles(array(
-                'guild.id' => intval($guild->discord_id)
-            ));
-            foreach( $roles as $role ) {
+            foreach( $this->roles as $role ) {
                 if( strstr( $message, '@'.$role->name ) ) {
                     $message = str_replace('@'.$role->name, '<@&'.$role->id.'>', $message);
                 }
@@ -123,10 +120,7 @@ class QuestConnector extends Model
 
         //Gestion des salons #
         if( strstr( $message, '#' ) ) {
-            $channels = $discord->guild->getGuildChannels(array(
-                'guild.id' => intval($guild->discord_id)
-            ));
-            foreach( $channels as $channel ) {
+            foreach( $this->channels as $channel ) {
                 if( strstr( $message, '#'.$channel->name ) ) {
                     $message = str_replace('#'.$channel->name, '<#'.$channel->id.'>', $message);
                 }
@@ -135,11 +129,8 @@ class QuestConnector extends Model
 
         //Gestion des emojis
         if( strstr( $message, ':' ) ) {
-            $emojis = $discord->emoji->listGuildEmojis(array(
-                'guild.id' => intval($guild->discord_id)
-            ));
-            if( !empty($emojis) ) {
-                foreach( $emojis as $emoji ) {
+            if( !empty($this->emojis) ) {
+                foreach( $this->emojis as $emoji ) {
                     if( strstr( $message, ':'.$emoji->name.':' ) ) {
                         $message = str_replace(':'.$emoji->name.':', '<:'.$emoji->name.':'.$emoji->id.'>', $message);
                     }

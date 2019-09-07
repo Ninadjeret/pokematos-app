@@ -57,7 +57,7 @@ class Connector extends Model {
             $embed = $this->getEmbedMessage($raid, $announce);
         } elseif( $this->format == 'custom' ) {
             $content = $this->getCustomMessage( $raid, $announce );
-            $embed = false;
+            $embed = [];
         } elseif( $this->format == 'both' ) {
             $content = $this->getCustomMessage( $raid, $announce );
             $embed = $this->getEmbedMessage($raid, $announce);
@@ -188,7 +188,7 @@ class Connector extends Model {
         }
 
         //Gestion EX
-        if( $raid->egg_level == 6 && empty( $raid->pokemon ) ) {
+        if( $raid->egg_level == 6 ) {
             $title = 'Raid EX le '.$startTime->format('d/m').' à '.$startTime->format('H\hi');
             if( $raid->channels ) {
                 foreach( $raid->channels as $channel ) {

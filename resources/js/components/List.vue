@@ -77,8 +77,8 @@
                     <div class="raids__wrapper">
                         <div v-on:click="showModal(gym)" v-for="gym in activeQuests" class="raid__wrapper">
                             <div class="raid__img">
-                                <img v-if="gym.quest.quest.pokemon" :src="gym.quest.quest.pokemon.thumbnail_url">
-                                <img v-if="gym.quest.quest.reward" :src="gym.quest.quest.reward.thumbnail_url">
+                                <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnail_url">
+                                <img v-if="!gym.quest.reward" src="https://assets.profchen.fr/img/app/unknown.png">
                             </div>
                             <div class="raid__content">
                                 <h3>
@@ -132,7 +132,7 @@
                 </v-card-text>
                 <v-subheader>Quels objets voir ?</v-subheader>
                 <v-card-text>
-                    <v-checkbox v-model="questsListFilters" v-for="quest in rewardQuests" :key="quest.id" :label="quest.reward.name" :value="quest.id"></v-checkbox>
+                    <v-checkbox v-model="questsListFilters" v-for="quest in rewardQuests" :key="quest.id" :label="quest.name" :value="quest.id"></v-checkbox>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
