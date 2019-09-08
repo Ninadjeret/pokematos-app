@@ -1,6 +1,10 @@
 <template>
     <div style="height: 100%;">
-        <l-map style="height: 100%; width: 100%" ref="map" :zoom=13>
+        <l-map
+            style="height: 100%; width: 100%"
+            ref="map"
+            @update:bounds="addMarkers"
+            :zoom=13>
             <l-tile-layer :url="url"></l-tile-layer>
         </l-map>
         <button-actions @localize="localize()" @showfilters="dialog = true"></button-actions>
@@ -26,7 +30,6 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
     import moment from 'moment'
     export default {
         name: 'Map',
@@ -38,6 +41,7 @@
               bounds: null,
               markers: [],
               dialog:false,
+              markersLayer: [],
             }
         },
         computed: {
@@ -64,9 +68,10 @@
             }
         },
         watch: {
-            gyms: function updateMarkers() {
-                this.addMarkers();
-            },
+            gyms: function () {
+                console.log('Update')
+                this.addMarkers()
+            }
         },
         mounted() {
             this.$nextTick(() => {
@@ -96,9 +101,28 @@
             addMarkers() {
                 const that = this;
                 this.deleteMarkers();
+                let zoom = this.map.getZoom();
+                let mapBounds = this.map.getBounds();
+                let limit = 200;
+                let count = 0;
+                console.log(mapBounds);
                 if( this.gyms && this.gyms.length > 0 ) {
                     this.gyms.forEach(function(gym) {
-                        that.addMarker(gym);
+                        if( gym.gym ) {
+                            count++;
+                            that.addMarker(gym);
+                        }
+                        if( count <= limit && zoom >= 12 && !gym.gym && mapBounds.contains([gym.lat, gym.lng]) ) {
+                            count++;
+                            that.addMarker(gym);
+                        }
+                    });
+                }
+                console.log('Count => '+count);
+                if( count >= limit ) {
+                    this.$store.commit('setSnackbar', {
+                        message: 'Zoomez plus pour voir plus de pokéstops',
+                        timeout: 1500
                     });
                 }
                 this.displayPlayerOnMap();
@@ -161,13 +185,14 @@
                 var html = '<img class="'+imgclassname+'" src="'+url+'"/>';
 
                 if( gym.raid !== false ) {
-                    imgclassname = imgclassname + ' raid';
+
                     var now = moment();
                     var raidStartTime = moment(gym.raid.start_time, '"YYYY-MM-DD HH:mm:ss"');
                     var raidEndTime = moment(gym.raid.end_time, '"YYYY-MM-DD HH:mm:ss"');
 
                     //raid actifs
                     if( now.isAfter(gym.raid.start_time) && now.isBefore(gym.raid.end_time) ) {
+                        imgclassname = imgclassname + ' raid';
                         label = raidEndTime.diff(now, 'minutes') + ' min';
                         url = 'https://assets.profchen.fr/img/map/map_marker_active_'+gym.raid.egg_level+'.png';
                         if( gym.raid.pokemon != false ) {
@@ -177,9 +202,12 @@
                                 url = 'https://assets.profchen.fr/img/map/map_marker_pokemon_'+gym.raid.pokemon.pokedex_id+'_'+gym.raid.pokemon.form_id+'.png';
                             }
                         }
+                        var html = '<img class="'+imgclassname+'" src="'+url+'"/>' + '<span class="map-marker__label">'+label+'</span>'
+                        zindex = gym.raid.egg_level * 2000;
 
                     //Raids à venir
-                    } else {
+                    } else if( now.isBefore(gym.raid.start_time) ) {
+                        imgclassname = imgclassname + ' raid';
                         if( gym.raid.ex ) {
                             if( raidStartTime.diff(now, 'days') >= 1 ) {
                                 label = raidStartTime.diff(now, 'days') + ' jours';
@@ -193,9 +221,10 @@
                             label = raidStartTime.diff(now, 'minutes') + ' min';
                             url = 'https://assets.profchen.fr/img/map/map_marker_future_'+gym.raid.egg_level+'.png';
                         }
+                        var html = '<img class="'+imgclassname+'" src="'+url+'"/>' + '<span class="map-marker__label">'+label+'</span>'
+                        zindex = gym.raid.egg_level * 2000;
                     }
-                    var html = '<img class="'+imgclassname+'" src="'+url+'"/>' + '<span class="map-marker__label">'+label+'</span>'
-                    zindex = gym.raid.egg_level * 2000;
+
                 }
 
                 if( gym.lat == null || gym.lng == null ) {

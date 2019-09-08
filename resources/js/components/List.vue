@@ -212,7 +212,7 @@
                     let isEmpty = ( that.questsListFilters.length == 0 ) ? true : false;
                     let inArray = ( gym.quest.reward && that.questsListFilters.filter( reward => reward.name == gym.quest.reward.name ).length > 0 ) ? true : false;
                     return isEmpty || inArray;
-                });;
+                });
             },
             raidsListOrder: {
                 get: function () {

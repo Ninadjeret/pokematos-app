@@ -252,6 +252,7 @@ export default {
             exMinutes: 0,
             questSearch: null,
             questToSubmit: false,
+            raidStatus: 'none',
         }
     },
     computed: {
@@ -282,20 +283,6 @@ export default {
                 return (matchingTitle || matchingPokemon);
             });
         },
-        raidStatus() {
-            if( this.gym.raid ) {
-                var now = moment();
-                this.startTime = moment(this.gym.raid.start_time, '"YYYY-MM-DD HH:mm:ss"');
-                this.endTime = moment(this.gym.raid.end_time, '"YYYY-MM-DD HH:mm:ss"');
-                if( this.startTime.isAfter(now) ) {
-                    return 'future';
-                } else if( this.endTime.isAfter(now) ) {
-                    return 'active';
-                }
-            } else {
-                return 'none';
-            }
-        },
         exBeginDate () {
             return moment().format('YYYY-MM-DD')
         },
@@ -317,6 +304,7 @@ export default {
             this.dialog = true;
             this.createRaidData.pokemon = false;
             this.questToSubmit = false;
+            this.raidStatus = 'none';
             this.getRaidData();
         },
         hideModal() {
@@ -383,32 +371,42 @@ export default {
             }
         },
         getRaidData() {
+            console.log('getRaidData');
             var now = moment();
+            this.raidStatus = 'none';
 
-            //Url
-            if( this.raidStatus == 'none' ) {
+            if( this.gym.raid ) {
+                this.startTime = moment(this.gym.raid.start_time, '"YYYY-MM-DD HH:mm:ss"');
+                this.endTime = moment(this.gym.raid.end_time, '"YYYY-MM-DD HH:mm:ss"');
+                //Url
+                if( now.isBefore(this.gym.raid.start_time) ) {
+                    this.raidStatus = 'future';
+                    this.timeLeft = parseInt(this.startTime.diff(now, 'milliseconds'));
+                    if( this.gym.raid.ex ) {
+                        this.raidAnnonce = 'Un raid EX va avoir lieu ici prochainement';
+                        this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
+                    } else {
+                        this.raidAnnonce = 'Un oeuf '+this.gym.raid.egg_level+' têtes va bientot éclore...';
+                        this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
+                    }
+                } else if( !this.gym.raid.pokemon && now.isAfter(this.gym.raid.start_time) && now.isBefore(this.gym.raid.end_time) ) {
+                    this.raidStatus = 'active';
+                    this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
+                    this.raidAnnonce = 'Un raid '+this.gym.raid.egg_level+' têtes est en cours...';
+                    this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
+                    if( this.gym.raid.ex ) this.raidAnnonce = 'Un raid EX est en cours...';
+                } else if( now.isAfter(this.gym.raid.start_time) && now.isBefore(this.gym.raid.end_time) ) {
+                    this.raidStatus = 'active';
+                    this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
+                    this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.name_fr+' est en cours...';
+                    this.raidUrl =  this.gym.raid.pokemon.thumbnail_url;
+                }
+            }
+
+            else {
                 this.timeLeft = false;
                 this.raidAnnonce = 'Rien pour le moment...';
                 this.raidUrl = 'https://assets.profchen.fr/img/app/egg_0.png';
-            } else if( this.raidStatus == 'future' && this.startTime ) {
-                this.timeLeft = parseInt(this.startTime.diff(now, 'milliseconds'));
-                if( this.gym.raid.ex ) {
-                    this.raidAnnonce = 'Un raid EX va avoir lieu ici prochainement';
-                    this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
-                } else {
-                    this.raidAnnonce = 'Un oeuf '+this.gym.raid.egg_level+' têtes va bientot éclore...';
-                    this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
-                }
-
-            } else if( !this.gym.raid.pokemon && this.endTime ) {
-                this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
-                this.raidAnnonce = 'Un raid '+this.gym.raid.egg_level+' têtes est en cours...';
-                this.raidUrl = 'https://assets.profchen.fr/img/eggs/egg_'+this.gym.raid.egg_level+'.png';
-                if( this.gym.raid.ex ) this.raidAnnonce = 'Un raid EX est en cours...';
-            } else if( this.endTime ) {
-                this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
-                this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.name_fr+' est en cours...';
-                this.raidUrl =  this.gym.raid.pokemon.thumbnail_url;
             }
         },
         deleteRaidConfirm() {
@@ -510,6 +508,7 @@ export default {
             this.setScreenTo('default');
             this.hideModal();
             axios.delete('/api/user/cities/'+this.currentCity.id+'/raids/'+this.gym.raid.id).then(res => {
+                this.$store.commit('deletePOIActivity', this.gym);
                 this.$store.dispatch('fetchData');
                 this.$store.commit('setSnackbar', {
                     message: 'Raid supprimé',
@@ -523,6 +522,7 @@ export default {
             this.setScreenTo('default');
             this.hideModal();
             axios.delete('/api/user/cities/'+this.currentCity.id+'/quests/'+this.gym.quest.id).then(res => {
+                this.$store.commit('deletePOIActivity', this.gym);
                 this.$store.dispatch('fetchData');
                 this.$store.commit('setSnackbar', {
                     message: 'Quête supprimée',

@@ -21,6 +21,14 @@ class Stop extends Model {
         'gym' => 'boolean',
     ];
 
+    public function raids() {
+        return $this->hasMany('App\Models\Raid', 'gym_id');
+    }
+
+    public function quests() {
+        return $this->hasMany('App\Models\QuestInstance', 'gym_id');
+    }
+
     public function getZoneAttribute() {
         return Zone::find($this->zone_id);
     }

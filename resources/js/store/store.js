@@ -25,15 +25,32 @@ const store = new Vuex.Store({
         snackbar: false,
     },
     mutations: {
-        fetchGyms( state, payload ) {
+        fetchGyms( state ) {
+            axios.get('/api/user/cities/'+state.currentCity.id+'/gyms').then( res => {
+                state.gyms = res.data;
+                localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
+            }).catch( err => {
+                //No error
+            });
+        },
+        fetchRaids( state, payload ) {
             if( payload ) {
                 state.snackbar = {
                     message: 'Synchronisation en cours',
                     timeout: 10000
                 }
             }
-            axios.get('/api/user/cities/'+state.currentCity.id+'/gyms').then( res => {
-                state.gyms = res.data;
+            axios.get('/api/user/cities/'+state.currentCity.id+'/active-gyms').then( res => {
+                let gyms = state.gyms
+                res.data.forEach( function(gym){
+                    let objIndex = gyms.findIndex((obj => obj.id == gym.id));
+                    if( objIndex ) {
+                        console.log('MAJ du POI '+gym.name)
+                        gyms[objIndex] = gym;
+                        state.gyms = [gym];
+                    }
+                });
+                state.gyms = gyms;
                 localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
                 if( payload ) {
                     state.snackbar = {
@@ -42,6 +59,7 @@ const store = new Vuex.Store({
                     }
                 }
             }).catch( err => {
+                console.log(err)
                 if( payload ) {
                     state.snackbar = {
                         message: 'Erreur de synchronisation',
@@ -130,14 +148,25 @@ const store = new Vuex.Store({
         },
         setSnackbar( state, payload ) {
             state.snackbar = payload;
-        }
+        },
+        deletePOIActivity( state, payload ) {
+            let objIndex = state.gyms.findIndex((obj => obj.id == payload.id));
+            let gym = state.gyms[objIndex];
+            gym.raid = false;
+            gym.quest = false;
+            state.gyms = [
+                ...state.gyms.filter(element => element.id !== gym.id),
+                gym
+            ];
+            localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
+        },
     },
     getters: {
         activeRaids: state => {
             if( !state.gyms || state.gyms.length === 0 ) return [];
             return state.gyms.filter((gym) => {
                 var now = moment();
-                return now.isAfter(gym.raid.start_time) && now.isBefore(gym.raid.end_time);
+                return gym.raid && now.isAfter(gym.raid.start_time) && now.isBefore(gym.raid.end_time);
             });
         },
         futureRaids: state => {
@@ -204,12 +233,12 @@ const store = new Vuex.Store({
     },
     actions: {
         autoFetchData ({ commit }) {
-            commit('fetchGyms')
+            commit('fetchRaids')
             commit('fetchPokemon')
             commit('fetchQuests')
         },
         fetchData ({ commit }) {
-            commit('fetchGyms', true)
+            commit('fetchRaids', true)
             commit('fetchZones')
         },
         changeCity ({ dispatch, commit }, payload) {

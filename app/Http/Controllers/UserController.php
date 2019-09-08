@@ -18,6 +18,7 @@ use App\ImageAnalyzer\Engine;
 use App\Models\QuestConnector;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller {
 
@@ -424,6 +425,28 @@ class UserController extends Controller {
             ->orderBy('name', 'asc')
             ->get();
         return response()->json($pois, 200);
+    }
+
+    public function getActivePOIs(City $city, Request $request){
+        $gyms = Stop::whereHas('raids', function (Builder $query) {
+                $start = new \DateTime();
+                $start->modify('- 45 minutes');
+                $end = new \DateTime();
+                $end->modify('+ 60 minutes');
+                $query->whereBetween('start_time', [$start->format('Y-m-d H:i:s'), $end->format('Y-m-d H:i:s')]);
+            })
+            ->where('gym', 1)
+            ->get()
+            ->toArray();
+        $stops = Stop::whereHas('quests', function (Builder $query) {
+                $query->where('date', date('Y-m-d 00:00:00'));
+            })
+            ->where('gym', 0)
+            ->get()
+            ->toArray();
+        $return = array_merge($gyms, $stops);
+        return response()->json($return, 200);
+
     }
 
 }
