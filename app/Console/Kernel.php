@@ -25,10 +25,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(Raid::updateStatuses())->everyMinute();
+        /*$schedule->command(Raid::updateStatuses())->everyMinute();
         $schedule->call(function () {
             event( new \App\Events\DayChanged() );
-        })->dailyAt('00:01');
+        })->dailyAt('00:01');*/
     }
 
     /**

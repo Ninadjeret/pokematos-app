@@ -86,7 +86,10 @@
         mounted() {
             this.$store.commit('fetchCities');
             this.$store.commit('fetchUser');
-            if( this.currentCity && this.currentCity !== undefined ) this.fetch();
+            if( this.currentCity && this.currentCity !== undefined ) {
+                this.$store.commit('fetchGyms');
+                this.fetch();
+            }
             setInterval( this.fetch, 60000, 'auto' );
         },
         computed: mapState([
@@ -106,7 +109,6 @@
         },
         methods: {
             fetch() {
-                this.$store.dispatch('autoFetchData');
                 this.$store.dispatch('autoFetchData');
             },
             changeCity( city ) {
