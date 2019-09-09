@@ -14,6 +14,8 @@ class UpdateQuestSystem extends Migration
     public function up()
     {
         Schema::table('quests', function (Blueprint $table) {
+            $table->dropForeign(['reward_id']);
+            $table->dropForeign(['pokemon_id']);
             $table->dropColumn('reward_type');
             $table->dropColumn('reward_id');
             $table->dropColumn('pokemon_id');
