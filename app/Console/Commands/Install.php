@@ -76,7 +76,7 @@ class Install extends Command
 
             $db_name = env('DB_DATABASE');
             if( empty($db_name) || $db_name == 'null' ) {
-                $db_name = $this->ask('Quel est e nom de votre base de données');
+                $db_name = $this->ask('Quel est le nom de votre base de données');
                 exec("php artisan env:set DB_DATABASE {$db_name}");
             }
 
