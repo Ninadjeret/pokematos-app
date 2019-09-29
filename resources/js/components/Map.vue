@@ -69,7 +69,6 @@
         },
         watch: {
             gyms: function () {
-                console.log('Update')
                 this.addMarkers()
             }
         },
@@ -105,7 +104,6 @@
                 let mapBounds = this.map.getBounds();
                 let limit = 200;
                 let count = 0;
-                console.log(mapBounds);
                 if( this.gyms && this.gyms.length > 0 ) {
                     this.gyms.forEach(function(gym) {
                         if( gym.gym ) {
@@ -118,7 +116,6 @@
                         }
                     });
                 }
-                console.log('Count => '+count);
                 if( count >= limit ) {
                     this.$store.commit('setSnackbar', {
                         message: 'Zoomez plus pour voir plus de pokéstops',

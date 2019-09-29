@@ -14,7 +14,7 @@ const defaultSettings = {
 
 const store = new Vuex.Store({
     state: {
-        currentCity: JSON.parse(localStorage.getItem('pokematos_currentCity') ),
+        currentCity: ( localStorage.getItem('pokematos_currentCity').substring(0, 1) == '{' ) ? JSON.parse(localStorage.getItem('pokematos_currentCity') ) : localStorage.getItem('pokematos_currentCity'),
         cities: JSON.parse(localStorage.getItem('pokematos_cities') ),
         gyms: JSON.parse(localStorage.getItem('pokematos_gyms') ),
         pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons') ),
@@ -92,29 +92,38 @@ const store = new Vuex.Store({
                 //No error
             });
         },
-        fetchCities( state ) {
-            axios.get('/api/user/cities/').then( res => {
-                state.cities = res.data;
-                localStorage.setItem('pokematos_cities', JSON.stringify(state.cities));
-                if (!state.currentCity || state.currentCity == undefined) {
+        setCities( state, cities ) {
+            console.log(cities)
+            state.cities = cities;
+            localStorage.setItem('pokematos_cities', JSON.stringify(state.cities));
+            if (!state.currentCity || state.currentCity == undefined) {
+                state.currentCity = state.cities[0];
+                localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
+            } else {
+                var newCurrentCity = cities.find(function(city) {
+                  return city.id == state.currentCity.id;
+                });
+                if( newCurrentCity ) {
+                    state.currentCity = newCurrentCity;
+                    localStorage.setItem('pokematos_currentCity', JSON.stringify(newCurrentCity));
+                } else {
                     state.currentCity = state.cities[0];
                     localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
-                } else {
-                    var newCurrentCity = res.data.find(function(city) {
-                      return city.id == state.currentCity.id;
-                    });
-                    if( newCurrentCity ) {
-                        state.currentCity = newCurrentCity;
-                        localStorage.setItem('pokematos_currentCity', JSON.stringify(newCurrentCity));
-                    } else {
-                        state.currentCity = state.cities[0];
-                        localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
-                    }
-
                 }
-            }).catch( err => {
-                //No error
+
+            }
+        },
+        setCity( state, currentCity ) {
+            var newCurrentCity = state.cities.find(function(city) {
+              return city.id == currentCity.id;
             });
+            if( newCurrentCity ) {
+                state.currentCity = newCurrentCity;
+                localStorage.setItem('pokematos_currentCity', JSON.stringify(newCurrentCity));
+            } else {
+                state.currentCity = state.cities[0];
+                localStorage.setItem('pokematos_currentCity', JSON.stringify(state.cities[0]));
+            }
         },
         fetchUser( state ) {
             axios.get('/api/user').then( res => {
@@ -123,10 +132,6 @@ const store = new Vuex.Store({
             }).catch( err => {
                 //No error
             });
-        },
-        setCity( state, payload ) {
-            state.currentCity = payload.city;
-            localStorage.setItem('pokematos_currentCity', JSON.stringify(payload.city));
         },
         setPokemons( state, payload ) {
             state.pokemons = payload;
@@ -160,6 +165,18 @@ const store = new Vuex.Store({
             ];
             localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
         },
+        setGyms( state, gyms ) {
+            if( !state.gyms ) {
+                state.gyms = [];
+            }
+            gyms.forEach(function(gym) {
+                state.gyms = [
+                    ...state.gyms.filter(element => element.id !== gym.id),
+                    gym
+                ];
+            });
+            localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
+        }
     },
     getters: {
         activeRaids: state => {
@@ -182,7 +199,11 @@ const store = new Vuex.Store({
         activeQuests: state => {
             if( !state.gyms || state.gyms.length === 0 ) return [];
             return state.gyms.filter((gym) => {
-                return (gym.quest);
+                var now = moment();
+                if (gym.quest) {
+                    var day = moment(gym.quest.start_time, '"YYYY-MM-DD HH:mm:ss"');
+                }
+                return (gym.quest && gym.quest.start_time == moment().format('YYYY-MM-DD')+' 00:00:00' );
             });
         },
         rewardQuests: state => {
@@ -232,6 +253,23 @@ const store = new Vuex.Store({
         },
     },
     actions: {
+        async fetchGyms ({ commit, state, getters }) {
+
+            var user = await axios.get('/api/user');
+            state.user = user.data;
+            localStorage.setItem('pokematos_user', JSON.stringify(state.user));
+
+            var cities = await axios.get('/api/user/cities/');
+            commit('setCities', cities.data);
+
+            var lastUpdate = getters.getSetting('lastUpdate');
+            var result = await axios.get('/api/user/cities/'+state.currentCity.id+'/gyms?last_update='+lastUpdate);
+            commit('setSetting', {
+                setting: 'lastUpdate',
+                value: require('moment')().format('YYYY-MM-DD HH:mm:ss')
+            });
+            commit('setGyms', result.data);
+        },
         autoFetchData ({ commit }) {
             commit('fetchRaids')
             commit('fetchPokemon')
@@ -241,9 +279,15 @@ const store = new Vuex.Store({
             commit('fetchRaids', true)
             commit('fetchZones')
         },
-        changeCity ({ dispatch, commit }, payload) {
-            commit('setCity', payload)
-            dispatch('fetchData');
+        async changeCity ({ dispatch, commit, state }, city) {
+            commit('setCity', city);
+            state.gyms = [];
+            var result = await axios.get('/api/user/cities/'+state.currentCity.id+'/gyms');
+            commit('setSetting', {
+                setting: 'lastUpdate',
+                value: require('moment')().format('YYYY-MM-DD HH:mm:ss')
+            });
+            commit('setGyms', result.data);
         },
     },
 });

@@ -26,7 +26,12 @@
                                     </span>
                                 </h3>
                                 <div class="raid__gym">
-                                    <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/4096-200.png">{{gym.zone.name}} - {{gym.name}}
+                                    <img v-if="gym.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
+                                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
+                                    <template v-if="gym.zone">
+                                        {{gym.zone.name}} -
+                                    </template>
+                                    {{gym.name}}
                                 </div>
                             </div>
                         </div>
@@ -55,7 +60,11 @@
                                 </h3>
                                 <div class="raid__gym">
                                     <img v-if="gym.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
-                                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">{{gym.zone.name}} - {{gym.name}}
+                                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
+                                    <template v-if="gym.zone">
+                                        {{gym.zone.name}} -
+                                    </template>
+                                    {{gym.name}}
                                 </div>
                             </div>
                         </div>
@@ -87,7 +96,10 @@
                                 </h3>
                                 <div class="raid__gym">
                                     <img src="https://assets.profchen.fr/img/app/connector_pokestop.png">
-                                    {{gym.zone.name}} - {{gym.name}}
+                                    <template v-if="gym.zone">
+                                        {{gym.zone.name}} -
+                                    </template>
+                                    {{gym.name}}
                                 </div>
                             </div>
                         </div>
@@ -95,7 +107,7 @@
                 </div>
                 <div v-if="activeQuests.length === 0" class="raids__empty hide">
                     <h3>Aucune quête pour le moment...</h3>
-                    <div class="wrapper" v-if="raidsListFilters.length > 1">
+                    <div class="wrapper" v-if="questsListFilters.length >= 1">
                         <p>Elargissez vos critères pour voir s'il y a d'autres quêtes dans les environs</p>
                         <v-btn depressed @click="dialog = true">Modifier mes filtres</v-btn>
                     </div>
@@ -128,7 +140,7 @@
                 </v-card-actions>
             </v-card>
             <v-card v-if="tabs == 'quetes'" max-width="290" content-class="list-filters">
-                <v-subheader>Quels Pokémon voir ?</v-subheader>
+                <v-subheader>Suivre seulement certaines récompenses ?</v-subheader>
                 <multiselect
                     :reset-after="true"
                     v-model="value"

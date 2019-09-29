@@ -49,6 +49,7 @@
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
                         <li v-if="gym.google_maps_url && gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
                         <li v-if="gym.google_maps_url && !gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers le Pokéstop</span></a></li>
+                        <li v-if="parseInt(currentCity.permissions) >= 10 && user.permissions[currentCity.guilds[0].id].find(val => val == 'poi_edit')"><a class="modal__action" :href="'/#/admin/gyms/'+gym.id"><i class="material-icons">edit</i><span>Modifier le POI</span></a></li>
                     </ul>
                 </div>
                 <div class="footer--actions">

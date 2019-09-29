@@ -5,7 +5,7 @@
                 <v-text-field single-line hide-details outline v-model="search" label="Recherche"></v-text-field>
             </div>
             <v-list>
-            <template v-for="(gym, index) in filteredGyms">
+            <template v-for="(gym, index) in paginateGyms">
               <v-list-tile :key="gym.id" :to="{ name: 'admin.gyms.edit', params: { id: gym.id } }">
                   <v-list-tile-avatar>
                       <img :src="getPoiIcon(gym)">
@@ -19,7 +19,15 @@
               <v-divider></v-divider>
             </template>
           </v-list>
-            <v-btn dark fixed bottom right fab :to="{ name: 'admin.gyms.add' }"><v-icon>add</v-icon></v-btn>
+          <div class="text-xs-center">
+              <v-pagination
+                v-model="page"
+                :length="totalPages"
+                circle
+                total-visible="7"
+              ></v-pagination>
+          </div>
+          <v-btn dark fixed bottom right fab :to="{ name: 'admin.gyms.add' }"><v-icon>add</v-icon></v-btn>
         </div>
     </div>
 </template>
@@ -31,9 +39,14 @@
         data() {
             return {
                 search: null,
+                page: 1,
+                perPage:10,
             }
         },
         computed: {
+            totalPages() {
+                return Math.round( this.filteredGyms.length / this.perPage );
+            },
             filteredGyms() {
                 return this.gyms.filter((gym) => {
                     let matchingTitle = 1;
@@ -50,6 +63,12 @@
                     }
                     return (matchingTitle || matchingZone || matchingEx || matchingGym || matchingStop);
                 });
+            },
+            paginateGyms() {
+                if( this.filteredGyms.length < this.page * 10 ) this.page = 1;
+                let start = (this.page === 1) ? 0 : (this.page - 1) * this.perPage;
+                let end = start + 10;
+                return this.filteredGyms.slice(start, end);
             },
             gyms() {
                 return this.$store.state.gyms;

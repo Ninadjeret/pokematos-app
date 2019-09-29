@@ -38,11 +38,24 @@ class ImportPOIs extends Command
      */
     public function handle()
     {
-        $city_id = 1;
+        $city_id = 5;
         $url = $this->argument('url');
 
         $json = file_get_contents($url);
         $array = json_decode($json);
+        foreach( $array->gyms as $poi ) {
+            $ex = ( property_exists($poi, 'isEx') ) ? 1 : 0;
+            Stop::create([
+                'name' => $poi->name,
+                'niantic_name' => $poi->name,
+                'lat' => $poi->lat,
+                'lng' => $poi->lng,
+                'ex' => $ex,
+                'gym' => 1,
+                'city_id' => $city_id,
+            ]);
+            echo $poi->name." importé\r\n";
+        }
         foreach( $array->pokestops as $poi ) {
             Stop::create([
                 'name' => $poi->name,
@@ -51,7 +64,7 @@ class ImportPOIs extends Command
                 'lng' => $poi->lng,
                 'ex' => 0,
                 'gym' => 0,
-                'city_id' => 1,
+                'city_id' => $city_id,
             ]);
             echo $poi->name." importé\r\n";
         }

@@ -105,14 +105,14 @@
                     this.name = res.data.name;
                     this.niantic_name = res.data.niantic_name;
                     this.description = res.data.description;
-                    this.zone_id = res.data.zone.id;
+                    this.zone_id = (res.data.zone) ? res.data.zone.id : false ;
                     this.ex = res.data.ex;
                     this.gym = res.data.gym;
                     this.coordinates.lat = res.data.lat;
                     this.coordinates.lng = res.data.lng;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
-                    if( err.response.data ) {
+                    if( err.response && err.response.data ) {
                         message = err.response.data;
                     }
                     this.$store.commit('setSnackbar', {

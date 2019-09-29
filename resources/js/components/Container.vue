@@ -1,5 +1,5 @@
 <template>
-<div id="app__container" :class="'template-'+$route.name" data-app v-if="currentCity">
+<div id="app__container" :class="'template-'+$route.name" data-app v-if="currentCity && currentCity !== 'undefined'">
         <v-toolbar fixed app color="primary" dark>
             <v-btn v-if="$route.meta.parent" :to="{ name: $route.meta.parent}" icon><v-icon>arrow_back</v-icon></v-btn>
             <v-spacer v-if="$route.name == 'map'"></v-spacer>
@@ -42,7 +42,7 @@
                 </v-btn>
 
                 <v-btn
-                    v-if="parseInt(currentCity.permissions) >= 10 && user.permissions[currentCity.guilds[0].id].find(val => val != 'raid_delete' && val != 'raidex_add' )"
+                    v-if="currentCity && currentCity !== undefined && parseInt(currentCity.permissions) >= 10 && user.permissions[currentCity.guilds[0].id].find(val => val != 'raid_delete' && val != 'raidex_add' )"
                     to="/admin"
                     color="primary"
                     flat value="recent"
@@ -63,6 +63,23 @@
                         </v-card-text>
                   </v-card>
               </v-dialog>
+              <v-dialog
+                  content-class="dialog-update"
+                  v-model="dialogUpdate"
+                  persistent
+                  width="300"
+                >
+                  <v-card color="primary">
+                    <v-card-text>
+                      <p>Initialisation<br><small><i>Le premier chargemet peut prendre 1 à 2 min...</i></small></p>
+                      <v-progress-linear
+                        indeterminate
+                        color="#5a6cae"
+                        class="mb-0"
+                      ></v-progress-linear>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
           </v-footer>
 
           <updater></updater>
@@ -80,17 +97,17 @@
         data() {
             return {
                 dialogCities: false,
+                dialogUpdate: true,
                 transitionName: 'fade_old',
             }
         },
-        mounted() {
-            this.$store.commit('fetchCities');
-            this.$store.commit('fetchUser');
-            if( this.currentCity && this.currentCity !== undefined ) {
-                this.$store.commit('fetchGyms');
-                this.fetch();
+        async mounted() {
+            try {
+                await this.$store.dispatch('fetchGyms')
+            } finally {
+                this.dialogUpdate = false;
+                setInterval( this.fetch, 60000, 'auto' );
             }
-            setInterval( this.fetch, 60000, 'auto' );
         },
         computed: mapState([
                 'cities', 'currentCity', 'user'
@@ -111,27 +128,15 @@
             fetch() {
                 this.$store.dispatch('autoFetchData');
             },
-            changeCity( city ) {
+            async changeCity( city ) {
                 this.dialogCities = false;
-                this.$store.commit('fetchZones')
+                this.dialogUpdate = true;
+                try {
+                    await this.$store.dispatch('changeCity', city)
+                } finally {
+                    this.dialogUpdate = false;
+                }
             }
-            /*test() {
-                console.log('refresh-data')
-            },
-            syncData() {
-                this.loadData();
-                setInterval( this.loadData, 60000, 'auto' );
-            },
-
-            getUser() {
-                axios.get('/api/user').then( res => {
-                    this.user = res.data
-                    localStorage.setItem('pokematos_user', JSON.stringify(res.data));
-                }).catch( err => {
-                    //No error
-                });
-            },
-            */
         }
     }
 </script>
