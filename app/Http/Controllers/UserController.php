@@ -421,7 +421,16 @@ class UserController extends Controller {
     */
 
     public function getPOIs(City $city, Request $request){
+
+        $lastUpdate = $request->last_update;
+        Log::debug($lastUpdate);
+        if( empty( $lastUpdate ) || $lastUpdate == 'false' ) {
+            Log::debug('titi');
+            $lastUpdate = '2000-01-01 00:00:00';
+        }
+        Log::debug($lastUpdate);
         $pois = Stop::where('city_id', '=', $city->id)
+            ->where('updated_at', '>=', $lastUpdate)
             ->orderBy('name', 'asc')
             ->get();
         return response()->json($pois, 200);

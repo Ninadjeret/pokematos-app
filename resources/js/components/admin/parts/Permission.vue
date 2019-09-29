@@ -2,29 +2,29 @@
     <v-card class="permission">
         <v-card-title v-if="open" primary-title>
             <div>
-                <p>Dans les salons</p>
-                <select multiple v-if="channels" v-model="permission.channels">
-                    <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
-                </select>
+
                 <p>Les joueurs ayant le(s) role(s)</p>
                 <select multiple v-if="roles" v-model="permission.roles">
                     <option v-for="role in roles" :value="role.id">{{role.name}}</option>
                 </select>
-                <select v-model="permission.type">
+                <p>Peuvent publier des messages avec des @mentions de roles de cette catégorie dans les salons</p>
+                <select multiple v-if="channels" v-model="permission.channels">
+                    <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
+                </select>
+                <select v-model="permission.type" class="select-permission-type">
                     <option value="auth">peuvent publier </option>
                     <option value="block">ne peuvent pas publier</option>
                 </select>
-                <p>des messages avec des @mentions de roles de cette catégorie</p>
             </div>
         </v-card-title>
         <v-card-title v-else primary-title>
             <div class="permission__content">
                 <p v-html="message"></p>
             </div>
-            <div class="permission__actions">
-                <v-btn icon flat dark @click="$emit('delete-permission', permission)"><v-icon>delete</v-icon></v-btn>
+            <div class="permission__actions">            
                 <v-btn v-if="open" flat @click="open = false">Valider</v-btn>
                 <v-btn v-if="!open" icon flat dark @click="open = true"><v-icon>edit</v-icon></v-btn>
+                <v-btn icon flat dark @click="$emit('delete-permission', permission)"><v-icon>delete</v-icon></v-btn>
             </div>
         </v-card-title>
         <v-card-actions v-if="open">

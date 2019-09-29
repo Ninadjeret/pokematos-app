@@ -191,8 +191,17 @@
     }
 }
 .permission {
-    .v-card {
-        background: $secondary;
+    &.v-card {
+        background: #fafafa !important;
+        .select-permission-type {
+            display: none;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .theme--dark.v-btn.v-btn--icon {
+            color: $grey;
+        }
     }
     .v-card__title--primary {
         padding: 10px;
@@ -246,4 +255,12 @@
     position: absolute;
     right: -5px;
     color: #fff;
+}
+
+.theme--light.v-pagination.v-pagination {
+    padding: 15px;
+    background: #fafafa;
+    .v-pagination__item--active {
+        background: $primary;
+    }
 }

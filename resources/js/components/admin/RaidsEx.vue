@@ -3,7 +3,7 @@
         <div class="settings-section">
             <div class="setting d-flex switch">
                 <div>
-                    <label>Actier le signalement des raids EX</label>
+                    <label>Activer le signalement des raids EX</label>
                     <p class="description">Les joueurs de votre communauté pourront ainsi annoncer des raids EX</p>
                 </div>
                 <v-switch v-model="raidsex_active"></v-switch>
@@ -68,7 +68,7 @@
                     this.raidsex_active = parseInt(res.data.raidsex_active);
                     this.raidsex_channels = parseInt(res.data.raidsex_channels);
                     this.raidsex_access_everyone = parseInt(res.data.raidsex_access_everyone);
-                    this.raidsex_channel_category_id = res.data.raidsex_channel_category_id.toString();                
+                    this.raidsex_channel_category_id = res.data.raidsex_channel_category_id.toString();
                 }).catch( err => {
                     //No error
                 });

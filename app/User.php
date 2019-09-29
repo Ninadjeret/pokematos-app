@@ -236,16 +236,22 @@ class User extends Authenticatable
                             //Gestion des prvilèges de modo
                             if ( !empty($guild->settings->map_access_moderation_roles) && !empty(array_intersect($guild->settings->map_access_moderation_roles, $result->roles))) {
                                 $admin = 10;
+                                $auth = true;
+                                $auth_discord = true;
                             }
 
                             //Gestion des prvilèges d'admin
                             if ( !empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $result->roles))) {
                                 $admin = 20;
+                                $auth = true;
+                                $auth_discord = true;
                             }
 
                             //Si l'utilisateur a les permission d'admin sur Discrod, alors il les hérite sur la map
                             if( $user_guild->permissions >= 2146958847 ) {
                                 $admin = 30;
+                                $auth = true;
+                                $auth_discord = true;
                             }
 
                             if( $auth_discord ) {
@@ -262,7 +268,7 @@ class User extends Authenticatable
                 }
             }
         }
-        
+
         if( $auth ) $error = false;
         $this->saveGuilds($guilds);
         return (object) [

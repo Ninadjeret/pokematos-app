@@ -3,5 +3,5 @@
 namespace App\Helpers;
 
 class Discord {
-    
+
 }

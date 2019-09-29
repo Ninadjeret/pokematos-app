@@ -511,6 +511,6 @@ class Helpers {
             '39.5' => 0.787473578,
             '40'   => 0.79030001,
         );
-        return $lvls_scalar[$lvl];        
+        return $lvls_scalar[$lvl];
     }
 }

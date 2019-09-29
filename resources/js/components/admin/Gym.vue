@@ -49,7 +49,7 @@
                 <v-switch v-model="ex"></v-switch>
             </div>
 
-            <div v-if="$route.params.id && Number.isInteger(parseInt(this.$route.params.id))">
+            <div v-if="$route.params.poi_id && Number.isInteger(parseInt(this.$route.params.poi_id))">
                 <v-subheader v-if="">Autres actions</v-subheader>
                 <v-list-tile color="pink" @click="dialog = true">Supprimer le POI</v-list-tile>
             </div>
@@ -95,24 +95,24 @@
         created() {
             console.log(this.$route.params);
             this.fetchZones();
-            if( this.$route.params.id && Number.isInteger(parseInt(this.$route.params.id)) ) {
+            if( this.$route.params.poi_id && Number.isInteger(parseInt(this.$route.params.poi_id)) ) {
                 this.fetch();
             }
         },
         methods: {
             fetch() {
-                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.$route.params.id).then( res => {
+                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.$route.params.poi_id).then( res => {
                     this.name = res.data.name;
                     this.niantic_name = res.data.niantic_name;
                     this.description = res.data.description;
-                    this.zone_id = res.data.zone.id;
+                    this.zone_id = (res.data.zone) ? res.data.zone.id : false ;
                     this.ex = res.data.ex;
                     this.gym = res.data.gym;
                     this.coordinates.lat = res.data.lat;
                     this.coordinates.lng = res.data.lng;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
-                    if( err.response.data ) {
+                    if( err.response && err.response.data ) {
                         message = err.response.data;
                     }
                     this.$store.commit('setSnackbar', {
@@ -146,7 +146,7 @@
                     lat: this.coordinates.lat,
                     lng: this.coordinates.lng,
                 };
-                if( this.$route.params.id && Number.isInteger(this.$route.params.id) ) {
+                if( this.$route.params.poi_id && Number.isInteger(parseInt(this.$route.params.poi_id) ) ) {
                     this.save(args);
                 } else {
                     this.create(args);
@@ -155,7 +155,7 @@
             save( args ) {
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
-                axios.put('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.$route.params.id, args).then( res => {
+                axios.put('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.$route.params.poi_id, args).then( res => {
                     this.$store.commit('setSnackbar', {
                         message: 'Enregistrement effectué',
                         timeout: 1500
@@ -198,7 +198,7 @@
             destroy() {
                 this.dialog = false;
                     this.$store.commit('setSnackbar', {message: 'Suppression en cours'})
-                    axios.delete('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.$route.params.id).then( res => {
+                    axios.delete('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.$route.params.poi_id).then( res => {
                         this.$store.commit('setSnackbar', {
                             message: 'suppression effectuée',
                             timeout: 1500
