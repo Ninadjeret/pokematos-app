@@ -14,7 +14,7 @@ const defaultSettings = {
 
 const store = new Vuex.Store({
     state: {
-        currentCity: ( localStorage.getItem('pokematos_currentCity').substring(0, 1) == '{' ) ? JSON.parse(localStorage.getItem('pokematos_currentCity') ) : localStorage.getItem('pokematos_currentCity'),
+        currentCity: ( localStorage.getItem('pokematos_currentCity') && localStorage.getItem('pokematos_currentCity').substring(0, 1) == '{' ) ? JSON.parse(localStorage.getItem('pokematos_currentCity') ) : localStorage.getItem('pokematos_currentCity'),
         cities: JSON.parse(localStorage.getItem('pokematos_cities') ),
         gyms: JSON.parse(localStorage.getItem('pokematos_gyms') ),
         pokemons: JSON.parse(localStorage.getItem('pokematos_pokemons') ),
@@ -200,10 +200,7 @@ const store = new Vuex.Store({
             if( !state.gyms || state.gyms.length === 0 ) return [];
             return state.gyms.filter((gym) => {
                 var now = moment();
-                if (gym.quest) {
-                    var day = moment(gym.quest.start_time, '"YYYY-MM-DD HH:mm:ss"');
-                }
-                return (gym.quest && gym.quest.start_time == moment().format('YYYY-MM-DD')+' 00:00:00' );
+                return (gym.quest && gym.quest.date == moment().format('YYYY-MM-DD')+' 00:00:00' );
             });
         },
         rewardQuests: state => {

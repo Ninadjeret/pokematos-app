@@ -257,7 +257,7 @@ const routes = [
                       component: AdminGym
                 },
                 {
-                      path: 'gyms/:id',
+                      path: 'gyms/:poi_id',
                       name: 'admin.gyms.edit',
                       meta: {
                           title: 'Modifier le POI',

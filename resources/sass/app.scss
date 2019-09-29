@@ -17,6 +17,7 @@
 @import 'admin';
 @import 'user';
 @import 'login';
+@import 'desktop';
 
 html {
     font-size: 10px !important;
@@ -70,6 +71,8 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
 }
 .v-content__wrap .container {
     padding : 0;
+    width: 100%;
+    max-width: 100%;
 }
 
 

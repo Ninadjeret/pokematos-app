@@ -2,7 +2,7 @@
 <div id="app__container" :class="'template-'+$route.name" data-app v-if="currentCity && currentCity !== 'undefined'">
         <v-toolbar fixed app color="primary" dark>
             <v-btn v-if="$route.meta.parent" :to="{ name: $route.meta.parent}" icon><v-icon>arrow_back</v-icon></v-btn>
-            <v-spacer v-if="$route.name == 'map'"></v-spacer>
+            <v-spacer class="hidden-md-and-up" v-if="$route.name == 'map'"></v-spacer>
             <v-toolbar-title v-if="$route.name == 'map'">
                 <img src="https://assets.profchen.fr/img/logo_pokematos.png"> POKEMATOS <small v-if="this.$store.state.currentCity">{{ this.$store.state.currentCity.name }}</small>
             </v-toolbar-title>
@@ -11,21 +11,7 @@
                 <v-icon>location_city</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-        </v-toolbar>
-
-
-        <v-content>
-            <v-container>
-                <transition :name="transitionName">
-                    <router-view></router-view>
-                </transition>
-                <snackbar></snackbar>
-            </v-container>
-          </v-content>
-
-
-          <v-footer app v-if="!$route.meta.parent">
-              <v-bottom-nav v-if="!$route.meta.parent" :value="true" absolute color="white" :mandatory="false">
+            <v-toolbar-items class="hidden-sm-and-down">
                 <v-btn to="/" color="primary" flat value="recent" >
                   <span>Map</span>
                   <v-icon>map</v-icon>
@@ -50,39 +36,78 @@
                   <span>Admin</span>
                   <v-icon>build</v-icon>
                 </v-btn>
-              </v-bottom-nav>
-              <v-dialog v-model="dialogCities" max-width="90%" content-class="city-modal">
-                  <v-card>
-                        <v-card-title class="headline">Choisis ta zone</v-card-title>
-                        <v-card-text>
-                            <ul id="cityChoice">
-                                <li v-for="city in cities" @click="changeCity( city )">
-                                    {{ city.name }}
-                                </li>
-                            </ul>
-                        </v-card-text>
-                  </v-card>
-              </v-dialog>
-              <v-dialog
-                  content-class="dialog-update"
-                  v-model="dialogUpdate"
-                  persistent
-                  width="300"
-                >
-                  <v-card color="primary">
-                    <v-card-text>
-                      <p>Initialisation<br><small><i>Le premier chargemet peut prendre 1 à 2 min...</i></small></p>
-                      <v-progress-linear
-                        indeterminate
-                        color="#5a6cae"
-                        class="mb-0"
-                      ></v-progress-linear>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
-          </v-footer>
+            </v-toolbar-items>
+        </v-toolbar>
 
-          <updater></updater>
+
+        <v-content>
+            <v-container>
+                <transition :name="transitionName">
+                    <router-view></router-view>
+                </transition>
+                <snackbar></snackbar>
+            </v-container>
+          </v-content>
+
+
+          <v-footer app v-if="!$route.meta.parent" class="hidden-md-and-up">
+              <v-bottom-nav v-if="!$route.meta.parent" :value="true" absolute color="white" :mandatory="false">
+                  <v-btn to="/" color="primary" flat value="recent" >
+                    <span>Map</span>
+                    <v-icon>map</v-icon>
+                  </v-btn>
+
+                  <v-btn to="/list" color="primary" flat value="recent" >
+                    <span>Listes</span>
+                    <v-icon>notifications_active</v-icon>
+                  </v-btn>
+
+                  <v-btn to="/profile" color="primary" flat value="recent" >
+                    <span>Profil</span>
+                    <v-icon>person</v-icon>
+                  </v-btn>
+
+                  <v-btn
+                      v-if="currentCity && currentCity !== undefined && parseInt(currentCity.permissions) >= 10 && user.permissions[currentCity.guilds[0].id].find(val => val != 'raid_delete' && val != 'raidex_add' )"
+                      to="/admin"
+                      color="primary"
+                      flat value="recent"
+                  >
+                    <span>Admin</span>
+                    <v-icon>build</v-icon>
+                  </v-btn>
+              </v-bottom-nav>
+          </v-footer>
+          <v-dialog v-model="dialogCities" max-width="90%" content-class="city-modal">
+              <v-card>
+                    <v-card-title class="headline">Choisis ta zone</v-card-title>
+                    <v-card-text>
+                        <ul id="cityChoice">
+                            <li v-for="city in cities" @click="changeCity( city )">
+                                {{ city.name }}
+                            </li>
+                        </ul>
+                    </v-card-text>
+              </v-card>
+          </v-dialog>
+          <v-dialog
+              content-class="dialog-update"
+              v-model="dialogUpdate"
+              persistent
+              width="300"
+            >
+              <v-card color="primary">
+                <v-card-text>
+                  <p>Initialisation<br><small><i>Le premier chargement peut prendre 1 à 2 min...</i></small></p>
+                  <v-progress-linear
+                    indeterminate
+                    color="#5a6cae"
+                    class="mb-0"
+                  ></v-progress-linear>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+            <updater></updater>
 
 </div>
 </template>

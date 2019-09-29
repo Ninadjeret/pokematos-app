@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="lists">
 
         <v-tabs v-model="tabs" fixed-tabs grow color="transparent" slider-color="white" class="">
             <v-tab href="#raids" class="primary--text">Raids</v-tab>
@@ -77,7 +77,6 @@
                         <p>Elargissez vos critères pour voir s'il y a d'autres raids dans les environs</p>
                         <v-btn depressed @click="dialog = true">Modifier mes filtres</v-btn>
                     </div>
-                    <img src="https://assets.profchen.fr/img/empty.png" />
                 </div>
 
             </v-tab-item>
@@ -111,7 +110,6 @@
                         <p>Elargissez vos critères pour voir s'il y a d'autres quêtes dans les environs</p>
                         <v-btn depressed @click="dialog = true">Modifier mes filtres</v-btn>
                     </div>
-                    <img src="https://assets.profchen.fr/img/empty.png" />
                 </div>
             </v-tab-item>
         </v-tabs-items>

@@ -149,6 +149,12 @@ class Connector extends Model {
             }
         }
 
+        //On nettoye les arobases inutles (sans fare de regex parce que c'est chiant ^^)
+        Log::debug($message);
+        $message = str_replace('<@', '##<##', $message);
+        $message = str_replace('@', '', $message);
+        $message = str_replace('##<##', '<@', $message);
+        Log::debug($message);
         return $message;
     }
 

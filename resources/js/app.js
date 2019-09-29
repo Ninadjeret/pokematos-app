@@ -48,17 +48,11 @@ Vue.component('v-select', vSelect)
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
- Vue.component(
-     'gym-modal',
-     require('./components/GymModal.vue').default
- );
- Vue.component(
-     'button-actions',
-     require('./components/ButtonActions.vue').default
- );
-
+ Vue.component( 'gym-modal', require('./components/GymModal.vue').default );
+ Vue.component( 'button-actions', require('./components/ButtonActions.vue').default );
  Vue.component( 'snackbar', require('./components/parts/Snackbar.vue').default );
  Vue.component( 'permission', require('./components/admin/parts/Permission.vue').default );
+ Vue.component( 'navigation', require('./components/Navigation.vue').default );
 
 import routes from './routes';
 import Container from './components/Container.vue';

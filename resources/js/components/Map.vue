@@ -243,9 +243,10 @@
                 this.markers.push(mapMarker);
             },
             localize() {
-                console.log('localize');
                 const that = this;
+                that.$refs.map.mapObject.panTo(new L.LatLng(this.currentCity.lat, this.currentCity.lng));
                 if (navigator.geolocation) {
+                    console.log('atata');
                     navigator.geolocation.getCurrentPosition(function (position) {
                         that.$refs.map.mapObject.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
                     });

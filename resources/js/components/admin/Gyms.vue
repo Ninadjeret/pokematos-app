@@ -6,7 +6,7 @@
             </div>
             <v-list>
             <template v-for="(gym, index) in paginateGyms">
-              <v-list-tile :key="gym.id" :to="{ name: 'admin.gyms.edit', params: { id: gym.id } }">
+              <v-list-tile :key="gym.id" :to="{ name: 'admin.gyms.edit', params: { poi_id: gym.id } }">
                   <v-list-tile-avatar>
                       <img :src="getPoiIcon(gym)">
                   </v-list-tile-avatar>

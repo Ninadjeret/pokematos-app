@@ -138,6 +138,11 @@ class QuestConnector extends Model
             }
         }
 
+        //On nettoye les arobases inutles (sans fare de regex parce que c'est chiant ^^)
+        $message = str_replace('<@', '##<##', $message);
+        $message = str_replace('@', '', $message);
+        $message = str_replace('##<##', '<@', $message);
+
         return $message;
     }
 
