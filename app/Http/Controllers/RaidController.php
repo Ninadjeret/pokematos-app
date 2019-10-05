@@ -44,6 +44,8 @@ class RaidController extends Controller {
     }*/
 
     public function delete(City $city, Raid $raid, Request $request) {
+        $gym = Stop::find($raid->gym_id);
+        $gym->touch();
         event( new \App\Events\RaidDeleted( $raid ) );
         $announces = $raid->getAnnounces();
         if( !empty($announces) ) {

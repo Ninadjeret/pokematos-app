@@ -268,7 +268,7 @@ const store = new Vuex.Store({
             commit('setGyms', result.data);
         },
         autoFetchData ({ commit }) {
-            commit('fetchRaids')
+            commit('fetchGyms')
             commit('fetchPokemon')
             commit('fetchQuests')
         },

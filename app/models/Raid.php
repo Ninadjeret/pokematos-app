@@ -185,8 +185,10 @@ class Raid extends Model {
             ]);
 
             if( $announceType == 'raid-create' ) {
+                $gym->touch();
                 event( new \App\Events\RaidCreated( $raid, $announce ) );
             } elseif( $announceType == 'raid-update') {
+                $gym->touch();
                 event( new \App\Events\RaidUpdated( $raid, $announce ) );
             } elseif( $announceType == 'raid-duplicate') {
                 event( new \App\Events\RaidDuplicate( $raid, $announce ) );
