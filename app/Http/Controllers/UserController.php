@@ -88,6 +88,8 @@ class UserController extends Controller {
                 Announce::destroy($announce->id);
             }
         }
+        $stop = Stop::find($questInstance->gym_id);
+        $stop->touch();
         QuestInstance::destroy($questInstance->id);
         return response()->json(null, 204);
     }
@@ -423,14 +425,14 @@ class UserController extends Controller {
     public function getPOIs(City $city, Request $request){
 
         $lastUpdate = $request->last_update;
-        Log::debug($lastUpdate);
         if( empty( $lastUpdate ) || $lastUpdate == 'false' ) {
-            Log::debug('titi');
             $lastUpdate = '2000-01-01 00:00:00';
         }
-        Log::debug($lastUpdate);
+
+        $date = new \DateTime($lastUpdate);
+        $date->modify('-10 minutes');
         $pois = Stop::where('city_id', '=', $city->id)
-            ->where('updated_at', '>=', $lastUpdate)
+            ->where('updated_at', '>=', $date->format('Y-m-d H:i:s'))
             ->orderBy('name', 'asc')
             ->get();
         return response()->json($pois, 200);

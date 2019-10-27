@@ -133,6 +133,7 @@ class CityController extends Controller {
         if( !$user->can('poi_edit', ['city_id' => $city->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
+        $stop->touch();
         Stop::destroy($stop->id);
         return response()->json(null, 204);
     }

@@ -10,8 +10,11 @@ use App\Models\Quest;
 use App\Models\QuestInstance;
 use App\Models\Zone;
 use App\Models\raidChannel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Stop extends Model {
+
+    use SoftDeletes;
 
     protected $fillable = ['name', 'niantic_name', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id', 'ex'];
     protected $appends = ['zone', 'city', 'google_maps_url', 'raid', 'quest'];
@@ -20,6 +23,7 @@ class Stop extends Model {
         'ex' => 'boolean',
         'gym' => 'boolean',
     ];
+    protected $dates = ['deleted_at'];
 
     public function raids() {
         return $this->hasMany('App\Models\Raid', 'gym_id');
