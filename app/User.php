@@ -179,20 +179,24 @@ class User extends Authenticatable
         $cities = [];
         $cities_ids = [];
         $user_guilds = $this->getGuilds();
-
         if( empty( $user_guilds ) ) return $cities;
 
         foreach( $user_guilds as $guild ) {
             if( !in_array($guild->city_id, $cities_ids) ) {
                 $cities_ids[] = $guild->city_id;
                 $city_to_add = City::find($guild->city_id);
+                $city_to_add = $city_to_add->toArray();
                 if( $city_to_add ) {
-                    $city_to_add->guilds = [$guild];
-                    $city_to_add->permissions = $guild->permissions;
+                    $city_to_add['guilds'] = [$guild];
+                    $city_to_add['permissions'] = $guild->permissions;
                     $cities[] = $city_to_add;
                 }
             } else {
-                $city_to_add->guilds[] = $guild;
+                foreach( $cities as &$city ) {
+                    if( $city['id'] == $guild->city_id ) {
+                        $city['guilds'][] = $guild;
+                    }
+                }
             }
         }
         return $cities;

@@ -47,9 +47,10 @@
     }
 }
 
-.v-window__container {
+.template-list .v-window__container {
     .v-window-item {
         display: flex;
+        flex-wrap: wrap;
         height: -webkit-fill-available;
         .raids__empty {
             width: 100%;

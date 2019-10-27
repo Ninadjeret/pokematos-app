@@ -11817,18 +11817,19 @@ body.logged-out .denied a {
   }
 }
 
-.v-window__container .v-window-item {
+.template-list .v-window__container .v-window-item {
   display: flex;
+  flex-wrap: wrap;
   height: -webkit-fill-available;
 }
 
-.v-window__container .v-window-item .raids__empty {
+.template-list .v-window__container .v-window-item .raids__empty {
   width: 100%;
   position: inherit;
   background: url("https://assets.profchen.fr/img/empty.png") bottom center no-repeat;
 }
 
-.v-window__container .v-window-item .raids__empty h3 {
+.template-list .v-window__container .v-window-item .raids__empty h3 {
   margin-top: calc( 50% - 50px);
 }
 
@@ -12081,7 +12082,8 @@ h6 small {
   line-height: 1.3rem;
 }
 
-.setting__wrapper > a {
+.setting__wrapper > a,
+.setting__wrapper > span.setting-link {
   padding: 10px 0;
   font-size: 16px;
   color: inherit;
