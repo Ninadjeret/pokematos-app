@@ -234,7 +234,8 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     margin: 0;
     line-height: 1.3rem;
 }
-.setting__wrapper > a {
+.setting__wrapper > a,
+.setting__wrapper > span.setting-link {
     padding: 10px 0;
     font-size: 16px;
     color: inherit;

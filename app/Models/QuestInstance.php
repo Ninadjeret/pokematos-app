@@ -93,6 +93,8 @@ class QuestInstance extends Model
                 'user_id' => Auth::id(),
                 'quest_instance_id' => $instance->id,
             ]);
+            $stop = Stop::find($args['gym_id']);
+            $stop->touch();
             event( new \App\Events\QuestInstanceCreated( $instance, $announce ) );
             return $instance;
         }

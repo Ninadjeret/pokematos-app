@@ -12,7 +12,7 @@
             <div v-if="welcome_active" class="setting">
                 <label>Message de bienvenue</label>
                 <p class="description">{utilisateur} permet d'indiquer le nom du nouvel arrivant.</p>
-                <input v-model="welcome_message" type="text">
+                <textarea v-model="welcome_message"></textarea>
             </div>
             <div v-if="welcome_active" class="setting">
                 <label>Salon</label>
