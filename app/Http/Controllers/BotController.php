@@ -65,7 +65,7 @@ class BotController extends Controller {
             $client = new Client();
             $url = config('app.bot_sync_url');
             if( !empty($url) ) {
-                $res = $client->post($url);
+                $res = $client->get($url);
             }
 
             return response()->json($guild, 200);
