@@ -110,7 +110,7 @@
                             count++;
                             that.addMarker(gym);
                         }
-                        if( count <= limit && zoom >= 12 && !gym.gym && mapBounds.contains([gym.lat, gym.lng]) ) {
+                        if( count <= limit && zoom >= 15 && !gym.gym && mapBounds.contains([gym.lat, gym.lng]) ) {
                             count++;
                             that.addMarker(gym);
                         }

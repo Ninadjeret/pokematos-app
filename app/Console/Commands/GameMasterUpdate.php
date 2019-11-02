@@ -144,6 +144,7 @@ class GameMasterUpdate extends Command
                     'form_id'       => $data['form_id'],
                     'niantic_id'    => $niantic_id,
                     'name_fr'       => $data['name_fr'],
+                    'name_ocr'      => $data['name_ocr'],
                     'base_att'      => $data['base_att'],
                     'base_def'      => $data['base_def'],
                     'base_sta'      => $data['base_sta'],

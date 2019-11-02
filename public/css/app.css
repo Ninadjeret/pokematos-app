@@ -10766,6 +10766,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   vertical-align: top;
 }
 
+.raids__wrapper {
+  padding-bottom: 70px;
+}
+
 .v-overlay--active {
   z-index: 6000 !important;
 }
@@ -11827,6 +11831,8 @@ body.logged-out .denied a {
   width: 100%;
   position: inherit;
   background: url("https://assets.profchen.fr/img/empty.png") bottom center no-repeat;
+  background-size: contain;
+  margin-bottom: 45px;
 }
 
 .template-list .v-window__container .v-window-item .raids__empty h3 {

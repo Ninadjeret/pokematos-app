@@ -90,7 +90,7 @@
         data() {
             return {
                 totalCouts: 279,
-                totalDons: 30,
+                totalDons: 45,
                 dialogUpdate: false,
             }
         },

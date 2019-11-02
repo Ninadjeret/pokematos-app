@@ -56,6 +56,8 @@
             width: 100%;
             position: inherit;
             background: url('https://assets.profchen.fr/img/empty.png') bottom center no-repeat;
+            background-size: contain;
+            margin-bottom: 45px;
             h3 {
                 margin-top: calc( 50% - 50px);
             }
