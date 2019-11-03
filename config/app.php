@@ -14,7 +14,7 @@ return [
     */
 
     'version' => [
-        'current' => '2.0.0-beta.1.3',
+        'current' => '2.0.0-beta.2.0',
         'min' => '2.0.0-alpha.4.2',
     ],
 
