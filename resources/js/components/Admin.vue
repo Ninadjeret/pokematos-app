@@ -20,11 +20,11 @@
                   </v-list>
               </div>
 
-              <div v-if="user.permissions[currentCity.guilds[0].id].find(val => val === 'zone_edit' || val === 'poi_edit' )">
+              <div v-if="canAccessCityParam('zone_edit') || canAccessCityParam('poi_edit')">
                     <v-subheader v-if="currentCity">{{currentCity.name}}</v-subheader>
                     <v-list>
                     <template v-for="(item, index) in generalItems">
-                        <v-list-tile v-if="user.permissions[currentCity.guilds[0].id].find(val => val === item.permission)" :key="item.route" :to="{ name: item.route}">
+                        <v-list-tile v-if="canAccessCityParam(item.permission)" :key="item.route" :to="{ name: item.route}">
                             <v-list-tile-action>
                                 <v-icon>{{item.icon}}</v-icon>
                             </v-list-tile-action>
@@ -38,11 +38,11 @@
               </div>
 
 
-              <div v-if="user.permissions[currentCity.guilds[0].id].find(val => val === 'boss_edit' || val === 'quest_edit' )">
+              <div v-if="canAccessCityParam('boss_edit') || canAccessCityParam('quest_edit')">
                     <v-subheader>Global</v-subheader>
                     <v-list>
                     <template v-for="(item, index) in commonItems">
-                        <v-list-tile v-if="user.permissions[currentCity.guilds[0].id].find(val => val === item.permission)" :key="item.route" :to="{ name: item.route}">
+                        <v-list-tile v-if="canAccessCityParam(item.permission)" :key="item.route" :to="{ name: item.route}">
                             <v-list-tile-action>
                                 <v-icon>{{item.icon}}</v-icon>
                             </v-list-tile-action>
@@ -152,6 +152,16 @@
         mounted() {
         },
         methods: {
+            canAccessCityParam( param ) {
+                let auth = false;
+                let that = this;
+                this.currentCity.guilds.forEach((guild, index) => {
+                    if( that.user.permissions[guild.id].find(val => val === param) ) {
+                        auth = true;
+                    }
+                })
+                return auth;
+            },
         }
     }
 </script>

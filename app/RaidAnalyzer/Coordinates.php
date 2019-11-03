@@ -12,6 +12,16 @@ class Coordinates {
         $this->ratioMap = array();
     }
 
+    public function forImgTypeEx() {
+        return array(
+            (object) array( 'x' => 1, 'y' => $this->image_height / 2),
+            (object) array( 'x' => $this->image_width - 1, 'y' => $this->image_height / 2),
+            (object) array( 'x' => 1, 'y' => $this->image_height - 5),
+            (object) array( 'x' => $this->image_width / 2, 'y' => $this->image_height - 5),
+            (object) array( 'x' => $this->image_width - 1, 'y' => $this->image_height - 5),
+        );
+    }
+
     public function forImgTypeEgg() {
         if( $this->ratio < 0.47 ) {
             return (object) array(

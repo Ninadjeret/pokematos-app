@@ -16,7 +16,7 @@ class ImageAnalyzer {
 
     function __construct( $source, $guild ) {
 
-        $this->debug = true;
+        $this->debug = false;
 
         $this->result = (object) array(
             'type' => false,
@@ -57,6 +57,7 @@ class ImageAnalyzer {
          if( $this->imageData->type == 'egg' ) {
              $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
              $this->_log($this->ocr);
+             $this->result->type = 'egg';
              $this->result->gym = $this->getGym();
              $this->result->date = $this->getTime();
              $this->result->eggLevel = $this->getEggLevel();
@@ -65,12 +66,22 @@ class ImageAnalyzer {
         elseif( $this->imageData->type == 'pokemon' ) {
              $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
              $this->_log($this->ocr);
+             $this->result->type = 'pokemon';
              $this->result->gym = $this->getGym();
              $this->result->date = $this->getTime();
              $this->result->pokemon = $this->getPokemon();
              if( $this->result->pokemon ) {
                  $this->result->eggLevel = $this->result->pokemon->getRaidLevel();
              }
+         }
+
+         elseif( $this->imageData->type == 'ex' ) {
+             $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
+             $this->_log($this->ocr);
+             $this->result->type = 'ex';
+             $this->result->gym = $this->getGym();
+             $this->result->date = $this->getExTime();
+             $this->result->eggLevel = 6;
          }
 
          $time_elapsed_secs = microtime(true) - $this->start;
@@ -208,6 +219,21 @@ class ImageAnalyzer {
 
         $image = imagecreatefromjpeg($this->imageData->path);
 
+        //Check for raidex
+        if( $this->debug ) $this->_log('---------- Check if image is Raid EX invit ----------');
+        $matching_points = 0;
+        foreach( $this->coordinates->forImgTypeEx() as $coords ) {
+            $rgb = $this->colorPicker->pickColor( $image, $coords->x, $coords->y );
+            if( $this->colorPicker->isExBackground( $rgb ) ) {
+                $matching_points++;
+            }
+        }
+        if( $matching_points == 5 ) {
+            if( $this->debug ) $this->_log('Great ! Img seems to be an EX invit');
+            return 'ex';
+        }
+
+
         //Check for Future Raid
         if( $this->debug ) $this->_log('---------- Check if image is Raid Announce ----------');
         $rgb = $this->colorPicker->pickColor( $image, $this->coordinates->forImgTypeEgg()->x, $this->coordinates->forImgTypeEgg()->y );
@@ -263,6 +289,31 @@ class ImageAnalyzer {
         return false;
     }
 
+    function getExTime() {
+        $date = false;
+        foreach( $this->ocr as $line ) {
+            if( preg_match( '/[0-9][0-9]:[0-9][0-9] - [0-9][0-9]:[0-9][0-9]/i', $line ) ) {
+                $date_els = explode(' - ', $line);
+                $date = $date_els[0];
+            }
+        }
+
+        if( $date ) {
+            $date_els = explode(' ', $date);
+            $year = date('Y');
+            $day = ( strlen($date_els[0]) === 1 ) ? '0'.$date_els[0] : $date_els[0] ;
+            $month = str_replace(
+                ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'aout', 'septembre', 'octobre', 'novembre', 'décembre'],
+                ['01', '02', '03', '04', '05', '06', '07', '08', '08', '09', '10', '11', '12'],
+                $date_els[1]
+            );
+            $minutes = $date_els[2];
+            return "{$year}-{$month}-{$day} {$minutes}:00";
+        }
+
+        return false;
+    }
+
     function getTime() {
         $minutes = false;
         foreach( $this->ocr as $line ) {
@@ -303,7 +354,7 @@ class ImageAnalyzer {
         $query = implode(' ', $this->ocr);
         $pokemon = $this->pokemonSearch->findPokemon($query, 70);
         if( $pokemon ) {
-            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->getNameFr() );
+            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->name_fr );
             return $pokemon;
         }
 
@@ -316,7 +367,7 @@ class ImageAnalyzer {
                     $this->ocr[ $ocr_count - 2 ]
                     );
             if( $pokemon ) {
-                if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->getNameFr() );
+                if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->name_fr );
                 return $pokemon;
             }
         }
