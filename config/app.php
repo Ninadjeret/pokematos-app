@@ -14,7 +14,7 @@ return [
     */
 
     'version' => [
-        'current' => '2.0.0-beta.1.2',
+        'current' => '2.0.0-beta.1.3',
         'min' => '2.0.0-alpha.4.2',
     ],
 
@@ -131,6 +131,7 @@ return [
     'bot_token' => env('BOT_TOKEN', false),
     'bot_sync_url' => env('BOT_SYNC_URL', false),
     'maps_api_key' => env('MAPS_API_KEY', false),
+    'microsoft_api_key' => env('MICROSOFT_API_KEY', false),
 
     /*
     |--------------------------------------------------------------------------

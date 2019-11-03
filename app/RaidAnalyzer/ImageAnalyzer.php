@@ -19,6 +19,7 @@ class ImageAnalyzer {
         $this->debug = true;
 
         $this->result = (object) array(
+            'type' => false,
             'gym' => false,
             'eggLevel' => false,
             'pokemon'   => false,
@@ -316,7 +317,7 @@ class ImageAnalyzer {
                     );
             if( $pokemon ) {
                 if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->getNameFr() );
-                return $pokemon);
+                return $pokemon;
             }
         }
 

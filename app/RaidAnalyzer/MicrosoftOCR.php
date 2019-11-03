@@ -6,14 +6,11 @@ use Illuminate\Support\Facades\Log;
 class MicrosoftOCR {
 
     function __construct() {
-        $this->apiKey = '';
+        $this->apiKey = config('app.microsoft_api_key');
         $this->baseUrl = 'https://westeurope.api.cognitive.microsoft.com/vision/v2.0/recognizeText?mode=Printed';
     }
 
     public function read( $image_url ) {
-
-        return array('4G', '$ 53 4 15:22', 'Echelle de vie', 'Ectoplasma', '0:42:14');
-
         $headers = $this->recognizeText($image_url);
         $requestURL = $this->getResultUrl($headers);
         if( $requestURL ) {
