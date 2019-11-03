@@ -112,11 +112,11 @@ class Guild extends Model
         }
 
         //On avertit le bot de la MAJ
-        /*$client = new Client();
+        $client = new Client();
         $url = config('app.bot_sync_url');
         if( !empty($url) ) {
             $res = $client->get($url);
-        }*/
+        }
 
         return true;
     }

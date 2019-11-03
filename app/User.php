@@ -194,6 +194,9 @@ class User extends Authenticatable
             } else {
                 foreach( $cities as &$city ) {
                     if( $city['id'] == $guild->city_id ) {
+                        if( $guild->permissions > $city['permissions'] ) {
+                            $city['permissions'] = $guild->permissions;
+                        }
                         $city['guilds'][] = $guild;
                     }
                 }
@@ -246,7 +249,7 @@ class User extends Authenticatable
 
                             //Gestion des prvilèges d'admin
                             if ( !empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $result->roles))) {
-                                $admin = 20;
+                                $admin = 30;
                                 $auth = true;
                                 $auth_discord = true;
                             }

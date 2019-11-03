@@ -6,14 +6,11 @@ use Illuminate\Support\Facades\Log;
 class MicrosoftOCR {
 
     function __construct() {
-        $this->apiKey = '';
+        $this->apiKey = config('app.microsoft_api_key');
         $this->baseUrl = 'https://westeurope.api.cognitive.microsoft.com/vision/v2.0/recognizeText?mode=Printed';
     }
 
     public function read( $image_url ) {
-
-        return array('4G', '$ 53 4 15:22', 'Echelle de vie', 'Ectoplasma', '0:42:14');
-
         $headers = $this->recognizeText($image_url);
         $requestURL = $this->getResultUrl($headers);
         if( $requestURL ) {
@@ -84,19 +81,43 @@ class MicrosoftOCR {
 
 
         $lines = array();
+        $num_ligne = 0;
+        $num_ligne_invitation = 0;
         foreach( $result->recognitionResult->lines as $line ) {
-            if( $line->text == 'Cette Arene est trop loin.' || $line->text == 'X' ) {
+
+            $num_ligne++;
+
+            //exceptions de base
+            if( $line->text == 'Cette Arene est trop loin.'
+                || $line->text == 'X'
+                || $line->text == 'COMBAT'
+                || $line->text == 'GROUPE PRIVE'
+                || $line->text == 'Walk closer to interact with this Gym.'
+            ) {
                 continue;
             }
-            if( $line->text == 'COMBAT' ) {
+
+            //Exceptions raidex zone géographique
+            if( $line->text == 'INVITATION' ) $num_ligne_invitation = $num_ligne;
+            if( $num_ligne_invitation > 0 && ($num_ligne_invitation + 3) == $num_ligne ) {
                 continue;
             }
-            if( $line->text == 'GROUPE PRIVE' ) {
+
+            //exceptions RaidEx
+            if( $line->text == 'Itineraire'
+                || $line->text == 'Itineraire'
+                || $line->text == 'Un Excellent ami et toi etes invites a un Raid EX.'
+                || $line->text == 'INVITATION'
+                || $line->text == 'Il s\'agit d\'une recompense pour ta victoire a'
+                || $line->text == 'INVITER'
+                || strstr($line->text, 'sur invitation uniquement')
+                || strstr($line->text, 'Felicitations,')
+                || strstr($line->text, 'Rends-toi a I\'Arene a l\'heure indiquee')
+                || strstr($line->text, ' Combat de Raid EX')
+            ) {
                 continue;
             }
-            if( $line->text == 'Walk closer to interact with this Gym.' ) {
-                continue;
-            }
+
             if(preg_match('/^CP/', $line->text) ) {
                 $this->cp_line = $line->text;
                 continue;

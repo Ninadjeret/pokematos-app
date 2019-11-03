@@ -41,7 +41,7 @@ class DeleteDiscordMessage
         }
 
         if( $event->announce->source == 'text' && $guild->settings->raidreporting_text_delete == false ) return;
-        if( $event->announce->source == 'image' && $guild->settings->raidreporting_image_delete == false ) return;
+        if( $event->announce->source == 'image' && $guild->settings->raidreporting_images_delete == false ) return;
 
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $discord->channel->deleteMessage([

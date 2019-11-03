@@ -65,7 +65,7 @@ class BotController extends Controller {
             $client = new Client();
             $url = config('app.bot_sync_url');
             if( !empty($url) ) {
-                $res = $client->post($url);
+                $res = $client->get($url);
             }
 
             return response()->json($guild, 200);
@@ -369,7 +369,12 @@ class BotController extends Controller {
             $args['guild_id'] = $guild->id;
             $args['source_type'] = $source_type;
             if( isset( $result->pokemon->id ) ) $args['pokemon_id'] = $result->pokemon->id;
-            if( isset( $result->eggLevel ) ) $args['egg_level'] = $result->eggLevel;
+            if( isset( $result->eggLevel ) ) {
+                $args['egg_level'] = $result->eggLevel;
+                if( $result->eggLevel == '6' ) {
+                    $args['ex'] = true;
+                }
+            }
             if( isset( $result->date ) ) $args['start_time'] = $result->date;
 
             $raid = Raid::add($args);

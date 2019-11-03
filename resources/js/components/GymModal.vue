@@ -45,7 +45,7 @@
                         <li v-if="!gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">explore</i><span>Annoncer une quête</span></a></li>
                         <li v-if="gym.quest && ( !gym.quest.quest_id || !gym.quest.reward_type )"><a class="modal__action update-quest" v-on:click="setScreenTo('updateQuest')"><i class="material-icons">fingerprint</i><span>Préciser la quête</span></a></li>
                         <li v-if="gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="deleteQuestConfirm()"><i class="material-icons">delete</i><span>Supprimer la quête</span></a></li>
-                        <li v-if="raidStatus == 'none' && gym.ex === true"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
+                        <li v-if="raidStatus == 'none' && gym.ex === true && canCreateRaidEx"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
                         <li v-if="gym.google_maps_url && gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
                         <li v-if="gym.google_maps_url && !gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers le Pokéstop</span></a></li>
@@ -257,6 +257,23 @@ export default {
         }
     },
     computed: {
+        canCreateRaidEx() {
+            let active = false;
+            let canAccess = false
+            this.currentCity.guilds.forEach((guild, index) => {
+                if( guild.settings.raidsex_active == true ) {
+                    active = true;
+                }
+                if( guild.settings.raidsex_access_everyone == true ) {
+                    canAccess = true;
+                } else if( parseInt(this.currentCity.permissions) >= 10 && this.user.permissions[this.currentCity.guilds[0].id].find(val => val == 'raidex_add') ) {
+                    canAccess = true;
+                } else if( parseInt(this.currentCity.permissions) >= 30 ) {
+                    canAccess = true;
+                }
+            })
+            return active && canAccess;
+        },
         pokemons() {
             return this.$store.getters.getRaidBosses;
         },

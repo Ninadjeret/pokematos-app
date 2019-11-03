@@ -246,7 +246,7 @@
                 return 'Toto';
             },
             gyms() {
-                return this.$store.state.gyms;
+                return this.$store.state.gyms.filter(element => element.gym);
             }
         },
         methods: {

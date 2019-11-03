@@ -43,7 +43,7 @@
     <div class="settings-section about">
         <div class="section__title">Merci pour votre soutien</div>
         <p class="donation">
-            Les frais de fonctionnement de Pokématos représentent pour l'instant <strong>{{totalCouts}}€</strong>. Grace à vous, nous avons déja récupéré <strong>{{totalDons}}€</strong> !
+            Les frais de fonctionnement de Pokématos représentent <strong>{{totalCouts}}€</strong> depuis le 01/01/2019. Grace à vous, nous avons déja récupéré <strong>{{totalDons}}€</strong> !
             <v-progress-linear
                 color="#5a6cae"
                 height="20"
@@ -90,7 +90,7 @@
         data() {
             return {
                 totalCouts: 279,
-                totalDons: 30,
+                totalDons: 45,
                 dialogUpdate: false,
             }
         },

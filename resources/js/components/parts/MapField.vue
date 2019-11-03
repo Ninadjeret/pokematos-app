@@ -44,13 +44,13 @@
         computed: {
             coords: {
                 get: function () {
-                    return this.coordinates.lat+', '+this.coordinates.lng;
+                    return this.coordinates.lat+','+this.coordinates.lng;
                 },
                 set: function (newValue) {
                     if( newValue === undefined || newValue == '' || !newValue ) {
                         return
                     }
-                    let coordinates = newValue.split(', ')
+                    let coordinates = newValue.split(',')
                     console.log(coordinates.length)
                     if( coordinates.length === 2 && coordinates[0].includes('.') && coordinates[1].includes('.') ) {
                         this.updateCoordinates(coordinates[0], coordinates[1])
