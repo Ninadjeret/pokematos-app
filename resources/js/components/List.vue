@@ -8,67 +8,71 @@
 
         <v-tabs-items v-model="tabs">
             <v-tab-item value="raids">
-                <div v-if="activeRaids.length > 0" class="raids__active">
-                    <div class="section__title">Raids en cours</div>
-                    <div class="raids__wrapper">
-                        <div v-on:click="showModal(gym)" v-for="gym in activeRaids" class="raid__wrapper">
-                            <div class="raid__img">
-                                <img :src="getRaidImgUrl(gym.raid)">
-                            </div>
-                            <div class="raid__content">
-                                <h3>
-                                    <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
-                                    <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
-                                    <span class="raid__timer active">
-                                        <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
-                                            <template slot-scope="props">Reste {{ props.totalMinutes }} min</template>
-                                        </countdown>
-                                    </span>
-                                </h3>
-                                <div class="raid__gym">
-                                    <img v-if="gym.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
-                                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
-                                    <template v-if="gym.zone">
-                                        {{gym.zone.name}} -
-                                    </template>
-                                    {{gym.name}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div v-if="futureRaids.length > 0" class="raids__future">
-                    <div class="section__title">Raids à venir</div>
-                    <div class="raids__wrapper">
-                        <div v-on:click="showModal(gym)" v-for="gym in futureRaids" class="raid__wrapper">
-                            <div class="raid__img">
-                                <img :src="getRaidImgUrl(gym.raid)">
-                            </div>
-                            <div class="raid__content">
-                                <h3>
-                                    <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
-                                    <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
-                                    <span class="raid__timer future">
-                                        <countdown v-if="gym.raid.ex" :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
-                                            <template slot-scope="props">{{ props.days }}j et {{ props.hours }}h</template>
-                                        </countdown>
-                                        <countdown v-else :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
-                                            <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
-                                        </countdown>
-                                    </span>
-                                </h3>
-                                <div class="raid__gym">
-                                    <img v-if="gym.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
-                                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
-                                    <template v-if="gym.zone">
-                                        {{gym.zone.name}} -
-                                    </template>
-                                    {{gym.name}}
+                <div v-if="futureRaids.length > 0 || activeRaids.length > 0" style="flex-basis: 100%;">
+                    <div v-if="activeRaids.length > 0" class="raids__active">
+                        <div class="section__title">Raids en cours</div>
+                        <div class="raids__wrapper">
+                            <div v-on:click="showModal(gym)" v-for="gym in activeRaids" class="raid__wrapper">
+                                <div class="raid__img">
+                                    <img :src="getRaidImgUrl(gym.raid)">
+                                </div>
+                                <div class="raid__content">
+                                    <h3>
+                                        <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                                        <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                                        <span class="raid__timer active">
+                                            <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                                <template slot-scope="props">Reste {{ props.totalMinutes }} min</template>
+                                            </countdown>
+                                        </span>
+                                    </h3>
+                                    <div class="raid__gym">
+                                        <img v-if="gym.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
+                                        <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
+                                        <template v-if="gym.zone">
+                                            {{gym.zone.name}} -
+                                        </template>
+                                        {{gym.name}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div v-if="futureRaids.length > 0" class="raids__future">
+                        <div class="section__title">Raids à venir</div>
+                        <div class="raids__wrapper">
+                            <div v-on:click="showModal(gym)" v-for="gym in futureRaids" class="raid__wrapper">
+                                <div class="raid__img">
+                                    <img :src="getRaidImgUrl(gym.raid)">
+                                </div>
+                                <div class="raid__content">
+                                    <h3>
+                                        <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                                        <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
+                                        <span class="raid__timer future">
+                                            <countdown v-if="gym.raid.ex" :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                                <template slot-scope="props">{{ props.days }}j et {{ props.hours }}h</template>
+                                            </countdown>
+                                            <countdown v-else :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                                <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
+                                            </countdown>
+                                        </span>
+                                    </h3>
+                                    <div class="raid__gym">
+                                        <img v-if="gym.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
+                                        <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
+                                        <template v-if="gym.zone">
+                                            {{gym.zone.name}} -
+                                        </template>
+                                        {{gym.name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div v-if="futureRaids.length === 0 &  activeRaids.length === 0" class="raids__empty hide">
@@ -81,24 +85,26 @@
 
             </v-tab-item>
             <v-tab-item value="quetes">
-                <div v-if="activeQuests.length > 0" class="raids__active">
+                <div v-if="activeQuests.length > 0" style="flex-basis: 100%;">
+                <div class="raids__active">
                     <div class="section__title">Quêtes en cours</div>
-                    <div class="raids__wrapper">
-                        <div v-on:click="showModal(gym)" v-for="gym in activeQuests" class="raid__wrapper">
-                            <div class="raid__img">
-                                <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnail_url">
-                                <img v-if="!gym.quest.reward" src="https://assets.profchen.fr/img/app/unknown.png">
-                            </div>
-                            <div class="raid__content">
-                                <h3>
-                                    <span>{{gym.quest.quest.name}}</span>
-                                </h3>
-                                <div class="raid__gym">
-                                    <img src="https://assets.profchen.fr/img/app/connector_pokestop.png">
-                                    <template v-if="gym.zone">
-                                        {{gym.zone.name}} -
-                                    </template>
-                                    {{gym.name}}
+                        <div class="raids__wrapper">
+                            <div v-on:click="showModal(gym)" v-for="gym in activeQuests" class="raid__wrapper">
+                                <div class="raid__img">
+                                    <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnail_url">
+                                    <img v-if="!gym.quest.reward" src="https://assets.profchen.fr/img/app/unknown.png">
+                                </div>
+                                <div class="raid__content">
+                                    <h3>
+                                        <span>{{gym.quest.quest.name}}</span>
+                                    </h3>
+                                    <div class="raid__gym">
+                                        <img src="https://assets.profchen.fr/img/app/connector_pokestop.png">
+                                        <template v-if="gym.zone">
+                                            {{gym.zone.name}} -
+                                        </template>
+                                        {{gym.name}}
+                                    </div>
                                 </div>
                             </div>
                         </div>

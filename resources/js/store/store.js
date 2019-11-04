@@ -272,9 +272,16 @@ const store = new Vuex.Store({
             commit('fetchPokemon')
             commit('fetchQuests')
         },
-        fetchData ({ commit }) {
-            commit('fetchRaids', true)
-            commit('fetchZones')
+        async fetchData ({ dispatch, commit }) {
+            commit('setSnackbar', {
+                message: 'Synchronisation en cours',
+                timeout: 10000
+            })
+            await dispatch('fetchGyms')
+            commit('setSnackbar', {
+                message: 'Synchronisation terminée',
+                timeout: 1500
+            })
         },
         async changeCity ({ dispatch, commit, state }, city) {
             commit('setCity', city);

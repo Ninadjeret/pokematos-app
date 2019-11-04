@@ -1,5 +1,4 @@
 <template>
-
 </template>
 
 <script>
@@ -23,7 +22,7 @@ export default {
             }
         }
     },
-    created() {
+    mounted() {
         this.fetchVersion();
     },
     methods: {

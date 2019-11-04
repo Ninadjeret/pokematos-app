@@ -128,6 +128,9 @@ class UserController extends Controller {
             event( new \App\Events\QuestInstanceUpdated( $questInstance, $announce ) );
         }
 
+        $stop = Stop::find($questInstance->gym_id);
+        $stop->touch();
+
         return response()->json($questInstance, 200);
     }
 

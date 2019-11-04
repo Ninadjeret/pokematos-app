@@ -57,11 +57,11 @@ class GameMasterUpdate extends Command
             if( strstr($node->templateId, '_NORMAL') ) continue;
             if( strstr($node->templateId, '_PURIFIED') ) continue;
             if( strstr($node->templateId, '_SHADOW') ) continue;
+            if( strstr($node->templateId, '_FALL_2019') ) continue;
 
             $pokedex_id = substr($node->templateId, 2, 3);
             $name_ocr = ( isset($names_fr[(int)$pokedex_id]) ) ? $names_fr[(int)$pokedex_id - 1] : null;
             $form_id = ( isset($node->pokemonSettings->form) ) ? $node->pokemonSettings->form : '00';
-
             $forms = [
                 'ALOLA' => 'd\'Alola',
                 'SPEED' => 'Vitesse',
@@ -69,7 +69,11 @@ class GameMasterUpdate extends Command
                 'DEFENSE' => 'Défense',
                 'PLANT' => 'Plante',
                 'SANDY' => 'Sable',
-                'TRASH' => 'test',
+                'TRASH' => 'Déchet',
+                'RAINY' => 'Pluie',
+                'SNOWY' => 'Neige',
+                'SUNNY' => 'Soleil',
+                'OVERCAST' => 'Couvert',
             ];
 
             $name_fr = $name_ocr;
@@ -140,6 +144,7 @@ class GameMasterUpdate extends Command
                     'form_id'       => $data['form_id'],
                     'niantic_id'    => $niantic_id,
                     'name_fr'       => $data['name_fr'],
+                    'name_ocr'      => $data['name_ocr'],
                     'base_att'      => $data['base_att'],
                     'base_def'      => $data['base_def'],
                     'base_sta'      => $data['base_sta'],
@@ -155,7 +160,7 @@ class GameMasterUpdate extends Command
                 $pokemon = Pokemon::where('niantic_id', $niantic_id);
                 if( $pokemon ) {
                     $pokemon->update([
-                        'name_fr'   => $data['name_fr'],
+                        'form_id'   => $data['form_id'],
                         'base_att'  => $data['base_att'],
                         'base_def'  => $data['base_def'],
                         'base_sta'  => $data['base_sta'],

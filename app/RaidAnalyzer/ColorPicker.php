@@ -64,4 +64,16 @@ class ColorPicker {
         return false;
     }
 
+    public function isExBackground( $rgb ) {
+        if(
+            ( $rgb['red'] >= 0 && $rgb['red'] <= 10) &&
+            ( $rgb['green'] >= 40 && $rgb['green'] <= 50 ) &&
+            ( $rgb['blue'] >= 70 && $rgb['blue'] <= 80 )
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
 }

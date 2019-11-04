@@ -68,7 +68,7 @@
                   </v-btn>
 
                   <v-btn
-                      v-if="currentCity && currentCity !== undefined && parseInt(currentCity.permissions) >= 10 && user.permissions[currentCity.guilds[0].id].find(val => val != 'raid_delete' && val != 'raidex_add' )"
+                      v-if="currentCity && currentCity !== undefined && isAdmin"
                       to="/admin"
                       color="primary"
                       flat value="recent"
@@ -134,9 +134,22 @@
                 setInterval( this.fetch, 60000, 'auto' );
             }
         },
-        computed: mapState([
-                'cities', 'currentCity', 'user'
-        ]),
+        computed: {
+            cities() {
+                return this.$store.state.cities;
+            },
+            currentCity() {
+                return this.$store.state.currentCity;
+            },
+            user() {
+                return this.$store.state.user;
+            },
+            isAdmin() {
+                let isAdmin = parseInt(this.currentCity.permissions) >= 30;
+                let isModo = parseInt(this.currentCity.permissions) >= 20 && this.user.permissions[this.currentCity.guilds[0].id].find(val => val != 'raid_delete' && val != 'raidex_add' )
+                return isAdmin || isModo;
+            }
+        },
         watch: {
             currentCity: function( val ) {
                 if( val && val !== undefined ) this.fetch();

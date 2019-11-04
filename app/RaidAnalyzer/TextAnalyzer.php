@@ -164,7 +164,7 @@ class TextAnalyzer {
     function getPokemon() {
         $pokemon = $this->pokemonSearch->findPokemon($query, 70);
         if( $pokemon ) {
-            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->getNameFr() );
+            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->name_fr );
             return $pokemon;
         }
 

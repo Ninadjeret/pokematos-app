@@ -166,7 +166,11 @@ class PokemonsTableSeeder extends Seeder {
                     'DEFENSE' => 'Défense',
                     'PLANT' => 'Plante',
                     'SANDY' => 'Sable',
-                    'TRASH' => 'test',
+                    'TRASH' => 'Déchet',
+                    'RAINY' => 'Pluie',
+                    'SNOWY' => 'Neige',
+                    'SUNNY' => 'Soleil',
+                    'OVERCAST' => 'Couvert',
                 ];
 
                 $name_fr = $name_ocr;

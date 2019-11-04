@@ -102,15 +102,14 @@
                 this.deleteMarkers();
                 let zoom = this.map.getZoom();
                 let mapBounds = this.map.getBounds();
-                let limit = 200;
+                let limit = 100;
                 let count = 0;
                 if( this.gyms && this.gyms.length > 0 ) {
                     this.gyms.forEach(function(gym) {
                         if( gym.gym ) {
-                            count++;
                             that.addMarker(gym);
                         }
-                        if( count <= limit && zoom >= 12 && !gym.gym && mapBounds.contains([gym.lat, gym.lng]) ) {
+                        if( count <= limit && zoom >= 15 && !gym.gym && mapBounds.contains([gym.lat, gym.lng]) ) {
                             count++;
                             that.addMarker(gym);
                         }

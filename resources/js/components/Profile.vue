@@ -35,19 +35,22 @@
             <div class="setting__wrapper">
                 <a href="https://www.pokematos.fr/documentation" class="setting-link">Documentation</a>
             </div>
+            <div class="setting__wrapper">
+                <span @click="updateData" class="setting-link">Retélécharger les données</span>
+            </div>
         </div>
     </div>
     <div class="settings-section about">
         <div class="section__title">Merci pour votre soutien</div>
         <p class="donation">
-            Les frais de fonctionnement de Pokématos représentent pour l'instant <strong>{{totalCouts}}€</strong>. Grace à vous, nous avons déja récupéré <strong>{{totalDons}}€</strong> !
+            Les frais de fonctionnement de Pokématos représentent <strong>{{totalCouts}}€</strong> depuis le 01/01/2019. Grace à vous, nous avons déja récupéré <strong>{{totalDons}}€</strong> !
             <v-progress-linear
                 color="#5a6cae"
                 height="20"
                 :value="pourcentageDons"
             ></v-progress-linear>
             <span class="text-center">
-                <v-btn href="#">Faire un don</v-btn>
+                <v-btn href="https://www.pokematos.fr/don">Faire un don</v-btn>
             </span>
         </p>
     </div>
@@ -59,6 +62,25 @@
             Version <span id="version">{{appVersion}}</span>
         </p>
     </div>
+
+    <v-dialog
+        content-class="dialog-update"
+        v-model="dialogUpdate"
+        persistent
+        width="300"
+      >
+        <v-card color="primary">
+          <v-card-text>
+            <p>Mise à jour des données<br><small><i>cela peut prendre 1 à 2 min...</i></small></p>
+            <v-progress-linear
+              indeterminate
+              color="#5a6cae"
+              class="mb-0"
+            ></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+
 </div>
 </template>
 
@@ -67,8 +89,9 @@
         name: 'Profile',
         data() {
             return {
-                totalCouts: 33,
-                totalDons: 5,
+                totalCouts: 279,
+                totalDons: 45,
+                dialogUpdate: false,
             }
         },
         computed: {
@@ -84,6 +107,20 @@
         },
         created() {
             this.$store.commit('fetchUser');
+        },
+        methods: {
+            async updateData() {
+                this.$store.commit('setSetting', {
+                    setting: 'lastUpdate',
+                    value: '2000-01-01 00:00:00'
+                });
+                this.dialogUpdate= true;
+                try {
+                    await this.$store.dispatch('fetchGyms')
+                } finally {
+                    this.dialogUpdate = false;
+                }
+            }
         }
     }
 </script>
