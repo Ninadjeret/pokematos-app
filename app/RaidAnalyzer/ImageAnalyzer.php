@@ -71,7 +71,7 @@ class ImageAnalyzer {
              $this->result->date = $this->getTime();
              $this->result->pokemon = $this->getPokemon();
              if( $this->result->pokemon ) {
-                 $this->result->eggLevel = $this->result->pokemon->getRaidLevel();
+                 $this->result->eggLevel = $this->result->pokemon->boss_level;
              }
          }
 

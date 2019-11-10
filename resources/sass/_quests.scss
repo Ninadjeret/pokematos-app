@@ -1,0 +1,11 @@
+.v-list.quests {
+    .v-list__tile__title {
+        white-space: normal;
+        overflow: initial;
+        height: auto;
+        font-size: 14px;
+    }
+    .v-avatar {
+        flex: 0 0 48px;
+    }
+}

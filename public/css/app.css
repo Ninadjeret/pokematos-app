@@ -11222,10 +11222,6 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   vertical-align: top;
 }
 
-.raids__wrapper {
-  padding-bottom: 70px;
-}
-
 .v-overlay--active {
   z-index: 6000 !important;
 }
@@ -12234,6 +12230,18 @@ body.logged-out .denied span {
 
 body.logged-out .denied a {
   text-decoration: underline;
+}
+
+.v-list.quests .v-list__tile__title {
+  white-space: normal;
+  overflow: initial;
+  height: auto;
+  font-size: 14px;
+}
+
+.v-list.quests .v-avatar {
+  -webkit-box-flex: 0;
+          flex: 0 0 48px;
 }
 
 @media screen and (min-width: 960px) {

@@ -110,7 +110,7 @@
                     <v-text-field single-line hide-details outline v-model="questSearch" label="Recherche"></v-text-field>
                 </div>
                 <p v-if="questToSubmit" class="step__title">Quelle est la quête ?</p>
-                <v-list>
+                <v-list class="quests">
                 <template v-for="(quest, index) in filteredQuests">
                   <v-list-tile :key="quest.id" @click="clickQuest(quest)">
                     <v-list-tile-content>
@@ -329,8 +329,7 @@ export default {
             this.dialog = false;
         },
         canDeleteRaid() {
-            let permissions = this.user.permissions;
-            return ( permissions[this.currentCity.guilds[0].id].find(val => val === 'raid_delete' ) );
+            return this.canAccessCityParam('raid_delete');
         },
         setScreenTo( value ) {
             console.log(value);
@@ -581,6 +580,16 @@ export default {
                     console.log(err)
                 });
             }
+        },
+        canAccessCityParam( param ) {
+            let auth = false;
+            let that = this;
+            this.currentCity.guilds.forEach( (guild, index) => {
+                if( that.user.permissions[guild.id].find(val => val === param ) ) {
+                    auth = true;
+                }
+            })
+            return auth;
         }
     }
 }

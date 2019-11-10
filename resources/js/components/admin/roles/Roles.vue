@@ -41,7 +41,7 @@
                     let matchingType = 1;
                     if (this.search != null) {
                         matchingTitle = item.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-                        matchingCategory = item.category.name.toLowerCase() == this.search.toLowerCase();
+                        matchingCategory = ( item.category && item.category.name.toLowerCase() == this.search.toLowerCase() );
                         matchingType = ':'+item.type == this.search.toLowerCase();
                     }
                     return (matchingTitle || matchingCategory || matchingType);

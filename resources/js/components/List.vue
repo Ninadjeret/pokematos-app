@@ -9,7 +9,7 @@
         <v-tabs-items v-model="tabs">
             <v-tab-item value="raids">
 
-                <div v-if="futureRaids.length > 0 || activeRaids.length > 0" style="flex-basis: 100%;">
+                <div v-if="futureRaids.length > 0 || activeRaids.length > 0" style="flex-basis: 100%; padding-bottom: 70px">
                     <div v-if="activeRaids.length > 0" class="raids__active">
                         <div class="section__title">Raids en cours</div>
                         <div class="raids__wrapper">
@@ -85,7 +85,7 @@
 
             </v-tab-item>
             <v-tab-item value="quetes">
-                <div v-if="activeQuests.length > 0" style="flex-basis: 100%;">
+                <div v-if="activeQuests.length > 0" style="flex-basis: 100%; padding-bottom: 70px;">
                 <div class="raids__active">
                     <div class="section__title">Quêtes en cours</div>
                         <div class="raids__wrapper">
