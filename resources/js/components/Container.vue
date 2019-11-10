@@ -28,7 +28,7 @@
                 </v-btn>
 
                 <v-btn
-                    v-if="currentCity && currentCity !== undefined && parseInt(currentCity.permissions) >= 10 && user.permissions[currentCity.guilds[0].id].find(val => val != 'raid_delete' && val != 'raidex_add' )"
+                    v-if="currentCity && currentCity !== undefined && isAdmin"
                     to="/admin"
                     color="primary"
                     flat value="recent"
@@ -146,7 +146,7 @@
             },
             isAdmin() {
                 let isAdmin = parseInt(this.currentCity.permissions) >= 30;
-                let isModo = parseInt(this.currentCity.permissions) >= 20 && this.user.permissions[this.currentCity.guilds[0].id].find(val => val != 'raid_delete' && val != 'raidex_add' )
+                let isModo =  this.canAccessCityParam('raid_delete') || this.canAccessCityParam('raidex_add')
                 return isAdmin || isModo;
             }
         },
@@ -174,6 +174,16 @@
                 } finally {
                     this.dialogUpdate = false;
                 }
+            },
+            canAccessCityParam( param ) {
+                let auth = false;
+                let that = this;
+                this.currentCity.guilds.forEach( (guild, index) => {
+                    if( that.user.permissions[guild.id].find(val => val === param ) ) {
+                        auth = true;
+                    }
+                })
+                return auth;
             }
         }
     }

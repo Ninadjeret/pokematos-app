@@ -12312,10 +12312,6 @@ body.logged-out .denied a {
   }
 }
 
-.template-list .v-window__container {
-  padding-bottom: 70px;
-}
-
 .template-list .v-window__container .v-window-item {
   display: -webkit-box;
   display: flex;

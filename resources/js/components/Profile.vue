@@ -85,12 +85,13 @@
 </template>
 
 <script>
+    import axios2 from 'axios';
     export default {
         name: 'Profile',
         data() {
             return {
                 totalCouts: 279,
-                totalDons: 45,
+                totalDons: 0,
                 dialogUpdate: false,
             }
         },
@@ -107,6 +108,7 @@
         },
         created() {
             this.$store.commit('fetchUser');
+            this.fetchDons();
         },
         methods: {
             async updateData() {
@@ -120,6 +122,13 @@
                 } finally {
                     this.dialogUpdate = false;
                 }
+            },
+            fetchDons() {
+                var xmlHttp = null;
+                xmlHttp = new XMLHttpRequest();
+                xmlHttp.open( "GET", 'https://www.pokematos.fr/api/v1/dons', false );
+                xmlHttp.send( null );
+                this.totalDons = xmlHttp.responseText
             }
         }
     }
