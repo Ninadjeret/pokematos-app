@@ -110,7 +110,7 @@
                     <v-text-field single-line hide-details outline v-model="questSearch" label="Recherche"></v-text-field>
                 </div>
                 <p v-if="questToSubmit" class="step__title">Quelle est la quête ?</p>
-                <v-list>
+                <v-list class="quests">
                 <template v-for="(quest, index) in filteredQuests">
                   <v-list-tile :key="quest.id" @click="clickQuest(quest)">
                     <v-list-tile-content>

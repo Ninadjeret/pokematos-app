@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Guild;
 use App\Models\Stop;
-use App\Models\RoleCategory;
+use App\Models\Guild;
+use App\Helpers\Helpers;
 use RestCord\DiscordClient;
+use App\Models\RoleCategory;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model {
 
@@ -80,7 +81,7 @@ class Role extends Model {
             'category_id' => $args['category_id'],
             'name' => $args['name'],
             'color_type' => $args['color_type'],
-            'color' => $color,
+            'color' => Helpers::sanitizeColor($color),
             'type' => $args['type'],
             'gym_id' => $args['gym_id'],
             'zone_id' => $args['zone_id'],
@@ -104,6 +105,7 @@ class Role extends Model {
         if( isset($args['color_type']) && $args['color_type'] == 'category' && $newCategory ) {
             $color = $newCategory->color;
         }
+        $color = Helpers::sanitizeColor($color);
 
         $type = (isset($args['type'])) ? $args['type'] : $this->type;
         $name = (isset($args['name'])) ? $args['name'] : $this->name;
