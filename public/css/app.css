@@ -11459,6 +11459,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   border-bottom: 1px solid #fafafa;
 }
 
+.modal__screen.edit-poi .v-btn--bottom.v-btn--floating {
+  background: #5a6cae !important;
+}
+
 .footer-action {
   position: fixed;
   bottom: 30px;

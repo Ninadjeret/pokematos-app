@@ -209,6 +209,14 @@
     border-bottom: 1px solid #fafafa;
 }
 
+.modal__screen {
+    &.edit-poi {
+        .v-btn--bottom.v-btn--floating {
+            background: $primary !important;
+        }
+    }
+}
+
 .footer-action {
     position: fixed;
     bottom: 30px;
