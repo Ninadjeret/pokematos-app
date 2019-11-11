@@ -12244,6 +12244,19 @@ body.logged-out .denied a {
           flex: 0 0 48px;
 }
 
+.template-list .v-dialog > .v-card > .v-card__text {
+  margin-top: 10px;
+}
+
+.template-list .list-filters .v-input--checkbox .v-messages {
+  display: none;
+}
+
+.template-list .list-filters label {
+  margin-bottom: 0.6rem;
+  margin-top: 0.6rem;
+}
+
 @media screen and (min-width: 960px) {
   .template-map .v-content__wrap .container {
     width: 100% !important;
