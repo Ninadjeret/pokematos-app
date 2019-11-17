@@ -16,6 +16,8 @@ class Role extends Model {
         'discord_id',
         'guild_id',
         'name',
+        'permissions',
+        'mentionable',
         'color_type',
         'color',
         'type',
@@ -57,6 +59,9 @@ class Role extends Model {
             $color = $roleCategory->color;
         }
 
+        $permissions = ( isset($args['permissions']) ) ? $args['permissions'] : null ;
+        $mentionable = ( isset($args['mentionable']) ) ? $args['mentionable'] : false;
+
         if( !$fromDiscord ) {
             $discord = new DiscordClient(['token' => config('discord.token')]);
             $discord_role = $discord->guild->createGuildRole([
@@ -64,6 +69,8 @@ class Role extends Model {
                 'name' => $args['name'],
                 'mentionable' => true,
                 'color' => hexdec($color),
+                'permissions' => (int) $permissions,
+                'mentionable' => boolval($mentionable)
             ]);
             $discord_id = $discord_role->id;
         } else {
@@ -80,6 +87,8 @@ class Role extends Model {
             'guild_id' => $guild->id,
             'category_id' => $args['category_id'],
             'name' => $args['name'],
+            'permissions' => $permissions,
+            'mentionable' => $mentionable,
             'color_type' => $args['color_type'],
             'color' => Helpers::sanitizeColor($color),
             'type' => $args['type'],
@@ -113,6 +122,8 @@ class Role extends Model {
         $zone_id = (isset($args['zone_id'])) ? $args['zone_id'] : $this->zone_id;
         $pokemon_id = (isset($args['pokemon_id'])) ? $args['pokemon_id'] : $this->pokemon_id;
         $category_id = (array_key_exists('category_id', $args)) ? $args['category_id'] : $this->category_id;
+        $permissions = ( isset($args['permissions']) ) ? $args['permissions'] : $this->permissions ;
+        $mentionable = ( isset($args['mentionable']) ) ? $args['mentionable'] : $this->mentionable;
 
         if( !$fromDiscord ) {
             $discord = new DiscordClient(['token' => config('discord.token')]);
@@ -121,6 +132,8 @@ class Role extends Model {
                 'role.id' => (int) $this->discord_id,
                 'name' => $name,
                 'color' => hexdec($color),
+                'permissions' => (int) $permissions,
+                'mentionable' => boolval($mentionable)
             ]);
         } else {
             $newCategory = $this->category;
@@ -136,6 +149,8 @@ class Role extends Model {
             'gym_id' => $gym_id,
             'zone_id' => $zone_id,
             'pokemon_id' => $pokemon_id,
+            'permissions' => $permissions,
+            'mentionable' => $mentionable
         ]);
         $this->manage_subscription_message($oldCategory, $newCategory);
 

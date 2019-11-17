@@ -155,6 +155,8 @@ class BotController extends Controller {
                 'name' => $request->name,
                 'color_type' => 'specific',
                 'color' => '#'.dechex($request->color),
+                'permissions' => $request->permissions,
+                'mentionable' => $request->mentionable
             ];
             $role = Role::add($args, $fromDiscord);
         };
@@ -215,6 +217,8 @@ class BotController extends Controller {
         $args = [
             'name' => $request->name,
             'color' => '#'.dechex($request->color),
+            'permissions' => $request->permissions,
+            'mentionable' => $request->mentionable
         ];
 
         $app_role->change($args, $fromDiscord);
