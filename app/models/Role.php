@@ -69,8 +69,8 @@ class Role extends Model {
                 'name' => $args['name'],
                 'mentionable' => true,
                 'color' => hexdec($color),
-                'permissions' => $permissions,
-                'mentionable' => $mentionable
+                'permissions' => (int) $permissions,
+                'mentionable' => boolval($mentionable)
             ]);
             $discord_id = $discord_role->id;
         } else {
@@ -132,8 +132,8 @@ class Role extends Model {
                 'role.id' => (int) $this->discord_id,
                 'name' => $name,
                 'color' => hexdec($color),
-                'permissions' => $permissions,
-                'mentionable' => $mentionable
+                'permissions' => (int) $permissions,
+                'mentionable' => boolval($mentionable)
             ]);
         } else {
             $newCategory = $this->category;
