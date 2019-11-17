@@ -18,9 +18,29 @@ class User extends Authenticatable
 {
      use HasApiTokens, Notifiable;
 
-    protected $fillable = ['name', 'email', 'password', 'guilds', 'discord_id', 'discord_access_token', 'discord_refresh_token'];
-    protected $hidden = ['password', 'remember_token','discord_access_token', 'discord_refresh_token'];
-    protected $appends = ['permissions', 'stats'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'guilds',
+        'discord_id',
+        'discord_access_token',
+        'discord_refresh_token',
+        'superadmin'
+    ];
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'discord_access_token',
+        'discord_refresh_token'
+    ];
+    protected $appends = [
+        'permissions',
+        'stats'
+    ];
+    protected $casts = [
+        'superadmin' => 'boolean'
+    ];
 
     public static function getPermissions() {
         return [
@@ -210,7 +230,22 @@ class User extends Authenticatable
         $guilds = [];
         $discord = new DiscordClient(['token' => config('discord.token')]);
 
-        if(  !empty( $user_guilds ) ) {
+        //Get all communities acces for super admin
+        if( $this->superadmin ) {
+            $auth = true;
+            $allguilds = Guild::where('active', 1)->get();
+            if( !empty( $allguilds ) ) {
+                foreach( $allguilds as $allguild ) {
+                    $guilds[] = [
+                        'id' => $allguild->id,
+                        'permissions' => 30,
+                    ];
+                }
+            }
+        }
+
+        //for basic users
+        elseif(  !empty( $user_guilds ) ) {
             foreach( $user_guilds as $user_guild ) {
                 $error = 2;
                 $auth_discord = false;
