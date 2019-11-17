@@ -62,6 +62,11 @@ class GameMasterUpdate extends Command
             $pokedex_id = substr($node->templateId, 2, 3);
             $name_ocr = ( isset($names_fr[(int)$pokedex_id]) ) ? $names_fr[(int)$pokedex_id - 1] : null;
             $form_id = ( isset($node->pokemonSettings->form) ) ? $node->pokemonSettings->form : '00';
+
+            if( strstr($form_id, 'GALARIAN' ) ) {
+                $form_id = '31';
+            }
+
             $forms = [
                 'ALOLA' => 'd\'Alola',
                 'SPEED' => 'Vitesse',
