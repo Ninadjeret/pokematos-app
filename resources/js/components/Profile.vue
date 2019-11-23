@@ -90,8 +90,8 @@
         name: 'Profile',
         data() {
             return {
-                totalCouts: 279,
-                totalDons: 0,
+                totalCouts: 317,
+                totalDons: 105,
                 dialogUpdate: false,
             }
         },
@@ -108,7 +108,6 @@
         },
         created() {
             this.$store.commit('fetchUser');
-            this.fetchDons();
         },
         methods: {
             async updateData() {
@@ -123,13 +122,6 @@
                     this.dialogUpdate = false;
                 }
             },
-            fetchDons() {
-                var xmlHttp = null;
-                xmlHttp = new XMLHttpRequest();
-                xmlHttp.open( "GET", 'https://www.pokematos.fr/api/v1/dons', false );
-                xmlHttp.send( null );
-                this.totalDons = xmlHttp.responseText
-            }
         }
     }
 </script>

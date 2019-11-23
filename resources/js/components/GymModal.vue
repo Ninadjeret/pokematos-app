@@ -49,7 +49,7 @@
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
                         <li v-if="gym.google_maps_url && gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
                         <li v-if="gym.google_maps_url && !gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers le Pokéstop</span></a></li>
-                        <li v-if="parseInt(currentCity.permissions) >= 10 && user.permissions[currentCity.guilds[0].id].find(val => val == 'poi_edit')"><a class="modal__action" :href="'/#/admin/gyms/'+gym.id"><i class="material-icons">edit</i><span>Modifier le POI</span></a></li>
+                        <li v-if="canAccessCityParam('poi_edit')"><a class="modal__action" v-on:click="setScreenTo('editPOI')"><i class="material-icons">edit</i><span>Modifier le POI</span></a></li>
                     </ul>
                 </div>
                 <div class="footer--actions">
@@ -57,6 +57,13 @@
                 </div>
             </div>
 
+            <div v-if="modalScreen == 'editPOI'" class="modal__screen edit-poi">
+                <h3 class="">Modifier le POI</h3>
+                <gym-edit v-bind:poi-id="gym.id"></gym-edit>
+                <div class="footer-action">
+                    <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
+                </div>
+            </div>
 
             <div v-if="modalScreen == 'updateRaid'" class="modal__screen update-raid">
                 <h3 class="">Préciser le Pokémon</h3>

@@ -11459,6 +11459,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   border-bottom: 1px solid #fafafa;
 }
 
+.modal__screen.edit-poi .v-btn--bottom.v-btn--floating {
+  background: #5a6cae !important;
+}
+
 .footer-action {
   position: fixed;
   bottom: 30px;
@@ -12242,6 +12246,19 @@ body.logged-out .denied a {
 .v-list.quests .v-avatar {
   -webkit-box-flex: 0;
           flex: 0 0 48px;
+}
+
+.template-list .v-dialog > .v-card > .v-card__text {
+  margin-top: 10px;
+}
+
+.template-list .list-filters .v-input--checkbox .v-messages {
+  display: none;
+}
+
+.template-list .list-filters label {
+  margin-bottom: 0.6rem;
+  margin-top: 0.6rem;
 }
 
 @media screen and (min-width: 960px) {

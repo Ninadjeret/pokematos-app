@@ -265,7 +265,8 @@ const store = new Vuex.Store({
                 setting: 'lastUpdate',
                 value: require('moment')().format('YYYY-MM-DD HH:mm:ss')
             });
-            commit('setGyms', result.data);
+            commit('setGyms', result.data)
+            commit('fetchZones')
         },
         autoFetchData ({ commit }) {
             commit('fetchGyms')
@@ -291,7 +292,8 @@ const store = new Vuex.Store({
                 setting: 'lastUpdate',
                 value: require('moment')().format('YYYY-MM-DD HH:mm:ss')
             });
-            commit('setGyms', result.data);
+            commit('setGyms', result.data)
+            commit('fetchZones')
         },
     },
 });

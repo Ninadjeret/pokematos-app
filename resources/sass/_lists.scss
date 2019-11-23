@@ -1,0 +1,16 @@
+.template-list {
+    .v-dialog>.v-card>.v-card__text {
+        margin-top: 10px;
+    }
+    .list-filters {
+        .v-input--checkbox {
+            .v-messages {
+                display: none;
+            }
+        }
+        label {
+            margin-bottom: 0.6rem;
+            margin-top: 0.6rem;
+        }
+    }
+}
