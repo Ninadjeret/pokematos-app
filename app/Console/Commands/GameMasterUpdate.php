@@ -91,6 +91,9 @@ class GameMasterUpdate extends Command
             if( strstr($form_id, 'GALARIAN' ) ) {
                 $form_id = '31';
             }
+            if( strstr($form_id, 'ALOLA' ) ) {
+                $form_id = '61';
+            }
 
             $data = [
                 'pokedex_id' => $pokedex_id,

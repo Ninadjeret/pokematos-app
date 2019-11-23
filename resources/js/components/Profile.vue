@@ -90,8 +90,8 @@
         name: 'Profile',
         data() {
             return {
-                totalCouts: 279,
-                totalDons: 95,
+                totalCouts: 317,
+                totalDons: 105,
                 dialogUpdate: false,
             }
         },

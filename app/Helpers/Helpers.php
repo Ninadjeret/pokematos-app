@@ -519,9 +519,18 @@ class Helpers {
             return $color;
         }
         $color = substr($color, 1);
-        if( strlen($color) === 4 ) {
-            $color = '00'.$color;
+        if( strlen($color) === 5 ) {
+            $color = '0'.$color;
         }
-        return '#'.$color;
+        if( strlen($color) === 3 ) {
+            $color = '000'.$color;
+        }
+        if( strlen($color) === 2 ) {
+            $color = '0000'.$color;
+        }
+        if( strlen($color) === 1 ) {
+            $color = '00000'.$color;
+        }
+        return strtoupper('#'.$color);
     }
 }
