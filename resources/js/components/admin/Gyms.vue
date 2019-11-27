@@ -38,14 +38,14 @@
         name: 'AdminGyms',
         data() {
             return {
-                search: null,
+                search: '',
                 page: 1,
                 perPage:10,
             }
         },
         computed: {
             totalPages() {
-                return Math.round( this.filteredGyms.length / this.perPage );
+                return Math.ceil( this.filteredGyms.length / this.perPage );
             },
             filteredGyms() {
                 return this.gyms.filter((gym) => {
@@ -54,7 +54,7 @@
                     let matchingEx = 1;
                     let matchingGym = 1;
                     let matchingStop = 1;
-                    if (this.search != null) {
+                    if (this.search != '') {
                         matchingTitle = gym.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
                         matchingZone = gym.zone && gym.zone.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
                         matchingEx = gym.ex && this.search.toLowerCase() == ':ex';
@@ -65,7 +65,8 @@
                 });
             },
             paginateGyms() {
-                if( this.filteredGyms.length < this.page * 10 ) this.page = 1;
+                let gyms = this.filteredGyms;
+                if( this.search != '' && this.page > ( gyms.length / this.perPage ) ) this.page = 1;
                 let start = (this.page === 1) ? 0 : (this.page - 1) * this.perPage;
                 let end = start + 10;
                 return this.filteredGyms.slice(start, end);

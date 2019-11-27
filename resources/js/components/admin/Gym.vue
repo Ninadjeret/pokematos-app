@@ -101,7 +101,7 @@
         },
         computed: {
             inAdmin() {
-                return this.poiId > 0;
+                return this.poiId === 0;
             },
             getId() {
                 let routeId = ( this.$route.params.poi_id && Number.isInteger(parseInt(this.$route.params.poi_id)) ) ? parseInt(this.$route.params.poi_id) : false ;
