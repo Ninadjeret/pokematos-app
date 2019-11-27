@@ -62,6 +62,15 @@ class Role extends Model {
         $permissions = ( isset($args['permissions']) ) ? $args['permissions'] : null ;
         $mentionable = ( isset($args['mentionable']) ) ? $args['mentionable'] : false;
 
+        //On force le paramètre mentionnable si le role fait partie d'une catégorie de roles de notifications
+        $newCategory = false;
+        if( isset( $args['category_id'] ) && !empty( $args['category_id'] ) ) {
+            $newCategory = RoleCategory::find($args['category_id']);
+            if( $newCategory && $newCategory->notifications ) {
+                $mentionable = true;
+            }
+        }
+
         if( !$fromDiscord ) {
             $discord = new DiscordClient(['token' => config('discord.token')]);
             $discord_role = $discord->guild->createGuildRole([
@@ -80,16 +89,7 @@ class Role extends Model {
             $args['gym_id'] = null;
             $args['zone_id'] = null;
             $args['pokemon_id'] = null;
-        }
-
-        //On force le paramètre mentionnable si le role fait partie d'une catégorie de roles de notifications
-        $newCategory = false;
-        if( isset( $args['category_id'] ) && !empty( $args['category_id'] ) ) {
-            $newCategory = RoleCategory::find($args['category_id']);
-            if( $newCategory && $newCategory->notifications ) {
-                $mentionable = true;
-            }
-        }
+        }    
 
         $role = Role::create([
             'discord_id' => $discord_id,
