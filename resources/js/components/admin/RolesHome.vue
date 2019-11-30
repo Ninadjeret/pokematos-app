@@ -26,7 +26,11 @@
 
             <div class="settings-section">
                 <v-subheader>Réglages</v-subheader>
-
+                <div class="setting">
+                    <label>Message d'interdiction</label>
+                    <p class="description">Ce message est affiché par le bot lorsqu'une mention est utilisée dans un salon interdit</p>
+                    <input v-model="roles_forbidden_message" type="text">
+                </div>
                 <v-btn dark fixed bottom right fab @click="submit()">
                     <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
                     <v-icon v-else>save</v-icon>
@@ -65,10 +69,7 @@
                         icon: 'alternate_email'
                     }
                 ],
-                roles_gym_color: '',
-                roles_gymex_color: '',
-                roles_zone_color: '',
-                roles_pokemon_color: '',
+                roles_forbidden_message: '',
             }
         },
         computed: mapState([
@@ -80,7 +81,7 @@
         methods: {
             fetch() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/settings').then( res => {
-                    //this.roles_gym_color = res.data.roles_gym_color;;
+                    this.roles_forbidden_message = res.data.roles_forbidden_message;;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response.data ) {
@@ -95,7 +96,7 @@
             submit() {
                 const args = {
                     settings: {
-                        //roles_gym_color: this.roles_gym_color,
+                        roles_forbidden_message: this.roles_forbidden_message,
                     }
                 };
                 this.save(args);
