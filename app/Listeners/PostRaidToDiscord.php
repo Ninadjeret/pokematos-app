@@ -63,7 +63,7 @@ class PostRaidToDiscord
             }
 
             if( !empty($connector->filter_source_type) ) {
-                if( !in_array( $event->raid->getLastAnnounce()->source, $connector->filter_source_type ) ) continue;
+                if( !in_array( $event->raid->getLastUserAction()->source, $connector->filter_source_type ) ) continue;
             }
 
             $connector->postMessage( $event->raid, $event->announce );

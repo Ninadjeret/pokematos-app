@@ -85,7 +85,7 @@ class QuestConnector extends Model
     }
 
     public function translate( $message, $quest ) {
-        $username = ( $quest->getLastAnnounce()->getUser() ) ? $quest->getLastAnnounce()->getUser()->name : false;
+        $username = ( $quest->getLastUserAction()->getUser() ) ? $quest->getLastUserAction()->getUser()->name : false;
 
         //Gestion des tags
         $patterns = array(
@@ -114,7 +114,7 @@ class QuestConnector extends Model
         }
 
         if( $username && strstr( $message, '@'.$username ) ) {
-            $user = $quest->getLastAnnounce()->getUser();
+            $user = $quest->getLastUserAction()->getUser();
             $message = str_replace('@'.$username, '<@!'.$user->discord_id.'>', $message);
         }
 

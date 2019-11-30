@@ -235,7 +235,7 @@ class ImageAnalyzer {
 
 
         //Check for Future Raid
-        if( $this->debug ) $this->_log('---------- Check if image is Raid Announce ----------');
+        if( $this->debug ) $this->_log('---------- Check if image is Raid UserAction ----------');
         $rgb = $this->colorPicker->pickColor( $image, $this->coordinates->forImgTypeEgg()->x, $this->coordinates->forImgTypeEgg()->y );
         if( $this->colorPicker->isFutureTimerColor( $rgb ) ) {
             if( $this->debug ) $this->_log('Great ! Img seems to include an egg');

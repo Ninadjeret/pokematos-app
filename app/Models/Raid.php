@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Models\Stop;
 use App\Models\Pokemon;
-use App\Models\Announce;
+use App\Models\UserAction;
 use App\Models\raidChannel;
 use App\Models\RaidMessage;
 use RestCord\DiscordClient;
@@ -40,7 +40,7 @@ class Raid extends Model {
     }
 
     public function getSourceAttribute() {
-        $annonce = $this->getLastAnnounce();
+        $annonce = $this->getLastUserAction();
         if( empty( $annonce ) ) return false;
         $return = [
             'source' => $annonce->source,
@@ -65,8 +65,8 @@ class Raid extends Model {
         return [];
     }
 
-    public function getLastAnnounce() {
-        $annonce = Announce::where('raid_id', $this->id)
+    public function getLastUserAction() {
+        $annonce = UserAction::where('raid_id', $this->id)
             ->where('type', '!=', 'raid-duplicate')
             ->where('source', '!=', 'auto')
             ->orderBy('created_at', 'desc')
@@ -74,8 +74,8 @@ class Raid extends Model {
         return $annonce;
     }
 
-    public function getAnnounces() {
-        $annonces = Announce::where('raid_id', $this->id)
+    public function getUserActions() {
+        $annonces = UserAction::where('raid_id', $this->id)
             ->orderBy('created_at', 'asc')
             ->get();
         return $annonces;
@@ -173,7 +173,7 @@ class Raid extends Model {
         }
 
         if( $announceType ) {
-            $announce = Announce::create([
+            $announce = UserAction::create([
                 'type' => $announceType,
                 'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
@@ -221,7 +221,7 @@ class Raid extends Model {
                 $bosses = Pokemon::where('boss_level', $raid->egg_level)->get();
                 if( count($bosses) === 1 ) {
                     $raid->update(['pokemon_id' => $bosses[0]->id ]);
-                    $announce = Announce::create([
+                    $announce = UserAction::create([
                         'type' => 'raid-update',
                         'source' => 'auto',
                         'date' => date('Y-m-d H:i:s'),

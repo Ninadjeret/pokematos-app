@@ -8,7 +8,7 @@ use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Quest;
 use App\Models\Guild;
-use App\Models\Announce;
+use App\Models\UserAction;
 use App\Models\Connector;
 use App\Models\QuestReward;
 use Illuminate\Http\Request;
@@ -82,10 +82,10 @@ class UserController extends Controller {
 
     public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {
         event( new \App\Events\QuestInstanceDeleted( $questInstance ) );;
-        $announces = $questInstance->getAnnounces();
+        $announces = $questInstance->getUserActions();
         if( !empty($announces) ) {
             foreach( $announces as $announce ) {
-                Announce::destroy($announce->id);
+                UserAction::destroy($announce->id);
             }
         }
         $stop = Stop::find($questInstance->gym_id);
@@ -118,7 +118,7 @@ class UserController extends Controller {
         }
 
         if( $updated ) {
-            $announce = Announce::create([
+            $announce = UserAction::create([
                 'type' => 'quest-update',
                 'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
