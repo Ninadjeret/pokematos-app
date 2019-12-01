@@ -15,17 +15,25 @@ class Log extends Model
         'source_type',
         'source',
         'result',
+        'user_id',
+        'channel_discord_id',
     ];
     protected $appends = [
-        'guild',
+        'guild', 'user',
     ];
-    protected $hidden = ['city_id', 'guild_id'];
+    protected $hidden = ['city_id', 'guild_id', 'user_id'];
     protected $casts = [
         'result' => 'boolean',
         'success' => 'array',
     ];
 
     public function getGuildAttribute() {
+        if( empty( $this->guild_id ) ) return false;
         return Guild::find($this->guild_id);
+    }
+
+    public function getUserAttribute() {
+        if( empty( $this->user_id ) ) return false;
+        return User::find($this->user_id);
     }
 }
