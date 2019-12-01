@@ -16,8 +16,16 @@ class Log extends Model
         'source',
         'result',
     ];
+    protected $appends = [
+        'guild',
+    ];
+    protected $hidden = ['city_id', 'guild_id'];
     protected $casts = [
         'result' => 'boolean',
         'success' => 'array',
     ];
+
+    public function getGuildAttribute() {
+        return Guild::find($this->guild_id);
+    }
 }

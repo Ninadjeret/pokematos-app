@@ -463,4 +463,12 @@ class UserController extends Controller {
 
     }
 
+    public function getLogs(Guild $guild, Request $request) {
+            $logs = App\Models\Log::where('guild_id', $guild->id)
+                ->orderBy('created_at', 'desc')
+                ->take(50)
+                ->get();
+            return response()->json($logs, 200);
+    }
+
 }

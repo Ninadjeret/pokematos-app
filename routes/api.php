@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/guilds/{guild}/questconnectors/{connector}', 'UserController@updateQuestConnector');
     Route::delete('user/guilds/{guild}/questconnectors/{connector}', 'UserController@deleteQuestConnector');
 
+    Route::get('user/guilds/{guild}/logs', 'UserController@getLogs');
 
     Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
