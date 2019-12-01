@@ -20,6 +20,8 @@ import AdminRolesRole from './components/admin/roles/Role.vue'
 import AdminQuests from './components/admin/quests/Quests.vue'
 import AdminQuest from './components/admin/quests/Quest.vue'
 
+import AdminLogs from './components/admin/Logs.vue'
+
 import AdminRaidReportingHome from './components/admin/RaidReporting.vue'
 import AdminRaidsConnectors from './components/admin/raids/Connecteurs.vue'
 import AdminRaidsConnector from './components/admin/raids/Connecteur.vue'
@@ -238,6 +240,15 @@ const routes = [
                          },
                          component: AdminMap
                    },
+                   {
+                         path: ':id/logs',
+                         name: 'admin.logs',
+                         meta: {
+                             title: 'Logs',
+                             parent: 'admin'
+                         },
+                         component: AdminLogs
+                    },
                 {
                       path: 'gyms',
                       name: 'admin.gyms',

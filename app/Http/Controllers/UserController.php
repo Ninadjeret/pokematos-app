@@ -464,11 +464,15 @@ class UserController extends Controller {
     }
 
     public function getLogs(Guild $guild, Request $request) {
-            $logs = App\Models\Log::where('guild_id', $guild->id)
-                ->orderBy('created_at', 'desc')
-                ->take(50)
-                ->get();
-            return response()->json($logs, 200);
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
+        $logs = \App\Models\Log::where('guild_id', $guild->id)
+            ->orderBy('created_at', 'desc')
+            ->take(50)
+            ->get();
+        return response()->json($logs, 200);
     }
 
 }

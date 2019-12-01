@@ -188,7 +188,7 @@ class TextAnalyzer {
         ];
 
         //Ajout du log
-        App\Models\log::create([
+        \App\Models\log::create([
             'city_id' => $this->guild->city->id,
             'guild_id' => $this->guild->id,
             'type' => 'raid',

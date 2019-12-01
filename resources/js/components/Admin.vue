@@ -127,6 +127,12 @@
                         icon: 'lock_open',
                         permission: 'guild_manage'
                     },
+                    {
+                        label: 'Logs',
+                        route: 'admin.logs',
+                        icon: 'receipt',
+                        permission: 'guild_manage'
+                    },
                 ],
                 commonItems: [
                     {
