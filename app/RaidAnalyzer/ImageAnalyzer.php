@@ -14,10 +14,13 @@ use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class ImageAnalyzer {
 
-    function __construct( $source, $guild ) {
+    function __construct( $source, $guild, $user = false, $channel_discord_id = false ) {
 
         $this->debug = false;
 
+        $this->guild = $guild;
+        $this->user = $user;
+        $this->channel_discord_id = $channel_discord_id;
         $this->result = (object) array(
             'type' => false,
             'gym' => false,
@@ -83,6 +86,8 @@ class ImageAnalyzer {
              $this->result->date = $this->getExTime();
              $this->result->eggLevel = 6;
          }
+
+         $this->addLog();
 
          $time_elapsed_secs = microtime(true) - $this->start;
          if( $this->debug ) $this->_log('========== Fin du traitement '.$this->imageData->source.' ('.round($time_elapsed_secs, 3).'s) ==========');
@@ -375,6 +380,35 @@ class ImageAnalyzer {
         if( $this->debug ) $this->_log('Nothing found in database :(' );
         return false;
 
+    }
+
+    public function addLog() {
+
+        //Construction du tableau
+        $success = ( $this->result->error ) ? false : true;
+        $result = [
+            'type' => $this->result->type,
+            'gym' => $this->result->gym,
+            'date' => $this->result->date,
+            'pokemon' => $this->result->pokemon,
+            'egg_level' => $this->result->eggLevel,
+            'url' => $this->imageData->url,
+            'ocr' => $this->ocr,
+        ];
+
+        //Ajout du log
+        App\Models\log::create([
+            'city_id' => $this->guild->city->id,
+            'guild_id' => $this->guild->id,
+            'type' => 'raid',
+            'success' => $success,
+            'error' => $this->result->error,
+            'source_type' => 'img',
+            'source' => $this->imageData->source,
+            'result' => $result,
+            'user' => ( $this->user ) ? $this->user->id ? 0,
+            'channel_discord_id' => $this->channel_discord_id
+        ]);
     }
 
 }

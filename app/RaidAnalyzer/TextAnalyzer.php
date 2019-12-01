@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class TextAnalyzer {
 
-    function __construct( $source, $guild ) {
+    function __construct( $source, $guild, $user = false, $channel_discord_id = false ) {
 
         $this->debug = true;
 
@@ -26,6 +26,8 @@ class TextAnalyzer {
 
         $this->text = $source;
         $this->guild = $guild;
+        $this->user = $user;
+        $this->channel_discord_id = $channel_discord_id;
         $this->gymSearch = new GymSearch($guild);
         $this->pokemonSearch = new PokemonSearch();
 
@@ -70,8 +72,8 @@ class TextAnalyzer {
         } else {
             $this->result->eggLevel = $this->getEggLevel();
         }
+        $this->addLog();
         $time_elapsed_secs = microtime(true) - $this->start;
-        //$this->result->error = 'demo';
         if( $this->debug ) $this->_log('========== Fin du traitement '.$this->text.' ('.round($time_elapsed_secs, 3).'s) ==========');
     }
 
@@ -171,6 +173,33 @@ class TextAnalyzer {
         if( $this->debug ) $this->_log('Nothing found in database :(' );
         return false;
 
+    }
+
+    public function addLog() {
+
+        //Construction du tableau
+        $success = ( $this->result->error ) ? false : true;
+        $result = [
+            'gym' => $this->result->gym,
+            'date' => $this->result->date,
+            'pokemon' => $this->result->pokemon,
+            'egg_level' => $this->result->eggLevel,
+            'text' => $this->text,
+        ];
+
+        //Ajout du log
+        App\Models\log::create([
+            'city_id' => $this->guild->city->id,
+            'guild_id' => $this->guild->id,
+            'type' => 'raid',
+            'success' => $success,
+            'error' => $this->result->error,
+            'source_type' => 'text',
+            'source' => $this->text,
+            'result' => $result,
+            'user' => ( $this->user ) ? $this->user->id ? 0,
+            'channel_discord_id' => $this->channel_discord_id
+        ]);
     }
 
 }
