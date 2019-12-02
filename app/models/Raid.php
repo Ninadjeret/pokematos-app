@@ -173,6 +173,8 @@ class Raid extends Model {
         }
 
         if( $announceType ) {
+
+            //Création de l'action utilisateur. permet ensuite la suppression du raid et les stats
             $announce = UserAction::create([
                 'type' => $announceType,
                 'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
@@ -193,6 +195,22 @@ class Raid extends Model {
             } elseif( $announceType == 'raid-duplicate') {
                 event( new \App\Events\RaidDuplicate( $raid, $announce ) );
             }
+
+            \App\Models\Log::create([
+                'city_id' => $city->id,
+                'guild_id' => null,
+                'type' => $announceType,
+                'success' => 1,
+                'error' => null,
+                'source_type' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
+                'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
+                'result' => json_encode([
+                    'raid_id' => $raid->id
+                ]),
+                'user_id' => $args['user_id'],
+                'channel_discord_id' => ( isset($args['channel_discord_id']) ) ? $args['channel_discord_id'] : null ,
+            ]);
+
         }
 
         return $raid;

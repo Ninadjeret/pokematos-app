@@ -240,15 +240,6 @@ const routes = [
                          },
                          component: AdminMap
                    },
-                   {
-                         path: ':id/logs',
-                         name: 'admin.logs',
-                         meta: {
-                             title: 'Logs',
-                             parent: 'admin'
-                         },
-                         component: AdminLogs
-                    },
                 {
                       path: 'gyms',
                       name: 'admin.gyms',
@@ -303,6 +294,15 @@ const routes = [
                       },
                       component: AdminZone
                 },
+                {
+                      path: 'logs',
+                      name: 'admin.logs',
+                      meta: {
+                          title: 'Logs',
+                          parent: 'admin'
+                      },
+                      component: AdminLogs
+                 },
                 {
                       path: 'bosses',
                       name: 'admin.bosses',

@@ -60,6 +60,10 @@ class User extends Authenticatable
                 'label' => 'Gérer les zones',
                 'context' => 'city'
             ],
+            'logs_manage' => [
+                'label' => 'Gérer les logs',
+                'context' => 'city'
+            ],
             'boss_edit' => [
                 'label' => 'Mettre à jour les boss de raid',
                 'context' => 'global'

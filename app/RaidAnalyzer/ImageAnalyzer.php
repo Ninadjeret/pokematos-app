@@ -400,13 +400,13 @@ class ImageAnalyzer {
         \App\Models\log::create([
             'city_id' => $this->guild->city->id,
             'guild_id' => $this->guild->id,
-            'type' => 'raid',
+            'type' => 'analysis-img',
             'success' => $success,
             'error' => $this->result->error,
             'source_type' => 'img',
             'source' => $this->imageData->source,
             'result' => $result,
-            'user' => ( $this->user ) ? $this->user->id ? 0,
+            'user_id' => ( $this->user ) ? $this->user->id ? 0,
             'channel_discord_id' => $this->channel_discord_id
         ]);
     }

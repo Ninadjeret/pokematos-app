@@ -463,12 +463,26 @@ class UserController extends Controller {
 
     }
 
-    public function getLogs(Guild $guild, Request $request) {
+    public function getGuildLogs(Guild $guild, Request $request) {
         $user = Auth::user();
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $logs = \App\Models\Log::where('guild_id', $guild->id)
+            ->orderBy('created_at', 'desc')
+            ->take(50)
+            ->get();
+        return response()->json($logs, 200);
+    }
+
+    public function getCityLogs(City $city, Request $request) {
+        Log::debug('toto');
+        Log::debug($city->id);
+        $user = Auth::user();
+        if( !$user->can('logs_manage', ['city_id' => $city->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
+        $logs = \App\Models\Log::where('city_id', $city->id)
             ->orderBy('created_at', 'desc')
             ->take(50)
             ->get();

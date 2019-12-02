@@ -191,13 +191,13 @@ class TextAnalyzer {
         \App\Models\log::create([
             'city_id' => $this->guild->city->id,
             'guild_id' => $this->guild->id,
-            'type' => 'raid',
+            'type' => 'analysis-text',
             'success' => $success,
             'error' => $this->result->error,
             'source_type' => 'text',
             'source' => $this->text,
             'result' => $result,
-            'user' => ( $this->user ) ? $this->user->id ? 0,
+            'user_id' => ( $this->user ) ? $this->user->id ? 0,
             'channel_discord_id' => $this->channel_discord_id
         ]);
     }

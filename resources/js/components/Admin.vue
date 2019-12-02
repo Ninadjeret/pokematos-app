@@ -87,6 +87,12 @@
                         route: 'admin.zones',
                         icon: 'map',
                         permission: 'zone_edit'
+                    },
+                    {
+                        label: 'Logs',
+                        route: 'admin.logs',
+                        icon: 'receipt',
+                        permission: 'logs_manage'
                     }
                 ],
                 discordItems: [
@@ -125,12 +131,6 @@
                         label: 'Droits d\'accès',
                         route: 'admin.access',
                         icon: 'lock_open',
-                        permission: 'guild_manage'
-                    },
-                    {
-                        label: 'Logs',
-                        route: 'admin.logs',
-                        icon: 'receipt',
                         permission: 'guild_manage'
                     },
                 ],

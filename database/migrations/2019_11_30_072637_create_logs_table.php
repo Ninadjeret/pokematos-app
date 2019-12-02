@@ -22,7 +22,7 @@ class CreateLogsTable extends Migration
             $table->boolean('success')->default(0);
             $table->string('error')->nullable();
             $table->string('source_type')->default('img');
-            $table->string('source');
+            $table->string('source')->nullable();
             $table->integer('user_id')->default(0);
             $table->string('channel_discord_id')->nullable();
             $table->json('result')->nullable();

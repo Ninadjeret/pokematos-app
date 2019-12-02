@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\User;
+use App\Models\Guild;
 use Illuminate\Database\Eloquent\Model;
 
 class Log extends Model
