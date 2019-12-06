@@ -65,7 +65,14 @@ class Raid extends Model {
         return [];
     }
 
-    public function getLastUserAction() {
+    public function getLastUserAction( $include_auto = false ) {
+        if( $include_auto ) {
+            $annonce = UserAction::where('raid_id', $this->id)
+                ->where('type', '!=', 'raid-duplicate')
+                ->orderBy('created_at', 'desc')
+                ->first();
+            return $annonce;
+        }
         $annonce = UserAction::where('raid_id', $this->id)
             ->where('type', '!=', 'raid-duplicate')
             ->where('source', '!=', 'auto')

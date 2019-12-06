@@ -115,7 +115,7 @@ class ImageAnalyzer {
             if( $this->debug ) $this->_log('Img extension : PNG');
             $image = imagecreatefrompng($source);
         } else {
-            $this->result->error = 'File type not allowed';
+            $this->result->error = 'Format de de fichier non accepté';
             return false;
         }
 
@@ -256,7 +256,7 @@ class ImageAnalyzer {
         }
 
         //else
-        $this->result->error = 'Img does not seem to be a raid announce';
+        $this->result->error = 'L\'image n\'a pas été comprise comme une image de raid';
         imagedestroy($image);
         return false;
     }
@@ -291,6 +291,7 @@ class ImageAnalyzer {
 		}
 
         imagedestroy($image);
+        $this->result->error = "Le niveau du raid n'a pas été trouvé";
         return false;
     }
 
@@ -340,6 +341,7 @@ class ImageAnalyzer {
             return $date->format('Y-m-d H:i:s');
         }
 
+        $this->result->error = "Aucun timing trouvé dans la capture";
         return false;
     }
 
@@ -352,6 +354,8 @@ class ImageAnalyzer {
             return $gym;
         }
         if( $this->debug ) $this->_log('Nothing found in database :(' );
+        $this->result->error = "L'arène n'a pas été trouvée";
+        return false;
 
     }
 
@@ -378,6 +382,7 @@ class ImageAnalyzer {
         }
 
         if( $this->debug ) $this->_log('Nothing found in database :(' );
+        $this->result->error = "Aucun Pokémon trouvé"
         return false;
 
     }
