@@ -1,13 +1,19 @@
 # Pokématos App
-Collaborative map for Pokemon Go players. Raid reporting, Discord notifications, powerfull REST api. Project under development
+![Pokématos Screenshot](https://www.pokematos.fr/wp-content/uploads/2019/04/mockups2-565x500.png)
 
-### Prerequisites
+Collaborative map for Pokemon Go players. Raid & quest reporting, Discord notifications, powerfull REST api.
+
+## Prerequisites
 1. Install NPM & nodeJs
 2. Install Composer
 3. Install Laravel
 3. Install Database server (like Wamp)
 
-### Installation
+## Installation
+### Auto installation
+1. Unzip all files in your project folder
+2. with your favorite CLI, run ```php artisan install```
+### Manual installation
 1. Unzip all files in your project folder
 2. with your favorite CLI, run ```npm install``` and ```composer install``` to add all needed dependencies
 3. rename ```.env.example``` in ```.env``` and add your database connexion information (host, port, database name, user & pwd)
