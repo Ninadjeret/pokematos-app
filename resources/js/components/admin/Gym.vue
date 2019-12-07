@@ -171,8 +171,10 @@
                 };
                 if( this.getId ) {
                     this.save(args);
+                    this.$emit('poi-create')
                 } else {
                     this.create(args);
+                    this.$emit('poi-create')
                 }
             },
             save( args ) {
