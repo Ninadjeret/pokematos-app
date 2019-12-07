@@ -65,7 +65,14 @@ class Raid extends Model {
         return [];
     }
 
-    public function getLastAnnounce() {
+    public function getLastAnnounce( $include_auto = false ) {
+        if( $include_auto ) {
+            $annonce = Announce::where('raid_id', $this->id)
+                ->where('type', '!=', 'raid-duplicate')
+                ->orderBy('created_at', 'desc')
+                ->first();
+            return $annonce;
+        }
         $annonce = Announce::where('raid_id', $this->id)
             ->where('type', '!=', 'raid-duplicate')
             ->where('source', '!=', 'auto')
