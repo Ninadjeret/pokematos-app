@@ -59,7 +59,7 @@
 
             <div v-if="modalScreen == 'editPOI'" class="modal__screen edit-poi">
                 <h3 class="">Modifier le POI</h3>
-                <gym-edit v-bind:poi-id="gym.id"></gym-edit>
+                <gym-edit v-bind:poi-id="gym.id" v-on:poi-create="setScreenTo('default')"></gym-edit>
                 <div class="footer-action">
                     <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
                 </div>
