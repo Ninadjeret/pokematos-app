@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Helpers;
 use RestCord\DiscordClient;
 use App\Models\QuestMessage;
 use Illuminate\Database\Eloquent\Model;
