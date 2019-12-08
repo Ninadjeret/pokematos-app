@@ -25,8 +25,8 @@ class Log extends Model
     ];
     protected $hidden = ['city_id', 'guild_id', 'user_id'];
     protected $casts = [
-        'result' => 'boolean',
-        'success' => 'array',
+        'result' => 'array',
+        'success' => 'boolean',
     ];
 
     public function getGuildAttribute() {

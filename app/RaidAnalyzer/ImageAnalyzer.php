@@ -24,8 +24,10 @@ class ImageAnalyzer {
         $this->result = (object) array(
             'type' => false,
             'gym' => false,
+            'gym_probability' => 0,
             'eggLevel' => false,
             'pokemon'   => false,
+            'pokemon_probability' => 0,
             'date' => false,
             'error' => false,
             'logs' => '',
