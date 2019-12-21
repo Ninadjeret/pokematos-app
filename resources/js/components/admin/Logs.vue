@@ -122,7 +122,7 @@
                 } else if(log.result.type == 'ex') {
                     return 'Capture d\'invitation de Raid EX';
                 } else {
-                    return log.result.type;
+                    return 'Type d\'image non reconnu';
                 }
             },
             getLogImgRaidStart(log) {
