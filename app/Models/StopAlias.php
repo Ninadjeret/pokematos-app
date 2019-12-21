@@ -11,4 +11,5 @@ class StopAlias extends Model
         'stop_id',
         'name',
     ];
+    protected $hidden = ['created_at', 'updated_at'];
 }

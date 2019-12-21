@@ -12166,6 +12166,24 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   margin-bottom: 0;
 }
 
+.setting .alias {
+  display: -webkit-box;
+  display: flex;
+  margin: 8px 0;
+}
+
+.setting .alias .v-btn {
+  margin: 0;
+}
+
+.setting .alias__add {
+  text-align: right;
+}
+
+.setting .alias__add .v-btn {
+  margin: 0;
+}
+
 .multiselect {
   min-height: 50px;
 }

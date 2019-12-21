@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\City;
 use App\Models\Raid;
-use App\Models\Quest;
-use App\Models\QuestInstance;
 use App\Models\Zone;
+use App\Models\Quest;
+use App\Models\StopAlias;
 use App\Models\raidChannel;
+use App\Models\QuestInstance;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Stop extends Model {
@@ -17,7 +18,7 @@ class Stop extends Model {
     use SoftDeletes;
 
     protected $fillable = ['name', 'niantic_name', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id', 'ex'];
-    protected $appends = ['zone', 'city', 'google_maps_url', 'raid', 'quest'];
+    protected $appends = ['zone', 'city', 'google_maps_url', 'raid', 'quest', 'aliases'];
     protected $hidden = ['zone_id', 'city_id', 'quest_id'];
     protected $casts = [
         'ex' => 'boolean',
@@ -66,6 +67,12 @@ class Stop extends Model {
             return $questInstance;
         }
         return false;
+    }
+
+    public function getAliasesAttribute() {
+        if( !$this->gym ) return [];
+        $aliases = StopAlias::where('stop_id', $this->id)->get();
+        return $aliases;
     }
 
     public function getFutureRaid() {
