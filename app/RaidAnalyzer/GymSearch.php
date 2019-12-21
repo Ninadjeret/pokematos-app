@@ -121,14 +121,14 @@ class GymSearch {
             Log::debug('Query black listed');
             return false;
         }
-        //Log::debug(print_r($min, true));
-        //Log::debug( print_r($this->getAllIdentifiers(), true) );
         $identifiers = $this->getAllIdentifiers();
         foreach($identifiers as $pattern => $data ) {
-            //Log::debug( print_r(strstr($sanitizedQuery, $pattern), true) );
             if( strstr($sanitizedQuery, $pattern) && $data->percent >= $min ) {
                 $gym = Stop::find($data->gymId);
-                return $gym;
+                return (object) [
+                    'gym' => $gym,
+                    'probability' => $data->percent 
+                ];
             }
         }
         return false;

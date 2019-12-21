@@ -92,7 +92,11 @@ class PokemonSearch {
         foreach( $this->getAllIdentifiers() as $pattern => $data ) {
 
             if( strstr($sanitizedQuery, $pattern) && $data->percent >= $min ) {
-                return Pokemon::find($data->pokemonId);
+                $pokemon = Pokemon::find($data->pokemonId)
+                return (object) [
+                    'pokemon' => $pokemon,
+                    'probability' => $data->percent,
+                ];
             }
         }
         return false;

@@ -350,22 +350,23 @@ class ImageAnalyzer {
     function getGym() {
 
         $query = implode(' ', $this->ocr);
-        $gym = $this->gymSearch->findGym($query, 70);
-        if( $gym ) {
-            if( $this->debug ) $this->_log('Gym finded in database : ' . $gym->name );
-            return $gym;
+        $result = $this->gymSearch->findGym($query, 70);
+        if( $result ) {
+            if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name );
+            $this->result->gym_probability = $result->probability;
+            return $result->gym;
         }
         if( $this->debug ) $this->_log('Nothing found in database :(' );
         $this->result->error = "L'arène n'a pas été trouvée";
         return false;
-
     }
 
     function getPokemon() {
         $query = implode(' ', $this->ocr);
-        $pokemon = $this->pokemonSearch->findPokemon($query, 70);
-        if( $pokemon ) {
-            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->name_fr );
+        $result = $this->pokemonSearch->findPokemon($query, 70);
+        if( $result ) {
+            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr );
+            $this->result->pokemon_probability = $result->probability;
             return $pokemon;
         }
 
@@ -396,8 +397,10 @@ class ImageAnalyzer {
         $result = [
             'type' => $this->result->type,
             'gym' => $this->result->gym,
+            'gym_probability' => $this->result->gym_probability,
             'date' => $this->result->date,
             'pokemon' => $this->result->pokemon,
+            'pokemon_probability' => $this->result->pokemon_probability,
             'egg_level' => $this->result->eggLevel,
             'url' => $this->imageData->url,
             'ocr' => $this->ocr,

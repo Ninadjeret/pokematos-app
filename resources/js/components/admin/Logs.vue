@@ -47,13 +47,13 @@
                                       <span class="label">Arène identifiée</span>
                                       <span class="value">
                                           <template v-if="log.result.gym">
-                                              {{log.result.gym.name}} (Probabilité 100%)
+                                              {{log.result.gym.name}} (Probabilité {{log.result.gym_probability}}%)
                                           </template>
                                       </span>
                                   </li>
                                   <li v-if="log.result.pokemon">
                                       <span class="label">Boss identifié</span>
-                                      <span class="value">{{log.result.pokemon.name}} (Probabilité 100%)</span>
+                                      <span class="value">{{log.result.pokemon.name}} (Probabilité {{log.result.pokemon_probability}}%)</span>
                                   </li>
                                   <li v-if="!log.result.pokemon">
                                       <span class="label">Niveau de boss</span>
@@ -74,7 +74,11 @@
         <v-dialog v-model="logImgDialog" max-width="90%">
         <v-card>
             <img v-if="logImg" :src="logImg">
-            <v-btn absolute fab top right small @click="logImgDialog = false"><v-icon>close</v-icon></v-btn>
+            <div class="footer--actions">
+                <button class="button--close" @click="logImgDialog = false">
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
         </v-card>
       </v-dialog>
 

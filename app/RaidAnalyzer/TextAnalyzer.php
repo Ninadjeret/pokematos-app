@@ -14,8 +14,10 @@ class TextAnalyzer {
 
         $this->result = (object) array(
             'gym' => false,
+            'gym_probability' => 0,
             'eggLevel' => false,
             'pokemon'   => false,
+            'pokemon_probability' => 0,
             'date' => false,
             'error' => false,
             'logs' => '',
@@ -154,9 +156,10 @@ class TextAnalyzer {
     function getGym() {
 
         $query = implode(' ', $this->ocr);
-        $gym = $this->gymSearch->findGym($query, 70);
-        if( $gym ) {
-            if( $this->debug ) $this->_log('Gym finded in database : ' . $gym->name );
+        $result = $this->gymSearch->findGym($query, 70);
+        if( $result ) {
+            if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name );
+            $this->result->gym_probability = $result->probability;
             return $gym;
         }
         if( $this->debug ) $this->_log('Nothing found in database :(' );
@@ -164,9 +167,10 @@ class TextAnalyzer {
     }
 
     function getPokemon() {
-        $pokemon = $this->pokemonSearch->findPokemon($query, 70);
-        if( $pokemon ) {
-            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->name_fr );
+        $result = $this->pokemonSearch->findPokemon($query, 70);
+        if( $result ) {
+            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr );
+            $this->result->pokemon_probability = $result->probability;
             return $pokemon;
         }
 
@@ -181,8 +185,10 @@ class TextAnalyzer {
         $success = ( $this->result->error ) ? false : true;
         $result = [
             'gym' => $this->result->gym,
+            'gym_probability' => $this->result->gym_probability,
             'date' => $this->result->date,
             'pokemon' => $this->result->pokemon,
+            'pokemon_probability' => $this->result->pokemon_probability,
             'egg_level' => $this->result->eggLevel,
             'text' => $this->text,
         ];
