@@ -363,25 +363,12 @@ class ImageAnalyzer {
 
     function getPokemon() {
         $query = implode(' ', $this->ocr);
-        $result = $this->pokemonSearch->findPokemon($query, 70);
+        $cp = $this->MicrosoftOCR->cp_line;
+        $result = $this->pokemonSearch->findPokemon($query, $cp, 90);
         if( $result ) {
             if( $this->debug ) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr );
             $this->result->pokemon_probability = $result->probability;
             return $pokemon;
-        }
-
-        $ocr_count = count( $this->ocr );
-        $start = $this->ocr[ $ocr_count - 3 ];
-        $end = $this->ocr[ $ocr_count - 2 ];
-        if( strlen( $start ) <= 4 ) {
-            $pokemon = $this->pokemonSearch->findPokemonFromFragments(
-                    $this->ocr[ $ocr_count - 3 ],
-                    $this->ocr[ $ocr_count - 2 ]
-                    );
-            if( $pokemon ) {
-                if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->name_fr );
-                return $pokemon;
-            }
         }
 
         if( $this->debug ) $this->_log('Nothing found in database :(' );

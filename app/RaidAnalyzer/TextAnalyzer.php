@@ -68,7 +68,7 @@ class TextAnalyzer {
 
         $this->result->date = $this->getTime();
         $this->result->gym = $this->gymSearch->findGym($this->text, 70);
-        $this->result->pokemon = $this->pokemonSearch->findPokemon($this->text, 70);
+        $this->result->pokemon = $this->pokemonSearch->findPokemon($this->text, $cp = null, 70);
         if( $this->result->pokemon ) {
             $this->result->eggLevel = $this->result->pokemon->boss_level;
         } else {
@@ -167,7 +167,7 @@ class TextAnalyzer {
     }
 
     function getPokemon() {
-        $result = $this->pokemonSearch->findPokemon($query, 70);
+        $result = $this->pokemonSearch->findPokemon($query, $cp = null, 70);
         if( $result ) {
             if( $this->debug ) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr );
             $this->result->pokemon_probability = $result->probability;
