@@ -12166,6 +12166,24 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   margin-bottom: 0;
 }
 
+.setting .alias {
+  display: -webkit-box;
+  display: flex;
+  margin: 8px 0;
+}
+
+.setting .alias .v-btn {
+  margin: 0;
+}
+
+.setting .alias__add {
+  text-align: right;
+}
+
+.setting .alias__add .v-btn {
+  margin: 0;
+}
+
 .multiselect {
   min-height: 50px;
 }
@@ -12298,6 +12316,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 
 .theme--light.v-pagination.v-pagination .v-pagination__item--active {
   background: #5a6cae;
+}
+
+.v-alert.warning {
+  background: orange;
 }
 
 .user__card {
@@ -12515,6 +12537,94 @@ body.logged-out .denied a {
 .template-list .list-filters label {
   margin-bottom: 0.6rem;
   margin-top: 0.6rem;
+}
+
+.log {
+  padding: 15px 15px 5px 15px;
+  display: -webkit-box;
+  display: flex;
+  flex-basis: 100%;
+}
+
+.log .log__img {
+  flex-basis: 30%;
+}
+
+.log .log__img .v-btn {
+  background: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+.log .log__img .v-btn .v-btn__content {
+  max-width: 100%;
+}
+
+.log .log__content {
+  flex-basis: 100%;
+}
+
+.log .v-chip {
+  background-color: #9a0007 !important;
+}
+
+.log .v-chip .v-chip__content {
+  font-size: 10px;
+  height: 20px;
+  padding: 0;
+}
+
+.log .meta {
+  color: #aaa;
+  font-size: 1.3rem;
+  margin-bottom: 0;
+}
+
+.log .error {
+  background: #ffebee;
+  margin: 10px;
+  padding: 8px 10px;
+  text-align: center;
+  color: #8e0000;
+  border-radius: 50px;
+  font-size: 13px;
+}
+
+.log .v-expansion-panel {
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+.log .v-expansion-panel .v-expansion-panel__container {
+  border-top: none !important;
+}
+
+.log .v-expansion-panel:not(:first-child):after {
+  border: none;
+}
+
+.log ul.result {
+  padding-left: 0;
+}
+
+.log ul.result li {
+  list-style-type: none;
+  padding: 8px 0;
+  margin: 0 20px;
+  border-bottom: 1px solid #eee;
+  display: -webkit-box;
+  display: flex;
+  flex-basis: 100%;
+}
+
+.log ul.result li .label {
+  flex-basis: 120px;
+  color: #aaa;
+}
+
+.log ul.result li .value {
+  flex-basis: auto;
 }
 
 @media screen and (min-width: 960px) {

@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Models\Raid;
-use App\Models\Announce;
+use App\Models\UserAction;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -22,7 +22,7 @@ class RaidDuplicate
      *
      * @return void
      */
-     public function __construct( Raid $raid, Announce $announce )
+     public function __construct( Raid $raid, UserAction $announce )
      {
          $this->raid = $raid;
          $this->announce = $announce;

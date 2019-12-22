@@ -8,14 +8,16 @@ use Illuminate\Support\Facades\Log;
 
 class TextAnalyzer {
 
-    function __construct( $source, $guild ) {
+    function __construct( $source, $guild, $user = false, $channel_discord_id = false ) {
 
         $this->debug = true;
 
         $this->result = (object) array(
             'gym' => false,
+            'gym_probability' => 0,
             'eggLevel' => false,
             'pokemon'   => false,
+            'pokemon_probability' => 0,
             'date' => false,
             'error' => false,
             'logs' => '',
@@ -26,6 +28,8 @@ class TextAnalyzer {
 
         $this->text = $source;
         $this->guild = $guild;
+        $this->user = $user;
+        $this->channel_discord_id = $channel_discord_id;
         $this->gymSearch = new GymSearch($guild);
         $this->pokemonSearch = new PokemonSearch();
 
@@ -64,14 +68,14 @@ class TextAnalyzer {
 
         $this->result->date = $this->getTime();
         $this->result->gym = $this->gymSearch->findGym($this->text, 70);
-        $this->result->pokemon = $this->pokemonSearch->findPokemon($this->text, 70);
+        $this->result->pokemon = $this->pokemonSearch->findPokemon($this->text, $cp = null, 70);
         if( $this->result->pokemon ) {
             $this->result->eggLevel = $this->result->pokemon->boss_level;
         } else {
             $this->result->eggLevel = $this->getEggLevel();
         }
+        $this->addLog();
         $time_elapsed_secs = microtime(true) - $this->start;
-        //$this->result->error = 'demo';
         if( $this->debug ) $this->_log('========== Fin du traitement '.$this->text.' ('.round($time_elapsed_secs, 3).'s) ==========');
     }
 
@@ -152,9 +156,10 @@ class TextAnalyzer {
     function getGym() {
 
         $query = implode(' ', $this->ocr);
-        $gym = $this->gymSearch->findGym($query, 70);
-        if( $gym ) {
-            if( $this->debug ) $this->_log('Gym finded in database : ' . $gym->name );
+        $result = $this->gymSearch->findGym($query, 70);
+        if( $result ) {
+            if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name );
+            $this->result->gym_probability = $result->probability;
             return $gym;
         }
         if( $this->debug ) $this->_log('Nothing found in database :(' );
@@ -162,15 +167,45 @@ class TextAnalyzer {
     }
 
     function getPokemon() {
-        $pokemon = $this->pokemonSearch->findPokemon($query, 70);
-        if( $pokemon ) {
-            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->name_fr );
+        $result = $this->pokemonSearch->findPokemon($query, $cp = null, 70);
+        if( $result ) {
+            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr );
+            $this->result->pokemon_probability = $result->probability;
             return $pokemon;
         }
 
         if( $this->debug ) $this->_log('Nothing found in database :(' );
         return false;
 
+    }
+
+    public function addLog() {
+
+        //Construction du tableau
+        $success = ( $this->result->error ) ? false : true;
+        $result = [
+            'gym' => $this->result->gym,
+            'gym_probability' => $this->result->gym_probability,
+            'date' => $this->result->date,
+            'pokemon' => $this->result->pokemon,
+            'pokemon_probability' => $this->result->pokemon_probability,
+            'egg_level' => $this->result->eggLevel,
+            'text' => $this->text,
+        ];
+
+        //Ajout du log
+        \App\Models\log::create([
+            'city_id' => $this->guild->city->id,
+            'guild_id' => $this->guild->id,
+            'type' => 'analysis-text',
+            'success' => $success,
+            'error' => $this->result->error,
+            'source_type' => 'text',
+            'source' => $this->text,
+            'result' => $result,
+            'user_id' => ( $this->user ) ? $this->user->id : 0,
+            'channel_discord_id' => $this->channel_discord_id
+        ]);
     }
 
 }

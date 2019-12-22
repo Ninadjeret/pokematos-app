@@ -86,16 +86,46 @@ class PokemonSearch {
      * @param type $min
      * @return boolean|\POGO_gym
      */
-    function findPokemon( $query, $min = 50 ) {
+    function findPokemon( $query = null, $cp = null, $min = 50 ) {
+        $result = false;
+        if( !empty($query) ) {
+            $result = $this->findPokemonFromName($query);
+        }
+        if( !$result && !empty($cp) ) {
+            $result = $this->findPokemonFromCp($cp);
+        }
+        return $result;
+    }
+
+    public function findPokemonFromName($query) {
         $this->query = $query;
         $sanitizedQuery = Helpers::sanitize($this->query);
         foreach( $this->getAllIdentifiers() as $pattern => $data ) {
 
             if( strstr($sanitizedQuery, $pattern) && $data->percent >= $min ) {
-                return Pokemon::find($data->pokemonId);
+                $pokemon = Pokemon::find($data->pokemonId);
+                return (object) [
+                    'pokemon' => $pokemon,
+                    'probability' => $data->percent,
+                ];
             }
         }
         return false;
+    }
+
+    public function findPokemonFromCp($cp) {
+        $matching = [];
+        foreach( $this->pokemons as $pokemon ) {
+            if( $pokemon->boss_cp == $cp ) {
+                $matching[] = $pokemon;
+            }
+        }
+        if( !empty($matching) && count($matching) === 1 ) {
+            return (object) [
+                'pokemon' => $pokemon,
+                'probability' => 100,
+            ];
+        }
     }
 
     public function findPokemonFromFragments( $start, $end ) {

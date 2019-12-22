@@ -27,11 +27,20 @@ class GymSearch {
     function getSanitizedNames() {
         $names = array();
         foreach( $this->gyms as $gym ) {
-            $names[] = Helpers::sanitize($gym->niantic_name);
+            $names[Helpers::sanitize($gym->niantic_name)] = $gym->id;
             if( $gym->niantic_name != $gym->name ) {
-                $names[] = Helpers::sanitize($gym->name);
+                $names[Helpers::sanitize($gym->name)] = $gym->id;
+            }
+            if( !empty($gym->aliases) ) {
+                foreach( $gym->aliases as $alias ) {
+                    if( !array_key_exists($alias->name, $names) ) {
+                        $names[Helpers::sanitize($alias->name)] = $gym->id;
+                    }
+                }
             }
         }
+        $keys = array_map('strlen', array_keys($names));
+        array_multisort($keys, SORT_DESC, $names);
         return $names;
     }
 
@@ -54,62 +63,6 @@ class GymSearch {
 
     /**
      *
-     * @return type
-     */
-    function getAllIdentifiers() {
-
-        $identifiers = array();
-
-        foreach( $this->gyms as $gym ) {
-
-            foreach( array( $gym->niantic_name, $gym->name ) as $name ) {
-
-                $name = Helpers::sanitize($name);
-                $nb_chars = strlen($name);
-
-                //Parcours
-                $debut = 0;
-                while( $debut < $nb_chars - 1) {
-
-                    $fin = $nb_chars - $debut;
-                    while( $fin > 2 ) {
-                        $pattern = mb_strimwidth($name, $debut, $fin);
-                        //echo $pattern.'<br>';
-                        $is_find = 0;
-                        foreach( $this->sanitizedNames as $sanitizedName ) {
-                            if( strstr($sanitizedName, $pattern) ) {
-                                $is_find++;
-                            }
-                        }
-
-                        if( $is_find === 1 ) {
-                            //echo 'Identifiant OK<br>';
-                            $identifiers[$pattern] = (object) array(
-                                'gymId' => $gym->id,
-                                'percent' => round( strlen($pattern) * 100 / $nb_chars )
-                            );$gym->id;
-                        }
-
-                        $fin--;
-                    }
-
-                    $debut++;
-                }
-                $identifiers[$name] = (object) array(
-                    'gymId' => $gym->id,
-                    'percent' => 100
-                );
-            }
-        }
-        $keys = array_map('strlen', array_keys($identifiers));
-        array_multisort($keys, SORT_DESC, $identifiers);
-        //Log::debug( print_r($identifiers, true) );
-        return $identifiers;
-    }
-
-
-    /**
-     *
      * @param type $query
      * @param type $min
      * @return boolean|\POGO_gym
@@ -117,20 +70,37 @@ class GymSearch {
     function findGym( $query, $min = 50 ) {
         $this->query = $query;
         $sanitizedQuery = Helpers::sanitize($this->query);
+
+        //On supprime les éventuels queries blacklistées(surimpression, etc)
         if( $this->isBlackListed($sanitizedQuery) ) {
             Log::debug('Query black listed');
             return false;
         }
-        //Log::debug(print_r($min, true));
-        //Log::debug( print_r($this->getAllIdentifiers(), true) );
-        $identifiers = $this->getAllIdentifiers();
-        foreach($identifiers as $pattern => $data ) {
-            //Log::debug( print_r(strstr($sanitizedQuery, $pattern), true) );
-            if( strstr($sanitizedQuery, $pattern) && $data->percent >= $min ) {
-                $gym = Stop::find($data->gymId);
-                return $gym;
+
+        //On fait la recherche de correspondance
+        $best_perc = 0;
+        $best_result = false;
+        foreach( $this->sanitizedNames as $name => $gym_id ) {
+            $similarity = similar_text($name, $sanitizedQuery);
+            $perc = $similarity * 100 / strlen($name);
+            if( $perc == 100 ) {
+                return (object) [
+                    'gym' => Stop::find($gym_id),
+                    'probability' => 100
+                ];
+            } elseif( $perc > $best_perc ) {
+                $best_perc = 0;
+                $best_result = $gym_id;
             }
         }
+
+        if( $best_perc > $min ) {
+            return (object) [
+                'gym' => Stop::find($best_result),
+                'probability' => $best_perc
+            ];
+        }
+
         return false;
     }
 

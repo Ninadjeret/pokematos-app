@@ -150,7 +150,19 @@
             margin-bottom: 0;
         }
     }
-
+    .alias {
+        display: flex;
+        margin: 8px 0;
+        .v-btn {
+            margin: 0;
+        }
+    }
+    .alias__add {
+        text-align: right;
+        .v-btn {
+            margin: 0;
+        }
+    }
 }
 .multiselect {
     min-height: 50px;
@@ -262,5 +274,11 @@
     background: #fafafa;
     .v-pagination__item--active {
         background: $primary;
+    }
+}
+
+.v-alert {
+    &.warning {
+        background: orange;
     }
 }

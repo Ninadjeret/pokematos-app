@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Guild;
 use App\Models\City;
 use GuzzleHttp\Client;
-use App\Models\Announce;
+use App\Models\UserAction;
 use App\Models\UserGuild;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
@@ -60,6 +60,10 @@ class User extends Authenticatable
                 'label' => 'Gérer les zones',
                 'context' => 'city'
             ],
+            'logs_manage' => [
+                'label' => 'Gérer les logs',
+                'context' => 'city'
+            ],
             'boss_edit' => [
                 'label' => 'Mettre à jour les boss de raid',
                 'context' => 'global'
@@ -98,17 +102,17 @@ class User extends Authenticatable
     public function getStatsAttribute() {
         $stats = ['total' => []];
 
-        $stats['total']['raidCreate'] = Announce::where('user_id', $this->id)
+        $stats['total']['raidCreate'] = UserAction::where('user_id', $this->id)
             ->where('confirmed', 1)
             ->where('type', 'raid-create')
             ->count();
 
-        $stats['total']['raidUpdate'] = Announce::where('user_id', $this->id)
+        $stats['total']['raidUpdate'] = UserAction::where('user_id', $this->id)
             ->where('confirmed', 1)
             ->where('type', 'raid-update')
             ->count();
 
-        $stats['total']['questCreate'] = Announce::where('user_id', $this->id)
+        $stats['total']['questCreate'] = UserAction::where('user_id', $this->id)
             ->where('confirmed', 1)
             ->where('type', 'quest-create')
             ->count();

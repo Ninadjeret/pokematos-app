@@ -49,6 +49,18 @@
                 <v-switch v-model="ex"></v-switch>
             </div>
 
+            <div v-if="gym" class="setting">
+                <label>Alias de nom</label>
+                <p class="description">Les alias de nom sont utilisés lors de la détection des raids pour identifier une arène dont le nom serait mal lu depuis l'image. <a href="https://www.pokematos.fr/documentation/alias-de-pois/">En savoir plus</a></p>
+                <div class="alias" v-for="(alias, index) in aliases">
+                    <input v-model="alias.name" type="text">
+                    <v-btn small flat fab @click="removeAlias(index)"><v-icon>delete</v-icon></v-btn>
+                </div>
+                <div class="alias__add">
+                    <v-btn small fab @click="addAlias"><v-icon>add</v-icon></v-btn>
+                </div>
+            </div>
+
             <div v-if="inAdmin && getId">
                 <v-subheader v-if="">Autres actions</v-subheader>
                 <v-list-tile color="pink" @click="dialog = true">Supprimer le POI</v-list-tile>
@@ -96,6 +108,7 @@
                 zone_id: '',
                 ex: false,
                 gym: false,
+                aliases: [{name:'toto'}, {name:'tutu'}],
                 coordinates:{lat: 1, lng: 1},
             }
         },
@@ -133,6 +146,7 @@
                     this.gym = res.data.gym;
                     this.coordinates.lat = res.data.lat;
                     this.coordinates.lng = res.data.lng;
+                    this.aliases = res.data.aliases;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response && err.response.data ) {
@@ -158,6 +172,13 @@
                     })
                 });
             },
+            addAlias() {
+                this.aliases.push({id:null,name:''});
+            },
+            removeAlias(index) {
+                console.log(index);
+                this.aliases.splice(index, 1);
+            },
             submit() {
                 const args = {
                     name: this.name,
@@ -168,6 +189,7 @@
                     gym: this.gym,
                     lat: this.coordinates.lat,
                     lng: this.coordinates.lng,
+                    aliases: this.aliases,
                 };
                 if( this.getId ) {
                     this.save(args);

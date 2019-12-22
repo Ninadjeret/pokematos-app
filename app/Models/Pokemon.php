@@ -9,7 +9,7 @@ class Pokemon extends Model {
 
     protected $fillable = [ 'pokedex_id', 'niantic_id', 'name_fr', 'name_ocr', 'base_att', 'base_def', 'base_sta', 'parent_id', 'boss', 'boss_level'];
     protected $table = 'pokemons';
-    protected $appends = ['thumbnail_url', 'cp', 'name'];
+    protected $appends = ['thumbnail_url', 'cp', 'name', 'boss_cp'];
     protected $casts = [
         'boss' => 'boolean',
         'shiny' => 'boolean',
@@ -36,6 +36,21 @@ class Pokemon extends Model {
         ];
     }
 
+    public function getBossCpAttribute() {
+        if( empty( $this->boss_level ) ) return false;
+        $levels = [
+            1 => 600,
+            2 => 1800,
+            3 => 3600,
+            4 => 9000,
+            5 => 15000,
+            6 => 9000,
+        ];
+        $rStamina = $levels[$this->boss_level];
+        $cp = ( ($this->base_att+15) * sqrt($this->base_def+15) * sqrt($rStamina) ) / 10;
+        return floor($cp);
+    }
+
     public function getCp( $lvl, $ivAttack, $ivDefense, $ivStamina ) {
         $cp_multiplier = Helpers::getCpScalar($lvl);
         $calc_attack = $this->base_att + $ivAttack;
@@ -44,6 +59,7 @@ class Pokemon extends Model {
         $cp = (int)($calc_attack * pow($calc_defense, 0.5) * pow($calc_stamina, 0.5) * pow($cp_multiplier, 2) / 10);
         return $cp;
     }
+
 
 
 
