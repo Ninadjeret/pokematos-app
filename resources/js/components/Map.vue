@@ -171,7 +171,7 @@
                     }
                     else if( gym.quest.reward_type && gym.quest.reward_type == 'reward' ) {
                         var imgclassname = 'map-marker__img quest';
-                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_reward_'+gym.quest.reward.type+'.png';
+                        url = 'https://assets.profchen.fr/img/map/map_marker_quest_reward_'+gym.quest.reward.id+'.png';
                     } else {
                         var imgclassname = 'map-marker__img quest';
                         url = 'https://assets.profchen.fr/img/map/map_marker_quest_unknown.png';
