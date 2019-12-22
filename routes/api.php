@@ -123,3 +123,6 @@ Route::group(['middleware' => ['auth.bot']], function () {
 });
 
 Route::get('version', 'Controller@getVersion');
+Route::get('test', function (Request $request) {
+    return 'OK';
+});

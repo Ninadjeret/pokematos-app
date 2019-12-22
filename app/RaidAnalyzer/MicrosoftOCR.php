@@ -90,6 +90,8 @@ class MicrosoftOCR {
 
             //exceptions de base
             if( $line->text == 'Cette Arene est trop loin.'
+                || $line->text == '>'
+                || $line->text == 'O'
                 || $line->text == 'X'
                 || $line->text == 'COMBAT'
                 || $line->text == 'GROUPE PRIVE'

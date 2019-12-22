@@ -203,7 +203,7 @@ class TextAnalyzer {
             'source_type' => 'text',
             'source' => $this->text,
             'result' => $result,
-            'user_id' => ( $this->user ) ? $this->user->id ? 0,
+            'user_id' => ( $this->user ) ? $this->user->id : 0,
             'channel_discord_id' => $this->channel_discord_id
         ]);
     }

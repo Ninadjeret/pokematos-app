@@ -372,7 +372,7 @@ class ImageAnalyzer {
         }
 
         if( $this->debug ) $this->_log('Nothing found in database :(' );
-        $this->result->error = "Aucun Pokémon trouvé"
+        $this->result->error = "Aucun Pokémon trouvé";
         return false;
 
     }
@@ -403,7 +403,7 @@ class ImageAnalyzer {
             'source_type' => 'img',
             'source' => $this->imageData->source,
             'result' => $result,
-            'user_id' => ( $this->user ) ? $this->user->id ? 0,
+            'user_id' => ( $this->user ) ? $this->user->id : 0,
             'channel_discord_id' => $this->channel_discord_id
         ]);
     }
