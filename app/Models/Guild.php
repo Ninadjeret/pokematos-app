@@ -32,10 +32,7 @@ class Guild extends Model
         'map_access_moderation_roles' => ['default' => [], 'type' => 'array'],
         'access_moderation_permissions' => ['default' => [], 'type' => 'array'],
 
-        /*'roles_gym_color' => ['default' => '#009688', 'type' => 'string'],
-        'roles_gymex_color' => ['default' => '#E91E63', 'type' => 'string'],
-        'roles_zone_color' => ['default' => '#2196F3', 'type' => 'string'],
-        'roles_pokemon_color' => ['default' => '#4CAF50', 'type' => 'string'],*/
+        'roles_forbidden_message' => ['default' => 'Ahum, merci de ne pas mentionner ce role ici', 'type' => 'string'],
 
         'raidsex_active' => ['default' => false, 'type' => 'boolean'],
         'raidsex_channels' => ['default' => false, 'type' => 'boolean'],
@@ -60,8 +57,14 @@ class Guild extends Model
     }
 
     public function getWatchedChannelsAttribute() {
-        $watched_channels = RoleCategory::where('guild_id', $this->id)->pluck('channel_discord_id')->unique()->toArray();
-        return $watched_channels;
+        $watched_channels = RoleCategory::where('guild_id', $this->id)->get();
+        $return = [];
+        foreach( $watched_channels as $watched_channel ) {
+            if( !in_array( $watched_channel->channel_discord_id, $return ) && !empty($watched_channel->channel_discord_id) ) {
+                $return[] = $watched_channel->channel_discord_id;
+            }
+        }
+        return $return;
     }
 
     public function getSettingsAttribute() {

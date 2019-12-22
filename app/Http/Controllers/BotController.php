@@ -354,11 +354,11 @@ class BotController extends Controller {
         }
 
         if( $url ) {
-            $imageAnalyzer = new ImageAnalyzer($url, $guild);
+            $imageAnalyzer = new ImageAnalyzer($url, $guild, $user, $channel_discord_id);
             $result = $imageAnalyzer->result;
             $source_type = 'image';
         } else {
-            $textAnalyzer = new TextAnalyzer($text, $guild);
+            $textAnalyzer = new TextAnalyzer($text, $guild, $user, $channel_discord_id);
             $result = $textAnalyzer->result;
             $source_type = 'text';
         }

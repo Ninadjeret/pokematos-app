@@ -8,7 +8,7 @@ use App\Models\City;
 use App\Models\Raid;
 use App\Models\Stop;
 use App\Models\Guild;
-use App\Models\Announce;
+use App\Models\UserAction;
 use App\Models\raidChannel;
 use Illuminate\Support\Facades\Log;
 
@@ -47,10 +47,10 @@ class RaidController extends Controller {
         $gym = Stop::find($raid->gym_id);
         $gym->touch();
         event( new \App\Events\RaidDeleted( $raid ) );
-        $announces = $raid->getAnnounces();
+        $announces = $raid->getUserActions();
         if( !empty($announces) ) {
             foreach( $announces as $announce ) {
-                Announce::destroy($announce->id);
+                UserAction::destroy($announce->id);
             }
         }
         Raid::destroy($raid->id);

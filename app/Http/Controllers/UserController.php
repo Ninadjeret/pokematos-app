@@ -8,7 +8,7 @@ use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Quest;
 use App\Models\Guild;
-use App\Models\Announce;
+use App\Models\UserAction;
 use App\Models\Connector;
 use App\Models\QuestReward;
 use Illuminate\Http\Request;
@@ -82,10 +82,10 @@ class UserController extends Controller {
 
     public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {
         event( new \App\Events\QuestInstanceDeleted( $questInstance ) );;
-        $announces = $questInstance->getAnnounces();
+        $announces = $questInstance->getUserActions();
         if( !empty($announces) ) {
             foreach( $announces as $announce ) {
-                Announce::destroy($announce->id);
+                UserAction::destroy($announce->id);
             }
         }
         $stop = Stop::find($questInstance->gym_id);
@@ -118,7 +118,7 @@ class UserController extends Controller {
         }
 
         if( $updated ) {
-            $announce = Announce::create([
+            $announce = UserAction::create([
                 'type' => 'quest-update',
                 'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
@@ -461,6 +461,32 @@ class UserController extends Controller {
         $return = array_merge($gyms, $stops);
         return response()->json($return, 200);
 
+    }
+
+    public function getGuildLogs(Guild $guild, Request $request) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
+        $logs = \App\Models\Log::where('guild_id', $guild->id)
+            ->orderBy('created_at', 'desc')
+            ->take(50)
+            ->get();
+        return response()->json($logs, 200);
+    }
+
+    public function getCityLogs(City $city, Request $request) {
+        Log::debug('toto');
+        Log::debug($city->id);
+        $user = Auth::user();
+        if( !$user->can('logs_manage', ['city_id' => $city->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
+        $logs = \App\Models\Log::where('city_id', $city->id)
+            ->orderBy('created_at', 'desc')
+            ->take(50)
+            ->get();
+        return response()->json($logs, 200);
     }
 
 }

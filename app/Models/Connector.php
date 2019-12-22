@@ -95,7 +95,7 @@ class Connector extends Model {
 
     private function translate( $message, $raid ) {
 
-        $username = ( $raid->getLastAnnounce()->getUser() ) ? $raid->getLastAnnounce()->getUser()->name : false ;
+        $username = ( $raid->getLastUserAction()->getUser() ) ? $raid->getLastUserAction()->getUser()->name : false ;
 
         //Gestion des tags
         $patterns = array(
@@ -130,7 +130,7 @@ class Connector extends Model {
         }
 
         if( $username && strstr( $message, '@'.$username ) ) {
-            $user = $raid->getLastAnnounce()->getUser();
+            $user = $raid->getLastUserAction()->getUser();
             $message = str_replace('@'.$username, '<@!'.$user->discord_id.'>', $message);
         }
 
