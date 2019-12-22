@@ -108,7 +108,7 @@
                 zone_id: '',
                 ex: false,
                 gym: false,
-                aliases: [{name:'toto'}, {name:'tutu'}],
+                aliases: [],
                 coordinates:{lat: 1, lng: 1},
             }
         },

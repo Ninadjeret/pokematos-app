@@ -97,7 +97,7 @@ class GymSearch {
         if( $best_perc > $min ) {
             return (object) [
                 'gym' => Stop::find($best_result),
-                'probability' => $best_perc
+                'probability' => round($best_perc)
             ];
         }
 

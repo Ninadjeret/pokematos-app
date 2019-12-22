@@ -97,7 +97,7 @@ class PokemonSearch {
         return $result;
     }
 
-    public function findPokemonFromName($query) {
+    public function findPokemonFromName($query, $min = 50) {
         $this->query = $query;
         $sanitizedQuery = Helpers::sanitize($this->query);
         foreach( $this->getAllIdentifiers() as $pattern => $data ) {
