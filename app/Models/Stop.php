@@ -11,6 +11,7 @@ use App\Models\Quest;
 use App\Models\StopAlias;
 use App\Models\raidChannel;
 use App\Models\QuestInstance;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Stop extends Model {
@@ -104,6 +105,36 @@ class Stop extends Model {
             ->first();
         if( empty($raid) ) return false;
         return $raid;
+    }
+
+    public function syncAliases($aliases) {
+
+        //On compare ceux déja présent en BDD et on supprimes les anciens
+        foreach( $this->aliases as $currAlias ) {
+            $check = false;
+            foreach( $aliases as $alias ) {
+                if( $alias['id'] == $currAlias->id ) {
+                    $currAlias->update([
+                        'name' => $alias['name']
+                    ]);
+                    $check = true;
+                }
+            }
+            if( !$check ) {
+                StopAlias::destroy($currAlias->id);
+            }
+        }
+
+        //Puis on ajoute les nouveaux
+        foreach( $aliases as $alias ) {
+            if( !isset($alias['id']) || empty($alias['id']) ) {
+                StopAlias::create([
+                    'stop_id' => $this->id,
+                    'name' => $alias['name']
+                ]);
+            }
+        }
+        return true;
     }
 
 }

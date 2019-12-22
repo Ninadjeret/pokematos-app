@@ -51,7 +51,7 @@
 
             <div v-if="gym" class="setting">
                 <label>Alias de nom</label>
-                <p class="description">Les alias de nom sont des noms complémentaire, utilisés lors de la détection des raids pour identifier une arène dont le nom serait mal lu depuis l'image</p>
+                <p class="description">Les alias de nom sont utilisés lors de la détection des raids pour identifier une arène dont le nom serait mal lu depuis l'image. <a href="https://www.pokematos.fr/documentation/alias-de-pois/">En savoir plus</a></p>
                 <div class="alias" v-for="(alias, index) in aliases">
                     <input v-model="alias.name" type="text">
                     <v-btn small flat fab @click="removeAlias(index)"><v-icon>delete</v-icon></v-btn>
