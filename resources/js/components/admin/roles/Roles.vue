@@ -4,6 +4,9 @@
         <div class="search__wrapper">
             <v-text-field single-line hide-details outline v-model="search" label="Recherche"></v-text-field>
         </div>
+        <v-alert v-if="items.length >= 240" :value="true" type="warning">
+            Vous avez déja {{items.length}} roles (250 max).
+        </v-alert>
         <v-list>
             <template v-for="(item, index) in filteredItems">
               <v-list-tile :key="item.id" :to="{ name: 'admin.roles.roles.edit', params: { id: $route.params.id, role_id:item.id } }">
@@ -17,7 +20,7 @@
               <v-divider></v-divider>
             </template>
         </v-list>
-        <v-btn dark fixed bottom right fab :to="{ name: 'admin.roles.roles.add', params: { id: $route.params.id } }">
+        <v-btn v-if="items.length <= 245" dark fixed bottom right fab :to="{ name: 'admin.roles.roles.add', params: { id: $route.params.id } }">
             <v-icon>add</v-icon>
         </v-btn>
     </div>

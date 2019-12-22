@@ -12318,6 +12318,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   background: #5a6cae;
 }
 
+.v-alert.warning {
+  background: orange;
+}
+
 .user__card {
   background: url("https://assets.profchen.fr/img/app/user_bg.png") top right #5a6cae;
   background-size: cover;
