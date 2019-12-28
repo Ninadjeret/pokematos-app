@@ -96,6 +96,8 @@ class MicrosoftOCR {
                 || $line->text == 'COMBAT'
                 || $line->text == 'GROUPE PRIVE'
                 || $line->text == 'Walk closer to interact with this Gym.'
+                || $line->text == '+'
+                || $line->text == 'ARENE DE RAID EX'
             ) {
                 continue;
             }

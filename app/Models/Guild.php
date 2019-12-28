@@ -46,6 +46,7 @@ class Guild extends Model
         'raidreporting_text_prefixes' => ['default' => ["+raid","+Raid"], 'type' => 'array'],
         'raidreporting_channel_type' => ['default' => '', 'type' => 'string'],
         'raidreporting_channel_discord_id' => ['default' => '', 'type' => 'string'],
+        'raidreporting_gym_min_proability' => ['default' => 70, 'type' => 'integer'],
 
         'welcome_active' => ['default' => false, 'type' => 'boolean'],
         'welcome_message' => ['default' => 'Bienvenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],

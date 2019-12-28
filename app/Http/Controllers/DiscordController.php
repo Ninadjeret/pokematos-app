@@ -66,8 +66,8 @@ class DiscordController extends Controller {
         Log::debug( print_r( $user_guilds, true ) );
         $result = $user->checkGuilds($user_guilds);
         if( $result->auth ) {
-            Auth::loginUsingId($user->id, true);
             sleep(1);
+            Auth::loginUsingId($user->id, true);
             return redirect('/');
         } else {
             return redirect('/?access=denied&code='.$result->error);

@@ -16,7 +16,7 @@ class ImageAnalyzer {
 
     function __construct( $source, $guild, $user = false, $channel_discord_id = false ) {
 
-        $this->debug = false;
+        $this->debug = true;
 
         $this->guild = $guild;
         $this->user = $user;
@@ -72,10 +72,11 @@ class ImageAnalyzer {
              $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
              $this->_log($this->ocr);
              $this->result->type = 'pokemon';
-             $this->result->gym = $this->getGym();
              $this->result->date = $this->getTime();
              $this->result->pokemon = $this->getPokemon();
+             $this->result->gym = $this->getGym();
              if( $this->result->pokemon ) {
+                 Log::debug( print_r($this->result->pokemon->boss_level, true) );
                  $this->result->eggLevel = $this->result->pokemon->boss_level;
              }
          }
@@ -348,11 +349,9 @@ class ImageAnalyzer {
     }
 
     function getGym() {
-
-        $query = implode(' ', $this->ocr);
-        $result = $this->gymSearch->findGym($query, 70);
+        $result = $this->gymSearch->findGym($this->ocr, $this->guild->settings->raidreporting_gym_min_proability);
         if( $result ) {
-            if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name );
+            if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name . '('.$result->probability.'%)' );
             $this->result->gym_probability = $result->probability;
             return $result->gym;
         }
@@ -362,13 +361,16 @@ class ImageAnalyzer {
     }
 
     function getPokemon() {
-        $query = implode(' ', $this->ocr);
         $cp = $this->MicrosoftOCR->cp_line;
-        $result = $this->pokemonSearch->findPokemon($query, $cp, 90);
+        $result = $this->pokemonSearch->findPokemon($this->ocr, $cp, 90);
         if( $result ) {
-            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr );
+            if( $this->pokemonSearch->num_line ) {
+                unset($this->ocr[$this->pokemonSearch->num_line]);
+                $this->ocr = array_values($this->ocr);
+            }
+            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr . '('.$result->probability.'%)' );
             $this->result->pokemon_probability = $result->probability;
-            return $pokemon;
+            return $result->pokemon;
         }
 
         if( $this->debug ) $this->_log('Nothing found in database :(' );

@@ -55,6 +55,11 @@
                     <p class="description">Indiquer par quoi doivent commencer les messages texte pour être analysés ?</p>
                     <input v-model="raidreporting_text_prefixes" type="text">
                 </div>
+                <div class="setting">
+                    <label>Proabilité minimale de correspondance des arènes</label>
+                    <p class="description">Compris entre 1 et 100, cela définir le niveau de proabilité minimale que le bot accepte pour considérer qu'il a trouvé une arène. (100 est le max)</p>
+                    <input v-model="raidreporting_gym_min_proability" type="number" min="1" max="100" step="1">
+                </div>
                 <v-btn dark fixed bottom right fab @click="submit()">
                     <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
                     <v-icon v-else>save</v-icon>
@@ -90,6 +95,7 @@
                 raidreporting_text_active: false,
                 raidreporting_text_delete: false,
                 raidreporting_text_prefixes: '+raid, +Raid',
+                raidreporting_gym_min_proability: 70,
             }
         },
         computed: mapState([
@@ -106,6 +112,7 @@
                     this.raidreporting_text_active = parseInt(res.data.raidreporting_text_active);
                     this.raidreporting_text_delete = parseInt(res.data.raidreporting_text_delete);
                     this.raidreporting_text_prefixes = res.data.raidreporting_text_prefixes.join(', ');
+                    this.raidreporting_gym_min_proability = res.data.raidreporting_gym_min_proability;
                 }).catch( err => {
                     //No error
                 });
@@ -118,6 +125,7 @@
                         raidreporting_text_active: this.raidreporting_text_active,
                         raidreporting_text_delete: this.raidreporting_text_delete,
                         raidreporting_text_prefixes: this.raidreporting_text_prefixes.split(', '),
+                        raidreporting_gym_min_proability: this.raidreporting_gym_min_proability,
                     }
                 };
                 this.save(args);

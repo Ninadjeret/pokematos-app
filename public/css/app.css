@@ -12080,7 +12080,8 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .setting input[type=text],
-.setting select {
+.setting select,
+.setting input[type=number] {
   height: 40px;
   width: 100%;
   font-size: 16px;

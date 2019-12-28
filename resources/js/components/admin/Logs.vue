@@ -4,11 +4,6 @@
             <v-list>
             <template v-for="(log, index) in logs">
 
-              <div class="log" :key="log.id" v-if="log.type == 'raid-create'">
-                  <h2>Annonce de raid</h2>
-                  <p>{{log.created_at}}, <i>par {{log.user.name}}</i></p>
-              </div>
-
               <div class="log" :key="log.id" v-if="log.type == 'analysis-img'">
                   <div v-if="hasImage(log)" class="log__img">
                       <v-btn @click="showModal(log.source)"><img :src="log.source"></v-btn>
