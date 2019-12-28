@@ -336,7 +336,8 @@ export default {
             this.dialog = false;
         },
         canDeleteRaid() {
-            return this.canAccessCityParam('raid_delete');
+            let isAuthor = this.gym.raid && this.gym.raid.source.user && this.gym.raid.source.user.id === this.user.id
+            return isAuthor || this.canAccessCityParam('raid_delete');
         },
         setScreenTo( value ) {
             console.log(value);

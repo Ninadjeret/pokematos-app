@@ -95,7 +95,7 @@ class CityController extends Controller {
             'lat' => $request->lat,
             'lng' => $request->lng,
         ]);
-        $stop->syncAliases($request->aliases);
+        $gym->syncAliases($request->aliases);
         return response()->json($gym, 200);
     }
 

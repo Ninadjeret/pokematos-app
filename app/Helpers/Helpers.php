@@ -522,6 +522,9 @@ class Helpers {
         if( strlen($color) === 5 ) {
             $color = '0'.$color;
         }
+        if( strlen($color) === 4 ) {
+            $color = '00'.$color;
+        }
         if( strlen($color) === 3 ) {
             $color = '000'.$color;
         }

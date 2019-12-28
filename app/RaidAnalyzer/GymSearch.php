@@ -17,6 +17,8 @@ class GymSearch {
             ->where('city_id', $guild->city->id)
             ->get();
         $this->sanitizedNames = $this->getSanitizedNames();
+        $this->max_length = 0;
+        $this->gym_name = false;
     }
 
 
@@ -41,6 +43,10 @@ class GymSearch {
         }
         $keys = array_map('strlen', array_keys($names));
         array_multisort($keys, SORT_DESC, $names);
+
+        $keys = array_keys($names);
+        $this->max_length = strlen($keys[0]);
+
         return $names;
     }
 
@@ -60,16 +66,34 @@ class GymSearch {
         return false;
     }
 
+    public function extractGymName($array) {
+        if( !is_array($array) ) return false;
+        $num = 0;
+        $i = 0;
+        $name = false;
+        foreach( $array as $line ) {
+            $i++;
+            if( strlen($line) >= 7 && empty(preg_match( '/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $line )) ) {
+                $name = $line;
+                $num = $i;
+            }
+        }
 
-    /**
-     *
-     * @param type $query
-     * @param type $min
-     * @return boolean|\POGO_gym
-     */
-    function findGym( $query, $min = 50 ) {
-        $this->query = $query;
-        $sanitizedQuery = Helpers::sanitize($this->query);
+        if( $name ) {
+            if( preg_match( '/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $array[$num] ) ) {
+                //nothing
+            } else {
+                $name .= ' '.$array[$num];
+            }
+        }
+        Log::debug('Gym name extracted : '.$name);
+        $this->gym_name = $name;
+        return $name;
+    }
+
+    public function findExactGym( $query, $min = 50  ) {
+
+        $sanitizedQuery = Helpers::sanitize($query);
 
         //On supprime les éventuels queries blacklistées(surimpression, etc)
         if( $this->isBlackListed($sanitizedQuery) ) {
@@ -80,27 +104,157 @@ class GymSearch {
         //On fait la recherche de correspondance
         $best_perc = 0;
         $best_result = false;
+        $array_probabilities = [];
+
         foreach( $this->sanitizedNames as $name => $gym_id ) {
-            $similarity = similar_text($name, $sanitizedQuery);
-            $perc = $similarity * 100 / strlen($name);
-            if( $perc == 100 ) {
+            $similarity = similar_text($sanitizedQuery, $name, $perc);
+            if( $perc >= 100 ) {
                 return (object) [
-                    'gym' => Stop::find($gym_id),
+                    'gym_id' => $gym_id,
                     'probability' => 100
                 ];
-            } elseif( $perc > $best_perc ) {
-                $best_perc = 0;
-                $best_result = $gym_id;
+            } elseif( $perc > $min ) {
+                if( !array_key_exists($gym_id, $array_probabilities) || $array_probabilities[$gym_id] < $perc ) {
+                    $array_probabilities[$gym_id] = $perc * 0.9;
+                }
             }
         }
 
-        if( $best_perc > $min ) {
+        if( empty( $array_probabilities ) ) {
+            return false;
+        }
+
+        arsort($array_probabilities);
+        Log::debug( print_r($array_probabilities, true) );
+        $coef = 1;
+        if( count($array_probabilities) > 1 ) {
+            $count = count($array_probabilities);
+            $coef = 1 - ( 1 / $count / 2 );
+            Log::debug($coef);
+        }
+
+        $best_proba = array_key_first($array_probabilities);
+        $array_probabilities[$best_proba] = $array_probabilities[$best_proba] * $coef;
+        Log::debug('Pondered proba : ' . $array_probabilities[$best_proba]);
+
+        if( $array_probabilities[$best_proba] >= $min ) {
+            Log::debug('Gym finded : '.$best_proba);
             return (object) [
-                'gym' => Stop::find($best_result),
-                'probability' => $best_perc
+                'gym_id' => $best_proba,
+                'probability' => round($array_probabilities[$best_proba])
             ];
         }
 
+        return false;
+
+    }
+
+
+    /**
+     *
+     * @param type $query
+     * @param type $min
+     * @return boolean|\POGO_gym
+     */
+    function findGym( $query, $min = 50 ) {
+
+        $array_probabilities = [];
+        $this->query = $query;
+
+        //On checke si on trouve un résultat exact
+        if( is_array($query) ) {
+            $gymName = $this->extractGymName($query);
+            if( $gymName ) {
+                $result = $this->findExactGym($gymName, $min);
+                if( $result ) {
+                    return (object) [
+                        'gym' => Stop::find($result->gym_id),
+                        'probability' => $result->probability
+                    ];
+                }
+            }
+            return false;
+        }
+
+        else {
+            $result = $this->findGymFromString( $query, $min );
+            return $result;
+        }
+
+        return false;
+
+    }
+
+    /**
+     *
+     * @return type
+     */
+    function getAllIdentifiers() {
+        $identifiers = array();
+        foreach( $this->gyms as $gym ) {
+            foreach( array( $gym->niantic_name, $gym->name ) as $name ) {
+                $name = Helpers::sanitize($name);
+                $nb_chars = strlen($name);
+                //Parcours
+                $debut = 0;
+                while( $debut < $nb_chars - 1) {
+                    $fin = $nb_chars - $debut;
+                    while( $fin > 2 ) {
+                        $pattern = mb_strimwidth($name, $debut, $fin);
+                        //echo $pattern.'<br>';
+                        $is_find = 0;
+                        foreach( $this->sanitizedNames as $sanitizedName ) {
+                            if( strstr($sanitizedName, $pattern) ) {
+                                $is_find++;
+                            }
+                        }
+                        if( $is_find === 1 ) {
+                            //echo 'Identifiant OK<br>';
+                            $identifiers[$pattern] = (object) array(
+                                'gymId' => $gym->id,
+                                'percent' => round( strlen($pattern) * 100 / $nb_chars )
+                            );$gym->id;
+                        }
+                        $fin--;
+                    }
+                    $debut++;
+                }
+                $identifiers[$name] = (object) array(
+                    'gymId' => $gym->id,
+                    'percent' => 100
+                );
+            }
+        }
+        $keys = array_map('strlen', array_keys($identifiers));
+        array_multisort($keys, SORT_DESC, $identifiers);
+        //Log::debug( print_r($identifiers, true) );
+        return $identifiers;
+    }
+
+
+    /**
+     *
+     * @param type $query
+     * @param type $min
+     * @return boolean|\POGO_gym
+     */
+    function findGymFromString( $query, $min = 50 ) {
+        $this->query = $query;
+        $sanitizedQuery = Helpers::sanitize($this->query);
+        if( $this->isBlackListed($sanitizedQuery) ) {
+            Log::debug('Query black listed');
+            return false;
+        }
+        $identifiers = $this->getAllIdentifiers();
+        foreach($identifiers as $pattern => $data ) {
+            if( strstr($sanitizedQuery, $pattern) && $data->percent >= $min ) {
+                $gym = Stop::find($data->gymId);
+                return (object) [
+                    'gym' => $gym,
+                    'probability' => $data->percent
+                ];
+            }
+        }
         return false;
     }
 

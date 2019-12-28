@@ -38,6 +38,10 @@ class Role extends Model {
         return Guild::find($this->guild_id);
     }
 
+    public function getColorAttribute($value) {        
+        return Helpers::sanitizeColor($value);
+    }
+
     public function getCategoryAttribute() {
         if( $this->category_id ) {
             $category = RoleCategory::find($this->category_id);
@@ -89,7 +93,7 @@ class Role extends Model {
             $args['gym_id'] = null;
             $args['zone_id'] = null;
             $args['pokemon_id'] = null;
-        }    
+        }
 
         $role = Role::create([
             'discord_id' => $discord_id,

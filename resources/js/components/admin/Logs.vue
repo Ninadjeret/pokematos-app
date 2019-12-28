@@ -4,11 +4,6 @@
             <v-list>
             <template v-for="(log, index) in logs">
 
-              <div class="log" :key="log.id" v-if="log.type == 'raid-create'">
-                  <h2>Annonce de raid</h2>
-                  <p>{{log.created_at}}, <i>par {{log.user.name}}</i></p>
-              </div>
-
               <div class="log" :key="log.id" v-if="log.type == 'analysis-img'">
                   <div v-if="hasImage(log)" class="log__img">
                       <v-btn @click="showModal(log.source)"><img :src="log.source"></v-btn>
@@ -18,7 +13,7 @@
                           Analyse d'image
                       </h2>
                       <p class="meta">
-                          {{getLogDate(log)}}<i v-if="log.user">, posté par {{log.user.name}} {{log.channel_discord_id}}</i>
+                          {{getLogDate(log)}}<i v-if="log.user">, posté par {{log.user.name}}</i>
                       </p>
                       <p v-if="!log.success" class="error">
                           {{log.error}}
@@ -64,9 +59,10 @@
                         </v-expansion-panel-content>
                       </v-expansion-panel>
                   </div>
+                  <v-divider></v-divider>
               </div>
 
-              <v-divider></v-divider>
+
             </template>
           </v-list>
         </div>

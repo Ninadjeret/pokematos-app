@@ -67,12 +67,11 @@ class TextAnalyzer {
     public function run() {
 
         $this->result->date = $this->getTime();
-        $this->result->gym = $this->gymSearch->findGym($this->text, 70);
-        $this->result->pokemon = $this->pokemonSearch->findPokemon($this->text, $cp = null, 70);
+        $this->result->gym = $this->getGym();
+        $this->result->eggLevel = $this->getEggLevel();
+        $this->result->pokemon = $this->getPokemon();
         if( $this->result->pokemon ) {
             $this->result->eggLevel = $this->result->pokemon->boss_level;
-        } else {
-            $this->result->eggLevel = $this->getEggLevel();
         }
         $this->addLog();
         $time_elapsed_secs = microtime(true) - $this->start;
@@ -154,26 +153,27 @@ class TextAnalyzer {
     }
 
     function getGym() {
-
-        $query = implode(' ', $this->ocr);
+        $query = $this->text;
         $result = $this->gymSearch->findGym($query, 70);
         if( $result ) {
             if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name );
             $this->result->gym_probability = $result->probability;
-            return $gym;
+            return $result->gym;
         }
+        $this->result->error = "L'arène n'a pas été trouvée";
         if( $this->debug ) $this->_log('Nothing found in database :(' );
 
     }
 
     function getPokemon() {
+        $query = $this->text;
         $result = $this->pokemonSearch->findPokemon($query, $cp = null, 70);
         if( $result ) {
             if( $this->debug ) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr );
             $this->result->pokemon_probability = $result->probability;
-            return $pokemon;
+            return $result->pokemon;
         }
-
+        if( !$this->result->eggLevel ) $this->result->error = "Aucun Pokémon trouvé";
         if( $this->debug ) $this->_log('Nothing found in database :(' );
         return false;
 
@@ -193,8 +193,10 @@ class TextAnalyzer {
             'text' => $this->text,
         ];
 
+        Log::debug(print_r($this->result, true));
+
         //Ajout du log
-        \App\Models\log::create([
+        \App\Models\Log::create([
             'city_id' => $this->guild->city->id,
             'guild_id' => $this->guild->id,
             'type' => 'analysis-text',

@@ -363,7 +363,7 @@ class BotController extends Controller {
             $source_type = 'text';
         }
 
-        if( empty( $result->error ) ) {
+        if( empty( $result->error ) && $result->eggLevel > 0 ) {
             $args = [];
             $args['city_id'] = $city->id;
             $args['user_id'] = $user->id;

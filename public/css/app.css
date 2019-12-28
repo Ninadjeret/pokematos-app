@@ -12080,7 +12080,8 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .setting input[type=text],
-.setting select {
+.setting select,
+.setting input[type=number] {
   height: 40px;
   width: 100%;
   font-size: 16px;
@@ -12547,7 +12548,7 @@ body.logged-out .denied a {
 }
 
 .log .log__img {
-  flex-basis: 30%;
+  flex-basis: 120px;
 }
 
 .log .log__img .v-btn {
@@ -12555,6 +12556,7 @@ body.logged-out .denied a {
   box-shadow: none !important;
   padding: 0 !important;
   min-width: 0 !important;
+  height: auto !important;
 }
 
 .log .log__img .v-btn .v-btn__content {
@@ -12613,14 +12615,12 @@ body.logged-out .denied a {
   padding: 8px 0;
   margin: 0 20px;
   border-bottom: 1px solid #eee;
-  display: -webkit-box;
-  display: flex;
-  flex-basis: 100%;
+  display: block;
 }
 
 .log ul.result li .label {
-  flex-basis: 120px;
   color: #aaa;
+  display: block;
 }
 
 .log ul.result li .value {
