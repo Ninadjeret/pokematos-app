@@ -12556,6 +12556,7 @@ body.logged-out .denied a {
   box-shadow: none !important;
   padding: 0 !important;
   min-width: 0 !important;
+  height: auto !important;
 }
 
 .log .log__img .v-btn .v-btn__content {
@@ -12614,14 +12615,12 @@ body.logged-out .denied a {
   padding: 8px 0;
   margin: 0 20px;
   border-bottom: 1px solid #eee;
-  display: -webkit-box;
-  display: flex;
-  flex-basis: 100%;
+  display: block;
 }
 
 .log ul.result li .label {
-  flex-basis: 120px;
   color: #aaa;
+  display: block;
 }
 
 .log ul.result li .value {

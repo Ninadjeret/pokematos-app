@@ -25,7 +25,7 @@ class CreateLogsTable extends Migration
             $table->string('source')->nullable();
             $table->integer('user_id')->default(0);
             $table->string('channel_discord_id')->nullable();
-            $table->json('result')->nullable();
+            $table->text('result')->nullable();
             $table->timestamps();
         });
     }

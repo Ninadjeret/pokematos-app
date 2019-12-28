@@ -26,7 +26,6 @@ class PokemonSearch {
     function getSanitizedNames() {
         $names = array();
         foreach( $this->pokemons as $pokemon ) {
-            $names[] = Helpers::sanitize($pokemon->name_ocr);
             $names[Helpers::sanitize($pokemon->name_ocr)] = $pokemon->id;
             if( $pokemon->name_ocr != $pokemon->name_fr ) {
                 $names[Helpers::sanitize($pokemon->name_fr)] = $pokemon->id;
@@ -62,7 +61,7 @@ class PokemonSearch {
      * [public description]
      * @var [type]
      */
-    public findPokemonFromstring($query, $min = 50) {
+    public function findPokemonFromstring($query, $min = 50) {
         $sanitizedQuery = Helpers::sanitize($query);
         foreach( $this->sanitizedNames as $name => $pokemon_id ) {
             if( strstr( $sanitizedQuery, $name ) ) {

@@ -13,7 +13,7 @@
                           Analyse d'image
                       </h2>
                       <p class="meta">
-                          {{getLogDate(log)}}<i v-if="log.user">, posté par {{log.user.name}} {{log.channel_discord_id}}</i>
+                          {{getLogDate(log)}}<i v-if="log.user">, posté par {{log.user.name}}</i>
                       </p>
                       <p v-if="!log.success" class="error">
                           {{log.error}}
@@ -59,9 +59,10 @@
                         </v-expansion-panel-content>
                       </v-expansion-panel>
                   </div>
+                  <v-divider></v-divider>
               </div>
 
-              <v-divider></v-divider>
+
             </template>
           </v-list>
         </div>

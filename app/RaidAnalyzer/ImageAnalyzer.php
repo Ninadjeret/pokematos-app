@@ -392,11 +392,11 @@ class ImageAnalyzer {
             'pokemon_probability' => $this->result->pokemon_probability,
             'egg_level' => $this->result->eggLevel,
             'url' => $this->imageData->url,
-            'ocr' => implode(' ', $this->ocr),
+            'ocr' => (property_exists($this, 'ocr')) ? implode(' ', $this->ocr) : '',
         ];
 
         //Ajout du log
-        \App\Models\log::create([
+        \App\Models\Log::create([
             'city_id' => $this->guild->city->id,
             'guild_id' => $this->guild->id,
             'type' => 'analysis-img',

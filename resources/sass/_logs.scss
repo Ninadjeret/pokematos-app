@@ -9,6 +9,7 @@
             box-shadow: none !important;
             padding: 0 !important;
             min-width: 0 !important;
+            height: auto! important;
             .v-btn__content {
                 max-width: 100%;
             }
@@ -56,11 +57,10 @@
             padding: 8px 0;
             margin: 0 20px;
             border-bottom: 1px solid #eee;
-            display: flex;
-            flex-basis: 100%;
+            display: block;
             .label {
-                flex-basis: 120px;
                 color: #aaa;
+                display: block;
             }
             .value {
                 flex-basis: auto;

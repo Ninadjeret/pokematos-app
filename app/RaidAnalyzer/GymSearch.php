@@ -73,7 +73,7 @@ class GymSearch {
         $name = false;
         foreach( $array as $line ) {
             $i++;
-            if( strlen($line) >= 10  ) {
+            if( strlen($line) >= 7 && empty(preg_match( '/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $line )) ) {
                 $name = $line;
                 $num = $i;
             }
@@ -92,7 +92,7 @@ class GymSearch {
     }
 
     public function findExactGym( $query, $min = 50  ) {
-        $min = 75;
+
         $sanitizedQuery = Helpers::sanitize($query);
 
         //On supprime les éventuels queries blacklistées(surimpression, etc)
