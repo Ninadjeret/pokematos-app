@@ -392,7 +392,7 @@ class ImageAnalyzer {
             'pokemon_probability' => $this->result->pokemon_probability,
             'egg_level' => $this->result->eggLevel,
             'url' => $this->imageData->url,
-            'ocr' => $this->ocr,
+            'ocr' => implode(' ', $this->ocr),
         ];
 
         //Ajout du log

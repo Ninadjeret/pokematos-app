@@ -25,3 +25,7 @@ Route::get('/', function () {
     }
     return view('login');
 })->name('home');
+
+Route::get('/maintenance', function () {
+    return view('maintenance');
+})->name('maintenance');
