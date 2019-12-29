@@ -1,8 +1,24 @@
 <template>
     <div>
         <div class="settings-section">
-            <v-list>
-            <template v-for="(log, index) in logs">
+
+            <div class="search__wrapper setting text-xs-center">
+                <v-btn-toggle v-model="filter_logs" mandatory>
+                    <v-btn value="all">Tous les logs</v-btn>
+                    <v-btn value="error">Erreurs</v-btn>
+                    <v-btn value="success">Succes</v-btn>
+                </v-btn-toggle>
+            </div>
+
+            <div v-if="loading" class="loading">
+                <div class="loading__content">
+                    <i class="friendball"></i>
+                    <p>Chargement...</p>
+                </div>
+            </div>
+
+            <v-list v-if="!loading">
+            <template v-for="(log, index) in filteredLogs">
 
               <div class="log" :key="log.id" v-if="log.type == 'analysis-img'">
                   <div v-if="hasImage(log)" class="log__img">
@@ -15,8 +31,12 @@
                       <p class="meta">
                           {{getLogDate(log)}}<i v-if="log.user">, posté par {{log.user.name}}</i>
                       </p>
+
                       <p v-if="!log.success" class="error">
                           {{log.error}}
+                      </p>
+                      <p v-if="log.success" class="success">
+                          Capture correctement analysée
                       </p>
 
                       <v-expansion-panel>
@@ -91,6 +111,19 @@
                 logs: [],
                 logImgDialog: false,
                 logImg: false,
+                loading: true,
+                filter_logs: 'all',
+            }
+        },
+        computed: {
+            filteredLogs() {
+                let that = this;
+                return this.logs.filter((log) => {
+                    return ( that.filter_logs == 'all'
+                        || ( that.filter_logs == 'success' && log.success )
+                        || ( that.filter_logs == 'error' && !log.success )
+                    );
+                });
             }
         },
         created() {
@@ -99,7 +132,7 @@
         methods: {
             fetchLogs() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/logs').then( res => {
-                    console.log(res.data)
+                    this.loading = false;
                     this.logs = res.data;
                 });
             },

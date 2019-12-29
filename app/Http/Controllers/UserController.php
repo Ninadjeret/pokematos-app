@@ -476,8 +476,6 @@ class UserController extends Controller {
     }
 
     public function getCityLogs(City $city, Request $request) {
-        Log::debug('toto');
-        Log::debug($city->id);
         $user = Auth::user();
         if( !$user->can('logs_manage', ['city_id' => $city->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);

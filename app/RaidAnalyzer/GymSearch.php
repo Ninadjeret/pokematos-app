@@ -66,6 +66,12 @@ class GymSearch {
         return false;
     }
 
+
+    /**
+     * [extractGymName description]
+     * @param  [type] $array [description]
+     * @return [type]        [description]
+     */
     public function extractGymName($array) {
         if( !is_array($array) ) return false;
         $num = 0;
@@ -91,9 +97,17 @@ class GymSearch {
         return $name;
     }
 
+
+    /**
+     * [findExactGym description]
+     * @param  [type]  $query [description]
+     * @param  integer $min   [description]
+     * @return [type]         [description]
+     */
     public function findExactGym( $query, $min = 50  ) {
 
         $sanitizedQuery = Helpers::sanitize($query);
+        $array_probabilities = [];
 
         //On supprime les éventuels queries blacklistées(surimpression, etc)
         if( $this->isBlackListed($sanitizedQuery) ) {
@@ -101,11 +115,33 @@ class GymSearch {
             return false;
         }
 
-        //On fait la recherche de correspondance
-        $best_perc = 0;
-        $best_result = false;
-        $array_probabilities = [];
+        /**
+        * ==================================================================
+        * PREMIER TOUR
+        * ==================================================================
+        */
+        foreach( $this->sanitizedNames as $name => $gym_id ) {
+            if( $name == $sanitizedQuery ) {
+                return (object) [
+                    'gym_id' => $gym_id,
+                    'probability' => 100
+                ];
+            }
+            elseif( strpos($name, $sanitizedQuery) === 0 ) {
+                $array_probabilities[$gym_id] = 90;
+            }
+        }
 
+        $result = $this->extractBestProba($array_probabilities, $min);
+        if( $result ) {
+            return $result;
+        }
+
+        /**
+        * ==================================================================
+        * DEUXIEME TOUR
+        * ==================================================================
+        */
         foreach( $this->sanitizedNames as $name => $gym_id ) {
             $similarity = similar_text($sanitizedQuery, $name, $perc);
             if( $perc >= 100 ) {
@@ -115,34 +151,14 @@ class GymSearch {
                 ];
             } elseif( $perc > $min ) {
                 if( !array_key_exists($gym_id, $array_probabilities) || $array_probabilities[$gym_id] < $perc ) {
-                    $array_probabilities[$gym_id] = $perc * 0.9;
+                    $array_probabilities[$gym_id] = $perc * 0.8;
                 }
             }
         }
 
-        if( empty( $array_probabilities ) ) {
-            return false;
-        }
-
-        arsort($array_probabilities);
-        Log::debug( print_r($array_probabilities, true) );
-        $coef = 1;
-        if( count($array_probabilities) > 1 ) {
-            $count = count($array_probabilities);
-            $coef = 1 - ( 1 / $count / 2 );
-            Log::debug($coef);
-        }
-
-        $best_proba = array_key_first($array_probabilities);
-        $array_probabilities[$best_proba] = $array_probabilities[$best_proba] * $coef;
-        Log::debug('Pondered proba : ' . $array_probabilities[$best_proba]);
-
-        if( $array_probabilities[$best_proba] >= $min ) {
-            Log::debug('Gym finded : '.$best_proba);
-            return (object) [
-                'gym_id' => $best_proba,
-                'probability' => round($array_probabilities[$best_proba])
-            ];
+        $result = $this->extractBestProba($array_probabilities, $min);
+        if( $result ) {
+            return $result;
         }
 
         return false;
@@ -184,6 +200,7 @@ class GymSearch {
         return false;
 
     }
+
 
     /**
      *
@@ -255,6 +272,36 @@ class GymSearch {
                 ];
             }
         }
+        return false;
+    }
+
+
+    /**
+     * [extractBestProba description]
+     * @return [type] [description]
+     */
+    private function extractBestProba($array_probabilities, $min) {
+        if( empty( $array_probabilities ) ) {
+            return false;
+        }
+
+        arsort($array_probabilities);
+        $coef = 1;
+        if( count($array_probabilities) > 1 ) {
+            $count = count($array_probabilities);
+            $coef =  1 - ( 1 / $count / 0.35 );
+        }
+
+        $best_proba = array_key_first($array_probabilities);
+        $array_probabilities[$best_proba] = $array_probabilities[$best_proba] - ($array_probabilities[$best_proba] * $coef);
+
+        if( $array_probabilities[$best_proba] >= $min ) {
+            return (object) [
+                'gym_id' => $best_proba,
+                'probability' => round($array_probabilities[$best_proba])
+            ];
+        }
+
         return false;
     }
 
