@@ -12593,6 +12593,16 @@ body.logged-out .denied a {
   font-size: 13px;
 }
 
+.log .success {
+  background: #d3ead0;
+  margin: 10px;
+  padding: 8px 10px;
+  text-align: center;
+  color: #244c20;
+  border-radius: 50px;
+  font-size: 13px;
+}
+
 .log .v-expansion-panel {
   box-shadow: none;
   margin-bottom: 0;
@@ -12712,6 +12722,618 @@ body.logged-out .denied a {
 
 .template-list .v-window__container .v-window-item .raids__empty h3 {
   margin-top: calc( 50% - 50px);
+}
+
+.pokeball {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  border: 1px solid #333;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset -3px 1px 1px rgba(0, 0, 0, 0.2);
+  background: radial-gradient(circle at top center, #ED1C1C 45%, #555 46%, #555 52%, #FFF 53%);
+  background-size: 200% 100%;
+  background-position: 50%;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+  -webkit-animation: pokewobble 5s ease infinite forwards;
+          animation: pokewobble 5s ease infinite forwards;
+}
+
+.pokeball:before {
+  content: "";
+  opacity: 0.3;
+  position: absolute;
+  bottom: -2px;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  border-radius: 50%;
+  box-shadow: 0 0 2px 1px #000;
+  background: #000;
+  z-index: -1;
+  -webkit-transform-origin: center -10px;
+          transform-origin: center -10px;
+  -webkit-animation: pokeshadow 5s ease infinite forwards;
+          animation: pokeshadow 5s ease infinite forwards;
+}
+
+.pokeball:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  margin-left: -3px;
+  margin-top: 1px;
+  background: white;
+  border: 1px solid #333;
+  box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  -webkit-animation: pokeglow 5s ease infinite forwards;
+          animation: pokeglow 5s ease infinite forwards;
+}
+
+.loveball {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  border: 1px solid #333;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset -3px 1px 1px rgba(0, 0, 0, 0.2);
+  background: radial-gradient(circle at top center, #ea7cc5 45%, #555 46%, #555 52%, #f2d7e9 53%);
+  background-size: 200% 100%;
+  background-position: 50%;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+  -webkit-animation: pokewobble 5s ease infinite forwards;
+          animation: pokewobble 5s ease infinite forwards;
+}
+
+.loveball:before {
+  content: "";
+  opacity: 0.3;
+  position: absolute;
+  bottom: -2px;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  border-radius: 50%;
+  box-shadow: 0 0 2px 1px #000;
+  background: #000;
+  z-index: -1;
+  -webkit-transform-origin: center -10px;
+          transform-origin: center -10px;
+  -webkit-animation: pokeshadow 5s ease infinite forwards;
+          animation: pokeshadow 5s ease infinite forwards;
+}
+
+.loveball:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  margin-left: -3px;
+  margin-top: 1px;
+  background: white;
+  border: 1px solid #333;
+  box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  -webkit-animation: pokeglow 5s ease infinite forwards;
+          animation: pokeglow 5s ease infinite forwards;
+}
+
+.masterball {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  border: 1px solid #333;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset -3px 1px 1px rgba(0, 0, 0, 0.2);
+  background: radial-gradient(circle at top center, #8633af 45%, #555 46%, #555 52%, #eee 53%);
+  background-size: 200% 100%;
+  background-position: 50%;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+  -webkit-animation: pokewobble 5s ease infinite forwards;
+          animation: pokewobble 5s ease infinite forwards;
+}
+
+.masterball:before {
+  content: "";
+  opacity: 0.3;
+  position: absolute;
+  bottom: -2px;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  border-radius: 50%;
+  box-shadow: 0 0 2px 1px #000;
+  background: #000;
+  z-index: -1;
+  -webkit-transform-origin: center -10px;
+          transform-origin: center -10px;
+  -webkit-animation: pokeshadow 5s ease infinite forwards;
+          animation: pokeshadow 5s ease infinite forwards;
+}
+
+.masterball:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  margin-left: -3px;
+  margin-top: 1px;
+  background: white;
+  border: 1px solid #333;
+  box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  -webkit-animation: pokeglow 5s ease infinite forwards;
+          animation: pokeglow 5s ease infinite forwards;
+}
+
+.ultraball {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  border: 1px solid #333;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset -3px 1px 1px rgba(0, 0, 0, 0.2);
+  background: radial-gradient(circle at top center, #777 45%, #555 46%, #555 52%, #eee 53%);
+  background-size: 200% 100%;
+  background-position: 50%;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+  -webkit-animation: pokewobble 5s ease infinite forwards;
+          animation: pokewobble 5s ease infinite forwards;
+}
+
+.ultraball:before {
+  content: "";
+  opacity: 0.3;
+  position: absolute;
+  bottom: -2px;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  border-radius: 50%;
+  box-shadow: 0 0 2px 1px #000;
+  background: #000;
+  z-index: -1;
+  -webkit-transform-origin: center -10px;
+          transform-origin: center -10px;
+  -webkit-animation: pokeshadow 5s ease infinite forwards;
+          animation: pokeshadow 5s ease infinite forwards;
+}
+
+.ultraball:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  margin-left: -3px;
+  margin-top: 1px;
+  background: white;
+  border: 1px solid #333;
+  box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  -webkit-animation: pokeglow 5s ease infinite forwards;
+          animation: pokeglow 5s ease infinite forwards;
+}
+
+.friendball {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  border: 1px solid #333;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset -3px 1px 1px rgba(0, 0, 0, 0.2);
+  background: radial-gradient(circle at top center, #5a6cae 45%, #555 46%, #555 52%, #ddd 53%);
+  background-size: 200% 100%;
+  background-position: 50%;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+  -webkit-animation: pokewobble 5s ease infinite forwards;
+          animation: pokewobble 5s ease infinite forwards;
+}
+
+.friendball:before {
+  content: "";
+  opacity: 0.3;
+  position: absolute;
+  bottom: -2px;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  border-radius: 50%;
+  box-shadow: 0 0 2px 1px #000;
+  background: #000;
+  z-index: -1;
+  -webkit-transform-origin: center -10px;
+          transform-origin: center -10px;
+  -webkit-animation: pokeshadow 5s ease infinite forwards;
+          animation: pokeshadow 5s ease infinite forwards;
+}
+
+.friendball:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  margin-left: -3px;
+  margin-top: 1px;
+  background: white;
+  border: 1px solid #333;
+  box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  -webkit-animation: pokeglow 5s ease infinite forwards;
+          animation: pokeglow 5s ease infinite forwards;
+}
+
+.greatball {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  border: 1px solid #333;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset -3px 1px 1px rgba(0, 0, 0, 0.2);
+  background: radial-gradient(circle at top center, #1aa5d8 45%, #555 46%, #555 52%, #eee 53%);
+  background-size: 200% 100%;
+  background-position: 50%;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+  -webkit-animation: pokewobble 5s ease infinite forwards;
+          animation: pokewobble 5s ease infinite forwards;
+}
+
+.greatball:before {
+  content: "";
+  opacity: 0.3;
+  position: absolute;
+  bottom: -2px;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  border-radius: 50%;
+  box-shadow: 0 0 2px 1px #000;
+  background: #000;
+  z-index: -1;
+  -webkit-transform-origin: center -10px;
+          transform-origin: center -10px;
+  -webkit-animation: pokeshadow 5s ease infinite forwards;
+          animation: pokeshadow 5s ease infinite forwards;
+}
+
+.greatball:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  margin-left: -3px;
+  margin-top: 1px;
+  background: white;
+  border: 1px solid #333;
+  box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  -webkit-animation: pokeglow 5s ease infinite forwards;
+          animation: pokeglow 5s ease infinite forwards;
+}
+
+.masterball:after {
+  box-shadow: -4px -8px 4px -1px rgba(255, 255, 255, 0.6), inset 0px 2px 0 rgba(0, 0, 0, 0.3), -5px -9px 0 -1px #bf225b, 5px -9px 0 -1px #b22554, -3px -5px 0 -2px #f28795, -3px -6px 0 -2px #f28795, -2px -7px 0 -2px #f28795, -1px -6px 0 -2px #f28795, 0px -5px 0 -2px #f28795, 1px -6px 0 -2px #f28795, 2px -7px 0 -2px #f28795, 3px -5px 0 -2px #f28795, 3px -6px 0 -2px #f28795;
+  -webkit-animation: none;
+          animation: none;
+}
+
+.greatball:after {
+  box-shadow: -4px -8px 4px -1px rgba(255, 255, 255, 0.6), inset 0px 2px 0 rgba(0, 0, 0, 0.3), -5px -9px 0 0 #bf225b, 5px -9px 0 0 #b22554;
+  -webkit-animation: none;
+          animation: none;
+}
+
+.friendball:after {
+  box-shadow: -4px -8px 4px -1px rgba(255, 255, 255, 0.6), inset 0px 2px 0 rgba(0, 0, 0, 0.3), -5px -5px 0 -2px #e5e52d, 0 -7px 0 -1px #e5e52d, 5px -5px 0 -2px #e5e52d;
+  -webkit-animation: none;
+          animation: none;
+}
+
+.loveball:after {
+  box-shadow: -4px -8px 4px -1px rgba(255, 255, 255, 0.6), inset 0px 2px 0 rgba(0, 0, 0, 0.3), -2px -7px 0 -1px #e22dd6, 0 -5px 0 -1px #e22dd6, 2px -7px 0 -1px #e22dd6;
+  -webkit-animation: none;
+          animation: none;
+}
+
+.ultraball:after {
+  box-shadow: -4px -8px 4px -1px rgba(255, 255, 255, 0.6), inset 0px 2px 0 rgba(0, 0, 0, 0.3), -5px -10px 0 0 rgba(255, 204, 0, 0.6), 5px -10px 0 0 rgba(255, 204, 0, 0.6);
+  -webkit-animation: none;
+          animation: none;
+}
+
+@-webkit-keyframes pokewobble {
+  2% {
+    -webkit-transform: rotate(-18deg);
+            transform: rotate(-18deg);
+    margin-left: -6px;
+  }
+
+  4% {
+    -webkit-transform: rotate(18deg);
+            transform: rotate(18deg);
+    margin-left: 6px;
+  }
+
+  6%, 30% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+    margin-left: 0px;
+  }
+
+  32% {
+    -webkit-transform: rotate(-18deg);
+            transform: rotate(-18deg);
+    margin-left: -6px;
+  }
+
+  34% {
+    -webkit-transform: rotate(18deg);
+            transform: rotate(18deg);
+    margin-left: 6px;
+  }
+
+  36% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+    margin-left: 0px;
+  }
+
+  62% {
+    margin-top: 0;
+  }
+
+  63% {
+    margin-top: -3px;
+  }
+
+  64% {
+    margin-top: 0px;
+  }
+
+  65% {
+    margin-top: -2px;
+  }
+
+  68% {
+    margin-top: 0;
+  }
+}
+
+@keyframes pokewobble {
+  2% {
+    -webkit-transform: rotate(-18deg);
+            transform: rotate(-18deg);
+    margin-left: -6px;
+  }
+
+  4% {
+    -webkit-transform: rotate(18deg);
+            transform: rotate(18deg);
+    margin-left: 6px;
+  }
+
+  6%, 30% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+    margin-left: 0px;
+  }
+
+  32% {
+    -webkit-transform: rotate(-18deg);
+            transform: rotate(-18deg);
+    margin-left: -6px;
+  }
+
+  34% {
+    -webkit-transform: rotate(18deg);
+            transform: rotate(18deg);
+    margin-left: 6px;
+  }
+
+  36% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+    margin-left: 0px;
+  }
+
+  62% {
+    margin-top: 0;
+  }
+
+  63% {
+    margin-top: -3px;
+  }
+
+  64% {
+    margin-top: 0px;
+  }
+
+  65% {
+    margin-top: -2px;
+  }
+
+  68% {
+    margin-top: 0;
+  }
+}
+
+@-webkit-keyframes pokeshadow {
+  2% {
+    -webkit-transform: rotate(18deg);
+            transform: rotate(18deg);
+  }
+
+  4% {
+    -webkit-transform: rotate(-18deg);
+            transform: rotate(-18deg);
+  }
+
+  6%, 30% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+
+  32% {
+    -webkit-transform: rotate(18deg);
+            transform: rotate(18deg);
+  }
+
+  34% {
+    -webkit-transform: rotate(-18deg);
+            transform: rotate(-18deg);
+  }
+
+  36% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+
+  62% {
+    bottom: -2px;
+  }
+
+  63% {
+    bottom: -6px;
+  }
+
+  64% {
+    bottom: -2px;
+  }
+
+  65% {
+    bottom: -4px;
+  }
+
+  68% {
+    bottom: -2px;
+  }
+}
+
+@keyframes pokeshadow {
+  2% {
+    -webkit-transform: rotate(18deg);
+            transform: rotate(18deg);
+  }
+
+  4% {
+    -webkit-transform: rotate(-18deg);
+            transform: rotate(-18deg);
+  }
+
+  6%, 30% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+
+  32% {
+    -webkit-transform: rotate(18deg);
+            transform: rotate(18deg);
+  }
+
+  34% {
+    -webkit-transform: rotate(-18deg);
+            transform: rotate(-18deg);
+  }
+
+  36% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+
+  62% {
+    bottom: -2px;
+  }
+
+  63% {
+    bottom: -6px;
+  }
+
+  64% {
+    bottom: -2px;
+  }
+
+  65% {
+    bottom: -4px;
+  }
+
+  68% {
+    bottom: -2px;
+  }
+}
+
+@-webkit-keyframes pokeglow {
+  60% {
+    background: white;
+    box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  }
+
+  68% {
+    background: #ff5f32;
+    box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8), 0 0 4px 2px #ff5f32;
+  }
+
+  80% {
+    background: white;
+    box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  }
+}
+
+@keyframes pokeglow {
+  60% {
+    background: white;
+    box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  }
+
+  68% {
+    background: #ff5f32;
+    box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8), 0 0 4px 2px #ff5f32;
+  }
+
+  80% {
+    background: white;
+    box-shadow: inset 0px 2px 0 rgba(0, 0, 0, 0.3), -4px -8px 4px -1px rgba(255, 255, 255, 0.8);
+  }
+}
+
+.loading {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+.loading__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 html {
