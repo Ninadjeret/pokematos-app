@@ -90,7 +90,9 @@ class ImageAnalyzer {
              $this->result->eggLevel = 6;
          }
 
-         $this->addLog();
+         if( $this->user ) {
+             $this->addLog();
+         }
 
          $time_elapsed_secs = microtime(true) - $this->start;
          if( $this->debug ) $this->_log('========== Fin du traitement '.$this->imageData->source.' ('.round($time_elapsed_secs, 3).'s) ==========');
