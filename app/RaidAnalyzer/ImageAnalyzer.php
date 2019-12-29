@@ -85,7 +85,7 @@ class ImageAnalyzer {
              $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
              $this->_log($this->ocr);
              $this->result->type = 'ex';
-             $this->result->gym = $this->getGym();
+             $this->result->gym = $this->getExGym();
              $this->result->date = $this->getExTime();
              $this->result->eggLevel = 6;
          }
@@ -238,7 +238,7 @@ class ImageAnalyzer {
                 $matching_points++;
             }
         }
-        if( $matching_points == 5 ) {
+        if( $matching_points == 4 ) {
             if( $this->debug ) $this->_log('Great ! Img seems to be an EX invit');
             return 'ex';
         }
@@ -352,6 +352,19 @@ class ImageAnalyzer {
 
     function getGym() {
         $result = $this->gymSearch->findGym($this->ocr, $this->guild->settings->raidreporting_gym_min_proability);
+        if( $result ) {
+            if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name . '('.$result->probability.'%)' );
+            $this->result->gym_probability = $result->probability;
+            return $result->gym;
+        }
+        if( $this->debug ) $this->_log('Nothing found in database :(' );
+        $this->result->error = "L'arène n'a pas été trouvée";
+        return false;
+    }
+
+    function getExGym() {
+        $value = implode(' ', $this->ocr);
+        $result = $this->gymSearch->findGymFromString($value, $this->guild->settings->raidreporting_gym_min_proability);
         if( $result ) {
             if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name . '('.$result->probability.'%)' );
             $this->result->gym_probability = $result->probability;
