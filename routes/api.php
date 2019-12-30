@@ -101,6 +101,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('quests/{quest}', 'PokemonController@updateQuest');
     Route::delete('quests/{quest}', 'PokemonController@deleteQuest');
 
+    //Rocket
+    Route::get('rocket/bosses', 'RocketController@getBosses');
+    Route::put('rocket/bosses/{boss}', 'RocketController@updateBoss');    
+
 });
 
 Route::group(['middleware' => ['auth.bot']], function () {
