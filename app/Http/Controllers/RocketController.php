@@ -12,7 +12,7 @@ class RocketController extends Controller
      * 
      */
     public function getBosses( Request $request ) {
-        $bosses = RocketBoss::all();
+        $bosses = RocketBoss::orderBy('name', 'asc')->get();
         return response()->json($bosses, 200); 
     }
 
