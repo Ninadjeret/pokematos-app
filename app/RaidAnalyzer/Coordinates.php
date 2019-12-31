@@ -16,9 +16,8 @@ class Coordinates {
         return array(
             (object) array( 'x' => 1, 'y' => $this->image_height / 2),
             (object) array( 'x' => $this->image_width - 1, 'y' => $this->image_height / 2),
-            (object) array( 'x' => 1, 'y' => $this->image_height - 5),
-            (object) array( 'x' => $this->image_width / 2, 'y' => $this->image_height - 5),
-            (object) array( 'x' => $this->image_width - 1, 'y' => $this->image_height - 5),
+            (object) array( 'x' => 1, 'y' => $this->image_height - 25),
+            (object) array( 'x' => $this->image_width - 1, 'y' => $this->image_height - 25),
         );
     }
 

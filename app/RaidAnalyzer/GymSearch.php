@@ -132,7 +132,7 @@ class GymSearch {
             }
         }
 
-        $result = $this->extractBestProba($array_probabilities, $min);
+        $result = $this->extractBestProba($array_probabilities, $min, 0.25);
         if( $result ) {
             return $result;
         }
@@ -156,7 +156,7 @@ class GymSearch {
             }
         }
 
-        $result = $this->extractBestProba($array_probabilities, $min);
+        $result = $this->extractBestProba($array_probabilities, $min, 0.15);
         if( $result ) {
             return $result;
         }
@@ -280,29 +280,29 @@ class GymSearch {
      * [extractBestProba description]
      * @return [type] [description]
      */
-    private function extractBestProba($array_probabilities, $min) {
-        if( empty( $array_probabilities ) ) {
-            return false;
-        }
+     private function extractBestProba($array_probabilities, $min, $coefPart) {
+         if( empty( $array_probabilities ) ) {
+             return false;
+         }
 
-        arsort($array_probabilities);
-        $coef = 1;
-        if( count($array_probabilities) > 1 ) {
-            $count = count($array_probabilities);
-            $coef =  1 - ( 1 / $count / 0.35 );
-        }
+         arsort($array_probabilities);
+         $best_proba = array_key_first($array_probabilities);
 
-        $best_proba = array_key_first($array_probabilities);
-        $array_probabilities[$best_proba] = $array_probabilities[$best_proba] - ($array_probabilities[$best_proba] * $coef);
+         if( count($array_probabilities) > 1 ) {
+             $count = count($array_probabilities);
+             $coef =  1 - ( $count * $coefPart );
+             if( $coef <= 0.5 ) $coef = 0.5;
+             $array_probabilities[$best_proba] = $array_probabilities[$best_proba] - ($array_probabilities[$best_proba] * $coef);
+         }
 
-        if( $array_probabilities[$best_proba] >= $min ) {
-            return (object) [
-                'gym_id' => $best_proba,
-                'probability' => round($array_probabilities[$best_proba])
-            ];
-        }
+         if( $array_probabilities[$best_proba] >= $min ) {
+             return (object) [
+                 'gym_id' => $best_proba,
+                 'probability' => round($array_probabilities[$best_proba])
+             ];
+         }
 
-        return false;
-    }
+         return false;
+     }
 
 }
