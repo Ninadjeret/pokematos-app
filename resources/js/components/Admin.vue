@@ -147,6 +147,12 @@
                         icon: 'explore',
                         permission: 'quest_edit'
                     },
+                    {
+                        label: 'Gérer les Boss Rocket',
+                        route: 'admin.rocket.bosses',
+                        icon: 'explore',
+                        permission: 'quest_edit'
+                    },
                 ]
             }
         },

@@ -1,0 +1,63 @@
+#app__container.template-admin-rocket-bosses {
+    background-color: $light_rocket;
+     .theme--dark.v-toolbar {
+         background-color: $primary_rocket;
+     }
+     .v-tabs__wrapper {
+         background-color: $primary_rocket;
+     }
+     .v-tabs__container--icons-and-text {
+         height: 140px;
+         background-color: $primary_rocket;
+         img {
+             height: 80px;
+             width: auto;
+             margin-bottom: 10px;
+             filter: grayscale(100%);
+         }
+     }
+     .v-tabs__item--active {
+         img {
+             filter: grayscale(0%);
+         }
+     }
+     .v-tabs__item:not(.v-tabs__item--active) {
+         opacity: 0.4;
+     }
+     .v-tabs__slider.accent {
+         background: #fff;
+     }
+     .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
+         background: $primary_rocket !important;
+     }
+     .v-card__text {
+         background: $light_rocket;
+         padding: 0;
+     }
+     .v-subheader {
+         color: #fff !important;
+         background: $primary_rocket;
+     }
+     .multiselect__tags {
+         border-radius: 0;
+         background: $light_rocket;
+         border-color: rgba(255, 255, 255, 0.1);
+         border-bottom: 0;
+         border-left: 0;
+         border-right: 0;
+         .multiselect__placeholder {
+             color: #fff;
+         }
+     }
+     .v-window {
+         background: #fff !important;
+     }
+     .setting.pokemon {
+         border-color: rgba(255, 255, 255, 0.1);
+         margin-left: 10px;
+         margin-right: 10px;
+         p {
+             color: #fff;
+         }
+     }
+}

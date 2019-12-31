@@ -13336,6 +13336,85 @@ body.logged-out .denied a {
   text-align: center;
 }
 
+#app__container.template-admin-rocket-bosses {
+  background-color: #403a45;
+}
+
+#app__container.template-admin-rocket-bosses .theme--dark.v-toolbar {
+  background-color: #362c40;
+}
+
+#app__container.template-admin-rocket-bosses .v-tabs__wrapper {
+  background-color: #362c40;
+}
+
+#app__container.template-admin-rocket-bosses .v-tabs__container--icons-and-text {
+  height: 140px;
+  background-color: #362c40;
+}
+
+#app__container.template-admin-rocket-bosses .v-tabs__container--icons-and-text img {
+  height: 80px;
+  width: auto;
+  margin-bottom: 10px;
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+}
+
+#app__container.template-admin-rocket-bosses .v-tabs__item--active img {
+  -webkit-filter: grayscale(0%);
+          filter: grayscale(0%);
+}
+
+#app__container.template-admin-rocket-bosses .v-tabs__item:not(.v-tabs__item--active) {
+  opacity: 0.4;
+}
+
+#app__container.template-admin-rocket-bosses .v-tabs__slider.accent {
+  background: #fff;
+}
+
+#app__container.template-admin-rocket-bosses .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
+  background: #362c40 !important;
+}
+
+#app__container.template-admin-rocket-bosses .v-card__text {
+  background: #403a45;
+  padding: 0;
+}
+
+#app__container.template-admin-rocket-bosses .v-subheader {
+  color: #fff !important;
+  background: #362c40;
+}
+
+#app__container.template-admin-rocket-bosses .multiselect__tags {
+  border-radius: 0;
+  background: #403a45;
+  border-color: rgba(255, 255, 255, 0.1);
+  border-bottom: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+#app__container.template-admin-rocket-bosses .multiselect__tags .multiselect__placeholder {
+  color: #fff;
+}
+
+#app__container.template-admin-rocket-bosses .v-window {
+  background: #fff !important;
+}
+
+#app__container.template-admin-rocket-bosses .setting.pokemon {
+  border-color: rgba(255, 255, 255, 0.1);
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#app__container.template-admin-rocket-bosses .setting.pokemon p {
+  color: #fff;
+}
+
 html {
   font-size: 10px !important;
 }

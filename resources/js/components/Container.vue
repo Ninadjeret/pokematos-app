@@ -1,5 +1,5 @@
 <template>
-<div id="app__container" :class="'template-'+$route.name.replace('.', '-')" data-app v-if="currentCity && currentCity !== 'undefined'">
+<div id="app__container" :class="'template-'+$route.name.split('.').join('-')" data-app v-if="currentCity && currentCity !== 'undefined'">
         <v-toolbar fixed app color="primary" dark>
             <v-btn v-if="$route.meta.parent" :to="{ name: $route.meta.parent}" icon><v-icon>arrow_back</v-icon></v-btn>
             <v-spacer class="hidden-md-and-up" v-if="$route.name == 'map'"></v-spacer>
