@@ -60,7 +60,7 @@ class MigrateJenny extends Command
 
         $this->info("Récupération des roles de la guild {$guild->name}");
         $roles = $discord->guild->getGuildRoles([
-            'guild.id' => intval(377559922214305792)
+            'guild.id' => intval($discord_id)
         ]);
 
         $roleCategories = RoleCategory::where('guild_id', $guild->id)->get()->toArray();
