@@ -38,7 +38,7 @@ class Role extends Model {
         return Guild::find($this->guild_id);
     }
 
-    public function getColorAttribute($value) {        
+    public function getColorAttribute($value) {
         return Helpers::sanitizeColor($value);
     }
 
