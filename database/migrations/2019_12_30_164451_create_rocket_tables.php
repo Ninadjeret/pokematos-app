@@ -25,12 +25,13 @@ class CreateRocketTables extends Migration
 
         Schema::create('rocket_invasions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('city_id')->nullable();
-            $table->unsignedInteger('stop_id')->nullable();
-            $table->unsignedInteger('boss_id')->nullable();
-            $table->unsignedInteger('pokemon_step1');
-            $table->unsignedInteger('pokemon_step2');
-            $table->unsignedInteger('pokemon_step3');
+            $table->integer('city_id')->nullable();
+            $table->integer('stop_id')->nullable();
+            $table->date('date');
+            $table->integer('boss_id')->nullable();
+            $table->integer('pokemon_step1')->nullable();
+            $table->integer('pokemon_step2')->nullable();
+            $table->integer('pokemon_step3')->nullable();
             $table->timestamps();
         });
 
@@ -53,7 +54,7 @@ class CreateRocketTables extends Migration
             ],
         ];
         foreach( $bosses as $boss ) {
-            DB::table('rocket_bosses')->insert($boss);            
+            DB::table('rocket_bosses')->insert($boss);
         }
     }
 

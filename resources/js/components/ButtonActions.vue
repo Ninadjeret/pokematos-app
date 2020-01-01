@@ -13,6 +13,12 @@
                 <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
                 <i class="material-icons">refresh</i>
             </button>
+            <button v-on:click="toggleMap()" class="action" id="refresh">
+                <span v-if="mode == 'base'">Radar Rocket</span>
+                <span v-else>Radar normal</span>
+                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+                <i class="material-icons">people_alt</i>
+            </button>
         </div>
         <div class="launcher">
             <button id="launcher" v-on:click="toggleMenu()">
@@ -26,6 +32,7 @@
 <script>
 import moment from 'moment';
 export default {
+    props: ['mode'],
     data() {
         return {
             'menuClass': ''
@@ -51,6 +58,10 @@ export default {
         },
         toggleMenu() {
              this.menuClass = ( this.menuClass == 'open' ) ? '' : 'open' ;
+        },
+        toggleMap() {
+            this.$emit('toggle-map');
+            this.toggleMenu();
         }
     }
 }

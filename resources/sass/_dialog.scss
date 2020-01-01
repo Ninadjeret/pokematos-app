@@ -62,6 +62,65 @@
             }
         }
     }
+    .create-rocket-boss__wrapper ul {
+        list-style-type: none;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding-left: 0;
+        &.selected-boss {
+            .unselected {
+                opacity: 0.4;
+                img {
+                    filter: grayscale(100);
+                }
+            }
+            .selected {
+                opacity: 1;
+                img {
+                    filter: grayscale(0);
+                }
+            }
+        }
+        li {
+
+            width: 25%;
+            text-align: center;
+            cursor: pointer;
+            span {
+                font-family: 'Teko';
+                font-size: 18px;
+            }
+        }
+    }
+    .rocket-boss-pokemon__wrapper {
+        .choices {
+            .choice {
+                width:33.33333%;
+                float:left;
+                background:none;
+                .multiselect__tags {
+                    padding: 0px;
+                    border-radius: 0;
+                    min-height: 90px;
+                    .multiselect__placeholder, .multiselect__input {
+                        line-height: 90px;
+                        width: 90px;
+                        text-align: center;
+                        font-family: 'Teko';
+                        font-size: 42px;
+                        margin-bottom: 7px;
+                    }
+                    .multiselect__single {
+                        img {
+                            max-width: 90px;
+                            height: auto;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 .v-dialog__content .dialog__wrap {
     overflow-y: scroll;

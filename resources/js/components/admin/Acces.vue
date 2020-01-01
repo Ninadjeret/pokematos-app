@@ -88,6 +88,10 @@
                     {
                         label: 'Mettre à jour les quêtes',
                         value: 'quest_edit',
+                    },
+                    {
+                        label: 'Mettre à jour les Boss Rocket',
+                        value: 'rocket_bosses_edit',
                     }
                 ],
             }

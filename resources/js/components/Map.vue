@@ -7,7 +7,12 @@
             :zoom=13>
             <l-tile-layer :url="url"></l-tile-layer>
         </l-map>
-        <button-actions @localize="localize()" @showfilters="dialog = true"></button-actions>
+        <button-actions
+            v-bind:mode="mode"
+            @localize="localize()"
+            @showfilters="dialog = true"
+            @toggle-map="toggleMap()"
+        ></button-actions>
         <gym-modal ref="gymModal"></gym-modal>
 
         <v-dialog v-model="dialog" max-width="290" content-class="list-filters">
@@ -37,6 +42,9 @@
             return {
               map: null,
               url: 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+              urlBase: 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+              urlRocket: 'https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+              mode: 'base',
               center: [47.413220, -1.219482],
               bounds: null,
               markers: [],
@@ -81,6 +89,17 @@
           this.localize();
         },
         methods: {
+            toggleMap() {
+                if(this.mode == 'base') {
+                    this.mode = 'rocket';
+                    this.$emit('changeMode', this.mode);
+                    this.url = this.urlRocket;
+                } else {
+                    this.mode = 'base';
+                    this.$emit('changeMode', this.mode);
+                    this.url = this.urlBase;
+                };
+            },
             displayPlayerOnMap() {
                 const that = this;
                 if (navigator.geolocation) {

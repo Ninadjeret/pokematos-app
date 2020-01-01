@@ -11545,6 +11545,73 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   background: #5a6cae;
 }
 
+.modal__screen .create-rocket-boss__wrapper ul {
+  list-style-type: none;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+  flex-wrap: wrap;
+  padding-left: 0;
+}
+
+.modal__screen .create-rocket-boss__wrapper ul.selected-boss .unselected {
+  opacity: 0.4;
+}
+
+.modal__screen .create-rocket-boss__wrapper ul.selected-boss .unselected img {
+  -webkit-filter: grayscale(100);
+          filter: grayscale(100);
+}
+
+.modal__screen .create-rocket-boss__wrapper ul.selected-boss .selected {
+  opacity: 1;
+}
+
+.modal__screen .create-rocket-boss__wrapper ul.selected-boss .selected img {
+  -webkit-filter: grayscale(0);
+          filter: grayscale(0);
+}
+
+.modal__screen .create-rocket-boss__wrapper ul li {
+  width: 25%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.modal__screen .create-rocket-boss__wrapper ul li span {
+  font-family: "Teko";
+  font-size: 18px;
+}
+
+.modal__screen .rocket-boss-pokemon__wrapper .choices .choice {
+  width: 33.33333%;
+  float: left;
+  background: none;
+}
+
+.modal__screen .rocket-boss-pokemon__wrapper .choices .choice .multiselect__tags {
+  padding: 0px;
+  border-radius: 0;
+  min-height: 90px;
+}
+
+.modal__screen .rocket-boss-pokemon__wrapper .choices .choice .multiselect__tags .multiselect__placeholder,
+.modal__screen .rocket-boss-pokemon__wrapper .choices .choice .multiselect__tags .multiselect__input {
+  line-height: 90px;
+  width: 90px;
+  text-align: center;
+  font-family: "Teko";
+  font-size: 42px;
+  margin-bottom: 7px;
+}
+
+.modal__screen .rocket-boss-pokemon__wrapper .choices .choice .multiselect__tags .multiselect__single img {
+  max-width: 90px;
+  height: auto;
+}
+
 .v-dialog__content .dialog__wrap {
   overflow-y: scroll;
   overflow-y: overlay;
@@ -13337,20 +13404,24 @@ body.logged-out .denied a {
 }
 
 #app__container.template-admin-rocket-bosses {
-  background-color: #403a45;
+  background-color: #2a2a2a;
+}
+
+#app__container.template-admin-rocket-bosses .v-content {
+  background-color: #2a2a2a;
 }
 
 #app__container.template-admin-rocket-bosses .theme--dark.v-toolbar {
-  background-color: #362c40;
+  background-color: #222;
 }
 
 #app__container.template-admin-rocket-bosses .v-tabs__wrapper {
-  background-color: #362c40;
+  background-color: #222;
 }
 
 #app__container.template-admin-rocket-bosses .v-tabs__container--icons-and-text {
   height: 140px;
-  background-color: #362c40;
+  background-color: #222;
 }
 
 #app__container.template-admin-rocket-bosses .v-tabs__container--icons-and-text img {
@@ -13371,26 +13442,26 @@ body.logged-out .denied a {
 }
 
 #app__container.template-admin-rocket-bosses .v-tabs__slider.accent {
-  background: #fff;
+  background: #d4271b;
 }
 
 #app__container.template-admin-rocket-bosses .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
-  background: #362c40 !important;
+  background: #d4271b !important;
 }
 
 #app__container.template-admin-rocket-bosses .v-card__text {
-  background: #403a45;
+  background: #2a2a2a;
   padding: 0;
 }
 
 #app__container.template-admin-rocket-bosses .v-subheader {
   color: #fff !important;
-  background: #362c40;
+  background: #222;
 }
 
 #app__container.template-admin-rocket-bosses .multiselect__tags {
   border-radius: 0;
-  background: #403a45;
+  background: #2a2a2a;
   border-color: rgba(255, 255, 255, 0.1);
   border-bottom: 0;
   border-left: 0;
@@ -13398,7 +13469,7 @@ body.logged-out .denied a {
 }
 
 #app__container.template-admin-rocket-bosses .multiselect__tags .multiselect__placeholder {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 #app__container.template-admin-rocket-bosses .v-window {
@@ -13412,7 +13483,200 @@ body.logged-out .denied a {
 }
 
 #app__container.template-admin-rocket-bosses .setting.pokemon p {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+#app__container.template-admin-rocket-bosses .v-card:not(.v-sheet--tile):not(.v-card--shaped) {
+  border-radius: 0;
+}
+
+#app__container.mode-rocket.template-map .v-toolbar__title img {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+}
+
+#app__container.mode-rocket.template-map .theme--dark.v-toolbar {
+  background-color: #222;
+}
+
+#app__container.mode-rocket.template-map .v-item-group.v-bottom-nav .v-btn {
+  background-color: #222 !important;
+  color: rgba(255, 255, 255, 0.2) !important;
+}
+
+#app__container.mode-rocket.template-map footer .theme--light.v-bottom-nav a.v-btn--active {
+  color: #d4271b !important;
+}
+
+#app__container.mode-rocket.template-map .map__actions #launcher {
+  background-color: #d4271b;
+}
+
+.modal__action.create-rocketboss {
+  color: #2a2a2a !important;
+  font-family: "Teko";
+  font-size: 19px;
+}
+
+.modal__action.create-rocketboss i {
+  color: #d4271b;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card,
+.v-dialog.gym-modal.stop.rocketboss .v-card {
+  background: #2a2a2a;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__content ul li a,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__content ul li a {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap h3,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap h3 {
+  color: #d4271b;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .step__title,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .step__title {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .create-rocket-boss__wrapper img,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .create-rocket-boss__wrapper img {
+  margin-bottom: 10px;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .create-rocket-boss__wrapper span,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .create-rocket-boss__wrapper span {
   color: #fff;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .bt,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .bt {
+  background: #d4271b;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .bt.modal__action.cancel,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .bt.modal__action.cancel {
+  background: #222;
+  line-height: 20px;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 12px;
+  padding: 10px 30px;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .bt.modal__action.cancel:before,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .bt.modal__action.cancel:before {
+  height: 30px;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .button--close,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .button--close {
+  background: #222;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .choices p,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .choices p {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .choices .multiselect__content-wrapper,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .choices .multiselect__content-wrapper {
+  background: #2a2a2a;
+  border: #222;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .choices .multiselect__content-wrapper .multiselect__element,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .choices .multiselect__content-wrapper .multiselect__element {
+  background: #2a2a2a;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .multiselect__tags,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .multiselect__tags {
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  /*border-right: 1px solid rgba(255, 255, 255, 0.1);*/
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .multiselect__tags:last-child,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .multiselect__tags:last-child {
+  border-right: none;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .multiselect__tags .multiselect__single,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .multiselect__tags .multiselect__single {
+  background: transparent;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .rocket_detail,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .rocket_detail {
+  display: -webkit-box;
+  display: flex;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .rocket_detail p,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .rocket_detail p {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 20px 10px 0 0;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .rocket_pokemons,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .rocket_pokemons {
+  width: 33%;
+  float: left;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .rocket_pokemons img,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .rocket_pokemons img {
+  max-width: 100px;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .rocket_pokemons .rocket_unknown,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .rocket_pokemons .rocket_unknown {
+  display: inline-block;
+  line-height: 100px;
+  font-family: "Teko";
+  font-size: 70px;
+}
+
+.rocket_invasion a {
+  margin-top: 15px;
+  text-decoration: none;
+  width: 100%;
+  padding: 5px 20px;
+  display: inline-block;
+  background: #2a2a2a;
+  text-align: left;
+}
+
+.rocket_invasion a img {
+  float: left;
+  width: 60px;
+  height: auto;
+}
+
+.rocket_invasion a p {
+  margin: 3px 0 0 0;
+  font-family: "Teko";
+  font-size: 23px;
+  color: #d4271b !important;
+}
+
+.rocket_invasion a i {
+  color: #d4271b !important;
 }
 
 html {

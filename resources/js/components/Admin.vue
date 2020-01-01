@@ -150,8 +150,8 @@
                     {
                         label: 'Gérer les Boss Rocket',
                         route: 'admin.rocket.bosses',
-                        icon: 'explore',
-                        permission: 'quest_edit'
+                        icon: 'people_alt',
+                        permission: 'rocket_bosses_edit'
                     },
                 ]
             }

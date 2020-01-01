@@ -103,7 +103,10 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     //Rocket
     Route::get('rocket/bosses', 'RocketController@getBosses');
-    Route::put('rocket/bosses/{boss}', 'RocketController@updateBoss');    
+    Route::put('rocket/bosses/{boss}', 'RocketController@updateBoss');
+    Route::post('user/cities/{city}/rocket/invasions', 'RocketController@createInvasion');
+    Route::put('user/cities/{city}/rocket/invasions/{invasion}', 'RocketController@updateInvasion');  
+    Route::delete('user/cities/{city}/rocket/invasions/{invasion}', 'RocketController@deleteInvasion');
 
 });
 
