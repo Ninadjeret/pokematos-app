@@ -13560,7 +13560,12 @@ body.logged-out .denied a {
 .v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .bt,
 .v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .bt {
   background: #d4271b;
-  color: rgba(255, 255, 255, 0.8);
+  color: white;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .bt:before,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .bt:before {
+  border: none;
 }
 
 .v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .bt.modal__action.cancel,
@@ -13574,12 +13579,18 @@ body.logged-out .denied a {
 
 .v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .bt.modal__action.cancel:before,
 .v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .bt.modal__action.cancel:before {
+  border: 1px solid rgba(255, 255, 255, 0.3);
   height: 30px;
 }
 
 .v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .button--close,
 .v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .button--close {
   background: #222;
+}
+
+.v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .button--close:before,
+.v-dialog.gym-modal.stop.rocketboss .v-card .dialog__wrap .button--close:before {
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .v-dialog.gym-modal.stop.createrocketboss .v-card .dialog__wrap .choices p,
@@ -13677,6 +13688,65 @@ body.logged-out .denied a {
 
 .rocket_invasion a i {
   color: #d4271b !important;
+}
+
+.map-rocket {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 3500;
+  position: fixed;
+}
+
+.map-rocket h3 {
+  position: fixed;
+  z-index: 4000;
+  top: 20px;
+  width: 100%;
+  text-align: center;
+  color: #d4271b;
+  font-family: "Teko";
+  font-size: 39px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.map-rocket .button--close {
+  position: fixed;
+  z-index: 4000;
+  bottom: 20px;
+  right: calc( 50% - 25px );
+  width: 45px;
+  min-width: 50px;
+  height: 50px;
+  background: #222;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 10px;
+  border-radius: 50%;
+  box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+  padding: 0;
+}
+
+.map-rocket .button--close i {
+  font-size: 18px;
+  line-height: 50px;
+}
+
+.map-rocket .button--close:before {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  content: "";
+  width: 40px;
+  height: 40px;
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  top: 5px;
+  left: 5px;
+}
+
+.map__actions.mode-rocket {
+  display: none;
 }
 
 html {

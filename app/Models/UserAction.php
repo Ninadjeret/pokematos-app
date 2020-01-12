@@ -9,8 +9,7 @@ class UserAction extends Model {
 
     protected $table = 'user_actions';
     protected $fillable = [
-        'raid_id',
-        'quest_instance_id',
+        'relation_id',
         'source',
         'type',
         'url',

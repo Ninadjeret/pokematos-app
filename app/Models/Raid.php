@@ -67,13 +67,15 @@ class Raid extends Model {
 
     public function getLastUserAction( $include_auto = false ) {
         if( $include_auto ) {
-            $annonce = UserAction::where('raid_id', $this->id)
+            $annonce = UserAction::where('type', 'like', 'raid-%')
+                ->where('relation_id', $this->id)
                 ->where('type', '!=', 'raid-duplicate')
                 ->orderBy('created_at', 'desc')
                 ->first();
             return $annonce;
         }
-        $annonce = UserAction::where('raid_id', $this->id)
+        $annonce = UserAction::where('type', 'like', 'raid-%')
+            ->where('relation_id', $this->id)
             ->where('type', '!=', 'raid-duplicate')
             ->where('source', '!=', 'auto')
             ->orderBy('created_at', 'desc')
@@ -82,7 +84,8 @@ class Raid extends Model {
     }
 
     public function getUserActions() {
-        $annonces = UserAction::where('raid_id', $this->id)
+        $annonces = UserAction::where('type', 'like', 'raid-%')
+            ->where('relation_id', $this->id)
             ->orderBy('created_at', 'asc')
             ->get();
         return $annonces;

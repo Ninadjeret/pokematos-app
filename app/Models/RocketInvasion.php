@@ -64,4 +64,16 @@ class RocketInvasion extends Model
         }
         return $pokemon;
     }
+
+    public function getStop() {
+        return Stop::find( $this->gym_id );
+    }
+
+    public function getUserActions() {
+        $annonces = UserAction::where('type', 'like', 'rocket-invasion-%')
+            ->where('relation_id', $this->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        return $annonces;
+    }
 }

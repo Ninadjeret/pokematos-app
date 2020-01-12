@@ -119,7 +119,10 @@
             }
             .bt {
                 background: $accent_rocket;
-                color: rgba(255, 255, 255, 0.8);
+                color: rgba(255, 255, 255, 1);
+                &:before {
+                    border: none;
+                }
             }
             .bt.modal__action.cancel {
                 background: $primary_rocket;
@@ -128,11 +131,15 @@
                 font-size: 12px;
                 padding: 10px 30px;
                 &:before {
+                    border: 1px solid rgba(255, 255, 255, 0.3);
                     height: 30px;
                 }
             }
             .button--close {
                 background: $primary_rocket;
+                &:before {
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                }
             }
             .choices {
                 p {
@@ -213,4 +220,58 @@
             color: $accent_rocket !important;
         }
     }
+}
+
+.map-rocket {
+    top:0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    z-index: 3500;
+    position: fixed;
+    h3 {
+        position: fixed;
+        z-index: 4000;
+        top: 20px;
+        width: 100%;
+        text-align: center;
+        color: #d4271b;
+        font-family: 'Teko';
+        font-size: 39px;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    }
+    .button--close {
+        position: fixed;
+        z-index: 4000;
+        bottom: 20px;
+        right: calc( 50% - 25px );
+        width: 45px;
+        min-width: 50px;
+        height: 50px;
+        background: $primary_rocket;
+        border: none;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 10px;
+        border-radius: 50%;
+        box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+        padding: 0;
+        i {
+            font-size: 18px;
+            line-height: 50px;
+        }
+        &:before {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            content: "";
+            width: 40px;
+            height: 40px;
+            display: block;
+            position: absolute;
+            border-radius: 50%;
+            top: 5px;
+            left: 5px;
+        }
+    }
+}
+.map__actions.mode-rocket {
+    display: none;
 }

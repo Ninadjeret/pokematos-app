@@ -1,5 +1,6 @@
 <template>
-    <div style="height: 100%;">
+    <div :class="'map-'+mode" style="height: 100%;">
+        <h3 v-if="mode == 'rocket'">Radar Rocket</h3>
         <l-map
             style="height: 100%; width: 100%"
             ref="map"
@@ -7,11 +8,12 @@
             :zoom=13>
             <l-tile-layer :url="url"></l-tile-layer>
         </l-map>
+        <button v-if="mode == 'rocket'" class="button--close" v-on:click="displayRocketMap"><i class="material-icons">close</i></button>
         <button-actions
             v-bind:mode="mode"
             @localize="localize()"
             @showfilters="dialog = true"
-            @toggle-map="toggleMap()"
+            @toggle-map="displayRocketMap"
         ></button-actions>
         <gym-modal ref="gymModal"></gym-modal>
 
@@ -82,24 +84,13 @@
         },
         mounted() {
             this.$nextTick(() => {
-              this.map = this.$refs.map.mapObject // work as expected
+              this.map = this.$refs.map.mapObject
               this.addMarkers();
 
           });
           this.localize();
         },
         methods: {
-            toggleMap() {
-                if(this.mode == 'base') {
-                    this.mode = 'rocket';
-                    this.$emit('changeMode', this.mode);
-                    this.url = this.urlRocket;
-                } else {
-                    this.mode = 'base';
-                    this.$emit('changeMode', this.mode);
-                    this.url = this.urlBase;
-                };
-            },
             displayPlayerOnMap() {
                 const that = this;
                 if (navigator.geolocation) {
@@ -114,7 +105,7 @@
                 }
             },
             showModal( gym ) {
-                this.$refs.gymModal.showModal( gym );
+                this.$refs.gymModal.showModal( gym, this.mode );
             },
             addMarkers() {
                 const that = this;
@@ -125,10 +116,11 @@
                 let count = 0;
                 if( this.gyms && this.gyms.length > 0 ) {
                     this.gyms.forEach(function(gym) {
-                        if( gym.gym ) {
+                        if( gym.invasion && that.mode == 'rocket' ) {
+                            that.addRocketMarker(gym);
+                        } else if( gym.gym && that.mode == 'base' ) {
                             that.addMarker(gym);
-                        }
-                        if( count <= limit && zoom >= 15 && !gym.gym && mapBounds.contains([gym.lat, gym.lng]) ) {
+                        } else if( count <= limit && zoom >= 15 && !gym.gym && mapBounds.contains([gym.lat, gym.lng]) && that.mode == 'base' ) {
                             count++;
                             that.addMarker(gym);
                         }
@@ -260,6 +252,23 @@
                 mapMarker.gym = gym;
                 this.markers.push(mapMarker);
             },
+            addRocketMarker(gym) {
+                const that2 = this;
+                let url = 'https://assets.profchen.fr/img/map/map_marker_rocket_'+gym.invasion.boss.name+'.png';
+                var mapMarker = L.marker([gym.lat, gym.lng], {
+                    icon: new L.DivIcon({
+                        className: 'map-marker__wrapper',
+                        html: '<img class="map-marker__img quest" src="'+url+'"/>',
+                        iconAnchor: [17, 35],
+                    }),
+                    zIndexOffset: 10,
+                }).addTo(this.$refs.map.mapObject).on('click', function(e){
+                    that2.showModal( e.target.gym );
+                });
+                console.log(gym.name);
+                mapMarker.gym = gym;
+                this.markers.push(mapMarker);
+            },
             localize() {
                 const that = this;
                 that.$refs.map.mapObject.panTo(new L.LatLng(this.currentCity.lat, this.currentCity.lng));
@@ -268,6 +277,19 @@
                     navigator.geolocation.getCurrentPosition(function (position) {
                         that.$refs.map.mapObject.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
                     });
+                }
+            },
+            displayRocketMap() {
+                console.log('tutu')
+                if( this.mode == 'base' ) {
+                    console.log('pilou')
+                    this.mode = 'rocket';
+                    this.url = this.urlRocket;
+                    this.addMarkers();
+                } else {
+                    this.mode = 'base';
+                    this.url = this.urlBase;
+                    this.addMarkers();
                 }
             },
         }

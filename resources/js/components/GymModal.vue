@@ -192,7 +192,8 @@
                     </ul>
                 </div>
                 <div class="footer--actions">
-                    <button class="button--close" v-on:click="setScreenTo('default')"><i class="material-icons">close</i></button>
+                    <button v-if="mode == 'base'" class="button--close" v-on:click="setScreenTo('default')"><i class="material-icons">close</i></button>
+                    <button v-if="mode == 'rocket'" class="button--close" v-on:click="hideModal"><i class="material-icons">close</i></button>
                 </div>
             </div>
 
@@ -348,6 +349,7 @@ export default {
             questSearch: null,
             questToSubmit: false,
             raidStatus: 'none',
+            mode: 'base',
             bosses: [],
             selectedBoss: {
                 boss: false,
@@ -438,7 +440,7 @@ export default {
               this.bosses = res.data;
             });
         },
-        showModal( gym ) {
+        showModal( gym, mode ) {
             this.gym = gym;
             this.dialog = true;
             this.createRaidData.pokemon = false;
@@ -446,6 +448,11 @@ export default {
             this.raidStatus = 'none';
             this.getRaidData();
             this.getInvasionData();
+            this.mode = 'base';
+            if( mode == 'rocket' ) {
+                this.mode = 'rocket';
+                this.modalScreen = 'RocketBoss';
+            }
         },
         hideModal() {
             this.dialog = false;

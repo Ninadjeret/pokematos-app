@@ -35,6 +35,36 @@ class CreateRocketTables extends Migration
             $table->timestamps();
         });
 
+        Schema::create('rocket_connectors', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->unsignedInteger('guild_id');
+            $table->string('channel_discord_id');
+
+            $table->string('filter_boss_type')->default('none'); //none, zone, gym
+            $table->text('filter_boss_bosses')->nullable();
+
+            $table->string('filter_stop_type')->default('none'); //none, zone, gym
+            $table->text('filter_stop_zone')->nullable();
+            $table->text('filter_stop_stop')->nullable();
+
+            $table->string('format')->default('auto'); //auto, custom
+            $table->string('custom_message')->nullable();
+            $table->boolean('delete_after_end')->default(true);
+
+            $table->timestamps();
+        });
+
+        Schema::create('rocket_messages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('invasion_id');
+            $table->unsignedInteger('guild_id');
+            $table->string('message_discord_id');
+            $table->string('channel_discord_id');
+            $table->boolean('delete_after_end')->default(true);
+            $table->timestamps();
+        });
+
         $bosses = [
             [
                 'name' => 'Cliff',
@@ -65,7 +95,7 @@ class CreateRocketTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rocket_bosses');
-        Schema::dropIfExists('rocket_invasions');
+        //Schema::dropIfExists('rocket_bosses');
+        //Schema::dropIfExists('rocket_invasions');
     }
 }

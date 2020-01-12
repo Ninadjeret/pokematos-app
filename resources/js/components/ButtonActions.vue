@@ -1,5 +1,5 @@
 <template>
-    <div ref="buttonactions" :class="'map__actions '+menuClass">
+    <div ref="buttonactions" :class="'map__actions '+menuClass+' mode-'+mode">
         <div class="map__overlay"></div>
         <div class="actions">
             <button v-if="this.$route.name == 'map'" v-on:click="localise()" class="action" id="findme">
@@ -14,8 +14,7 @@
                 <i class="material-icons">refresh</i>
             </button>
             <button v-on:click="toggleMap()" class="action" id="refresh">
-                <span v-if="mode == 'base'">Radar Rocket</span>
-                <span v-else>Radar normal</span>
+                <span>Radar Rocket</span>
                 <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
                 <i class="material-icons">people_alt</i>
             </button>

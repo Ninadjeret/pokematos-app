@@ -367,6 +367,7 @@ class User extends Authenticatable
         }
 
         $user->refreshDiscordToken();
+        sleep(1);
         $user_guilds = $user->getDiscordMeGuilds();
 
         if( !$user_guilds ) {
