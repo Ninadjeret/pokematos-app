@@ -2,7 +2,25 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Log;
+
 class Helpers {
+
+    public static function extractIds( $array ) {
+        if( !is_array($array) ) {
+            return false;
+        }
+        $ids = [];
+        foreach( $array as $item ) {
+            if( is_object($item) && property_exists($item, 'id') ) {
+                $ids[] = $item->id;
+            }
+            elseif( is_array($item) && array_key_exists('id', $item) ){
+                $ids[] = $item['id'];
+            }
+        }
+        return $ids;
+    }
 
     public static function sanitize( $string ) {
         $string = str_replace(' ', '-', $string);

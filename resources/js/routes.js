@@ -23,7 +23,9 @@ import AdminQuest from "./components/admin/quests/Quest.vue";
 import AdminLogs from "./components/admin/Logs.vue";
 
 import AdminRocketBosses from "./components/admin/rocket/Bosses.vue";
-import AdminRocketBoss from "./components/admin/rocket/Boss.vue";
+import AdminRocketHome from "./components/admin/rocket/Home.vue";
+import AdminRocketConnectors from "./components/admin/rocket/Connecteurs.vue";
+import AdminRocketConnector from "./components/admin/rocket/Connecteur.vue";
 
 import AdminRaidReportingHome from "./components/admin/RaidReporting.vue";
 import AdminRaidsConnectors from "./components/admin/raids/Connecteurs.vue";
@@ -235,6 +237,44 @@ const routes = [
                 ]
             },
             {
+                path: ":id/rocket",
+                name: "admin.rocket.home",
+                meta: {
+                    title: "Signalement de boss Rocket",
+                    parent: "admin"
+                },
+                component: AdminRocketHome,
+                children: [
+                    {
+                        path: "connectors",
+                        name: "admin.rocket.annonces",
+                        meta: {
+                            title: "Gérer les connecteurs",
+                            parent: "admin.rocket.home"
+                        },
+                        component: AdminRocketConnectors
+                    },
+                    {
+                        path: "connectors/add",
+                        name: "admin.rocket.annonces.add",
+                        meta: {
+                            title: "Nouveau connecteur",
+                            parent: "admin.rocket.annonces"
+                        },
+                        component: AdminRocketConnector
+                    },
+                    {
+                        path: "connectors/:invasion_connector_id",
+                        name: "admin.rocket.annonces.edit",
+                        meta: {
+                            title: "Modifier le connecteur",
+                            parent: "admin.rocket.annonces"
+                        },
+                        component: AdminRocketConnector
+                    }
+                ]
+            },
+            {
                 path: "map",
                 name: "admin.map",
                 meta: {
@@ -350,15 +390,6 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminRocketBosses
-            },
-            {
-                path: "rocket/bosses/:rocket_boss_id",
-                name: "admin.rocket.boss",
-                meta: {
-                    title: "Modifier le boss Rocket",
-                    parent: "admin.rocket.bosses"
-                },
-                component: AdminRocketBoss
             }
         ]
     }

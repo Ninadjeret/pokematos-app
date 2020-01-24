@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Stop;
+use App\Models\Zone;
 use App\Models\Guild;
 use App\Helpers\Helpers;
+use App\Models\RocketBoss;
 use RestCord\DiscordClient;
 use App\Models\RocketMessage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 
 class RocketConnector extends Model
@@ -28,8 +32,52 @@ class RocketConnector extends Model
         'filter_stop_zone' => 'array',
         'filter_stop_stop' => 'array',
     ];
+    protected $appends = ['pokemon', 'thumbnail'];
 
     public $roles, $emojis, $channels;
+
+    public function getFilterStopZoneAttribute( $value ) {
+        if( empty($value) ) {
+            return [];
+        }
+        $zones = [];
+        foreach( json_decode($value) as $zone_id ) {
+            $zone = Zone::find($zone_id);
+            if( $zone ) {
+                $zones[] = $zone;
+            }
+        }
+        return $zones;
+    }
+
+    public function getFilterStopStopAttribute( $value ) {
+        if( empty($value) ) {
+            return [];
+        }
+        $stops = [];
+        foreach( json_decode($value) as $stop_id ) {
+            Log::debug( print_r($boss_id, true) );
+            $stop = Stop::find($stop_id);
+            if( $stop ) {
+                $stops[] = $stop;
+            }
+        }
+        return $stops;
+    }
+
+    public function getFilterBossBossesAttribute( $value ) {
+        if( empty($value) ) {
+            return [];
+        }
+        $bosses = [];
+        foreach( json_decode($value) as $boss_id ) {
+            $boss = RocketBoss::find($boss_id);
+            if( $boss ) {
+                $bosses[] = $boss;
+            }
+        }
+        return $bosses;
+    }
 
     public function postMessage( $invasion, $announce ) {
         if( empty( $this->channel_discord_id ) ) return false;
