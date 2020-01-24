@@ -41,7 +41,7 @@
                 <div class="dialog__content">
                     <ul>
                         <li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
-                        <li v-if="raidStatus == 'none' && gym.gym"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
+                        <li v-if="gym.gym && (raidStatus == 'none' || gym.raid.egg_level == 6)"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
                         <li v-if="!gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">explore</i><span>Annoncer une quête</span></a></li>
                         <li v-if="gym.quest && ( !gym.quest.quest_id || !gym.quest.reward_type )"><a class="modal__action update-quest" v-on:click="setScreenTo('updateQuest')"><i class="material-icons">fingerprint</i><span>Préciser la quête</span></a></li>
                         <li v-if="gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="deleteQuestConfirm()"><i class="material-icons">delete</i><span>Supprimer la quête</span></a></li>
