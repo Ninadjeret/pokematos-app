@@ -31,17 +31,34 @@ class RocketConnector extends Model
         'filter_boss_bosses' => 'array',
         'filter_stop_zone' => 'array',
         'filter_stop_stop' => 'array',
+        'filtered_bosses' => 'array',
+        'filtered_zones' => 'array',
+        'filtered_stops' => 'array',
     ];
-    protected $appends = ['pokemon', 'thumbnail'];
+    protected $appends = ['filtered_bosses', 'filtered_zones', 'filtered_stops'];
 
     public $roles, $emojis, $channels;
 
-    public function getFilterStopZoneAttribute( $value ) {
-        if( empty($value) ) {
+    public function getFilteredBossesAttribute() {
+        if( empty($this->filter_boss_bosses) ) {
+            return [];
+        }
+        $bosses = [];
+        foreach( $this->filter_boss_bosses as $boss_id ) {
+            $boss = RocketBoss::find($boss_id);
+            if( $boss ) {
+                $bosses[] = $boss;
+            }
+        }
+        return $bosses;
+    }
+
+    public function getFilteredZonesAttribute() {
+        if( empty($this->filter_stop_zone) ) {
             return [];
         }
         $zones = [];
-        foreach( json_decode($value) as $zone_id ) {
+        foreach( $this->filter_stop_zone as $zone_id ) {
             $zone = Zone::find($zone_id);
             if( $zone ) {
                 $zones[] = $zone;
@@ -50,33 +67,18 @@ class RocketConnector extends Model
         return $zones;
     }
 
-    public function getFilterStopStopAttribute( $value ) {
-        if( empty($value) ) {
+    public function getFilteredStopsAttribute() {
+        if( empty($this->filter_stop_stop) ) {
             return [];
         }
         $stops = [];
-        foreach( json_decode($value) as $stop_id ) {
-            Log::debug( print_r($boss_id, true) );
-            $stop = Stop::find($stop_id);
+        foreach( $this->filter_stop_stop as $stop_id ) {
+            $stop = RocketBoss::find($stop_id);
             if( $stop ) {
                 $stops[] = $stop;
             }
         }
         return $stops;
-    }
-
-    public function getFilterBossBossesAttribute( $value ) {
-        if( empty($value) ) {
-            return [];
-        }
-        $bosses = [];
-        foreach( json_decode($value) as $boss_id ) {
-            $boss = RocketBoss::find($boss_id);
-            if( $boss ) {
-                $bosses[] = $boss;
-            }
-        }
-        return $bosses;
     }
 
     public function postMessage( $invasion, $announce ) {
@@ -137,9 +139,9 @@ class RocketConnector extends Model
         //Gestion des tags
         $patterns = array(
             'rocketboss_name' => html_entity_decode( $invasion->boss->name ),
-            'rocketboss_pokemon_1' => ( !empty($invasion->pokemon_step1) ) ? $invasion->pokemon_step1->name : '',
-            'rocketboss_pokemon_2' => ( !empty($invasion->pokemon_step2) ) ? $invasion->pokemon_step2->name : '',
-            'rocketboss_pokemon_3' => ( !empty($invasion->pokemon_step3) ) ? $invasion->pokemon_step3->name : '',
+            'rocketboss_pokemon_1' => ( !empty($invasion->pokemon_step1) ) ? $invasion->pokemon_step1->name : '?',
+            'rocketboss_pokemon_2' => ( !empty($invasion->pokemon_step2) ) ? $invasion->pokemon_step2->name : '?',
+            'rocketboss_pokemon_3' => ( !empty($invasion->pokemon_step3) ) ? $invasion->pokemon_step3->name : '?',
 
             'pokestop_nom' => $invasion->getStop()->niantic_name,
             'pokestop_nom_nettoye' => Helpers::sanitize($invasion->getStop()->niantic_name),
@@ -166,7 +168,7 @@ class RocketConnector extends Model
         }
 
         if( $username && strstr( $message, '@'.$username ) ) {
-            $user = $quest->getLastUserAction()->getUser();
+            $user = $invasion->getLastUserAction()->getUser();
             $message = str_replace('@'.$username, '<@!'.$user->discord_id.'>', $message);
         }
 
@@ -199,13 +201,12 @@ class RocketConnector extends Model
     }
 
     public function getEmbedMessage( $invasion, $announce ) {
-
         $stop = $invasion->getStop();
         $title = "Invasion de {$invasion->boss->name} au Pokéstop {$stop->name}";
         $img_url = $invasion->boss->thumbnail;
 
-        $description = ( !empty($invasion->pokemon_step1) ) ? ":one: {$invasion->pokemon_step1->name}" : ":one: ?" ;
-        $description .= ( !empty($invasion->pokemon_step2) ) ? ":two: {$invasion->pokemon_step2->name}" : ":two: ?" ;
+        $description = ( !empty($invasion->pokemon_step1) ) ? ":one: {$invasion->pokemon_step1->name}\r\n" : ":one: ?\r\n" ;
+        $description .= ( !empty($invasion->pokemon_step2) ) ? ":two: {$invasion->pokemon_step2->name}\r\n" : ":two: ?\r\n" ;
         $description .= ( !empty($invasion->pokemon_step3) ) ? ":three: {$invasion->pokemon_step3->name}" : ":three: ?" ;
 
         //On formatte le embed
@@ -217,9 +218,9 @@ class RocketConnector extends Model
                 'url' => $img_url
             ),
             'author' => array(
-                'name' => $quest->getStop()->name,
-                'url' => $quest->getStop()->google_maps_url,
-                'icon_url' => 'https://assets.profchen.fr/img/app/connector_pokestop.png'
+                'name' => $invasion->getStop()->name,
+                'url' => $invasion->getStop()->google_maps_url,
+                'icon_url' => 'https://assets.profchen.fr/img/app/connector_pokestop_rocket.png'
             ),
         );
 

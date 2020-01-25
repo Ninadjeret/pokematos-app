@@ -66,7 +66,7 @@ class RocketController extends Controller
                 'source' => 'map',
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => $user->id,
-                'relation_id' => $invasion->id,
+                'relation_id' => $stop->invasion->id,
                 'message_discord_id' => null,
                 'channel_discord_id' => null,
                 'guild_id' => null,
@@ -144,6 +144,13 @@ class RocketController extends Controller
 
         $stop = Stop::find($invasion->stop_id);
         $stop->touch();
+        event( new \App\Events\RocketInvasionDeleted( $invasion ) );
+        $announces = $invasion->getUserActions();
+        if( !empty($announces) ) {
+            foreach( $announces as $announce ) {
+                UserAction::destroy($announce->id);
+            }
+        }
         RocketInvasion::destroy($invasion->id);
         return response()->json(null, 204);
     }
@@ -204,6 +211,36 @@ class RocketController extends Controller
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         return response()->json($connector, 200);
+    }
+
+    public function updateConnector( Guild $guild, RocketConnector $connector, Request $request ) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
+        $connector->update([
+            'name' => ( isset( $request->name ) ) ? $request->name : $connector->name ,
+            'guild_id' => $guild->id,
+            'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : $connector->channel_discord_id ,
+            'filter_stop_type' => ( isset( $request->filter_stop_type ) ) ? $request->filter_stop_type : $connector->filter_stop_type ,
+            'filter_stop_zone' => ( isset( $request->filter_stop_zone ) ) ? Helpers::extractIds($request->filter_stop_zone) : $connector->filter_stop_zone ,
+            'filter_stop_gym' => ( isset( $request->filter_stop_stop ) ) ? Helpers::extractIds($request->filter_stop_stop) : $connector->filter_stop_stop ,
+            'filter_boss_type' => ( isset( $request->filter_boss_type ) ) ? $request->filter_boss_type : $connector->filter_boss_type ,
+            'filter_boss_bosses' => ( isset( $request->filter_boss_bosses ) ) ? Helpers::extractIds($request->filter_boss_bosses) : Helpers::extractIds($connector->filter_boss_bosses) ,
+            'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
+            'custom_message' => ( isset( $request->custom_message ) ) ? $request->custom_message : $connector->custom_message ,
+            'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : $connector->delete_after_end ,
+        ]);
+        return response()->json($connector, 200);
+    }
+
+    public function deleteConnector(Guild $guild, RocketConnector $connector, Request $request ) {
+        $user = Auth::user();
+        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
+        RocketConnector::destroy($connector->id);
+        return response()->json(null, 204);
     }
 
 }

@@ -17,7 +17,7 @@
                     <div class="setting">
                         <label>Channel</label>
                         <select v-if="channels" v-model="channel_discord_id">
-                            <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
+                            <option v-for="channel in channels" v-bind:key="channel.id" :value="channel.id">{{channel.name}}</option>
                         </select>
                     </div>
                     <div v-if="this.$route.params.quest_connector_id">
@@ -73,7 +73,7 @@
                                 track-by="id"
                                 label="name"
                                 :multiple="true"
-                                placeholder="Ajouter un objet">
+                                placeholder="Ajouter un boss">
                             </multiselect>
                         </div>
                         <v-subheader>Format de l'annonce</v-subheader>
@@ -89,8 +89,10 @@
                             <label>Message personnalisé</label>
                             <p class="description">
                                 Utilisez les tags suivants pour afficher des propriétés du raid :<br>
-                                {quete_recompense}<br>
-                                {quete_nom}<br>
+                                {rocketboss_name}<br>
+                                {rocketboss_pokemon_1}<br>
+                                {rocketboss_pokemon_2}<br>
+                                {rocketboss_pokemon_3}<br>
                                 {pokestop_nom}<br>
                                 {pokestop_nom_custom}<br>
                                 {pokestop_description}<br>
@@ -106,6 +108,10 @@
                                 <p class="description">Tous les messages d'annonces de quête liés à ce connecteurs seront supprimés dans la nuit</p>
                             </div>
                             <v-switch v-model="delete_after_end"></v-switch>
+                        </div>
+                        <div v-if="$route.params.invasion_connector_id">
+                            <v-subheader v-if="">Autres actions</v-subheader>
+                            <v-list-tile color="pink" @click="dialog = true">Supprimer le connecteur</v-list-tile>
                         </div>
                 </v-tab-item>
             </v-tabs-items>
@@ -176,15 +182,15 @@
                 axios.get('/api/user/guilds/'+this.$route.params.id+'/invasionconnectors/'+this.$route.params.invasion_connector_id).then( res => {
                     console.log( res.data )
                     this.name = res.data.name;
-                    this.channel_discord_id = res.data.channel_discord_id;
-                    this.filter_stop_type = res.data.filter_stop_type;
-                    this.filter_stop_zone = res.data.filter_stop_zone
-                    this.filter_stop_stop = res.data.filter_stop_stop
-                    this.filter_boss_type = res.data.filter_boss_type;
-                    this.filter_boss_bosses = res.data.filter_boss_bosses;
-                    this.format = res.data.format;
-                    this.custom_message = res.data.custom_message;
-                    this.delete_after_end = res.data.delete_after_end;
+                    this.channel_discord_id = res.data.channel_discord_id
+                    this.filter_stop_type = res.data.filter_stop_type
+                    this.filter_stop_zone = res.data.filtered_zones
+                    this.filter_stop_stop = res.data.filtered_stops
+                    this.filter_boss_type = res.data.filter_boss_type
+                    this.filter_boss_bosses = res.data.filtered_bosses
+                    this.format = res.data.format
+                    this.custom_message = res.data.custom_message
+                    this.delete_after_end = res.data.delete_after_end
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response.data ) {
@@ -238,7 +244,7 @@
             save( args ) {
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
-                axios.put('/api/user/guilds/'+this.$route.params.id+'/invasionconnectors/'+this.$route.params.quest_connector_id, args).then( res => {
+                axios.put('/api/user/guilds/'+this.$route.params.id+'/invasionconnectors/'+this.$route.params.invasion_connector_id, args).then( res => {
                     this.$store.commit('setSnackbar', {
                         message: 'Enregistrement effectué',
                         timeout: 1500
@@ -281,7 +287,7 @@
             destroy() {
                 this.dialog = false;
                     this.$store.commit('setSnackbar', {message: 'Suppression en cours'})
-                    axios.delete('/api/user/guilds/'+this.$route.params.id+'/invasionconnectors/'+this.$route.params.quest_connector_id).then( res => {
+                    axios.delete('/api/user/guilds/'+this.$route.params.id+'/invasionconnectors/'+this.$route.params.invasion_connector_id).then( res => {
                         this.$store.commit('setSnackbar', {
                             message: 'suppression effectuée',
                             timeout: 1500

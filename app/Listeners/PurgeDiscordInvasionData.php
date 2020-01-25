@@ -5,6 +5,7 @@ namespace App\Listeners;
 use GuzzleHttp\Client;
 use RestCord\DiscordClient;
 use App\Models\RocketMessage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -46,7 +47,6 @@ class PurgeDiscordInvasionData
         }
 
         elseif( $event instanceof \App\Events\DayChanged ) {
-
             $date = new \DateTime();
             $date->modify('- 1 day');
 

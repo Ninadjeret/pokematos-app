@@ -23,10 +23,9 @@ class RocketInvasionDeleted
      *
      * @return void
      */
-     public function __construct( RocketInvasion $invasion, UserAction $announce )
+     public function __construct( RocketInvasion $invasion )
      {
          $this->invasion = $invasion;
-         $this->announce = $announce;
      }
 
     /**
