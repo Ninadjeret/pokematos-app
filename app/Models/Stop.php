@@ -56,6 +56,8 @@ class Stop extends Model {
             return $this->getActiveRaid();
         } elseif( $this->getFutureRaid() ) {
             return $this->getFutureRaid();
+        } elseif( $this->getFutureRaidEx() ) {
+            return $this->getFutureRaidEx();
         } else {
             return false;
         }
@@ -96,7 +98,11 @@ class Stop extends Model {
             ->where('start_time', '<', $end->format('Y-m-d H:i:s') )
             ->first();
         if( !empty($raid) ) return $raid;
+        return false;
+    }
 
+    public function getFutureRaidEx() {
+        $begin = new \DateTime();
         $raidEx = Raid::where('gym_id', $this->id)
             ->where('start_time', '>', $begin->format('Y-m-d H:i:s') )
             ->where('ex', '1')
