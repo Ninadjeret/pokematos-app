@@ -133,6 +133,7 @@ Route::group(['middleware' => ['auth.bot']], function () {
 
     Route::post('bot/raids', 'BotController@addRaid');
     Route::post('bot/raids/imagedecode', 'BotController@imageDecode');
+    Route::post('bot/conversations', 'BotController@addConversation');
 
 });
 

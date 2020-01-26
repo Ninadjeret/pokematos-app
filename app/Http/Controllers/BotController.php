@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Raid;
 use App\Models\Guild;
 use GuzzleHttp\Client;
+use App\Models\UserAction;
 use RestCord\DiscordClient;
 use App\Models\RoleCategory;
 use Illuminate\Http\Request;
@@ -280,12 +281,12 @@ class BotController extends Controller {
         $guild = Guild::where('discord_id', $request->guild_id)->first();
         if( empty($guild) ) return response()->json('L\'ID de la guild n\'existe pas', 400);
 
-        $roleCategory ->update([
-            'name' => ($request->name) ? $request->name : $roleCategory->name,
-            'channel_discord_id' => ($request->channel_id) ? $request->channel_id : $roleCategory->channel_discord_id,
-            'restricted' => ($request->restricted) ? $request->restricted : $roleCategory->restricted,
+        $categorie ->update([
+            'name' => ($request->name) ? $request->name : $categorie->name,
+            'channel_discord_id' => ($request->channel_id) ? $request->channel_id : $categorie->channel_discord_id,
+            'restricted' => ($request->restricted) ? $request->restricted : $categorie->restricted,
         ]);
-        return response()->json($roleCategory, 200);
+        return response()->json($categorie, 200);
     }
 
 
@@ -316,7 +317,7 @@ class BotController extends Controller {
      * @return [type]                  [description]
      */
     public function deleteRoleCategory( Request $request, $guild_id, RoleCategory $categorie ) {
-        RoleCategoy::destroy($categorie->id);
+        RoleCategory::destroy($categorie->id);
         return response()->json(null, 204);
     }
 
@@ -409,10 +410,51 @@ class BotController extends Controller {
         if( $url ) {
             $imageAnalyzer = new ImageAnalyzer($url, $guild);
             $result = $imageAnalyzer->result;
-            return response()->json($result, 200); 
+            return response()->json($result, 200);
         } else {
             return response()->json('URL de l\'image obligatoire', 400);
         }
+    }
+
+    public function addConversation( Request $request ) {
+        $message = ( isset($request->message) && !empty($request->message) ) ? $request->message : false ;
+        $username = $request->user_name;
+        $user_discord_id = $request->user_discord_id;
+        $guild_discord_id = $request->guild_discord_id;
+        $message_discord_id = $request->message_discord_id;
+        $channel_discord_id = $request->channel_discord_id;
+
+        if( empty( $guild_discord_id ) ) {
+            return response()->json('L\'ID de Guild est obligatoire', 400);
+        }
+
+        $guild = Guild::where( 'discord_id', $guild_discord_id )->first();
+
+        $user = User::where('discord_id', $user_discord_id)->first();
+        if( !$user ) {
+            $user = User::create([
+                'name' => $username,
+                'password' => Hash::make( str_random(20) ),
+                'discord_name' => $username,
+                'discord_id' => $user_discord_id,
+            ]);
+        }
+
+        $user_action = UserAction::create([
+            'type' => 'conversation',
+            'source' => 'discord',
+            'date' => date('Y-m-d H:i:s'),
+            'content' => $message,
+            'user_id' => $user->id,
+            'message_discord_id' => $message_discord_id,
+            'channel_discord_id' => $channel_discord_id,
+            'guild_id' => $guild->id,
+        ]);
+
+        $reply = $user_action->reply();
+
+        return response()->json($reply, 200);
+
     }
 
 }

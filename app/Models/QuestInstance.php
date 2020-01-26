@@ -93,7 +93,7 @@ class QuestInstance extends Model
                 'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => Auth::id(),
-                'quest_instance_id' => $instance->id,
+                'relation_id' => $instance->id,
             ]);
             $stop = Stop::find($args['gym_id']);
             $stop->touch();
