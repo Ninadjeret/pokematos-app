@@ -188,7 +188,7 @@ class UserAction extends Model {
 
     public function getMessageType() {
         $types = [];
-        $message = $this->content;
+        $message = str_replace('<@!'.config('discord.id').'>', '', $this->content);
 
         preg_match('/(hello|coucou|bjr|bonjour|:wave:)/i', $message, $hello);
         if( !empty( $hello ) ) {
