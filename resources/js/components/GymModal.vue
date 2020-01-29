@@ -166,7 +166,8 @@
                 <hr>
                     <div class="rocket_detail">
                         <img :src="gym.invasion.boss.thumbnail">
-                        <p>{{gym.invasion.boss.name}} est présent(e) au Pokéstop {{gym.name}}. Voici les pokémons qu'elle va utliser pour t'affronter</p>
+                        <p v-if="gym.invasion.boss === 3">{{gym.invasion.boss.name}} est présente au Pokéstop {{gym.name}}. Voici les pokémons qu'elle va utliser pour t'affronter</p>
+                        <p v-else>{{gym.invasion.boss.name}} est présent au Pokéstop {{gym.name}}. Voici les pokémons qu'il va utliser pour t'affronter</p>
                     </div>
                 <hr>
                 <div v-for="step in rocketSteps" class="rocket_pokemons">

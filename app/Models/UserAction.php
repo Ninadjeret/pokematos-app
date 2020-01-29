@@ -70,17 +70,17 @@ class UserAction extends Model {
         [
             'message' => '@{utilisateur} Coucou :wave:',
             'categories' => ['hello'],
-            'positions' => ['start'],
+            'positions' => ['start', 'middle'],
         ],
         [
-            'message' => 'Hello @{utilisateur}, la fome ?',
+            'message' => 'Hello @{utilisateur}, la forme ?',
             'categories' => ['hello'],
-            'positions' => ['start'],
+            'positions' => ['start', 'middle'],
         ],
         [
             'message' => '@{utilisateur} :sweet_smile: :wave:',
             'categories' => ['hello'],
-            'positions' => ['start'],
+            'positions' => ['start', 'middle'],
         ],
         [
             'message' => 'Ohla, tu sais mes compétences sont limitées. Je voudrais pas te répondre une bêtise',
@@ -89,6 +89,7 @@ class UserAction extends Model {
         ],
         [
             'message' => 'Aucune idée, mais je veux bien demander à mon créateur',
+            'suite' => ['Il comprend plus de choses que moi', '(heureusement :wink:)'],
             'categories' => ['question'],
             'positions' => ['start', 'middle'],
         ],
@@ -129,6 +130,7 @@ class UserAction extends Model {
         if( count($last_messages) < 5 ) {
 
             $message = $this->get_random_message($type, $position);
+            if( !$message ) return;
             $content = Discord::translate( $message['message'], $this->getGuild(), $this->getUser() );
 
             $discord = new DiscordClient(['token' => config('discord.token')]);
@@ -160,6 +162,10 @@ class UserAction extends Model {
     }
 
     public function get_random_message( $categories = false, $positions = false ) {
+
+        Log::debug( print_r($categories, true) );
+        Log::debug( print_r($positions, true) );
+
         if( !is_array($categories) && !empty($categories) ) $categories = [$categories];
         if( !is_array($positions) && !empty($positions) ) $positions = [$positions];
 
@@ -180,10 +186,13 @@ class UserAction extends Model {
             if($in_categories && $in_positions) $matching_messages[] = $value;
         }
 
+        if( !empty($matching_messages) ) {
+            $random_key = array_rand($matching_messages);
+            return $matching_messages[$random_key];
+        }
 
+        return false;
 
-        $random_key = array_rand($matching_messages);
-        return $matching_messages[$random_key];
     }
 
     public function getMessageType() {
