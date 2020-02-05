@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Models\Stop;
 use App\Models\Pokemon;
-use App\Models\Announce;
+use App\Models\UserAction;
 use App\Models\raidChannel;
 use App\Models\RaidMessage;
 use RestCord\DiscordClient;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class Raid extends Model {
 
-    protected $fillable = ['status', 'pokemon_id'];
+    protected $fillable = ['status', 'pokemon_id', 'egg_level'];
     protected $hidden = ['gym_id', 'city_id', 'pokemon_id'];
     protected $appends = ['end_time', 'pokemon', 'source', 'channels', 'messages', 'thumbnail_url'];
 
@@ -40,7 +40,7 @@ class Raid extends Model {
     }
 
     public function getSourceAttribute() {
-        $annonce = $this->getLastAnnounce();
+        $annonce = $this->getLastUserAction();
         if( empty( $annonce ) ) return false;
         $return = [
             'source' => $annonce->source,
@@ -65,8 +65,17 @@ class Raid extends Model {
         return [];
     }
 
-    public function getLastAnnounce() {
-        $annonce = Announce::where('raid_id', $this->id)
+    public function getLastUserAction( $include_auto = false ) {
+        if( $include_auto ) {
+            $annonce = UserAction::where('type', 'like', 'raid-%')
+                ->where('relation_id', $this->id)
+                ->where('type', '!=', 'raid-duplicate')
+                ->orderBy('created_at', 'desc')
+                ->first();
+            return $annonce;
+        }
+        $annonce = UserAction::where('type', 'like', 'raid-%')
+            ->where('relation_id', $this->id)
             ->where('type', '!=', 'raid-duplicate')
             ->where('source', '!=', 'auto')
             ->orderBy('created_at', 'desc')
@@ -74,8 +83,9 @@ class Raid extends Model {
         return $annonce;
     }
 
-    public function getAnnounces() {
-        $annonces = Announce::where('raid_id', $this->id)
+    public function getUserActions() {
+        $annonces = UserAction::where('type', 'like', 'raid-%')
+            ->where('relation_id', $this->id)
             ->orderBy('created_at', 'asc')
             ->get();
         return $annonces;
@@ -173,7 +183,9 @@ class Raid extends Model {
         }
 
         if( $announceType ) {
-            $announce = Announce::create([
+
+            //Création de l'action utilisateur. permet ensuite la suppression du raid et les stats
+            $announce = UserAction::create([
                 'type' => $announceType,
                 'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
@@ -193,6 +205,22 @@ class Raid extends Model {
             } elseif( $announceType == 'raid-duplicate') {
                 event( new \App\Events\RaidDuplicate( $raid, $announce ) );
             }
+
+            \App\Models\Log::create([
+                'city_id' => $city->id,
+                'guild_id' => null,
+                'type' => $announceType,
+                'success' => 1,
+                'error' => null,
+                'source_type' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
+                'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
+                'result' => json_encode([
+                    'raid_id' => $raid->id
+                ]),
+                'user_id' => $args['user_id'],
+                'channel_discord_id' => ( isset($args['channel_discord_id']) ) ? $args['channel_discord_id'] : null ,
+            ]);
+
         }
 
         return $raid;
@@ -221,7 +249,7 @@ class Raid extends Model {
                 $bosses = Pokemon::where('boss_level', $raid->egg_level)->get();
                 if( count($bosses) === 1 ) {
                     $raid->update(['pokemon_id' => $bosses[0]->id ]);
-                    $announce = Announce::create([
+                    $announce = UserAction::create([
                         'type' => 'raid-update',
                         'source' => 'auto',
                         'date' => date('Y-m-d H:i:s'),

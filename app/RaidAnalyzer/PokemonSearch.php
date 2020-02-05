@@ -15,6 +15,7 @@ class PokemonSearch {
         $this->query = false;
         $this->pokemons = Pokemon::where('boss', 1)->get();
         $this->sanitizedNames = $this->getSanitizedNames();
+        $this->num_line = false;
     }
 
 
@@ -25,58 +26,14 @@ class PokemonSearch {
     function getSanitizedNames() {
         $names = array();
         foreach( $this->pokemons as $pokemon ) {
-            $names[] = Helpers::sanitize($pokemon->name_ocr);
-        }
-        return $names;
-    }
-
-
-    /**
-     *
-     * @return type
-     */
-    function getAllIdentifiers() {
-        $identifiers = array();
-
-        foreach( $this->pokemons as $pokemon ) {
-            $name = Helpers::sanitize($pokemon->name_ocr);
-            $name = $this->sanitizePattern($name);
-            $nb_chars = strlen($name);
-
-            //Parcours
-            $debut = 0;
-            while( $debut < $nb_chars - 1) {
-
-                $fin = $nb_chars - $debut;
-                while( $fin > 2 ) {
-                    $pattern = mb_strimwidth($name, $debut, $fin);
-                    //echo $pattern.'<br>';
-                    $is_find = 0;
-                    foreach( $this->sanitizedNames as $sanitizedName ) {
-                        if( strstr($sanitizedName, $pattern) ) {
-                            $is_find++;
-                        }
-                    }
-
-                    if( $is_find === 1 ) {
-                        //echo 'Identifiant OK<br>';
-                        $identifiers[$pattern] = (object) array(
-                            'pokemonId' => $pokemon->id,
-                            'percent' => round( strlen($pattern) * 100 / $nb_chars )
-                        );
-                    }
-
-                    $fin--;
-                }
-
-                $debut++;
+            $names[Helpers::sanitize($pokemon->name_ocr)] = $pokemon->id;
+            if( $pokemon->name_ocr != $pokemon->name_fr ) {
+                $names[Helpers::sanitize($pokemon->name_fr)] = $pokemon->id;
             }
-            //die();
         }
-        $keys = array_map('strlen', array_keys($identifiers));
-        array_multisort($keys, SORT_DESC, $identifiers);
-        //Log::debug( print_r($identifiers, true) );
-        return $identifiers;
+        $keys = array_map('strlen', array_keys($names));
+        array_multisort($keys, SORT_DESC, $names);
+        return $names;
     }
 
 
@@ -86,14 +43,91 @@ class PokemonSearch {
      * @param type $min
      * @return boolean|\POGO_gym
      */
-    function findPokemon( $query, $min = 50 ) {
-        $this->query = $query;
-        $sanitizedQuery = Helpers::sanitize($this->query);
-        foreach( $this->getAllIdentifiers() as $pattern => $data ) {
+    function findPokemon( $query = null, $cp = null, $min = 50 ) {
+        $result = false;
+        if( !empty($query) && is_array($query) ) {
+            $result = $this->findPokemonFromName($query, $min);
+        } elseif( !empty($query) ) {
+            $result = $this->findPokemonFromstring($query, $min);
+        }
+        if( !$result && !empty($cp) ) {
+            $result = $this->findPokemonFromCp($cp);
+        }
+        return $result;
+    }
 
-            if( strstr($sanitizedQuery, $pattern) && $data->percent >= $min ) {
-                return Pokemon::find($data->pokemonId);
+
+    /**
+     * [public description]
+     * @var [type]
+     */
+    public function findPokemonFromstring($query, $min = 50) {
+        $sanitizedQuery = Helpers::sanitize($query);
+        foreach( $this->sanitizedNames as $name => $pokemon_id ) {
+            if( strstr( $sanitizedQuery, $name ) ) {
+                return (object) [
+                    'pokemon' => Pokemon::find($pokemon_id),
+                    'probability' => 100
+                ];
             }
+        }
+        return false;
+    }
+
+
+    /**
+     * [findPokemonFromName description]
+     * @param  [type]  $query [description]
+     * @param  integer $min   [description]
+     * @return [type]         [description]
+     */
+    public function findPokemonFromName($query, $min = 50) {
+        $best_perc = 0;
+        $best_result = false;
+        $num_line = false;
+        $i = 0;
+        foreach( $query as $line ) {
+            $sanitizedQuery = Helpers::sanitize($line);
+            foreach( $this->sanitizedNames as $name => $pokemon_id ) {
+                $similarity = similar_text($name, $sanitizedQuery, $perc);
+                if( $perc >= 100 ) {
+                    $this->num_line = $i;
+                    return (object) [
+                        'pokemon' => Pokemon::find($pokemon_id),
+                        'probability' => 100
+                    ];
+                } elseif( $perc > $best_perc ) {
+                    $best_perc = $perc;
+                    $best_result = $pokemon_id;
+                    $num_line = $i;
+                }
+            }
+            $i++;
+        }
+
+        if( $best_perc > $min ) {
+            $this->num_line = $num_line;
+            return (object) [
+                'pokemon' => Pokemon::find($best_result),
+                'probability' => round($best_perc)
+            ];
+        }
+
+        return false;
+    }
+
+    public function findPokemonFromCp($cp) {
+        $matching = [];
+        foreach( $this->pokemons as $pokemon ) {
+            if( $pokemon->boss_cp == $cp ) {
+                $matching[] = $pokemon;
+            }
+        }
+        if( !empty($matching) && count($matching) === 1 ) {
+            return (object) [
+                'pokemon' => $pokemon,
+                'probability' => 100,
+            ];
         }
         return false;
     }

@@ -85,12 +85,13 @@
 </template>
 
 <script>
+    import axios2 from 'axios';
     export default {
         name: 'Profile',
         data() {
             return {
-                totalCouts: 279,
-                totalDons: 45,
+                totalCouts: 317,
+                totalDons: 105,
                 dialogUpdate: false,
             }
         },
@@ -120,7 +121,7 @@
                 } finally {
                     this.dialogUpdate = false;
                 }
-            }
+            },
         }
     }
 </script>

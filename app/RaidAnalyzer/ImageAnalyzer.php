@@ -14,15 +14,20 @@ use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class ImageAnalyzer {
 
-    function __construct( $source, $guild ) {
+    function __construct( $source, $guild, $user = false, $channel_discord_id = false ) {
 
-        $this->debug = false;
+        $this->debug = true;
 
+        $this->guild = $guild;
+        $this->user = $user;
+        $this->channel_discord_id = $channel_discord_id;
         $this->result = (object) array(
             'type' => false,
             'gym' => false,
+            'gym_probability' => 0,
             'eggLevel' => false,
             'pokemon'   => false,
+            'pokemon_probability' => 0,
             'date' => false,
             'error' => false,
             'logs' => '',
@@ -67,11 +72,12 @@ class ImageAnalyzer {
              $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
              $this->_log($this->ocr);
              $this->result->type = 'pokemon';
-             $this->result->gym = $this->getGym();
              $this->result->date = $this->getTime();
              $this->result->pokemon = $this->getPokemon();
+             $this->result->gym = $this->getGym();
              if( $this->result->pokemon ) {
-                 $this->result->eggLevel = $this->result->pokemon->getRaidLevel();
+                 Log::debug( print_r($this->result->pokemon->boss_level, true) );
+                 $this->result->eggLevel = $this->result->pokemon->boss_level;
              }
          }
 
@@ -79,9 +85,13 @@ class ImageAnalyzer {
              $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
              $this->_log($this->ocr);
              $this->result->type = 'ex';
-             $this->result->gym = $this->getGym();
+             $this->result->gym = $this->getExGym();
              $this->result->date = $this->getExTime();
              $this->result->eggLevel = 6;
+         }
+
+         if( $this->user ) {
+             $this->addLog();
          }
 
          $time_elapsed_secs = microtime(true) - $this->start;
@@ -110,7 +120,7 @@ class ImageAnalyzer {
             if( $this->debug ) $this->_log('Img extension : PNG');
             $image = imagecreatefrompng($source);
         } else {
-            $this->result->error = 'File type not allowed';
+            $this->result->error = 'Format de de fichier non accepté';
             return false;
         }
 
@@ -228,14 +238,14 @@ class ImageAnalyzer {
                 $matching_points++;
             }
         }
-        if( $matching_points == 5 ) {
+        if( $matching_points == 4 ) {
             if( $this->debug ) $this->_log('Great ! Img seems to be an EX invit');
             return 'ex';
         }
 
 
         //Check for Future Raid
-        if( $this->debug ) $this->_log('---------- Check if image is Raid Announce ----------');
+        if( $this->debug ) $this->_log('---------- Check if image is Raid UserAction ----------');
         $rgb = $this->colorPicker->pickColor( $image, $this->coordinates->forImgTypeEgg()->x, $this->coordinates->forImgTypeEgg()->y );
         if( $this->colorPicker->isFutureTimerColor( $rgb ) ) {
             if( $this->debug ) $this->_log('Great ! Img seems to include an egg');
@@ -251,7 +261,7 @@ class ImageAnalyzer {
         }
 
         //else
-        $this->result->error = 'Img does not seem to be a raid announce';
+        $this->result->error = 'L\'image n\'a pas été comprise comme une image de raid';
         imagedestroy($image);
         return false;
     }
@@ -286,6 +296,7 @@ class ImageAnalyzer {
 		}
 
         imagedestroy($image);
+        $this->result->error = "Le niveau du raid n'a pas été trouvé";
         return false;
     }
 
@@ -335,46 +346,83 @@ class ImageAnalyzer {
             return $date->format('Y-m-d H:i:s');
         }
 
+        $this->result->error = "Aucun timing trouvé dans la capture";
         return false;
     }
 
     function getGym() {
-
-        $query = implode(' ', $this->ocr);
-        $gym = $this->gymSearch->findGym($query, 70);
-        if( $gym ) {
-            if( $this->debug ) $this->_log('Gym finded in database : ' . $gym->name );
-            return $gym;
+        $result = $this->gymSearch->findGym($this->ocr, $this->guild->settings->raidreporting_gym_min_proability);
+        if( $result ) {
+            if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name . '('.$result->probability.'%)' );
+            $this->result->gym_probability = $result->probability;
+            return $result->gym;
         }
         if( $this->debug ) $this->_log('Nothing found in database :(' );
+        $this->result->error = "L'arène n'a pas été trouvée";
+        return false;
+    }
 
+    function getExGym() {
+        $value = implode(' ', $this->ocr);
+        $result = $this->gymSearch->findGymFromString($value, $this->guild->settings->raidreporting_gym_min_proability);
+        if( $result ) {
+            if( $this->debug ) $this->_log('Gym finded in database : ' . $result->gym->name . '('.$result->probability.'%)' );
+            $this->result->gym_probability = $result->probability;
+            return $result->gym;
+        }
+        if( $this->debug ) $this->_log('Nothing found in database :(' );
+        $this->result->error = "L'arène n'a pas été trouvée";
+        return false;
     }
 
     function getPokemon() {
-        $query = implode(' ', $this->ocr);
-        $pokemon = $this->pokemonSearch->findPokemon($query, 70);
-        if( $pokemon ) {
-            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->name_fr );
-            return $pokemon;
-        }
-
-        $ocr_count = count( $this->ocr );
-        $start = $this->ocr[ $ocr_count - 3 ];
-        $end = $this->ocr[ $ocr_count - 2 ];
-        if( strlen( $start ) <= 4 ) {
-            $pokemon = $this->pokemonSearch->findPokemonFromFragments(
-                    $this->ocr[ $ocr_count - 3 ],
-                    $this->ocr[ $ocr_count - 2 ]
-                    );
-            if( $pokemon ) {
-                if( $this->debug ) $this->_log('Pokemon finded in database : ' . $pokemon->name_fr );
-                return $pokemon;
+        $cp = $this->MicrosoftOCR->cp_line;
+        $result = $this->pokemonSearch->findPokemon($this->ocr, $cp, 90);
+        if( $result ) {
+            if( $this->pokemonSearch->num_line ) {
+                unset($this->ocr[$this->pokemonSearch->num_line]);
+                $this->ocr = array_values($this->ocr);
             }
+            if( $this->debug ) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr . '('.$result->probability.'%)' );
+            $this->result->pokemon_probability = $result->probability;
+            return $result->pokemon;
         }
 
         if( $this->debug ) $this->_log('Nothing found in database :(' );
+        $this->result->error = "Aucun Pokémon trouvé";
         return false;
 
+    }
+
+    public function addLog() {
+
+        //Construction du tableau
+        $success = ( $this->result->error ) ? false : true;
+        $result = [
+            'type' => $this->result->type,
+            'gym' => $this->result->gym,
+            'gym_probability' => $this->result->gym_probability,
+            'date' => $this->result->date,
+            'pokemon' => $this->result->pokemon,
+            'pokemon_probability' => $this->result->pokemon_probability,
+            'egg_level' => $this->result->eggLevel,
+            'url' => $this->imageData->url,
+            'ocr' => (property_exists($this, 'ocr')) ? implode(' ', $this->ocr) : '',
+        ];
+
+        //Ajout du log
+        \App\Models\Log::create([
+            'city_id' => $this->guild->city->id,
+            'guild_id' => $this->guild->id,
+            'type' => 'analysis-img',
+            'success' => $success,
+            'error' => $this->result->error,
+            'source_type' => 'img',
+            'source' => $this->imageData->source,
+            'result' => $result,
+            'user_id' => ( $this->user ) ? $this->user->id : 0,
+            'channel_discord_id' => $this->channel_discord_id
+        ]);
     }
 
 }

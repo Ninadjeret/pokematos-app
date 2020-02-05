@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Helpers;
 use RestCord\DiscordClient;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -94,19 +95,23 @@ class Connector extends Model {
 
     private function translate( $message, $raid ) {
 
-        $username = ( $raid->getLastAnnounce()->getUser() ) ? $raid->getLastAnnounce()->getUser()->name : false ;
+        $username = ( $raid->getLastUserAction()->getUser() ) ? $raid->getLastUserAction()->getUser()->name : false ;
 
         //Gestion des tags
         $patterns = array(
             'raid_pokemon' => ( !$raid->pokemon ) ? false : html_entity_decode( $raid->pokemon->name_fr ),
+            'raid_pokemon_nettoye' => ( !$raid->pokemon ) ? false : Helpers::sanitize(html_entity_decode( $raid->pokemon->name_fr )),
             'raid_niveau' => $raid->egg_level,
-            'raid_debut' => $raid->getStartTime()->format('H\hi'),
-            'raid_fin' => $raid->getEndTime()->format('H\hi'),
+            'raid_debut' => ( $raid->egg_level < 5 ) ? $raid->getStartTime()->format('H\hi') : $raid->getStartTime()->format('d/m/y à H\hi'),
+            'raid_fin' => ( $raid->egg_level < 5 ) ? $raid->getEndTime()->format('H\hi') : $raid->getEndTime()->format('d/m/y à H\hi'),
 
             'arene_nom' => $raid->getGym()->niantic_name,
+            'arene_nom_nettoye' => Helpers::sanitize($raid->getGym()->niantic_name),
             'arene_nom_custom' => $raid->getGym()->name,
+            'arene_nom_custom_nettoye' => Helpers::sanitize($raid->getGym()->name),
             'arene_description' => $raid->getGym()->description,
             'arene_zone' => ( !empty(  $raid->getGym()->zone ) ) ?  $raid->getGym()->zone->name : false,
+            'arene_zone_nettoye' => ( !empty(  $raid->getGym()->zone ) ) ?  Helpers::sanitize($raid->getGym()->zone->name) : false,
             'arene_gmaps' => ( !empty(  $raid->getGym()->google_maps_url ) ) ?  $raid->getGym()->google_maps_url : false,
 
             'utilisateur' => $username,
@@ -125,7 +130,7 @@ class Connector extends Model {
         }
 
         if( $username && strstr( $message, '@'.$username ) ) {
-            $user = $raid->getLastAnnounce()->getUser();
+            $user = $raid->getLastUserAction()->getUser();
             $message = str_replace('@'.$username, '<@!'.$user->discord_id.'>', $message);
         }
 

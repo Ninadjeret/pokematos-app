@@ -41,7 +41,7 @@
                 <div class="dialog__content">
                     <ul>
                         <li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
-                        <li v-if="raidStatus == 'none' && gym.gym"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
+                        <li v-if="gym.gym && (raidStatus == 'none' || gym.raid.egg_level == 6)"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
                         <li v-if="!gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">explore</i><span>Annoncer une quête</span></a></li>
                         <li v-if="gym.quest && ( !gym.quest.quest_id || !gym.quest.reward_type )"><a class="modal__action update-quest" v-on:click="setScreenTo('updateQuest')"><i class="material-icons">fingerprint</i><span>Préciser la quête</span></a></li>
                         <li v-if="gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="deleteQuestConfirm()"><i class="material-icons">delete</i><span>Supprimer la quête</span></a></li>
@@ -49,7 +49,7 @@
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
                         <li v-if="gym.google_maps_url && gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
                         <li v-if="gym.google_maps_url && !gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers le Pokéstop</span></a></li>
-                        <li v-if="parseInt(currentCity.permissions) >= 10 && user.permissions[currentCity.guilds[0].id].find(val => val == 'poi_edit')"><a class="modal__action" :href="'/#/admin/gyms/'+gym.id"><i class="material-icons">edit</i><span>Modifier le POI</span></a></li>
+                        <li v-if="canAccessCityParam('poi_edit')"><a class="modal__action" v-on:click="setScreenTo('editPOI')"><i class="material-icons">edit</i><span>Modifier le POI</span></a></li>
                     </ul>
                 </div>
                 <div class="footer--actions">
@@ -57,6 +57,13 @@
                 </div>
             </div>
 
+            <div v-if="modalScreen == 'editPOI'" class="modal__screen edit-poi">
+                <h3 class="">Modifier le POI</h3>
+                <gym-edit v-bind:poi-id="gym.id" v-on:poi-create="setScreenTo('default')"></gym-edit>
+                <div class="footer-action">
+                    <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
+                </div>
+            </div>
 
             <div v-if="modalScreen == 'updateRaid'" class="modal__screen update-raid">
                 <h3 class="">Préciser le Pokémon</h3>
@@ -110,7 +117,7 @@
                     <v-text-field single-line hide-details outline v-model="questSearch" label="Recherche"></v-text-field>
                 </div>
                 <p v-if="questToSubmit" class="step__title">Quelle est la quête ?</p>
-                <v-list>
+                <v-list class="quests">
                 <template v-for="(quest, index) in filteredQuests">
                   <v-list-tile :key="quest.id" @click="clickQuest(quest)">
                     <v-list-tile-content>
@@ -329,8 +336,8 @@ export default {
             this.dialog = false;
         },
         canDeleteRaid() {
-            let permissions = this.user.permissions;
-            return ( permissions[this.currentCity.guilds[0].id].find(val => val === 'raid_delete' ) );
+            let isAuthor = this.gym.raid && this.gym.raid.source.user && this.gym.raid.source.user.id === this.user.id
+            return isAuthor || this.canAccessCityParam('raid_delete');
         },
         setScreenTo( value ) {
             console.log(value);
@@ -581,6 +588,16 @@ export default {
                     console.log(err)
                 });
             }
+        },
+        canAccessCityParam( param ) {
+            let auth = false;
+            let that = this;
+            this.currentCity.guilds.forEach( (guild, index) => {
+                if( that.user.permissions[guild.id].find(val => val === param ) ) {
+                    auth = true;
+                }
+            })
+            return auth;
         }
     }
 }

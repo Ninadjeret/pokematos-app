@@ -127,9 +127,9 @@
                             <label>Message personnalisé avant pop</label>
                             <p class="description">
                                 Utilisez les tags suivants pour afficher des propriétés du raid :<br>
-                                {arene_nom}<br>
-                                {arene_nom_custom}<br>
-                                {arene_zone}<br>
+                                {arene_nom} ou {arene_nom_nettoye}<br>
+                                {arene_nom_custom} ou {arene_nom_custom_nettoye}<br>
+                                {arene_zone} ou {arene_zone_nettoye}<br>
                                 {arene_description}<br>
                                 {arene_gmaps}<br>
                                 {raid_niveau}<br>
@@ -143,13 +143,13 @@
                             <label>Message personalisé après pop</label>
                             <p class="description">
                                 Utilisez les tags suivants pour afficher des propriétés du raid :<br>
-                                {arene_nom}<br>
-                                {arene_nom_custom}<br>
-                                {arene_zone}<br>
+                                {arene_nom} ou {arene_nom_nettoye}<br>
+                                {arene_nom_custom} ou {arene_nom_custom_nettoye}<br>
+                                {arene_zone} ou {arene_zone_nettoye}<br>
                                 {arene_description}<br>
                                 {arene_gmaps}<br>
                                 {raid_niveau}<br>
-                                {raid_pokemon}<br>
+                                {raid_pokemon} ou {raid_pokemon_nettoye}<br>
                                 {raid_debut}<br>
                                 {raid_fin}<br>
                                 {utilisateur}<br>

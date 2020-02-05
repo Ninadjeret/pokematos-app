@@ -4,7 +4,7 @@
             <div class="search__wrapper">
                 <v-text-field single-line hide-details outline v-model="search" label="Recherche"></v-text-field>
             </div>
-            <v-list>
+            <v-list class="quests">
             <template v-for="(quest, index) in filteredQuests">
               <v-list-tile :key="quest.id" :to="{ name: 'admin.quests.edit', params: { id: quest.id } }">
                 <v-list-tile-content>

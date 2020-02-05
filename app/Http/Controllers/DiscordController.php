@@ -66,6 +66,7 @@ class DiscordController extends Controller {
         Log::debug( print_r( $user_guilds, true ) );
         $result = $user->checkGuilds($user_guilds);
         if( $result->auth ) {
+            sleep(1);
             Auth::loginUsingId($user->id, true);
             return redirect('/');
         } else {

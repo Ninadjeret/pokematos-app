@@ -8,6 +8,7 @@ class MicrosoftOCR {
     function __construct() {
         $this->apiKey = config('app.microsoft_api_key');
         $this->baseUrl = 'https://westeurope.api.cognitive.microsoft.com/vision/v2.0/recognizeText?mode=Printed';
+        $this->cp_line = false;
     }
 
     public function read( $image_url ) {
@@ -89,10 +90,14 @@ class MicrosoftOCR {
 
             //exceptions de base
             if( $line->text == 'Cette Arene est trop loin.'
+                || $line->text == '>'
+                || $line->text == 'O'
                 || $line->text == 'X'
                 || $line->text == 'COMBAT'
                 || $line->text == 'GROUPE PRIVE'
                 || $line->text == 'Walk closer to interact with this Gym.'
+                || $line->text == '+'
+                || $line->text == 'ARENE DE RAID EX'
             ) {
                 continue;
             }
@@ -119,10 +124,13 @@ class MicrosoftOCR {
             }
 
             if(preg_match('/^CP/', $line->text) ) {
-                $this->cp_line = $line->text;
+                //$this->cp_line = $line->text;
                 continue;
             }
             if(preg_match('/^[0-9]+$/', $line->text) ) {
+                if( strlen($line->text) === 4 || strlen($line->text) === 5 ) {
+                    $this->cp_line = $line->text;
+                }
                 continue;
             }
             $lines[] = $line->text;

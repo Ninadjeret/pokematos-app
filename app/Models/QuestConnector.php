@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Helpers;
 use RestCord\DiscordClient;
 use App\Models\QuestMessage;
 use Illuminate\Database\Eloquent\Model;
@@ -85,17 +86,21 @@ class QuestConnector extends Model
     }
 
     public function translate( $message, $quest ) {
-        $username = ( $quest->getLastAnnounce()->getUser() ) ? $quest->getLastAnnounce()->getUser()->name : false;
+        $username = ( $quest->getLastUserAction()->getUser() ) ? $quest->getLastUserAction()->getUser()->name : false;
 
         //Gestion des tags
         $patterns = array(
             'quete_recompense' => ( !$quest->reward ) ? false : html_entity_decode( $quest->reward->name ),
+            'quete_recompense_nettoye' => ( !$quest->reward ) ? false : Helpers::sanitize(html_entity_decode( $quest->reward->name )),
             'quete_nom' => $quest->name,
 
             'pokestop_nom' => $quest->getStop()->niantic_name,
+            'pokestop_nom_nettoye' => Helpers::sanitize($quest->getStop()->niantic_name),
             'pokestop_nom_custom' => $quest->getStop()->name,
+            'pokestop_nom_custom_nettoye' => Helpers::sanitize($quest->getStop()->name),
             'pokestop_description' => $quest->getStop()->description,
             'pokestop_zone' => ( !empty(  $quest->getStop()->zone ) ) ?  $quest->getStop()->zone->name : false,
+            'pokestop_zone_nettoye' => ( !empty(  $quest->getStop()->zone ) ) ?  Helpers::sanitize($quest->getStop()->zone->name) : false,
             'pokestop_gmaps' => ( !empty(  $quest->getStop()->google_maps_url ) ) ?  $quest->getStop()->google_maps_url : false,
 
             'utilisateur' => $username,
@@ -114,7 +119,7 @@ class QuestConnector extends Model
         }
 
         if( $username && strstr( $message, '@'.$username ) ) {
-            $user = $quest->getLastAnnounce()->getUser();
+            $user = $quest->getLastUserAction()->getUser();
             $message = str_replace('@'.$username, '<@!'.$user->discord_id.'>', $message);
         }
 

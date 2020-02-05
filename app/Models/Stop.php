@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\City;
 use App\Models\Raid;
-use App\Models\Quest;
-use App\Models\QuestInstance;
 use App\Models\Zone;
+use App\Models\Quest;
+use App\Models\StopAlias;
 use App\Models\raidChannel;
+use App\Models\QuestInstance;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Stop extends Model {
@@ -17,7 +19,7 @@ class Stop extends Model {
     use SoftDeletes;
 
     protected $fillable = ['name', 'niantic_name', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id', 'ex'];
-    protected $appends = ['zone', 'city', 'google_maps_url', 'raid', 'quest'];
+    protected $appends = ['zone', 'city', 'google_maps_url', 'raid', 'quest', 'aliases'];
     protected $hidden = ['zone_id', 'city_id', 'quest_id'];
     protected $casts = [
         'ex' => 'boolean',
@@ -53,6 +55,8 @@ class Stop extends Model {
             return $this->getActiveRaid();
         } elseif( $this->getFutureRaid() ) {
             return $this->getFutureRaid();
+        } elseif( $this->getFutureRaidEx() ) {
+            return $this->getFutureRaidEx();
         } else {
             return false;
         }
@@ -68,6 +72,12 @@ class Stop extends Model {
         return false;
     }
 
+    public function getAliasesAttribute() {
+        if( !$this->gym ) return [];
+        $aliases = StopAlias::where('stop_id', $this->id)->get();
+        return $aliases;
+    }
+
     public function getFutureRaid() {
         $begin = new \DateTime();
         $end = new \DateTime();
@@ -77,7 +87,11 @@ class Stop extends Model {
             ->where('start_time', '<', $end->format('Y-m-d H:i:s') )
             ->first();
         if( !empty($raid) ) return $raid;
+        return false;
+    }
 
+    public function getFutureRaidEx() {
+        $begin = new \DateTime();
         $raidEx = Raid::where('gym_id', $this->id)
             ->where('start_time', '>', $begin->format('Y-m-d H:i:s') )
             ->where('ex', '1')
@@ -97,6 +111,36 @@ class Stop extends Model {
             ->first();
         if( empty($raid) ) return false;
         return $raid;
+    }
+
+    public function syncAliases($aliases) {
+
+        //On compare ceux déja présent en BDD et on supprimes les anciens
+        foreach( $this->aliases as $currAlias ) {
+            $check = false;
+            foreach( $aliases as $alias ) {
+                if( $alias['id'] == $currAlias->id ) {
+                    $currAlias->update([
+                        'name' => $alias['name']
+                    ]);
+                    $check = true;
+                }
+            }
+            if( !$check ) {
+                StopAlias::destroy($currAlias->id);
+            }
+        }
+
+        //Puis on ajoute les nouveaux
+        foreach( $aliases as $alias ) {
+            if( !isset($alias['id']) || empty($alias['id']) ) {
+                StopAlias::create([
+                    'stop_id' => $this->id,
+                    'name' => $alias['name']
+                ]);
+            }
+        }
+        return true;
     }
 
 }

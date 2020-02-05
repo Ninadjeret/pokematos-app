@@ -28,7 +28,7 @@
             </div>
             <div v-if="raidsex_channels" class="setting">
                 <label>Catégorie de salon</label>
-                <p class="description">Le salon temporaire sera créé dans la catégorie choisie. (les droits appliqués au salon seront les mêmes que ceux de la caégorie)</p>
+                <p class="description">Le salon temporaire sera créé dans la catégorie choisie. (les droits appliqués au salon seront les mêmes que ceux de la catégorie)</p>
                 <select v-if="channels_categories" v-model="raidsex_channel_category_id">
                     <option v-for="channel in channels_categories" :value="channel.id.toString()">{{channel.name}}</option>
                 </select>

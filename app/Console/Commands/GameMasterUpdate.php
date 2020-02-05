@@ -62,6 +62,7 @@ class GameMasterUpdate extends Command
             $pokedex_id = substr($node->templateId, 2, 3);
             $name_ocr = ( isset($names_fr[(int)$pokedex_id]) ) ? $names_fr[(int)$pokedex_id - 1] : null;
             $form_id = ( isset($node->pokemonSettings->form) ) ? $node->pokemonSettings->form : '00';
+
             $forms = [
                 'ALOLA' => 'd\'Alola',
                 'SPEED' => 'Vitesse',
@@ -74,6 +75,7 @@ class GameMasterUpdate extends Command
                 'SNOWY' => 'Neige',
                 'SUNNY' => 'Soleil',
                 'OVERCAST' => 'Couvert',
+                'GALARIAN' => 'de Galar',
             ];
 
             $name_fr = $name_ocr;
@@ -83,6 +85,14 @@ class GameMasterUpdate extends Command
                         $name_fr = $name_ocr.' '.$label;
                     }
                 }
+            }
+
+            //On transforme les IDS des formes en numéro pour correspondre aux sprites officielles
+            if( strstr($form_id, 'GALARIAN' ) ) {
+                $form_id = '31';
+            }
+            if( strstr($form_id, 'ALOLA' ) ) {
+                $form_id = '61';
             }
 
             $data = [

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Quest;
-use App\Models\Announce;
+use App\Models\UserAction;
 use App\Models\QuestMessage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -31,15 +31,15 @@ class QuestInstance extends Model
         return Stop::find( $this->gym_id );
     }
 
-    public function getLastAnnounce() {
-        $annonce = Announce::where('quest_instance_id', $this->id)
+    public function getLastUserAction() {
+        $annonce = UserAction::where('quest_instance_id', $this->id)
             ->orderBy('created_at', 'desc')
             ->first();
         return $annonce;
     }
 
-    public function getAnnounces() {
-        $annonces = Announce::where('quest_instance_id', $this->id)
+    public function getUserActions() {
+        $annonces = UserAction::where('quest_instance_id', $this->id)
             ->orderBy('created_at', 'asc')
             ->get();
         return $annonces;
@@ -86,7 +86,7 @@ class QuestInstance extends Model
         $instance = QuestInstance::create($args);
 
         if( $instance ) {
-            $announce = Announce::create([
+            $announce = UserAction::create([
                 'type' => 'quest-create',
                 'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),

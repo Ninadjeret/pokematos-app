@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Guild;
 use App\Models\City;
 use GuzzleHttp\Client;
-use App\Models\Announce;
+use App\Models\UserAction;
 use App\Models\UserGuild;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
@@ -18,9 +18,29 @@ class User extends Authenticatable
 {
      use HasApiTokens, Notifiable;
 
-    protected $fillable = ['name', 'email', 'password', 'guilds', 'discord_id', 'discord_access_token', 'discord_refresh_token'];
-    protected $hidden = ['password', 'remember_token','discord_access_token', 'discord_refresh_token'];
-    protected $appends = ['permissions', 'stats'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'guilds',
+        'discord_id',
+        'discord_access_token',
+        'discord_refresh_token',
+        'superadmin'
+    ];
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'discord_access_token',
+        'discord_refresh_token'
+    ];
+    protected $appends = [
+        'permissions',
+        'stats'
+    ];
+    protected $casts = [
+        'superadmin' => 'boolean'
+    ];
 
     public static function getPermissions() {
         return [
@@ -38,6 +58,10 @@ class User extends Authenticatable
             ],
             'zone_edit' => [
                 'label' => 'Gérer les zones',
+                'context' => 'city'
+            ],
+            'logs_manage' => [
+                'label' => 'Gérer les logs',
                 'context' => 'city'
             ],
             'boss_edit' => [
@@ -78,17 +102,17 @@ class User extends Authenticatable
     public function getStatsAttribute() {
         $stats = ['total' => []];
 
-        $stats['total']['raidCreate'] = Announce::where('user_id', $this->id)
+        $stats['total']['raidCreate'] = UserAction::where('user_id', $this->id)
             ->where('confirmed', 1)
             ->where('type', 'raid-create')
             ->count();
 
-        $stats['total']['raidUpdate'] = Announce::where('user_id', $this->id)
+        $stats['total']['raidUpdate'] = UserAction::where('user_id', $this->id)
             ->where('confirmed', 1)
             ->where('type', 'raid-update')
             ->count();
 
-        $stats['total']['questCreate'] = Announce::where('user_id', $this->id)
+        $stats['total']['questCreate'] = UserAction::where('user_id', $this->id)
             ->where('confirmed', 1)
             ->where('type', 'quest-create')
             ->count();
@@ -210,7 +234,22 @@ class User extends Authenticatable
         $guilds = [];
         $discord = new DiscordClient(['token' => config('discord.token')]);
 
-        if(  !empty( $user_guilds ) ) {
+        //Get all communities acces for super admin
+        if( $this->superadmin ) {
+            $auth = true;
+            $allguilds = Guild::where('active', 1)->get();
+            if( !empty( $allguilds ) ) {
+                foreach( $allguilds as $allguild ) {
+                    $guilds[] = [
+                        'id' => $allguild->id,
+                        'permissions' => 30,
+                    ];
+                }
+            }
+        }
+
+        //for basic users
+        elseif(  !empty( $user_guilds ) ) {
             foreach( $user_guilds as $user_guild ) {
                 $error = 2;
                 $auth_discord = false;

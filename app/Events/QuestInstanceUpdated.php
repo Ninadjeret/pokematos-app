@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Announce;
+use App\Models\UserAction;
 use App\Models\QuestInstance;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -23,7 +23,7 @@ class QuestInstanceUpdated
      *
      * @return void
      */
-    public function __construct( QuestInstance $quest, Announce $announce )
+    public function __construct( QuestInstance $quest, UserAction $announce )
     {
         $this->quest = $quest;
         $this->announce = $announce;

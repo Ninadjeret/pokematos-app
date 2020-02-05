@@ -9,7 +9,7 @@
         <v-tabs-items v-model="tabs">
             <v-tab-item value="raids">
 
-                <div v-if="futureRaids.length > 0 || activeRaids.length > 0" style="flex-basis: 100%;">
+                <div v-if="futureRaids.length > 0 || activeRaids.length > 0" style="flex-basis: 100%; padding-bottom: 70px">
                     <div v-if="activeRaids.length > 0" class="raids__active">
                         <div class="section__title">Raids en cours</div>
                         <div class="raids__wrapper">
@@ -85,7 +85,7 @@
 
             </v-tab-item>
             <v-tab-item value="quetes">
-                <div v-if="activeQuests.length > 0" style="flex-basis: 100%;">
+                <div v-if="activeQuests.length > 0" style="flex-basis: 100%; padding-bottom: 70px;">
                 <div class="raids__active">
                     <div class="section__title">Quêtes en cours</div>
                         <div class="raids__wrapper">
@@ -122,6 +122,7 @@
 
 
         <v-dialog v-model="dialog" max-width="290" content-class="list-filters">
+
             <v-card v-if="tabs == 'raids'">
                 <v-subheader>Ordre d'affichage</v-subheader>
                 <v-card-text>
@@ -138,11 +139,16 @@
                     <v-checkbox v-model="raidsListFilters" label="Raids 2 têtes" value="2"></v-checkbox>
                     <v-checkbox v-model="raidsListFilters" label="Raids 1 tête" value="1"></v-checkbox>
                 </v-card-text>
+                <v-subheader>Quelles zones voir ?</v-subheader>
+                <v-card-text>
+                    <v-checkbox v-for="zone in zones" v-model="raidsZoneFilters" :key="zone.id" :label="zone.name" :value="zone.id"></v-checkbox>
+                </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" flat @click="dialog = false">Fermer</v-btn>
                 </v-card-actions>
             </v-card>
+
             <v-card v-if="tabs == 'quetes'" max-width="290" content-class="list-filters">
                 <v-subheader>Suivre seulement certaines récompenses ?</v-subheader>
                 <multiselect
@@ -164,11 +170,16 @@
                         <v-icon>close</v-icon>
                     </v-btn>
                 </div>
+                <v-subheader>Quelles zones voir ?</v-subheader>
+                <v-card-text>
+                    <v-checkbox v-for="zone in zones" v-model="questsZoneFilters" :key="zone.id" :label="zone.name" :value="zone.id"></v-checkbox>
+                </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" flat @click="dialog = false">Fermer</v-btn>
                 </v-card-actions>
             </v-card>
+
         </v-dialog>
 
         <button-actions @showfilters="dialog = true"></button-actions>
@@ -197,6 +208,9 @@
             pokemons() {
                 return this.$store.state.pokemons;
             },
+            zones() {
+                return this.$store.state.zones;
+            },
             rewards() {
                 return this.objects.concat(this.pokemons);
             },
@@ -211,7 +225,9 @@
                 return this.$store.getters.activeRaids.sort(this.compare).filter(function(gym) {
                     let isEmpty = ( that.raidsListFilters.length == 0 ) ? true : false;
                     let inArray = ( that.raidsListFilters.includes( gym.raid.egg_level.toString()) ) ? true : false;
-                    return isEmpty || inArray;
+                    let isEmptyZone = ( that.raidsZoneFilters.length == 0 ) ? true : false;
+                    let inZone = ( gym.zone && that.raidsZoneFilters.includes( gym.zone.id) ) ? true : false;
+                    return ( isEmpty || inArray ) && ( isEmptyZone || inZone )
                 });;
             },
             futureRaids() {
@@ -219,7 +235,9 @@
                 return this.$store.getters.futureRaids.sort(this.compare).filter(function(gym) {
                     let isEmpty = ( that.raidsListFilters.length == 0 ) ? true : false;
                     let inArray = ( that.raidsListFilters.includes( gym.raid.egg_level.toString()) ) ? true : false;
-                    return isEmpty || inArray;
+                    let isEmptyZone = ( that.raidsZoneFilters.length == 0 ) ? true : false;
+                    let inZone = ( gym.zone && that.raidsZoneFilters.includes( gym.zone.id) ) ? true : false;
+                    return ( isEmpty || inArray ) && ( isEmptyZone || inZone )
                 });
             },
             activeQuests() {
@@ -227,7 +245,9 @@
                 return this.$store.getters.activeQuests.filter(function(gym) {
                     let isEmpty = ( that.questsListFilters.length == 0 ) ? true : false;
                     let inArray = ( gym.quest.reward && that.questsListFilters.filter( reward => reward.name == gym.quest.reward.name ).length > 0 ) ? true : false;
-                    return isEmpty || inArray;
+                    let isEmptyZone = ( that.questsZoneFilters.length == 0 ) ? true : false;
+                    let inZone = ( gym.zone && that.questsZoneFilters.includes( gym.zone.id) ) ? true : false;
+                    return ( isEmpty || inArray ) && ( isEmptyZone || inZone )
                 });
             },
             raidsListOrder: {
@@ -252,6 +272,17 @@
                     });
                 }
             },
+            raidsZoneFilters: {
+                get: function () {
+                    return this.$store.getters.getSetting('raidsZoneFilters');
+                },
+                set: function (newValue) {
+                    this.$store.commit('setSetting', {
+                        setting: 'raidsZoneFilters',
+                        value: newValue
+                    });
+                }
+            },
             questsListFilters: {
                 get: function () {
                     return this.$store.getters.getSetting('questsListFilters');
@@ -262,7 +293,18 @@
                         value: newValue
                     });
                 }
-            }
+            },
+            questsZoneFilters: {
+                get: function () {
+                    return this.$store.getters.getSetting('questsZoneFilters');
+                },
+                set: function (newValue) {
+                    this.$store.commit('setSetting', {
+                        setting: 'questsZoneFilters',
+                        value: newValue
+                    });
+                }
+            },
         },
         created() {
             this.fetchRewards();
@@ -272,6 +314,14 @@
             });
             this.$store.commit('initSetting', {
                 setting: 'questsListFilters',
+                value: []
+            });
+            this.$store.commit('initSetting', {
+                setting: 'raidsZoneFilters',
+                value: []
+            });
+            this.$store.commit('initSetting', {
+                setting: 'questsZoneFilters',
                 value: []
             });
             this.$store.commit('initSetting', {

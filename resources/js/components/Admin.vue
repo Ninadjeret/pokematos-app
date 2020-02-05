@@ -87,6 +87,12 @@
                         route: 'admin.zones',
                         icon: 'map',
                         permission: 'zone_edit'
+                    },
+                    {
+                        label: 'Logs',
+                        route: 'admin.logs',
+                        icon: 'receipt',
+                        permission: 'logs_manage'
                     }
                 ],
                 discordItems: [

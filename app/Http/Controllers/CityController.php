@@ -95,6 +95,7 @@ class CityController extends Controller {
             'lat' => $request->lat,
             'lng' => $request->lng,
         ]);
+        $gym->syncAliases($request->aliases);
         return response()->json($gym, 200);
     }
 
@@ -112,8 +113,8 @@ class CityController extends Controller {
             'gym' => $request->gym,
             'lat' => $request->lat,
             'lng' => $request->lng,
-
         ]);
+        $stop->syncAliases($request->aliases);
 
         $roles = Role::where('type', 'gym')
             ->where('gym_id', $stop->id)

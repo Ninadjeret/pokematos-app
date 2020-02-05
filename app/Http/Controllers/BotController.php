@@ -155,6 +155,8 @@ class BotController extends Controller {
                 'name' => $request->name,
                 'color_type' => 'specific',
                 'color' => '#'.dechex($request->color),
+                'permissions' => $request->permissions,
+                'mentionable' => $request->mentionable
             ];
             $role = Role::add($args, $fromDiscord);
         };
@@ -215,6 +217,8 @@ class BotController extends Controller {
         $args = [
             'name' => $request->name,
             'color' => '#'.dechex($request->color),
+            'permissions' => $request->permissions,
+            'mentionable' => $request->mentionable
         ];
 
         $app_role->change($args, $fromDiscord);
@@ -350,16 +354,16 @@ class BotController extends Controller {
         }
 
         if( $url ) {
-            $imageAnalyzer = new ImageAnalyzer($url, $guild);
+            $imageAnalyzer = new ImageAnalyzer($url, $guild, $user, $channel_discord_id);
             $result = $imageAnalyzer->result;
             $source_type = 'image';
         } else {
-            $textAnalyzer = new TextAnalyzer($text, $guild);
+            $textAnalyzer = new TextAnalyzer($text, $guild, $user, $channel_discord_id);
             $result = $textAnalyzer->result;
             $source_type = 'text';
         }
 
-        if( empty( $result->error ) ) {
+        if( empty( $result->error ) && $result->eggLevel > 0 ) {
             $args = [];
             $args['city_id'] = $city->id;
             $args['user_id'] = $user->id;
@@ -383,7 +387,32 @@ class BotController extends Controller {
 
         return response()->json($result, 400);
 
+    }
 
+    /**
+     * [decodeImage description]
+     * @param  Request $request [description]
+     * @param  City    $city    [description]
+     * @return [type]           [description]
+     */
+    public function imageDecode( Request $request ) {
+        $url = ( isset($request->url) && !empty($request->url) ) ? $request->url : false ;
+        $guild_discord_id = $request->guild_discord_id;
+
+        if( empty( $guild_discord_id ) ) {
+            return response()->json('L\'ID de Guild est obligatoire', 400);
+        }
+
+        $guild = Guild::where( 'discord_id', $guild_discord_id )->first();
+        $city = City::find( $guild->city->id );
+
+        if( $url ) {
+            $imageAnalyzer = new ImageAnalyzer($url, $guild);
+            $result = $imageAnalyzer->result;
+            return response()->json($result, 200); 
+        } else {
+            return response()->json('URL de l\'image obligatoire', 400);
+        }
     }
 
 }

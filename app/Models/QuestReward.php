@@ -10,6 +10,6 @@ class QuestReward extends Model
     protected $appends = ['thumbnail_url'];
 
     public function getThumbnailUrlAttribute() {
-        return 'https://assets.profchen.fr/img/rewards/reward_'.$this->type.'.png';
+        return 'https://assets.profchen.fr/img/rewards/reward_'.$this->id.'.png';
     }
 }

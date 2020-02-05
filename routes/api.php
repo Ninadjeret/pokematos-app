@@ -83,6 +83,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/guilds/{guild}/questconnectors/{connector}', 'UserController@updateQuestConnector');
     Route::delete('user/guilds/{guild}/questconnectors/{connector}', 'UserController@deleteQuestConnector');
 
+    Route::get('user/guilds/{guild}/logs', 'UserController@getGuildLogs');
+    Route::get('user/cities/{city}/logs', 'UserController@getCityLogs');
 
     Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
@@ -117,7 +119,11 @@ Route::group(['middleware' => ['auth.bot']], function () {
     Route::delete('bot/guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
 
     Route::post('bot/raids', 'BotController@addRaid');
+    Route::post('bot/raids/imagedecode', 'BotController@imageDecode');
 
 });
 
 Route::get('version', 'Controller@getVersion');
+Route::get('test', function (Request $request) {
+    return 'OK';
+});

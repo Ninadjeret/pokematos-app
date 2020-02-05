@@ -49,7 +49,19 @@
                 <v-switch v-model="ex"></v-switch>
             </div>
 
-            <div v-if="$route.params.poi_id && Number.isInteger(parseInt(this.$route.params.poi_id))">
+            <div v-if="gym" class="setting">
+                <label>Alias de nom</label>
+                <p class="description">Les alias de nom sont utilisés lors de la détection des raids pour identifier une arène dont le nom serait mal lu depuis l'image. <a href="https://www.pokematos.fr/documentation/alias-de-pois/">En savoir plus</a></p>
+                <div class="alias" v-for="(alias, index) in aliases">
+                    <input v-model="alias.name" type="text">
+                    <v-btn small flat fab @click="removeAlias(index)"><v-icon>delete</v-icon></v-btn>
+                </div>
+                <div class="alias__add">
+                    <v-btn small fab @click="addAlias"><v-icon>add</v-icon></v-btn>
+                </div>
+            </div>
+
+            <div v-if="inAdmin && getId">
                 <v-subheader v-if="">Autres actions</v-subheader>
                 <v-list-tile color="pink" @click="dialog = true">Supprimer le POI</v-list-tile>
             </div>
@@ -78,6 +90,13 @@
     export default {
         name: 'AdminGym',
         components: { VueGoogleAutocomplete, MapField },
+        props: {
+            poiId: {
+                type: Number,
+                required: false,
+                default: 0,
+            },
+        },
         data() {
             return {
                 loading: false,
@@ -89,19 +108,36 @@
                 zone_id: '',
                 ex: false,
                 gym: false,
+                aliases: [],
                 coordinates:{lat: 1, lng: 1},
+            }
+        },
+        computed: {
+            inAdmin() {
+                return this.poiId === 0;
+            },
+            getId() {
+                let routeId = ( this.$route.params.poi_id && Number.isInteger(parseInt(this.$route.params.poi_id)) ) ? parseInt(this.$route.params.poi_id) : false ;
+                let paramId = ( this.poiId > 0 ) ? parseInt(this.poiId) : false;
+                if( routeId ) {
+                    return routeId;
+                } else if( paramId ) {
+                    return paramId;
+                } else {
+                    return false;
+                }
             }
         },
         created() {
             console.log(this.$route.params);
             this.fetchZones();
-            if( this.$route.params.poi_id && Number.isInteger(parseInt(this.$route.params.poi_id)) ) {
+            if( this.getId ) {
                 this.fetch();
             }
         },
         methods: {
             fetch() {
-                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.$route.params.poi_id).then( res => {
+                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.getId).then( res => {
                     this.name = res.data.name;
                     this.niantic_name = res.data.niantic_name;
                     this.description = res.data.description;
@@ -110,6 +146,7 @@
                     this.gym = res.data.gym;
                     this.coordinates.lat = res.data.lat;
                     this.coordinates.lng = res.data.lng;
+                    this.aliases = res.data.aliases;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response && err.response.data ) {
@@ -135,6 +172,13 @@
                     })
                 });
             },
+            addAlias() {
+                this.aliases.push({id:null,name:''});
+            },
+            removeAlias(index) {
+                console.log(index);
+                this.aliases.splice(index, 1);
+            },
             submit() {
                 const args = {
                     name: this.name,
@@ -145,17 +189,20 @@
                     gym: this.gym,
                     lat: this.coordinates.lat,
                     lng: this.coordinates.lng,
+                    aliases: this.aliases,
                 };
-                if( this.$route.params.poi_id && Number.isInteger(parseInt(this.$route.params.poi_id) ) ) {
+                if( this.getId ) {
                     this.save(args);
+                    this.$emit('poi-create')
                 } else {
                     this.create(args);
+                    this.$emit('poi-create')
                 }
             },
             save( args ) {
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
-                axios.put('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.$route.params.poi_id, args).then( res => {
+                axios.put('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.getId, args).then( res => {
                     this.$store.commit('setSnackbar', {
                         message: 'Enregistrement effectué',
                         timeout: 1500
@@ -198,7 +245,7 @@
             destroy() {
                 this.dialog = false;
                     this.$store.commit('setSnackbar', {message: 'Suppression en cours'})
-                    axios.delete('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.$route.params.poi_id).then( res => {
+                    axios.delete('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.getId).then( res => {
                         this.$store.commit('setSnackbar', {
                             message: 'suppression effectuée',
                             timeout: 1500
