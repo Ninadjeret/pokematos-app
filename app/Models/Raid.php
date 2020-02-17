@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class Raid extends Model {
 
-    protected $fillable = ['status', 'pokemon_id'];
+    protected $fillable = ['status', 'pokemon_id', 'egg_level'];
     protected $hidden = ['gym_id', 'city_id', 'pokemon_id'];
     protected $appends = ['end_time', 'pokemon', 'source', 'channels', 'messages', 'thumbnail_url'];
 
