@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Stop;
+use App\Models\Zone;
 use App\Models\Guild;
+use App\Models\Pokemon;
 use App\Helpers\Helpers;
 use RestCord\DiscordClient;
+use App\Models\QuestReward;
 use App\Models\QuestMessage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -32,7 +36,65 @@ class QuestConnector extends Model
         'filter_stop_stop' => 'array',
     ];
 
+    protected $appends = ['filtered_rewards', 'filtered_pokemons', 'filtered_zones', 'filtered_stops'];
+
     public $roles, $emojis, $channels;
+
+    public function getFilteredRewardsAttribute() {
+        if( empty($this->filter_reward_reward) ) {
+            return [];
+        }
+        $rewards = [];
+        foreach( $this->filter_reward_reward as $reward_id ) {
+            $reward = QuestReward::find($reward_id);
+            if( $reward ) {
+                $rewards[] = $reward;
+            }
+        }
+        return $rewards;
+    }
+
+    public function getFilteredPokemonsAttribute() {
+        if( empty($this->filter_reward_pokemon) ) {
+            return [];
+        }
+        $pokemons = [];
+        foreach( $this->filter_reward_pokemon as $pokemon_id ) {
+            $pokemon = Pokemon::find($pokemon_id);
+            if( $pokemon ) {
+                $pokemons[] = $pokemon;
+            }
+        }
+        return $pokemons;
+    }
+
+    public function getFilteredZonesAttribute() {
+        if( empty($this->filter_stop_zone) ) {
+            return [];
+        }
+        $zones = [];
+        foreach( $this->filter_stop_zone as $zone_id ) {
+            $zone = Zone::find($zone_id);
+            if( $zone ) {
+                $zones[] = $zone;
+            }
+        }
+        return $zones;
+    }
+
+    public function getFilteredStopsAttribute() {
+        if( empty($this->filter_stop_stop) ) {
+            return [];
+        }
+        $stops = [];
+        foreach( $this->filter_stop_stop as $stop_id ) {
+            $stop = Stop::find($stop_id);
+            if( $stop ) {
+                $stops[] = $stop;
+            }
+        }
+        return $stops;
+    }
 
     public function postMessage( $quest, $announce ) {
         if( empty( $this->channel_discord_id ) ) return false;
