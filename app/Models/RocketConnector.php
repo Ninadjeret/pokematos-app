@@ -73,7 +73,7 @@ class RocketConnector extends Model
         }
         $stops = [];
         foreach( $this->filter_stop_stop as $stop_id ) {
-            $stop = RocketBoss::find($stop_id);
+            $stop = Stop::find($stop_id);
             if( $stop ) {
                 $stops[] = $stop;
             }

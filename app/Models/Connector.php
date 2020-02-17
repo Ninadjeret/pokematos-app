@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Stop;
+use App\Models\Zone;
+use App\Models\Guild;
+use App\Models\Pokemon;
 use App\Helpers\Helpers;
 use RestCord\DiscordClient;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +38,65 @@ class Connector extends Model {
         'auto_settings' => 'array',
     ];
 
+    protected $appends = ['filtered_levels', 'filtered_pokemons', 'filtered_zones', 'filtered_gyms'];
+
     public $roles, $emojis, $channels;
+
+    public function getFilteredLevelsAttribute() {
+        if( empty($this->filter_pokemon_level) ) {
+            return [];
+        }
+        $levels = [];
+        foreach( $this->filter_pokemon_level as $level_id ) {
+            $level = Helpers::getLevelObject($level_id);
+            if( $level ) {
+                $levels[] = $level;
+            }
+        }
+        return $levels;
+    }
+
+    public function getFilteredPokemonsAttribute() {
+        if( empty($this->filter_pokemon_pokemon) ) {
+            return [];
+        }
+        $pokemons = [];
+        foreach( $this->filter_pokemon_pokemon as $pokemon_id ) {
+            $pokemon = Pokemon::find($pokemon_id);
+            if( $pokemon ) {
+                $pokemons[] = $pokemon;
+            }
+        }
+        return $pokemons;
+    }
+
+    public function getFilteredZonesAttribute() {
+        if( empty($this->filter_gym_zone) ) {
+            return [];
+        }
+        $zones = [];
+        foreach( $this->filter_gym_zone as $zone_id ) {
+            $zone = Zone::find($zone_id);
+            if( $zone ) {
+                $zones[] = $zone;
+            }
+        }
+        return $zones;
+    }
+
+    public function getFilteredGymsAttribute() {
+        if( empty($this->filter_gym_gym) ) {
+            return [];
+        }
+        $stops = [];
+        foreach( $this->filter_gym_gym as $stop_id ) {
+            $stop = Stop::find($stop_id);
+            if( $stop ) {
+                $stops[] = $stop;
+            }
+        }
+        return $stops;
+    }
 
     public function postMessage( $raid, $announce ) {
         if( empty( $this->channel_discord_id ) ) return false;

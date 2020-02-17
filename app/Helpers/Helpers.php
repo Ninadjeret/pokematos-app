@@ -554,4 +554,19 @@ class Helpers {
         }
         return strtoupper('#'.$color);
     }
+
+    public static function getLevelObject($level_id) {
+        $levels = [
+            1 => (object) ['id' => 1, 'name' => '1 têtes'],
+            2 => (object) ['id' => 2, 'name' => '2 têtes'],
+            3 => (object) ['id' => 3, 'name' => '3 têtes'],
+            4 => (object) ['id' => 4, 'name' => '4 têtes'],
+            5 => (object) ['id' => 5, 'name' => '5 têtes'],
+            6 => (object) ['id' => 6, 'name' => 'EX'],
+        ];
+        if( array_key_exists( $level_id, $levels ) ) {
+            return $levels[$level_id];
+        }
+        return false;
+    }
 }
