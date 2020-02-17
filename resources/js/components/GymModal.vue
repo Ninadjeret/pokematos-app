@@ -17,6 +17,13 @@
                     <img v-if="!gym.quest" src="https://assets.profchen.fr/img/app/egg_0.png">
                     <img v-if="gym.quest && gym.quest.reward" :src="gym.quest.reward.thumbnail_url">
                     <img v-if="gym.quest && !gym.quest.reward" src="https://assets.profchen.fr/img/app/unknown.png">
+                    <div v-if="!gym.gym && gym.invasion" class="rocket_invasion">
+                        <a v-on:click="setScreenTo('RocketBoss')">
+                            <img :src="gym.invasion.boss.thumbnail">
+                            <p>{{gym.invasion.boss.name}} est présent(e) !</p>
+                            <span>En savoir plus <v-icon>keyboard_arrow_right</v-icon></span>
+                        </a>
+                    </div>
                 </div>
                 <div v-if="gym.gym" :class="'dialog__egg '+raidStatus">
                     <p>
@@ -41,12 +48,13 @@
                 <div class="dialog__content">
                     <ul>
                         <li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
-                        <li v-if="gym.gym && (raidStatus == 'none' || gym.raid.egg_level == 6)"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
+                       <li v-if="gym.gym && (raidStatus == 'none' || gym.raid.egg_level == 6)"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
                         <li v-if="!gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">explore</i><span>Annoncer une quête</span></a></li>
                         <li v-if="gym.quest && ( !gym.quest.quest_id || !gym.quest.reward_type )"><a class="modal__action update-quest" v-on:click="setScreenTo('updateQuest')"><i class="material-icons">fingerprint</i><span>Préciser la quête</span></a></li>
                         <li v-if="gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="deleteQuestConfirm()"><i class="material-icons">delete</i><span>Supprimer la quête</span></a></li>
                         <li v-if="raidStatus == 'none' && gym.ex === true && canCreateRaidEx"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
+                        <li v-if="!gym.gym && !gym.invasion"><a class="modal__action create-rocketboss" v-on:click="setScreenTo('createRocketBoss')"><i class="material-icons">people_alt</i><span>Annoncer un boss Rocket</span></a></li>
                         <li v-if="gym.google_maps_url && gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
                         <li v-if="gym.google_maps_url && !gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers le Pokéstop</span></a></li>
                         <li v-if="canAccessCityParam('poi_edit')"><a class="modal__action" v-on:click="setScreenTo('editPOI')"><i class="material-icons">edit</i><span>Modifier le POI</span></a></li>
@@ -108,6 +116,85 @@
                 <div class="footer-action">
                     <a v-on:click="postNewRaidEx()" class="bt modal__action cancel">Confirmer</a>
                     <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
+                </div>
+            </div>
+
+            <div v-if="modalScreen == 'createRocketBoss'" class="modal__screen create-rocketboss">
+                <h3 class="">Annoncer un boss Rocket</h3>
+                <p v-if="bosses" class="step__title">Quel est le boss présent ?</p>
+                <div class="create-rocket-boss__wrapper">
+                    <ul v-if="bosses" :class="(selectedBoss.boss.id) ? 'selected-boss' : ''">
+                        <li v-for="boss in bosses" :key="boss.id" :class="(selectedBoss.boss.id == boss.id) ? 'selected' : 'unselected'">
+                            <a @click="selectBoss(boss)">
+                                <img :src="boss.thumbnail">
+                                <span>{{boss.name}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="selectedBoss.boss" class="rocket-boss-pokemon__wrapper">
+                    <hr>
+                    <p class="step__title">Quels sont ses Pokémon ?</p>
+                    <div class="choices">
+                        <div v-for="step in rocketSteps" class="choice">
+                            <multiselect
+                                v-model="selectedBoss['pokemon_'+step.id]"
+                                :options="selectedBoss.boss.pokemon[step.id]"
+                                track-by="id"
+                                label="name_fr"
+                                placeholder="?"
+                                :searchable="false">
+                                <template slot="singleLabel" slot-scope="{ option }"><img :src="option.thumbnail_url"></template>
+                                <template slot="option" slot-scope="props"><img class="option__image" :src="props.option.thumbnail_url"></template>
+                            </multiselect>
+                            <p>{{step.name}}</p>
+                        </div>
+                    </div>
+                    <hr style="clear: both">
+                    <div class="text-xs-center">
+                        <a class="bt" @click="createRocketInvasion()">Valider</a>
+                    </div>
+                </div>
+                <div class="footer-action">
+                    <a v-if="!gym.invasion" v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
+                    <a v-if="gym.invasion" v-on:click="setScreenTo('RocketBoss')" class="bt modal__action cancel">Annuler</a>
+                </div>
+            </div>
+
+            <div v-if="modalScreen == 'RocketBoss'" class="modal__screen rocketboss">
+                <h3 class="">Invasion Rocket !</h3>
+                <hr>
+                    <div class="rocket_detail">
+                        <img :src="gym.invasion.boss.thumbnail">
+                        <p v-if="gym.invasion.boss === 3">{{gym.invasion.boss.name}} est présente au Pokéstop {{gym.name}}. Voici les pokémons qu'elle va utliser pour t'affronter</p>
+                        <p v-else>{{gym.invasion.boss.name}} est présent au Pokéstop {{gym.name}}. Voici les pokémons qu'il va utliser pour t'affronter</p>
+                    </div>
+                <hr>
+                <div v-for="step in rocketSteps" class="rocket_pokemons">
+                    <img v-if="gym.invasion['pokemon_'+step.id]" :src="gym.invasion['pokemon_'+step.id]['thumbnail_url']">
+                    <span v-if="!gym.invasion['pokemon_'+step.id]" class="rocket_unknown">?</span>
+                    <p>{{step.name}}</p>
+                </div>
+                <hr style="clear: both">
+                <div class="dialog__content">
+                    <ul>
+                        <li v-if="!gym.invasion['pokemon_step1'] || !gym.invasion['pokemon_step2'] || !gym.invasion['pokemon_step3']">
+                            <a class="modal__action delete-invasion" v-on:click="setScreenTo('createRocketBoss')">
+                                <i class="material-icons">fingerprint</i>
+                                <span>Préciser les Pokémon</span>
+                            </a>
+                        </li>
+                        <li v-if="gym.invasion">
+                            <a class="modal__action delete-invasion" v-on:click="deleteInvasionConfirm()">
+                                <i class="material-icons">delete</i>
+                                <span>Supprimer l'invasion Rocket</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer--actions">
+                    <button v-if="mode == 'base'" class="button--close" v-on:click="setScreenTo('default')"><i class="material-icons">close</i></button>
+                    <button v-if="mode == 'rocket'" class="button--close" v-on:click="hideModal"><i class="material-icons">close</i></button>
                 </div>
             </div>
 
@@ -233,7 +320,9 @@
 
 <script>
 import moment from 'moment';
+import Multiselect from 'vue-multiselect'
 export default {
+    components: { Multiselect },
     data() {
         return {
             dialog: false,
@@ -261,6 +350,28 @@ export default {
             questSearch: null,
             questToSubmit: false,
             raidStatus: 'none',
+            mode: 'base',
+            bosses: [],
+            selectedBoss: {
+                boss: false,
+                pokemon_step1: false,
+                pokemon_step2: false,
+                pokemon_step3: false,
+            },
+            rocketSteps: [
+                {
+                    id: 'step1',
+                    name: '1er Pokemon'
+                },
+                {
+                    id: 'step2',
+                    name: '2e Pokemon'
+                },
+                {
+                    id: 'step3',
+                    name: '3e Pokemon'
+                }
+            ],
         }
     },
     computed: {
@@ -317,20 +428,32 @@ export default {
         contentClass() {
             let isGym = (this.gym.gym) ? 'gym' : 'stop' ;
             let isEx = (this.gym.ex) ? 'ex' : '' ;
-            return 'gym-modal '+isGym+' '+isEx;
+            return 'gym-modal '+isGym+' '+isEx+' '+this.modalScreen.toLowerCase();
         }
     },
     created() {
         this.updateTimeRange();
+        this.fetchRocketBosses();
     },
     methods: {
-        showModal( gym ) {
+        fetchRocketBosses() {
+            axios.get("/api/rocket/bosses").then(res => {
+              this.bosses = res.data;
+            });
+        },
+        showModal( gym, mode ) {
             this.gym = gym;
             this.dialog = true;
             this.createRaidData.pokemon = false;
             this.questToSubmit = false;
             this.raidStatus = 'none';
             this.getRaidData();
+            this.getInvasionData();
+            this.mode = 'base';
+            if( mode == 'rocket' ) {
+                this.mode = 'rocket';
+                this.modalScreen = 'RocketBoss';
+            }
         },
         hideModal() {
             this.dialog = false;
@@ -432,6 +555,16 @@ export default {
                 this.timeLeft = false;
                 this.raidAnnonce = 'Rien pour le moment...';
                 this.raidUrl = 'https://assets.profchen.fr/img/app/egg_0.png';
+            }
+        },
+        getInvasionData() {
+            if( this.gym.invasion ) {
+                this.selectedBoss = {
+                    boss: this.gym.invasion.boss,
+                    pokemon_step1: this.gym.invasion.pokemon_step1,
+                    pokemon_step2: this.gym.invasion.pokemon_step2,
+                    pokemon_step3: this.gym.invasion.pokemon_step3,
+                };
             }
         },
         deleteRaidConfirm() {
@@ -598,6 +731,67 @@ export default {
                 }
             })
             return auth;
+        },
+        selectBoss(boss) {
+            this.selectedBoss = {
+                boss: false,
+                pokemon_step1: false,
+                pokemon_step2: false,
+                pokemon_step3: false,
+            };
+            this.selectedBoss.boss = boss;
+            let that = this;
+            this.rocketSteps.forEach( (step, index) => {
+                if( that.selectedBoss.boss.pokemon[step.id] && that.selectedBoss.boss.pokemon[step.id].length === 1 ) {
+                    that.selectedBoss['pokemon_'+step.id] = that.selectedBoss.boss.pokemon[step.id][0];
+                }
+            })
+        },
+        createRocketInvasion() {
+            this.setScreenTo('default');
+            this.hideModal();
+            let params = {
+                stop_id: this.gym.id,
+                boss_id: this.selectedBoss.boss.id,
+                pokemon_step1: (this.selectedBoss.pokemon_step1) ? this.selectedBoss.pokemon_step1.id : null,
+                pokemon_step2: (this.selectedBoss.pokemon_step2) ? this.selectedBoss.pokemon_step2.id : null,
+                pokemon_step3: (this.selectedBoss.pokemon_step3) ? this.selectedBoss.pokemon_step3.id : null,
+            };
+            if( !this.gym.invasion ) {
+                axios.post('/api/user/cities/'+this.currentCity.id+'/rocket/invasions', {
+                    params: params,
+                }).then(res => {
+                    this.$store.dispatch('fetchData');
+                }).catch(err => {
+                });
+            } else {
+                axios.put('/api/user/cities/'+this.currentCity.id+'/rocket/invasions/'+this.gym.invasion.id, {
+                    params: params,
+                }).then(res => {
+                    this.$store.dispatch('fetchData');
+                }).catch(err => {
+                });
+            }
+        },
+        deleteInvasionConfirm() {
+            var result = confirm('Supprimer l\'invasion Rocket de '+this.gym.invasion.boss.name+' au Pokéstop '+this.gym.name);
+            if( result ) {
+                this.deleteInvasion();
+            }
+        },
+        deleteInvasion() {
+            this.setScreenTo('default');
+            this.hideModal();
+            axios.delete('/api/user/cities/'+this.currentCity.id+'/rocket/invasions/'+this.gym.invasion.id).then(res => {
+                this.$store.commit('deletePOIActivity', this.gym);
+                this.$store.dispatch('fetchData');
+                this.$store.commit('setSnackbar', {
+                    message: 'Invasion supprimée',
+                    timeout: 1500
+                });
+            }).catch(err => {
+                console.log(err)
+            });
         }
     }
 }

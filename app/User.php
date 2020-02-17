@@ -72,6 +72,10 @@ class User extends Authenticatable
                 'label' => 'Mettre à jour les quêtes',
                 'context' => 'global'
             ],
+            'rocket_bosses_edit' => [
+                'label' => 'Mettre à jour les Boss Rocket',
+                'context' => 'global'
+            ],
             'guild_manage' => [
                 'label' => 'Gérer la guild',
                 'context' => 'guild'
@@ -363,6 +367,7 @@ class User extends Authenticatable
         }
 
         $user->refreshDiscordToken();
+        sleep(1);
         $user_guilds = $user->getDiscordMeGuilds();
 
         if( !$user_guilds ) {

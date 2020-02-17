@@ -190,7 +190,7 @@ class Raid extends Model {
                 'source' => ( isset($args['source_type']) ) ? $args['source_type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => $args['user_id'],
-                'raid_id' => $raid->id,
+                'relation_id' => $raid->id,
                 'message_discord_id' => ( isset($args['message_discord_id']) ) ? $args['message_discord_id'] : null ,
                 'channel_discord_id' => ( isset($args['channel_discord_id']) ) ? $args['channel_discord_id'] : null ,
                 'guild_id' => ( isset($args['guild_id']) ) ? $args['guild_id'] : null ,

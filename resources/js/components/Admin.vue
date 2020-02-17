@@ -113,7 +113,12 @@
                         route: 'admin.quests.home',
                         icon: 'explore',
                         permission: 'guild_manage',
-                        permission: 'guild_manage'
+                    },
+                    {
+                        label: 'Signalements de boss Rocket',
+                        route: 'admin.rocket.home',
+                        icon: 'people_alt',
+                        permission: 'guild_manage',
                     },
                     {
                         label: 'Roles personnalisés',
@@ -146,6 +151,12 @@
                         route: 'admin.quests',
                         icon: 'explore',
                         permission: 'quest_edit'
+                    },
+                    {
+                        label: 'Gérer les Boss Rocket',
+                        route: 'admin.rocket.bosses',
+                        icon: 'people_alt',
+                        permission: 'rocket_bosses_edit'
                     },
                 ]
             }

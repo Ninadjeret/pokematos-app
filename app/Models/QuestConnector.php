@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Guild;
 use App\Helpers\Helpers;
 use RestCord\DiscordClient;
 use App\Models\QuestMessage;

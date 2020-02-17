@@ -32,14 +32,16 @@ class QuestInstance extends Model
     }
 
     public function getLastUserAction() {
-        $annonce = UserAction::where('quest_instance_id', $this->id)
+        $annonce = UserAction::where('type', 'like', 'quest-%')
+            ->where('relation_id', $this->id)
             ->orderBy('created_at', 'desc')
             ->first();
         return $annonce;
     }
 
     public function getUserActions() {
-        $annonces = UserAction::where('quest_instance_id', $this->id)
+        $annonces = UserAction::where('type', 'like', 'quest-%')
+            ->where('relation_id', $this->id)
             ->orderBy('created_at', 'asc')
             ->get();
         return $annonces;
@@ -91,7 +93,7 @@ class QuestInstance extends Model
                 'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => Auth::id(),
-                'quest_instance_id' => $instance->id,
+                'relation_id' => $instance->id,
             ]);
             $stop = Stop::find($args['gym_id']);
             $stop->touch();

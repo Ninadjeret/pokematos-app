@@ -54,6 +54,7 @@ Vue.component('v-select', vSelect)
  Vue.component( 'snackbar', require('./components/parts/Snackbar.vue').default );
  Vue.component( 'permission', require('./components/admin/parts/Permission.vue').default );
  Vue.component( 'navigation', require('./components/Navigation.vue').default );
+  Vue.component( 'rocket-map', require('./components/parts/RocketMap.vue').default );
 
 import routes from './routes';
 import Container from './components/Container.vue';

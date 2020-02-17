@@ -1,5 +1,5 @@
 <template>
-    <div ref="buttonactions" :class="'map__actions '+menuClass">
+    <div ref="buttonactions" :class="'map__actions '+menuClass+' mode-'+mode">
         <div class="map__overlay"></div>
         <div class="actions">
             <button v-if="this.$route.name == 'map'" v-on:click="localise()" class="action" id="findme">
@@ -12,6 +12,11 @@
                 <span>Actualiser</span>
                 <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
                 <i class="material-icons">refresh</i>
+            </button>
+            <button v-on:click="toggleMap()" class="action" id="refresh">
+                <span>Radar Rocket</span>
+                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+                <i class="material-icons">people_alt</i>
             </button>
         </div>
         <div class="launcher">
@@ -26,6 +31,7 @@
 <script>
 import moment from 'moment';
 export default {
+    props: ['mode'],
     data() {
         return {
             'menuClass': ''
@@ -51,6 +57,10 @@ export default {
         },
         toggleMenu() {
              this.menuClass = ( this.menuClass == 'open' ) ? '' : 'open' ;
+        },
+        toggleMap() {
+            this.$emit('toggle-map');
+            this.toggleMenu();
         }
     }
 }

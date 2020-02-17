@@ -101,6 +101,19 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('quests/{quest}', 'PokemonController@updateQuest');
     Route::delete('quests/{quest}', 'PokemonController@deleteQuest');
 
+    //Rocket
+    Route::get('rocket/bosses', 'RocketController@getBosses');
+    Route::put('rocket/bosses/{boss}', 'RocketController@updateBoss');
+    Route::post('user/cities/{city}/rocket/invasions', 'RocketController@createInvasion');
+    Route::put('user/cities/{city}/rocket/invasions/{invasion}', 'RocketController@updateInvasion');
+    Route::delete('user/cities/{city}/rocket/invasions/{invasion}', 'RocketController@deleteInvasion');
+
+    Route::get('user/guilds/{guild}/invasionconnectors', 'RocketController@getConnectors');
+    Route::post('user/guilds/{guild}/invasionconnectors', 'RocketController@createConnector');
+    Route::get('user/guilds/{guild}/invasionconnectors/{connector}', 'RocketController@getConnector');
+    Route::put('user/guilds/{guild}/invasionconnectors/{connector}', 'RocketController@updateConnector');
+    Route::delete('user/guilds/{guild}/invasionconnectors/{connector}', 'RocketController@deleteConnector');
+
 });
 
 Route::group(['middleware' => ['auth.bot']], function () {
@@ -120,6 +133,7 @@ Route::group(['middleware' => ['auth.bot']], function () {
 
     Route::post('bot/raids', 'BotController@addRaid');
     Route::post('bot/raids/imagedecode', 'BotController@imageDecode');
+    Route::post('bot/conversations', 'BotController@addConversation');
 
 });
 

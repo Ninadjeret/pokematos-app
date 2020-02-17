@@ -1,0 +1,277 @@
+#app__container.template-admin-rocket-bosses {
+    background-color: $light_rocket;
+    .v-content {
+        background-color: $light_rocket;
+    }
+     .theme--dark.v-toolbar {
+         background-color: $primary_rocket;
+     }
+     .v-tabs__wrapper {
+         background-color: $primary_rocket;
+     }
+     .v-tabs__container--icons-and-text {
+         height: 140px;
+         background-color: $primary_rocket;
+         img {
+             height: 80px;
+             width: auto;
+             margin-bottom: 10px;
+             filter: grayscale(100%);
+         }
+     }
+     .v-tabs__item--active {
+         img {
+             filter: grayscale(0%);
+         }
+     }
+     .v-tabs__item:not(.v-tabs__item--active) {
+         opacity: 0.4;
+     }
+     .v-tabs__slider.accent {
+         background: $accent_rocket;
+     }
+     .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
+         background: $accent_rocket !important;
+     }
+     .v-card__text {
+         background: $light_rocket;
+         padding: 0;
+     }
+     .v-subheader {
+         color: #fff !important;
+         background: $primary_rocket;
+     }
+     .multiselect__tags {
+         border-radius: 0;
+         background: $light_rocket;
+         border-color: rgba(255, 255, 255, 0.1);
+         border-bottom: 0;
+         border-left: 0;
+         border-right: 0;
+         .multiselect__placeholder {
+             color: rgba(255, 255, 255, 0.6);
+         }
+     }
+     .v-window {
+         background: #fff !important;
+     }
+     .setting.pokemon {
+         border-color: rgba(255, 255, 255, 0.1);
+         margin-left: 10px;
+         margin-right: 10px;
+         p {
+             color: rgba(255, 255, 255, 0.6);
+         }
+     }
+     .v-card:not(.v-sheet--tile):not(.v-card--shaped) {
+         border-radius: 0;
+     }
+}
+
+#app__container.mode-rocket.template-map {
+    .v-toolbar__title img {
+        filter: grayscale(100%);
+    }
+    .theme--dark.v-toolbar {
+        background-color: $primary_rocket;
+    }
+    .v-item-group.v-bottom-nav .v-btn {
+        background-color: $primary_rocket !important;
+        color: rgba(255, 255, 255, 0.2) !important;
+    }
+    footer .theme--light.v-bottom-nav a.v-btn--active {
+        color: $accent_rocket !important;
+    }
+    .map__actions #launcher{
+        background-color: $accent_rocket;
+    }
+}
+.modal__action.create-rocketboss {
+    color: $light_rocket !important;
+    font-family: 'Teko';
+    font-size: 19px;
+    i {
+        color: $accent_rocket;
+    }
+}
+.v-dialog.gym-modal.stop.createrocketboss,
+.v-dialog.gym-modal.stop.rocketboss {
+    .v-card {
+        background: $light_rocket;
+        .dialog__content ul li a {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .dialog__wrap {
+            border-color: rgba(255, 255, 255, 0.1);
+            h3 {
+                color: $accent_rocket;
+            }
+            .step__title {
+                color: rgba(255, 255, 255, 0.8);
+            }
+            .create-rocket-boss__wrapper {
+                img {
+                    margin-bottom: 10px;
+                }
+                span {
+                    color: #fff;
+                }
+            }
+            .bt {
+                background: $accent_rocket;
+                color: rgba(255, 255, 255, 1);
+                &:before {
+                    border: none;
+                }
+            }
+            .bt.modal__action.cancel {
+                background: $primary_rocket;
+                line-height: 20px;
+                color: rgba(255, 255, 255, 0.8) !important;
+                font-size: 12px;
+                padding: 10px 30px;
+                &:before {
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    height: 30px;
+                }
+            }
+            .button--close {
+                background: $primary_rocket;
+                &:before {
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                }
+            }
+            .choices {
+                p {
+                    text-align: center;
+                    font-size: 11px;
+                    color: rgba(255, 255, 255, 0.8);
+                }
+                .multiselect__content-wrapper {
+                    background: $light_rocket;
+                    border: $primary_rocket;
+                    .multiselect__element {
+                        background: $light_rocket;
+                    }
+                }
+            }
+            .multiselect__tags {
+                background: transparent;
+                border-radius: 0;
+                border: none;
+                /*border-right: 1px solid rgba(255, 255, 255, 0.1);*/
+                &:last-child {
+                    border-right: none;
+                }
+                .multiselect__single {
+                    background: transparent;
+                }
+
+            }
+            .rocket_detail {
+                display: flex;
+                p {
+                    color: rgba(255, 255, 255, 0.8);
+                    padding: 20px 10px 0 0;
+                }
+            }
+            .rocket_pokemons {
+                width: 33%;
+                float: left;
+                text-align: center;
+                color: rgba(255, 255, 255, 0.3);
+                font-size: 12px;
+                img {
+                    max-width: 100px;
+                }
+                .rocket_unknown {
+                    display: inline-block;
+                    line-height: 100px;
+                    font-family: 'Teko';
+                    font-size: 70px;
+                }
+            }
+        }
+    }
+}
+.rocket_invasion {
+    a {
+        margin-top: 15px;
+        text-decoration: none;
+        width: 100%;
+        padding: 5px 20px;
+        display: inline-block;
+        background: $light_rocket;
+        text-align: left;
+        img {
+            float: left;
+            width: 60px;
+            height: auto;
+        }
+        p {
+            margin: 3px 0 0 0;
+            font-family: 'Teko';
+            font-size: 23px;
+            color: $accent_rocket !important;
+        }
+        span {
+        }
+        i {
+            color: $accent_rocket !important;
+        }
+    }
+}
+
+.map-rocket {
+    top:0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    z-index: 3500;
+    position: fixed;
+    h3 {
+        position: fixed;
+        z-index: 4000;
+        top: 20px;
+        width: 100%;
+        text-align: center;
+        color: #d4271b;
+        font-family: 'Teko';
+        font-size: 39px;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    }
+    .button--close {
+        position: fixed;
+        z-index: 4000;
+        bottom: 20px;
+        right: calc( 50% - 25px );
+        width: 45px;
+        min-width: 50px;
+        height: 50px;
+        background: $primary_rocket;
+        border: none;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 10px;
+        border-radius: 50%;
+        box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+        padding: 0;
+        i {
+            font-size: 18px;
+            line-height: 50px;
+        }
+        &:before {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            content: "";
+            width: 40px;
+            height: 40px;
+            display: block;
+            position: absolute;
+            border-radius: 50%;
+            top: 5px;
+            left: 5px;
+        }
+    }
+}
+.map__actions.mode-rocket {
+    display: none;
+}
