@@ -19,7 +19,7 @@ class Stop extends Model {
 
     use SoftDeletes;
 
-    protected $fillable = ['name', 'niantic_name', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id', 'ex'];
+    protected $fillable = ['name', 'niantic_name','niantic_id', 'description', 'lat', 'lng', 'ex', 'gym', 'city_id', 'zone_id', 'ex'];
     protected $appends = ['zone', 'city', 'google_maps_url', 'raid', 'quest', 'invasion', 'aliases'];
     protected $hidden = ['zone_id', 'city_id', 'quest_id'];
     protected $casts = [
