@@ -1,6 +1,7 @@
 <?php
 
 namespace App\RaidAnalyzer;
+use Illuminate\Support\Str;
 
 use App\RaidAnalyzer\GymSearch;
 use App\RaidAnalyzer\Coordinates;
@@ -60,7 +61,7 @@ class ImageAnalyzer {
     public function run() {
 
          if( $this->imageData->type == 'egg' ) {
-             $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
+             $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url_ocr );
              $this->_log($this->ocr);
              $this->result->type = 'egg';
              $this->result->gym = $this->getGym();
@@ -69,7 +70,7 @@ class ImageAnalyzer {
          }
 
         elseif( $this->imageData->type == 'pokemon' ) {
-             $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
+             $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url_ocr );
              $this->_log($this->ocr);
              $this->result->type = 'pokemon';
              $this->result->date = $this->getTime();
@@ -82,7 +83,7 @@ class ImageAnalyzer {
          }
 
          elseif( $this->imageData->type == 'ex' ) {
-             $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url );
+             $this->ocr = $this->MicrosoftOCR->read( $this->imageData->url_ocr );
              $this->_log($this->ocr);
              $this->result->type = 'ex';
              $this->result->gym = $this->getExGym();
@@ -105,9 +106,11 @@ class ImageAnalyzer {
      */
     private function saveImage( $source ) {
 
-        $filename = 'capture-' . time();
+        $filename = 'capture-' . time().'-'.Str::random(10);;
         $path = storage_path('app/public/captures/'.$filename.'.jpg');
+        $path_ocr = storage_path('app/public/captures/'.$filename.'-ocr.jpg');
         $url = env('APP_URL').Storage::url('captures/'.$filename.'.jpg');
+        $url_ocr = env('APP_URL').Storage::url('captures/'.$filename.'-ocr.jpg');
 
         //Create Img from file
         if( strstr($source, '.jpg') ) {
@@ -134,12 +137,18 @@ class ImageAnalyzer {
             $image = $this->cropImage($image, $firtPixel, $lastPixel);
         }
 
+        //Crop pour l'envoi à l'API de l'OCR
+        $lastPixel = $this->getLastPixel($image);
+        $image2 = $image = $this->cropImage($image, $lastPixel * 0.04, $lastPixel);
+
         //Return data
         $imageData = (object) array(
             'source'   => $source,
             'filename'  => $filename,
             'path'  => $path,
+            'patch_ocr' => $path_ocr,
             'url'   => $url,
+            'url_ocr' => $url_ocr,
             'width' => imagesx($image),
             'height' => imagesy($image),
         );
@@ -150,6 +159,8 @@ class ImageAnalyzer {
         //Destroy temp Img
         imagejpeg($image, $path);
         imagedestroy($image);
+        imagejpeg($image2, $path);
+        imagedestroy($image2);
         return $imageData;
 
     }
