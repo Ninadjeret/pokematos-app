@@ -146,6 +146,8 @@ class ImportPOIs extends Command
     public function findPOI( $key, $data, $city_id, $type ) {
 
         $to_update = false;
+        $import_lat = round($data['lat'], 5, PHP_ROUND_HALF_DOWN);
+        $import_lng = round($data['lng'], 5, PHP_ROUND_HALF_DOWN);
         $this->line('Analyse du POI '.$data['name']." ({$data['guid']})");
 
         $stop = Stop::where('city_id', $city_id )
@@ -153,7 +155,7 @@ class ImportPOIs extends Command
             ->first();
         if( !empty( $stop ) ) {
             $to_update = $stop->id;
-            $this->line('     => Correspondance trouvée : '.$stop->id);
+            $this->line('     => Correspondance trouvée par ID : '.$stop->id);
         }
 
         $stop = Stop::where('city_id', $city_id )
@@ -164,26 +166,26 @@ class ImportPOIs extends Command
                 'lat' => $stop->lat,
                 'lng' => $stop->lng,
             ], [
-                'lat' => $data['lat'],
-                'lng' => $data['lng'],
+                'lat' => $import_lat,
+                'lng' => $import_lng,
             ]);
             if( $coords_similarity ) {
                 $to_update = $stop->id;
-                $this->line('     => Correspondance trouvée : '.$stop->id);
+                $this->line('     => Correspondance trouvée par Titre : '.$stop->id);
             }
         }
-
         $stop = Stop::where('city_id', $city_id )
-            ->where('lat', $data['lat'])
-            ->where('lng', $data['lng'])
+            ->whereBetween('lat', [$import_lat-0.00001, $import_lat+0.00001])
+            ->whereBetween('lng', [$import_lng-0.00001, $import_lng+0.00001])
             ->first();
         if( !empty( $stop ) ) {
             $to_update = $stop->id;
-            $this->line('     => Correspondance trouvée : '.$stop->id);
+            $this->line('     => Correspondance trouvée par GPS : '.$stop->id);
         }
 
         if( !$to_update ) {
             $this->result[$type]->to_add_count++;
+            $this->info("{$data['name']} -- lat:{$import_lat} -- lng:{$import_lng}");
         } else {
             $this->result[$type]->to_update_count++;
             $this->result[$type]->to_update_vals[$key] = $to_update;
@@ -192,9 +194,15 @@ class ImportPOIs extends Command
     }
 
     public static function isSameCoords( $stop_coords, $import_coords ) {
-        if( $stop_coords['lat'] == $import_coords['lat'] && $stop_coords['lng'] == $import_coords['lng'] ) {
-            return true;
+        $lat = false;
+        $lng = false;
+
+        if( $stop_coords['lat'] - $import_coords['lat'] <= 0.00002 || $import_coords['lat'] - $stop_coords['lat'] <= 0.00002 ) {
+            $lat = true;
         }
-        return false;
+        if( $stop_coords['lng'] - $import_coords['lng'] <= 0.00002 || $import_coords['lng'] - $stop_coords['lng'] <= 0.00002 ) {
+            $lng = true;
+        }
+        return $lat && $lng;
     }
 }

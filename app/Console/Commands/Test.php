@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use RestCord\DiscordClient;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class Test extends Command
 {
@@ -11,7 +13,7 @@ class Test extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'test';
 
     /**
      * The console command description.
@@ -37,6 +39,19 @@ class Test extends Command
      */
     public function handle()
     {
-        //
+        $discord = new DiscordClient([
+            'token' => config('discord.token'), 
+        ]);
+
+        try {
+            $guild = $discord->guild->getGuild(['guild.id' => 48065406879879]);;
+        }
+        catch (GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+        }
+        //Log::debug( print_r($discord, true) );
+        //$this->line( print_r($guild, true) );
+        $this->info('OK');
     }
 }
