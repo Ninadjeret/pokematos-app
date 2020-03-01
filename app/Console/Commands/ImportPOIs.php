@@ -90,23 +90,31 @@ class ImportPOIs extends Command
         }
         $this->info("Taitement en cours...");
 
+        $added = 0;
+        $updated = 0;
         foreach( $array['gyms'] as $key => $data ) {
             if( !array_key_exists( $key, $this->result['gyms']->to_update_vals ) ) {
+                $added++;
                 $this->add($data, $city->id, true);
             } else {
+                $updated++;
                 $stop_to_update = Stop::find( $this->result['gyms']->to_update_vals[$key] );
-                $this->update($data, $stop_to_update, $city->id, false);
+                $this->update($data, $stop_to_update, $city->id, true);
             }
         }
 
         foreach( $array['pokestops'] as $key => $data ) {
-            if( !array_key_exists( $key, $this->result['gyms']->to_update_vals ) ) {
-                $this->add($data, $city->id, true);
+            if( !array_key_exists( $key, $this->result['pokestops']->to_update_vals ) ) {
+                $added++;
+                $this->add($data, $city->id, false);
             } else {
-                $stop_to_update = Stop::find( $this->result['gyms']->to_update_vals[$key] );
+                $updated++;
+                $stop_to_update = Stop::find( $this->result['pokestops']->to_update_vals[$key] );
                 $this->update($data, $stop_to_update, $city->id, false);
             }
         }
+
+        $this->info("{$added} POI ajoutés et {$updated} mis à jour");
 
         return;
     }
@@ -128,6 +136,7 @@ class ImportPOIs extends Command
     }
 
     public function update( $data, $stop, $city_id, $gym = true ) {
+        $this->line( 'tototo ' . print_r($stop->id, true) );
         $gym_type = ( $gym ) ? 1 : 0 ;
         $ex = ( array_key_exists('isEx', $data) ) ? 1 : 0;
         $stop->update([
