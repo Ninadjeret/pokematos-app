@@ -53,8 +53,8 @@ class PostQuestInstanceToDiscord
             }
 
             if( $connector->filter_reward_type == 'reward' ) {
-                if( !$event->quest->quest ) continue;
-                if( !in_array( $event->raid->egg_level, $connector->filter_reward_reward ) ) continue;
+                if( !$event->quest->reward ) continue;
+                if( !in_array( $event->quest->reward->id, $connector->filter_reward_reward ) ) continue;
             }
 
             if( $connector->filter_reward_type == 'pokemon' ) {
