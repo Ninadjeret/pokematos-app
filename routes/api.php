@@ -141,3 +141,7 @@ Route::get('version', 'Controller@getVersion');
 Route::get('test', function (Request $request) {
     return 'OK';
 });
+
+//Stats
+Route::get('stats/g/ia', 'StatsController@getGlobalIAReport');
+Route::get('stats/c/{city_slug}/ia', 'StatsController@getCityIAReport');
