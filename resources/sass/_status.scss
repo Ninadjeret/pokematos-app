@@ -1,0 +1,120 @@
+.status__header {
+    background: $primary;
+    .container {
+        position: relative;
+        padding-top: 35px;
+    }
+    h1 {
+        font-family: 'Teko';
+        color: #fff;
+        font-size: 40px;
+        text-align: center;
+        small {
+            font-family: 'Teko';
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 28px;
+        }
+    }
+    img {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        max-height: 100px;
+    }
+}
+
+.status__data {
+    background: #fff;
+    .chart {
+        padding: 15px 0;
+        text-align: center;
+        h3 {
+            font-family: 'Teko';
+            color: $primary_dark;
+            font-size: 30px;
+        }
+        &:after {
+            content: "";
+            margin: auto;
+            width:100px;
+            height: 3px;
+            background: $primary;
+            margin-top: 30px;
+            display: block;
+        }
+    }
+    .services {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: stretch;
+        box-sizing: border-box;
+        .service {
+            background: #f6f6f6;
+            padding: 10px;
+            flex-basis: 255px;
+            box-sizing: border-box;
+            margin: 10px;
+            position: relative;
+            h4 {
+                margin-left: 40px;
+                text-align: left;
+                color: $primary_dark;
+                font-size: 20px;
+                font-family: 'Teko';
+                small {
+                    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                    display: block;
+                }
+            }
+        }
+        i {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-radius: 100px;
+            position: absolute;
+            left: 5px;
+            margin: 10px 20px 10px 10px;
+            &.on {
+                background: green;
+                &:after {
+                    border: 2px solid green;
+                }
+            }
+            &.off {
+                background: red;
+                &:after {
+                    border: 2px solid red;
+                }
+            }
+            &:after {
+                content: "";
+                display: block;
+                width: 30px;
+                height: 30px;
+                border-radius: 100px;
+                background: transparent;
+                left: -5px;
+                top: -5px;
+                position: absolute;
+            }
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .status__header {
+        img {
+            max-height: 50px;
+        }
+    }
+    .status__data {
+        .services {
+            .service {
+                flex-basis: 100%;
+            }
+        }
+    }
+}
