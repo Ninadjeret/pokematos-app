@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stop;
+use App\User;
+use App\Models\Guild;
+use App\Helpers\Discord;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
+
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -19,16 +21,10 @@ class Controller extends BaseController
     }
 
     public function test( Request $request ) {
-        $stops = Stop::whereHas('raid', function (Builder $query) {
-                $start = new \DateTime();
-                $start->modify('- 45 minutes');
-                $end = new \DateTime();
-                $end->modify('+ 60 minutes');
-                $query->whereBetween('start_time', [$start->format('Y-m-d H:i:s'), $end->format('Y-m-d H:i:s')]);
-            })
-            ->where('gym', 1)
-            ->get()
-            ->keyBy('id');
-        return response()->json($stops, 200);
+        $guild = Guild::find(1);
+        $user = User::find(1);
+        $message = "Coucou <@!287549031087996928> <@!630740660537786371>";
+        $decoded = Discord::translateFrom($message, $guild, $user);
+        return response()->json($decoded, 200);
     }
 }

@@ -53,6 +53,8 @@ class RocketController extends Controller
 
     public function createInvasion( City $city, Request $request ) {
 
+        return response()->json('Annonce actuellement indisponible', 403);
+
         $user = Auth::user();
 
         $stop = Stop::find($request->params['stop_id']);
@@ -103,6 +105,8 @@ class RocketController extends Controller
 
     public function updateInvasion( City $city, RocketInvasion $invasion, Request $request ) {
 
+        return response()->json('Annonce actuellement indisponible', 403);
+
         $user = Auth::user();
 
         $args = [
@@ -133,6 +137,8 @@ class RocketController extends Controller
     }
 
     public function deleteInvasion( City $city, RocketInvasion $invasion, Request $request ) {
+
+        return response()->json('Annonce actuellement indisponible', 403);
         $user = Auth::user();
 
         $announces = $invasion->getUserActions();

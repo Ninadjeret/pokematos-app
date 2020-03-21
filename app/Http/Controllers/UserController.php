@@ -68,6 +68,8 @@ class UserController extends Controller {
 
     public function createQuest( City $city, Request $request ) {
 
+        return response()->json('Annonce actuellement indisponible', 403);
+
         $params = [
             'city_id' => $city->id,
             'gym_id'  => $request->params['gym_id'],
@@ -82,6 +84,7 @@ class UserController extends Controller {
     }
 
     public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {
+        return response()->json('Annonce actuellement indisponible', 403);
         event( new \App\Events\QuestInstanceDeleted( $questInstance ) );;
         $announces = $questInstance->getUserActions();
         if( !empty($announces) ) {
@@ -96,6 +99,8 @@ class UserController extends Controller {
     }
 
     public function updateQuest( Request $request, City $city, QuestInstance $questInstance ) {
+
+        return response()->json('Annonce actuellement indisponible', 403);
 
         $updated = false;
 

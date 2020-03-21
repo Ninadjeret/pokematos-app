@@ -138,9 +138,7 @@ Route::group(['middleware' => ['auth.bot']], function () {
 });
 
 Route::get('version', 'Controller@getVersion');
-Route::get('test', function (Request $request) {
-    return 'OK';
-});
+Route::get('test', 'Controller@test');
 
 //Stats
 Route::get('stats/g/ia', 'StatsController@getGlobalIAReport');
