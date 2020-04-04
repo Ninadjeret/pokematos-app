@@ -144,4 +144,6 @@ Route::get('test', 'Controller@test');
 Route::get('stats/g/ia', 'StatsController@getGlobalIAReport');
 Route::get('stats/c/{city_slug}/ia', 'StatsController@getCityIAReport');
 
-Route::get('user/cities/{city}/gyms', 'UserController@getPOIs');
+//Public
+Route::get('public/pokemons', 'PokemonController@getAll');
+Route::get('public/tools/pokemon/get-pokedex-from-name/{name}', 'PokemonController@getPokedexIdFromNameFr');

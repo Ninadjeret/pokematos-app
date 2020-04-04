@@ -33,3 +33,19 @@ Route::get('/maintenance', function () {
 Route::get('/status', function () {
     return view('status');
 })->name('status');
+
+Route::get('/ressources/img/pokemon/florked/{name}.png', function ( $name ) {
+    $pokemon = \App\Models\Pokemon::where('name_fr', $name)->first();
+    if( $pokemon ) {
+        $id = $pokemon->pokedex_id;
+        $id = ltrim($id, '0');
+
+        $form = \App\Helpers\Helpers::getPokemonFormFromName($name);
+        if( $form ) $id .= $form['florked'];
+
+        $remoteImage = 'https://gamepress.gg/pokemongo/sites/pokemongo/files/styles/240w/public/flork-images/'.$id.'.png';
+        $imginfo = getimagesize($remoteImage);
+        header("Content-type: {$imginfo['mime']}");
+        readfile($remoteImage);
+    }
+})->name('img-pokemon-florked');

@@ -189,4 +189,14 @@ class PokemonController extends Controller {
         return response()->json(null, 204);
     }
 
+    public function getPokedexIdFromNameFr( Request $request, $name ) {
+        $pokemon = Pokemon::where('name_fr', $name)->first();
+        if( $pokemon ) {
+            $id = $pokemon->pokedex_id;
+            $id = ltrim($id, '0');
+            return $id;
+        }
+        return response()->json('Pokémon non trouvé', 404);
+    }
+
 }
