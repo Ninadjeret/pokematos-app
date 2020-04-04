@@ -569,4 +569,32 @@ class Helpers {
         }
         return false;
     }
+
+    public static function getPokemonFormFromName( $name ) {
+
+        $forms = [
+            'ALOLA' => ['id' => '61', 'name' => 'd\'Alola', 'florked' => 'A'],
+            'SPEED' => ['id' => '00', 'name' => 'Vitesse', 'florked' => ''],
+            'ATTACK' => ['id' => '00', 'name' => 'Attaque', 'florked' => ''],
+            'DEFENSE' => ['id' => '00', 'name' => 'Défense', 'florked' => ''],
+            'PLANT' => ['id' => '00', 'name' => 'Plante', 'florked' => ''],
+            'SANDY' => ['id' => '00', 'name' => 'Sable', 'florked' => ''],
+            'TRASH' => ['id' => '00', 'name' => 'Déchet', 'florked' => ''],
+            'RAINY' => ['id' => '00', 'name' => 'Pluie', 'florked' => ''],
+            'SNOWY' => ['id' => '00', 'name' => 'Neige', 'florked' => ''],
+            'SUNNY' => ['id' => '00', 'name' => 'Soleil', 'florked' => ''],
+            'OVERCAST' => ['id' => '00', 'name' => 'Couvert', 'florked' => ''],
+            'GALARIAN' => ['id' => '31', 'name' => 'de Galar', 'florked' => ''],
+        ];
+
+        foreach( $forms as $form_name => $form_data ) {
+            if(  strstr(strtoupper($name), $form_name)  ) {
+                return $form_data;
+            }
+            if(  strstr($name, $form_data['name'])  ) {
+                return $form_data;
+            }
+        }
+        return false;
+    }
 }

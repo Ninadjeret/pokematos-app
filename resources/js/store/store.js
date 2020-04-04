@@ -22,6 +22,10 @@ const store = new Vuex.Store({
         settings: JSON.parse(localStorage.getItem('pokematos_settings') ),
         user: JSON.parse(localStorage.getItem('pokematos_user') ),
         zones: JSON.parse(localStorage.getItem('pokematos_zones') ),
+
+        POIs: JSON.parse(localStorage.getItem('pokematos_pois') ),
+        activePOIs: JSON.parse(localStorage.getItem('pokematos_active_pois') ),
+
         snackbar: false,
     },
     mutations: {

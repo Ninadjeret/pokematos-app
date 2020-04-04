@@ -25,7 +25,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/cities/{city}', 'CityController@getOne');
     Route::get('user/guilds', 'GuildController@getAll');
     Route::get('user/guilds/{guild}', 'GuildController@getOne');
-    Route::get('user/cities/{city}/gyms', 'UserController@getPOIs');
+
     Route::get('user/cities/{city}/active-gyms', 'UserController@getActivePOIs');
     Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
     Route::post('user/cities/{city}/raids', 'RaidController@create');
@@ -143,3 +143,5 @@ Route::get('test', 'Controller@test');
 //Stats
 Route::get('stats/g/ia', 'StatsController@getGlobalIAReport');
 Route::get('stats/c/{city_slug}/ia', 'StatsController@getCityIAReport');
+
+Route::get('user/cities/{city}/gyms', 'UserController@getPOIs');
