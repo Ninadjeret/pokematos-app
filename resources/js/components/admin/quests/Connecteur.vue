@@ -193,11 +193,11 @@
                     this.channel_discord_id = res.data.channel_discord_id;
                     this.publish = res.data.publish;
                     this.filter_stop_type = res.data.filter_stop_type;
-                    this.filter_stop_zone = this.convertIdstoObjects(res.data.filter_stop_zone, this.zones);
-                    this.filter_stop_stop = this.convertIdstoObjects(res.data.filter_stop_stop, this.gyms);
+                    this.filter_stop_zone = res.data.filtered_zones;
+                    this.filter_stop_stop = res.data.filtered_stops;
                     this.filter_reward_type = res.data.filter_reward_type;
-                    this.filter_reward_reward = this.convertIdstoObjects(res.data.filter_reward_reward, this.rewards);
-                    this.filter_reward_pokemon = this.convertIdstoObjects(res.data.filter_reward_pokemon, this.pokemons);
+                    this.filter_reward_reward = res.data.filtered_rewards;
+                    this.filter_reward_pokemon = res.data.filtered_pokemons;
                     this.format = res.data.format;
                     this.custom_message = res.data.custom_message;
                     this.delete_after_end = res.data.delete_after_end;
@@ -237,11 +237,11 @@
                     name: this.name,
                     channel_discord_id: this.channel_discord_id,
                     filter_stop_type: this.filter_stop_type,
-                    filter_stop_zone: this.convertObjectsToIds(this.filter_stop_zone),
-                    filter_stop_stop: this.convertObjectsToIds(this.filter_stop_stop),
+                    filter_stop_zone: this.filter_stop_zone,
+                    filter_stop_stop: this.filter_stop_stop,
                     filter_reward_type: this.filter_reward_type,
-                    filter_reward_reward: this.convertObjectsToIds(this.filter_reward_reward),
-                    filter_reward_pokemon: this.convertObjectsToIds(this.filter_reward_pokemon),
+                    filter_reward_reward: this.filter_reward_reward,
+                    filter_reward_pokemon: this.filter_reward_pokemon,
                     format: this.format,
                     custom_message: this.custom_message,
                     delete_after_end: this.delete_after_end

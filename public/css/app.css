@@ -13749,6 +13749,144 @@ body.logged-out .denied a {
   display: none;
 }
 
+.status__header {
+  background: #5a6cae;
+}
+
+.status__header .container {
+  position: relative;
+  padding-top: 35px;
+}
+
+.status__header h1 {
+  font-family: "Teko";
+  color: #fff;
+  font-size: 40px;
+  text-align: center;
+}
+
+.status__header h1 small {
+  font-family: "Teko";
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 28px;
+}
+
+.status__header img {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  max-height: 100px;
+}
+
+.status__data {
+  background: #fff;
+}
+
+.status__data .chart {
+  padding: 15px 0;
+  text-align: center;
+}
+
+.status__data .chart h3 {
+  font-family: "Teko";
+  color: #28304d;
+  font-size: 30px;
+}
+
+.status__data .chart:after {
+  content: "";
+  margin: auto;
+  width: 100px;
+  height: 3px;
+  background: #5a6cae;
+  margin-top: 30px;
+  display: block;
+}
+
+.status__data .services {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: stretch;
+          align-items: stretch;
+  box-sizing: border-box;
+}
+
+.status__data .services .service {
+  background: #f6f6f6;
+  padding: 10px;
+  flex-basis: 255px;
+  box-sizing: border-box;
+  margin: 10px;
+  position: relative;
+}
+
+.status__data .services .service h4 {
+  margin-left: 40px;
+  text-align: left;
+  color: #28304d;
+  font-size: 20px;
+  font-family: "Teko";
+}
+
+.status__data .services .service h4 small {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  display: block;
+}
+
+.status__data .services i {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 100px;
+  position: absolute;
+  left: 5px;
+  margin: 10px 20px 10px 10px;
+}
+
+.status__data .services i.on {
+  background: green;
+}
+
+.status__data .services i.on:after {
+  border: 2px solid green;
+}
+
+.status__data .services i.off {
+  background: red;
+}
+
+.status__data .services i.off:after {
+  border: 2px solid red;
+}
+
+.status__data .services i:after {
+  content: "";
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+  background: transparent;
+  left: -5px;
+  top: -5px;
+  position: absolute;
+}
+
+@media (max-width: 640px) {
+  .status__header img {
+    max-height: 50px;
+  }
+
+  .status__data .services .service {
+    flex-basis: 100%;
+  }
+}
+
 html {
   font-size: 10px !important;
 }

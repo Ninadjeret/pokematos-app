@@ -79,7 +79,7 @@ class GymSearch {
         $name = false;
         foreach( $array as $line ) {
             $i++;
-            if( strlen($line) >= 7 && empty(preg_match( '/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $line )) ) {
+            if( empty(preg_match( '/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $line )) ) {
                 $name = $line;
                 $num = $i;
             }

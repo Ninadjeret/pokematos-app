@@ -255,11 +255,11 @@
                     this.name = res.data.name;
                     this.channel_discord_id = res.data.channel_discord_id;
                     this.filter_gym_type = res.data.filter_gym_type;
-                    this.filter_gym_zone = this.convertIdstoObjects(res.data.filter_gym_zone, this.zones);
-                    this.filter_gym_gym = this.convertIdstoObjects(res.data.filter_gym_gym, this.gyms);
+                    this.filter_gym_zone = res.data.filtered_zones;
+                    this.filter_gym_gym = res.data.filtered_gyms;
                     this.filter_pokemon_type = res.data.filter_pokemon_type;
-                    this.filter_pokemon_level = this.convertIdstoObjects(res.data.filter_pokemon_level, this.levels);
-                    this.filter_pokemon_pokemon = this.convertIdstoObjects(res.data.filter_pokemon_pokemon, this.pokemons);
+                    this.filter_pokemon_level = res.data.filtered_levels;
+                    this.filter_pokemon_pokemon = res.data.filtered_pokemons;
                     this.format = res.data.format;
                     this.filter_source_type = res.data.filter_source_type;
                     this.custom_message_before = res.data.custom_message_before;
@@ -297,11 +297,11 @@
                     name: this.name,
                     channel_discord_id: this.channel_discord_id,
                     filter_gym_type: this.filter_gym_type,
-                    filter_gym_zone: this.convertObjectsToIds(this.filter_gym_zone),
-                    filter_gym_gym: this.convertObjectsToIds(this.filter_gym_gym),
+                    filter_gym_zone: this.filter_gym_zone,
+                    filter_gym_gym: this.filter_gym_gym,
                     filter_pokemon_type: this.filter_pokemon_type,
-                    filter_pokemon_level: this.convertObjectsToIds(this.filter_pokemon_level),
-                    filter_pokemon_pokemon: this.convertObjectsToIds(this.filter_pokemon_pokemon),
+                    filter_pokemon_level: this.filter_pokemon_level,
+                    filter_pokemon_pokemon: this.filter_pokemon_pokemon,
                     filter_source_type: this.filter_source_type,
                     format: this.format,
                     custom_message_before: this.custom_message_before,
@@ -377,23 +377,6 @@
                             timeout: 1500
                         })
                     });
-            },
-            convertObjectsToIds( array ) {
-                let arrayIds = [];
-                if( array.length === 0 ) return arrayIds;
-                array.forEach(function(item){
-                  arrayIds.push(item.id);
-                });
-                return arrayIds;
-            },
-            convertIdstoObjects( arrayIds, ObjectsReference ) {
-                let arrayObjects = [];
-                if( arrayIds.length === 0 ) return arrayObjects;
-                arrayIds.forEach(function(id){
-                    let objectToAdd = ObjectsReference.find( el => el.id == id );
-                    if( objectToAdd ) arrayObjects.push(objectToAdd);
-                });
-                return arrayObjects;
             },
     }
 }

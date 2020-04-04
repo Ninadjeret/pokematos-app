@@ -2,6 +2,7 @@
 
 namespace App\RaidAnalyzer;
 
+use App\Helpers\Discord;
 use App\RaidAnalyzer\GymSearch;
 use App\RaidAnalyzer\PokemonSearch;
 use Illuminate\Support\Facades\Log;
@@ -25,10 +26,10 @@ class TextAnalyzer {
 
         $this->start = microtime(true);
         if( $this->debug ) $this->_log('========== Début du traitement '.$source.' ==========');
-
-        $this->text = $source;
+ 
         $this->guild = $guild;
         $this->user = $user;
+        $this->text = Discord::translateFrom($source, $this->guild, $this->user);
         $this->channel_discord_id = $channel_discord_id;
         $this->gymSearch = new GymSearch($guild);
         $this->pokemonSearch = new PokemonSearch();

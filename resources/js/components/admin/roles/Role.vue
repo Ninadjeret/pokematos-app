@@ -44,7 +44,7 @@
                     <v-btn value="other">Autre chose</v-btn>
                 </v-btn-toggle>
             </div>
-            <div class="setting" v-if="type == 'gym' && gyms">
+            <div class="setting" v-if="type == 'poi' && gyms">
                 <label>Arène liée</label>
                 <select v-model="gym_id">
                     <option v-for="gym in gyms" :value="gym.id">{{gym.name}}</option>

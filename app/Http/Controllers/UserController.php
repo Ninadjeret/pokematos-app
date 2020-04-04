@@ -8,8 +8,9 @@ use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Quest;
 use App\Models\Guild;
-use App\Models\UserAction;
+use App\Helpers\Helpers;
 use App\Models\Connector;
+use App\Models\UserAction;
 use App\Models\QuestReward;
 use Illuminate\Http\Request;
 use App\Models\RoleCategory;
@@ -67,6 +68,8 @@ class UserController extends Controller {
 
     public function createQuest( City $city, Request $request ) {
 
+        return response()->json('Annonce actuellement indisponible', 403);
+
         $params = [
             'city_id' => $city->id,
             'gym_id'  => $request->params['gym_id'],
@@ -81,6 +84,7 @@ class UserController extends Controller {
     }
 
     public function deleteQuest( City $city, QuestInstance $questInstance, Request $request ) {
+        return response()->json('Annonce actuellement indisponible', 403);
         event( new \App\Events\QuestInstanceDeleted( $questInstance ) );;
         $announces = $questInstance->getUserActions();
         if( !empty($announces) ) {
@@ -95,6 +99,8 @@ class UserController extends Controller {
     }
 
     public function updateQuest( Request $request, City $city, QuestInstance $questInstance ) {
+
+        return response()->json('Annonce actuellement indisponible', 403);
 
         $updated = false;
 
@@ -159,11 +165,11 @@ class UserController extends Controller {
            'guild_id' => $guild->id,
            'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : '' ,
            'filter_gym_type' => ( isset( $request->filter_gym_type ) ) ? $request->filter_gym_type : '' ,
-           'filter_gym_zone' => ( isset( $request->filter_gym_zone ) ) ? $request->filter_gym_zone : '' ,
-           'filter_gym_gym' => ( isset( $request->filter_gym_gym ) ) ? $request->filter_gym_gym : '' ,
+           'filter_gym_zone' => ( isset( $request->filter_gym_zone ) ) ? Helpers::extractIds($request->filter_gym_zone) : '' ,
+           'filter_gym_gym' => ( isset( $request->filter_gym_gym ) ) ? Helpers::extractIds($request->filter_gym_gym) : '' ,
            'filter_pokemon_type' => ( isset( $request->filter_pokemon_type ) ) ? $request->filter_pokemon_type : '' ,
-           'filter_pokemon_level' => ( isset( $request->filter_pokemon_level ) ) ? $request->filter_pokemon_level : '' ,
-           'filter_pokemon_pokemon' => ( isset( $request->filter_pokemon_pokemon ) ) ? $request->filter_pokemon_pokemon : '' ,
+           'filter_pokemon_level' => ( isset( $request->filter_pokemon_level ) ) ? Helpers::extractIds($request->filter_pokemon_level) : '' ,
+           'filter_pokemon_pokemon' => ( isset( $request->filter_pokemon_pokemon ) ) ? Helpers::extractIds($request->filter_pokemon_pokemon) : '' ,
            'filter_source_type' => ( isset( $request->filter_source_type ) ) ? $request->filter_source_type : '' ,
            'format' => ( isset( $request->format ) ) ? $request->format : 'auto' ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : '' ,
@@ -183,11 +189,11 @@ class UserController extends Controller {
            'name' => ( isset( $request->name ) ) ? $request->name : $connector->name ,
            'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : $connector->channel_discord_id ,
            'filter_gym_type' => ( isset( $request->filter_gym_type ) ) ? $request->filter_gym_type : $connector->filter_gym_type ,
-           'filter_gym_zone' => ( isset( $request->filter_gym_zone ) ) ? $request->filter_gym_zone : $connector->filter_gym_zone ,
-           'filter_gym_gym' => ( isset( $request->filter_gym_gym ) ) ? $request->filter_gym_gym : $connector->filter_gym_gym ,
+           'filter_gym_zone' => ( isset( $request->filter_gym_zone ) ) ? Helpers::extractIds($request->filter_gym_zone) : $connector->filter_gym_zone ,
+           'filter_gym_gym' => ( isset( $request->filter_gym_gym ) ) ? Helpers::extractIds($request->filter_gym_gym) : $connector->filter_gym_gym ,
            'filter_pokemon_type' => ( isset( $request->filter_pokemon_type ) ) ? $request->filter_pokemon_type : $connector->filter_pokemon_type ,
-           'filter_pokemon_level' => ( isset( $request->filter_pokemon_level ) ) ? $request->filter_pokemon_level : $connector->filter_pokemon_level ,
-           'filter_pokemon_pokemon' => ( isset( $request->filter_pokemon_pokemon ) ) ? $request->filter_pokemon_pokemon : $connector->filter_pokemon_pokemon ,
+           'filter_pokemon_level' => ( isset( $request->filter_pokemon_level ) ) ? Helpers::extractIds($request->filter_pokemon_level) : $connector->filter_pokemon_level ,
+           'filter_pokemon_pokemon' => ( isset( $request->filter_pokemon_pokemon ) ) ? Helpers::extractIds($request->filter_pokemon_pokemon) : $connector->filter_pokemon_pokemon ,
            'filter_source_type' => ( isset( $request->filter_source_type ) ) ? $request->filter_source_type : $connector->filter_source_type ,
            'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
            'custom_message_before' => ( isset( $request->custom_message_before ) ) ? $request->custom_message_before : $connector->custom_message_before ,
@@ -240,11 +246,11 @@ class UserController extends Controller {
           'guild_id' => $guild->id,
           'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : '' ,
           'filter_reward_type' => ( isset( $request->filter_reward_type ) ) ? $request->filter_reward_type : '' ,
-          'filter_reward_reward' => ( isset( $request->filter_reward_reward ) ) ? $request->filter_reward_reward : '' ,
-          'filter_reward_pokemon' => ( isset( $request->filter_reward_pokemon ) ) ? $request->filter_reward_pokemon : '' ,
+          'filter_reward_reward' => ( isset( $request->filter_reward_reward ) ) ? Helpers::extractIds($request->filter_reward_reward) : '' ,
+          'filter_reward_pokemon' => ( isset( $request->filter_reward_pokemon ) ) ? Helpers::extractIds($request->filter_reward_pokemon) : '' ,
           'filter_stop_type' => ( isset( $request->filter_stop_type ) ) ? $request->filter_stop_type : '' ,
-          'filter_stop_zone' => ( isset( $request->filter_stop_zone ) ) ? $request->filter_stop_zone : '' ,
-          'filter_stop_stop' => ( isset( $request->filter_stop_stop ) ) ? $request->filter_stop_stop : '' ,
+          'filter_stop_zone' => ( isset( $request->filter_stop_zone ) ) ? Helpers::extractIds($request->filter_stop_zone) : '' ,
+          'filter_stop_stop' => ( isset( $request->filter_stop_stop ) ) ? Helpers::extractIds($request->filter_stop_stop) : '' ,
           'format' => ( isset( $request->format ) ) ? $request->format : 'auto' ,
           'custom_message' => ( isset( $request->custom_message ) ) ? $request->custom_message : '' ,
           'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : '' ,
@@ -261,11 +267,11 @@ class UserController extends Controller {
           'name' => ( isset( $request->name ) ) ? $request->name : $connector->name ,
           'channel_discord_id' => ( isset( $request->channel_discord_id ) ) ? $request->channel_discord_id : $connector->channel_discord_id ,
           'filter_reward_type' => ( isset( $request->filter_reward_type ) ) ? $request->filter_reward_type : $connector->filter_reward_type ,
-          'filter_reward_reward' => ( isset( $request->filter_reward_reward ) ) ? $request->filter_reward_reward : $connector->filter_reward_reward ,
-          'filter_reward_pokemon' => ( isset( $request->filter_reward_pokemon ) ) ? $request->filter_reward_pokemon : $connector->filter_reward_pokemon ,
+          'filter_reward_reward' => ( isset( $request->filter_reward_reward ) ) ? Helpers::extractIds($request->filter_reward_reward) : $connector->filter_reward_reward ,
+          'filter_reward_pokemon' => ( isset( $request->filter_reward_pokemon ) ) ? Helpers::extractIds($request->filter_reward_pokemon) : $connector->filter_reward_pokemon ,
           'filter_stop_type' => ( isset( $request->filter_stop_type ) ) ? $request->filter_stop_type : $connector->filter_stop_type ,
-          'filter_stop_zone' => ( isset( $request->filter_stop_zone ) ) ? $request->filter_stop_zone : $connector->filter_stop_zone ,
-          'filter_stop_stop' => ( isset( $request->filter_stop_stop ) ) ? $request->filter_stop_stop : $connector->filter_stop_stop ,
+          'filter_stop_zone' => ( isset( $request->filter_stop_zone ) ) ? Helpers::extractIds($request->filter_stop_zone) : $connector->filter_stop_zone ,
+          'filter_stop_stop' => ( isset( $request->filter_stop_stop ) ) ? Helpers::extractIds($request->filter_stop_stop) : $connector->filter_stop_stop ,
           'format' => ( isset( $request->format ) ) ? $request->format : $connector->format ,
           'custom_message' => ( isset( $request->custom_message ) ) ? $request->custom_message : $connector->custom_message ,
           'delete_after_end' => ( isset( $request->delete_after_end ) ) ? $request->delete_after_end : $connector->delete_after_end ,

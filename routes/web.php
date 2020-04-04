@@ -29,3 +29,7 @@ Route::get('/', function () {
 Route::get('/maintenance', function () {
     return view('maintenance');
 })->name('maintenance');
+
+Route::get('/status', function () {
+    return view('status');
+})->name('status');
