@@ -29,49 +29,6 @@ const store = new Vuex.Store({
         snackbar: false,
     },
     mutations: {
-        fetchGyms( state ) {
-            axios.get('/api/user/cities/'+state.currentCity.id+'/gyms').then( res => {
-                state.gyms = res.data;
-                localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
-            }).catch( err => {
-                //No error
-            });
-        },
-        fetchRaids( state, payload ) {
-            if( payload ) {
-                state.snackbar = {
-                    message: 'Synchronisation en cours',
-                    timeout: 10000
-                }
-            }
-            axios.get('/api/user/cities/'+state.currentCity.id+'/active-gyms').then( res => {
-                let gyms = state.gyms
-                res.data.forEach( function(gym){
-                    let objIndex = gyms.findIndex((obj => obj.id == gym.id));
-                    if( objIndex ) {
-                        console.log('MAJ du POI '+gym.name)
-                        gyms[objIndex] = gym;
-                        state.gyms = [gym];
-                    }
-                });
-                state.gyms = gyms;
-                localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
-                if( payload ) {
-                    state.snackbar = {
-                        message: 'Synchronisation terminée',
-                        timeout: 1000
-                    }
-                }
-            }).catch( err => {
-                console.log(err)
-                if( payload ) {
-                    state.snackbar = {
-                        message: 'Erreur de synchronisation',
-                        timeout: 1000
-                    }
-                }
-            });
-        },
         fetchPokemon( state ) {
             axios.get('/api/pokemons').then( res => {
                 state.pokemons = res.data;
@@ -97,7 +54,6 @@ const store = new Vuex.Store({
             });
         },
         setCities( state, cities ) {
-            console.log(cities)
             state.cities = cities;
             localStorage.setItem('pokematos_cities', JSON.stringify(state.cities));
             if (!state.currentCity || state.currentCity == undefined) {
@@ -170,6 +126,7 @@ const store = new Vuex.Store({
             localStorage.setItem('pokematos_gyms', JSON.stringify(state.gyms));
         },
         setGyms( state, gyms ) {
+            console.log(gyms)
             if( !state.gyms ) {
                 state.gyms = [];
             }
@@ -255,7 +212,6 @@ const store = new Vuex.Store({
     },
     actions: {
         async fetchGyms ({ commit, state, getters }) {
-
             var user = await axios.get('/api/user');
             state.user = user.data;
             localStorage.setItem('pokematos_user', JSON.stringify(state.user));
@@ -272,18 +228,13 @@ const store = new Vuex.Store({
             commit('setGyms', result.data)
             commit('fetchZones')
         },
-        autoFetchData ({ commit }) {
-            commit('fetchGyms')
-            commit('fetchPokemon')
-            commit('fetchQuests')
-        },
-        async fetchData ({ dispatch, commit }) {
-            commit('setSnackbar', {
+        async fetchData (context) {
+            context.commit('setSnackbar', {
                 message: 'Synchronisation en cours',
-                timeout: 10000
+                timeout: 20000
             })
-            await dispatch('fetchGyms')
-            commit('setSnackbar', {
+            await context.dispatch('fetchGyms')
+            context.commit('setSnackbar', {
                 message: 'Synchronisation terminée',
                 timeout: 1500
             })

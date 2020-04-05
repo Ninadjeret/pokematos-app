@@ -1,7 +1,7 @@
 <template>
     <div class="lists">
 
-        <v-tabs v-model="tabs" fixed-tabs grow color="transparent" slider-color="white" class="">
+        <v-tabs v-model="tabs" color="transparent" slider-color="#8e56d9" class="">
             <v-tab href="#raids" class="primary--text">Raids</v-tab>
             <v-tab href="#quetes" class="primary--text">Quêtes</v-tab>
         </v-tabs>
