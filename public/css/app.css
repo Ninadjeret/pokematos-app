@@ -11497,29 +11497,6 @@ a.text-dark:focus {
   margin: 10px 0;
 }
 
-#app__container .v-tabs {
-  background: #fff;
-}
-
-#app__container .v-tabs .theme--light.v-tabs__bar .v-tabs__div {
-  color: #aaa;
-}
-
-#app__container .v-tabs .v-tabs__item {
-  font-family: "Teko";
-  font-weight: 600;
-  font-size: 20px;
-}
-
-#app__container .v-tabs .v-tabs__item.v-tabs__item--active {
-  color: #8e56d9;
-}
-
-#app__container .v-tabs .v-tabs__item:hover {
-  color: #a8a7cf;
-  text-decoration: none;
-}
-
 #app__container.template-map .v-toolbar.v-toolbar--fixed.theme--dark.primary {
   background: -webkit-gradient(linear, left top, right top, from(#5a6cae), to(#8e56d9));
   background: linear-gradient(to right, #5a6cae, #8e56d9);
@@ -12090,7 +12067,8 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   position: relative;
   width: 60px;
   height: 60px;
-  background: #5a6cae;
+  background: -webkit-gradient(linear, left top, right top, from(#5a6cae), to(#8e56d9));
+  background: linear-gradient(to right, #5a6cae, #8e56d9);
   background-size: contain;
   border: none;
   color: rgba(255, 255, 255, 0.8);
@@ -12106,7 +12084,7 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 .map__actions #launcher:before {
   content: "";
   width: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 0px solid rgba(255, 255, 255, 0.3);
   height: 50px;
   display: block;
   position: absolute;
@@ -12231,7 +12209,8 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
-  background-color: #5a6cae !important;
+  background: -webkit-gradient(linear, left top, right top, from(#5a6cae), to(#8e56d9)) !important;
+  background: linear-gradient(to right, #5a6cae, #8e56d9) !important;
 }
 
 .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed:hover {
@@ -12783,6 +12762,44 @@ body.logged-out .denied a {
 .template-list .list-filters label {
   margin-bottom: 0.6rem;
   margin-top: 0.6rem;
+}
+
+#app__container .v-tabs {
+  background: #fff;
+}
+
+#app__container .v-tabs .v-tabs__wrapper {
+  border-radius: 0;
+}
+
+#app__container .v-tabs .v-tabs__wrapper .v-tabs__item {
+  font-family: "Teko";
+  font-weight: 600;
+  font-size: 20px;
+}
+
+#app__container .v-tabs .v-tabs__wrapper .v-tabs__item.v-tabs__item--active {
+  color: #8e56d9;
+}
+
+#app__container .v-tabs .v-tabs__wrapper .v-tabs__item:hover {
+  color: #8e56d9;
+  text-decoration: none;
+}
+
+#app__container .v-tabs .theme--light.v-tabs__bar .v-tabs__div {
+  color: #aaa;
+}
+
+#app__container .v-tabs .items__counter {
+  font-family: Roboto;
+  font-size: 13px;
+  width: 24px;
+  height: 24px;
+  margin-left: 5px;
+  background: #fafafa;
+  line-height: 24px;
+  text-align: center;
 }
 
 .log {
@@ -13849,6 +13866,7 @@ body.logged-out .denied a {
   display: inline-block;
   background: #2a2a2a;
   text-align: left;
+  border-radius: 50px;
 }
 
 .rocket_invasion a img {

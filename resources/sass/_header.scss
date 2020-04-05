@@ -74,24 +74,6 @@
         width: 100%;
         margin: 10px 0;
     }
-    .v-tabs {
-        background: #fff;
-        .theme--light.v-tabs__bar .v-tabs__div {
-            color: $grey;
-        }
-        .v-tabs__item {
-            font-family: 'Teko';
-            font-weight: 600;
-            font-size: 20px;
-            &.v-tabs__item--active {
-                color: $accent;
-            }
-            &:hover {
-                color: $secondary;
-                text-decoration: none;
-            }
-        }
-    }
 }
 
 #app__container.template-map {

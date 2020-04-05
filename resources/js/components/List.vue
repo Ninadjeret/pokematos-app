@@ -2,8 +2,18 @@
     <div class="lists">
 
         <v-tabs v-model="tabs" color="transparent" slider-color="#8e56d9" class="">
-            <v-tab href="#raids" class="primary--text">Raids</v-tab>
-            <v-tab href="#quetes" class="primary--text">Quêtes</v-tab>
+            <v-tab href="#raids" class="primary--text">
+                Raids
+                <div v-if="futureRaids.length+activeRaids.length > 0" class="items__counter"><span>{{futureRaids.length+activeRaids.length}}</span></div>
+            </v-tab>
+            <v-tab href="#quetes" class="primary--text">
+                Quêtes
+                <div v-if="activeQuests.length > 0" class="items__counter"><span>{{activeQuests.length}}</span></div>
+            </v-tab>
+            <v-tab href="#invasions" class="primary--text">
+                Rocket
+                <div v-if="activeRocketInvasions.length > 0" class="items__counter"><span>{{activeRocketInvasions.length}}</span></div>
+            </v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tabs">
@@ -79,11 +89,11 @@
                     <h3>Aucun raid pour le moment...</h3>
                     <div class="wrapper" v-if="raidsListFilters.length < 5">
                         <p>Elargissez vos critères pour voir s'il y a d'autres raids dans les environs</p>
-                        <v-btn depressed @click="dialog = true">Modifier mes filtres</v-btn>
+                        <v-btn round large @click="dialog = true">Modifier mes filtres</v-btn>
                     </div>
                 </div>
-
             </v-tab-item>
+
             <v-tab-item value="quetes">
                 <div v-if="activeQuests.length > 0" style="flex-basis: 100%; padding-bottom: 70px;">
                 <div class="raids__active">
@@ -118,6 +128,37 @@
                     </div>
                 </div>
             </v-tab-item>
+
+            <v-tab-item value="invasions">
+                <div v-if="activeRocketInvasions.length > 0" style="flex-basis: 100%; padding-bottom: 70px;">
+                <div class="raids__active">
+                    <div class="section__title">Invasions Rocket en cours</div>
+                        <div class="raids__wrapper">
+                            <div v-on:click="showModal(gym)" v-for="gym in activeRocketInvasions" class="raid__wrapper">
+                                <div class="raid__img">
+                                    <img  :src="gym.invasion.boss.thumbnail">
+                                </div>
+                                <div class="raid__content">
+                                    <h3>
+                                        <span>{{gym.invasion.boss.name}}</span>
+                                    </h3>
+                                    <div class="raid__gym">
+                                        <img src="https://assets.profchen.fr/img/app/connector_pokestop.png">
+                                        <template v-if="gym.zone">
+                                            {{gym.zone.name}} -
+                                        </template>
+                                        {{gym.name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="activeRocketInvasions.length === 0" class="raids__empty hide">
+                    <h3>Aucune invasion Rocket pour le moment...</h3>
+                </div>
+            </v-tab-item>
+
         </v-tabs-items>
 
 
@@ -249,6 +290,10 @@
                     let inZone = ( gym.zone && that.questsZoneFilters.includes( gym.zone.id) ) ? true : false;
                     return ( isEmpty || inArray ) && ( isEmptyZone || inZone )
                 });
+            },
+            activeRocketInvasions() {
+                const that = this;
+                return this.$store.getters.activeRocketInvasions;
             },
             raidsListOrder: {
                 get: function () {

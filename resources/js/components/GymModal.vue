@@ -549,6 +549,10 @@ export default {
                     this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                     this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.name_fr+' est en cours...';
                     this.raidUrl =  this.gym.raid.pokemon.thumbnail_url;
+                } else {
+                    this.timeLeft = false;
+                    this.raidAnnonce = 'Rien pour le moment...';
+                    this.raidUrl = 'https://assets.profchen.fr/img/app/egg_0.png';
                 }
             }
 

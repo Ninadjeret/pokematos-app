@@ -8,7 +8,7 @@
 }
 
 .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
-    background-color: $primary !important;
+    background: linear-gradient(to right, $primary, $accent) !important;
     &:hover {
         text-decoration: none;
     }

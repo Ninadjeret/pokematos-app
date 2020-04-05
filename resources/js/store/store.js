@@ -164,6 +164,13 @@ const store = new Vuex.Store({
                 return (gym.quest && gym.quest.date == moment().format('YYYY-MM-DD')+' 00:00:00' );
             });
         },
+        activeRocketInvasions: state => {
+            if( !state.gyms || state.gyms.length === 0 ) return [];
+            return state.gyms.filter((gym) => {
+                var now = moment();
+                return (gym.invasion && gym.invasion.date == moment().format('YYYY-MM-DD') );
+            });
+        },
         rewardQuests: state => {
             if( !state.quests || state.quests.length === 0 ) return [];
             let rewardQuests = [];
