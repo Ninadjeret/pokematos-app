@@ -12128,6 +12128,7 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   opacity: 0;
   -webkit-transition: visibility 0.3s, opacity 0.3s linear;
   transition: visibility 0.3s, opacity 0.3s linear;
+  border-radius: 0 !important;
 }
 
 .map__actions .actions {

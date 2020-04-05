@@ -32,7 +32,7 @@
                                         <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
                                         <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
                                         <span class="raid__timer active">
-                                            <countdown :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                            <countdown :time="getRaidTimeLeft(gym.raid)">
                                                 <template slot-scope="props">Reste {{ props.totalMinutes }} min</template>
                                             </countdown>
                                         </span>
@@ -62,10 +62,10 @@
                                         <span v-if="gym.raid.ex">Raid EX de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
                                         <span v-else>{{gym.raid.egg_level}}T de {{getRaidStartTime(gym.raid)}} à {{getRaidEndTime(gym.raid)}}</span>
                                         <span class="raid__timer future">
-                                            <countdown v-if="gym.raid.ex" :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                            <countdown v-if="gym.raid.ex" :time="getRaidTimeLeft(gym.raid)">
                                                 <template slot-scope="props">{{ props.days }}j et {{ props.hours }}h</template>
                                             </countdown>
-                                            <countdown v-else :time="getRaidTimeLeft(gym.raid)" @end="$store.dispatch('fetchData')">
+                                            <countdown v-else :time="getRaidTimeLeft(gym.raid)">
                                                 <template slot-scope="props">Dans {{ props.totalMinutes }} min</template>
                                             </countdown>
                                         </span>
