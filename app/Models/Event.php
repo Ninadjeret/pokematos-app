@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = ['city_id', 'guid_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'channel_discord_id'];
+    protected $fillable = ['city_id', 'guid_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id'];
     protected $appends = ['relation'];
 
     public function getRelationAttribute() {
@@ -32,7 +32,15 @@ class Event extends Model
             ]);
 
             foreach( $args['steps'] as $step ) {
-                EventTrainStep::create($step);
+                EventTrainStep::create([
+                    'train_id' => $train->id,
+                    'type' => $step->type,
+                    'stop_id' => $step->stop_id,
+                    'start_time' => $step->start_time,
+                    'duration' => $step->duration,
+                    'description' => $step->description,
+                    'checked' => 0,
+                ]);
             }
 
         }

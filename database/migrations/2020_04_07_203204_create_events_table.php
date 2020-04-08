@@ -22,6 +22,7 @@ class CreateEventsTable extends Migration
             $table->dateTime('end_time');
             $table->string('type');
             $table->integer('relation_id');
+            $table->boolean('discord_link')->default(0);
             $table->string('channel_discord_id');
             $table->timestamps();
         });
@@ -41,7 +42,7 @@ class CreateEventsTable extends Migration
             $table->dateTime('start_time')->nullable();
             $table->float('duration')->nullable();
             $table->text('description')->nullable();
-            $table->boolean('checked')->default(false);
+            $table->boolean('checked')->default(0);
             $table->timestamps();
         });
     }
