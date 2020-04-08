@@ -35,6 +35,9 @@ import AdminQuestReportingHome from "./components/admin/quests/Home.vue";
 import AdminQuestsConnectors from "./components/admin/quests/Connecteurs.vue";
 import AdminQuestsConnector from "./components/admin/quests/Connecteur.vue";
 
+import Events from "./components/Events.vue";
+import Event from "./components/Event.vue";
+
 const routes = [
     {
         path: "/",
@@ -59,6 +62,23 @@ const routes = [
             title: "Profil"
         },
         component: Profile
+    },
+    {
+        path: "/events",
+        name: "events",
+        meta: {
+            title: "Évents"
+        },
+        component: Events
+    },
+    {
+        path: "/events/:event_id",
+        name: "events.event",
+        meta: {
+            title: "Détail de l'évent",
+            parent: "events"
+        },
+        component: Event
     },
     {
         path: "/admin",

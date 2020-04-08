@@ -115,11 +115,13 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::delete('user/guilds/{guild}/invasionconnectors/{connector}', 'RocketController@deleteConnector');
 
     //Events
-    Route::get('user/guilds/{guild}/events', 'EventController@getActiveEvents');
-    Route::get('user/guilds/{guild}/events/{event}', 'EventController@getEvent');
-    Route::post('user/guilds/{guild}/events', 'EventController@createEvent');
-    Route::put('user/guilds/{guild}/events/{event}', 'EventController@updateEvent');
-    Route::delete('user/guilds/{guild}/events/{event}', 'EventController@deleteEvent');
+    Route::get('user/cities/{city}/events', 'EventController@getActiveEvents');
+    Route::get('user/cities/{city}/events/{event}', 'EventController@getEvent');
+    Route::post('user/cities/{city}/events', 'EventController@createEvent');
+    Route::put('user/cities/{city}/events/{event}', 'EventController@updateEvent');
+    Route::delete('user/cities/{city}/events/{event}', 'EventController@deleteEvent');
+    Route::post('user/guilds/{guild}/events/{event}/steps/{step}/check', 'EventController@checkStep');
+    Route::post('user/guilds/{guild}/events/{event}/steps/{step}/uncheck', 'EventController@uncheckStep');
 
 });
 

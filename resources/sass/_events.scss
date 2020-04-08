@@ -1,0 +1,37 @@
+.event__card {
+    margin: 15px;
+    padding: 15px;
+    background: linear-gradient(to right, #157d74, #ffcd5c);
+    border-radius: 20px;
+    position: relative;
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+    h3 {
+        font-family: 'Teko';
+        font-size: 30px;
+        margin-bottom: 0;
+    }
+    p {
+        margin-bottom: 5px;
+    }
+    img {       
+        position: absolute;
+        top: 0;
+        right: 10px;
+        height: 100%;
+    }
+}
+
+.event__single {
+    .v-card__title {
+        background: #fff;
+        color: $primary;
+    }
+    .flex.xs3 {
+        flex-basis: 20%;
+        max-width: 20%;
+        min-width: 20%;
+    }
+}

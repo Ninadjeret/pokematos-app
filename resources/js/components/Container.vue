@@ -27,6 +27,11 @@
                   <v-icon>person</v-icon>
                 </v-btn>
 
+                <v-btn to="/events" color="primary" flat value="recent" >
+                  <span>Évents</span>
+                  <v-icon>event</v-icon>
+                </v-btn>
+
                 <v-btn
                     v-if="currentCity && currentCity !== undefined && isAdmin"
                     to="/admin"
@@ -67,6 +72,11 @@
                     <v-icon>person</v-icon>
                   </v-btn>
 
+                  <v-btn to="/events" color="primary" flat value="recent" >
+                    <span>Évents</span>
+                    <v-icon>event</v-icon>
+                    </v-btn>
+
                   <v-btn
                       v-if="currentCity && currentCity !== undefined && isAdmin"
                       to="/admin"
@@ -83,7 +93,7 @@
                     <v-card-title class="headline">Choisis ta zone</v-card-title>
                     <v-card-text>
                         <ul id="cityChoice">
-                            <li v-for="city in cities" @click="changeCity( city )">
+                            <li v-for="city in cities" @click="changeCity( city )" :key="city.id">
                                 {{ city.name }}
                             </li>
                         </ul>

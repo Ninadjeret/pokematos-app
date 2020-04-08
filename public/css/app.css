@@ -13887,6 +13887,48 @@ body.logged-out .denied a {
   }
 }
 
+.event__card {
+  margin: 15px;
+  padding: 15px;
+  background: -webkit-gradient(linear, left top, right top, from(#157d74), to(#ffcd5c));
+  background: linear-gradient(to right, #157d74, #ffcd5c);
+  border-radius: 20px;
+  position: relative;
+}
+
+.event__card a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.event__card h3 {
+  font-family: "Teko";
+  font-size: 30px;
+  margin-bottom: 0;
+}
+
+.event__card p {
+  margin-bottom: 5px;
+}
+
+.event__card img {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  height: 100%;
+}
+
+.event__single .v-card__title {
+  background: #fff;
+  color: #5a6cae;
+}
+
+.event__single .flex.xs3 {
+  flex-basis: 20%;
+  max-width: 20%;
+  min-width: 20%;
+}
+
 html {
   font-size: 10px !important;
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Guild;
 use App\Models\Event;
 use App\Models\EventTrain;
 use App\Models\EventTrainStep;
@@ -9,8 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = ['city_id', 'guid_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id'];
-    protected $appends = ['relation'];
+    protected $fillable = ['city_id', 'guild_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id'];
+    protected $appends = ['relation', 'guild'];
 
     public function getRelationAttribute() {
         if( $this->type == 'train' ) {
@@ -20,6 +21,10 @@ class Event extends Model
             }
         }
         return false;
+    }
+
+    public function getGuildAttribute() {
+        return Guild::find($this->guild_id);
     }
 
     public static function add($args) {
