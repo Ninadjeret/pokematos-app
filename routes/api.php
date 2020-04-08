@@ -114,6 +114,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/guilds/{guild}/invasionconnectors/{connector}', 'RocketController@updateConnector');
     Route::delete('user/guilds/{guild}/invasionconnectors/{connector}', 'RocketController@deleteConnector');
 
+    //Events
+    Route::get('user/guilds/{guild}/events', 'EventController@getActiveEvents');
+    Route::get('user/guilds/{guild}/events/{event}', 'EventController@getEvent');
+    Route::post('user/guilds/{guild}/events', 'EventController@createEvent');
+
 });
 
 Route::group(['middleware' => ['auth.bot']], function () {
