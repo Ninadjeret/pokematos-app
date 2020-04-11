@@ -96,7 +96,21 @@ class EventController extends Controller
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
-        Event::destroy($event->id);
+
+        $event_id = $event->id;
+        Event::destroy($event_id);
+
+        $train = EventTrain::where('event_id', $event_id)->first();
+        if( $train ) {
+            $train_id = $train->id;
+            EventTrain::destroy($train_id);  
+            
+            $steps = EventTrainSteps::where('train_id', $train_id)->get();
+            if( !empty($steps) ) {
+                EventTrainSteps::destroy($steps);
+            }
+        }
+
         return response()->json(null, 204);
     }
 
