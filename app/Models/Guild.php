@@ -51,6 +51,9 @@ class Guild extends Model
         'welcome_active' => ['default' => false, 'type' => 'boolean'],
         'welcome_message' => ['default' => 'Bienvenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],
         'welcome_channel_discord_id' => ['default' => false, 'type' => 'string'],
+
+        'events_create_channels' => ['default' => false, 'type' => 'boolean'],
+        'events_channel_discord_id' => ['default' => false, 'type' => 'string'],
     ];
 
     public function getCityAttribute() {

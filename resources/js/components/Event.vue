@@ -35,8 +35,8 @@
                     <v-flex>
                         <strong v-if="step.stop" @click="showModal(step.stop)">
                             <span class="stop__marker">
-                                <img v-if="step.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
-                                <img v-if="!step.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
+                                <img v-if="step.stop.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
+                                <img v-if="!step.stop.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
                             </span>
                             <span v-if="step.stop && step.stop.zone">{{step.stop.zone.name}} - </span>
                             {{step.stop.name}}
@@ -114,7 +114,7 @@
             },
             getStepColor(step, index) {
                 if( this.displayCheck( step, index ) ) return 'green';
-                return ( step.checked ) ? 'grey' : 'blue' ;
+                return ( step.checked ) ? 'grey' : '#5a6cae' ;
             },
             userCan( param ) {
                 let auth = false;

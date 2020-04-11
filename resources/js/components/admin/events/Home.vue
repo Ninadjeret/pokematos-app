@@ -26,6 +26,20 @@
 
             <div class="settings-section">
                 <v-subheader>Réglages</v-subheader>
+                <div class="setting d-flex switch">
+                    <div>
+                        <label>Créer des salons temporaires pour les évents ?</label>
+                        <p class="description">Cela permettra à Pokématos d'organiser les évents et publiant messages et réactions. La fonctionnalité doit être activée pour certains événements (comme les Pokéquiz).</p>
+                    </div>
+                    <v-switch v-model="events_create_channels"></v-switch>
+                </div>
+                <div v-if="events_create_channels" class="setting">
+                    <label>Catégorie de salon</label>
+                    <p class="description">Le salon temporaire sera créé dans la catégorie choisie. (les droits appliqués au salon seront les mêmes que ceux de la catégorie)</p>
+                    <select v-if="channels_categories" v-model="events_channel_discord_id">
+                        <option v-for="channel in channels_categories" :value="channel.id.toString()">{{channel.name}}</option>
+                    </select>
+                </div>
                 <v-btn dark fixed bottom right fab @click="submit()">
                     <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
                     <v-icon v-else>save</v-icon>
@@ -56,18 +70,33 @@
                         icon: 'event'
                     },
                 ],
+                channels_categories: [],
+                events_create_channels: false,
+                events_channel_discord_id: false,
+
             }
         },
-        computed: mapState([
-                'currentCity'
-        ]),
+        computed: {
+            currentCity() {
+                return this.$store.state.currentCity;
+            },
+        },
         created() {
             this.fetch();
+            this.fetchDiscordChannelCategories();
         },
         methods: {
             fetch() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/settings').then( res => {
-                    //this.roles_gym_color = res.data.roles_gym_color;
+                    this.events_create_channels = res.data.events_create_channels;
+                    this.events_channel_discord_id = res.data.events_channel_discord_id;
+                }).catch( err => {
+                    //No error
+                });
+            },
+            fetchDiscordChannelCategories() {
+                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/channelcategories').then( res => {
+                    this.channels_categories = res.data;
                 }).catch( err => {
                     //No error
                 });
@@ -75,7 +104,8 @@
             submit() {
                 const args = {
                     settings: {
-                        //roles_gym_color: this.roles_gym_color,
+                        events_create_channels: this.events_create_channels,
+                        events_channel_discord_id: this.events_channel_discord_id,
                     }
                 };
                 this.save(args);

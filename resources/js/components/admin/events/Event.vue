@@ -9,12 +9,12 @@
             </div>
 
             <div class="setting">
-                <v-datetime-picker 
-                    label="Début de l'évent" 
+                <v-datetime-picker
+                    label="Début de l'évent"
                     v-model="start_time"
                     date-format="dd/MM/yyyy"
                     time-format="HH:mm"
-                ></v-datetime-picker>               
+                ></v-datetime-picker>
             </div>
 
             <div class="setting">
@@ -30,33 +30,40 @@
                 <label>Étapes du Pokétrain</label>
                 <div class="step" v-for="(step, index) in steps" :key="index">
                     <div class="step__num">{{index+1}}</div>
-
-                    <label>Heure</label>
-                    <v-layout>
-                        <v-flex xs6>
-                            <select dir="rtl" class="hour" v-if="exAllowedHours" v-model="step.hour">
-                                <option v-for="hour in exAllowedHours" :value="hour" :key="hour">{{hour}}h</option>
+                    <div class="step__content">
+                        <div class="setting">
+                            <label>Heure</label>
+                            <v-layout>
+                                <v-flex xs6>
+                                    <select dir="rtl" class="hour" v-if="exAllowedHours" v-model="step.hour">
+                                        <option v-for="hour in exAllowedHours" :value="hour" :key="hour">{{hour}}h</option>
+                                    </select>
+                                </v-flex>
+                                <v-flex xs6>
+                                    <select class="minutes" v-if="exAllowedMinutes" v-model="step.minutes">
+                                        <option v-for="minutes in exAllowedMinutes" :value="minutes" :key="minutes">{{minutes}}</option>
+                                    </select>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+                        <div class="setting">
+                            <label>Type d'étape</label>
+                            <select v-model="step.type">
+                                <option v-for="stepType in stepTypes" :value="stepType.id" :key="stepType.id">{{stepType.name}}</option>
                             </select>
-                        </v-flex>
-                        <v-flex xs6>
-                            <select class="minutes" v-if="exAllowedMinutes" v-model="step.minutes">
-                                <option v-for="minutes in exAllowedMinutes" :value="minutes" :key="minutes">{{minutes}}</option>
+                        </div>
+                        <div class="setting" v-if="step.type == 'stop' && gyms">
+                            <label>Arène liée</label>
+                            <select v-model="step.stop_id">
+                                <option v-for="gym in gyms" :value="gym.id" :key="gym.id">{{gym.name}}</option>
                             </select>
-                        </v-flex>
-                    </v-layout>
-                    <label>Type d'étape</label>
-                    <select v-model="step.type">
-                        <option v-for="stepType in stepTypes" :value="stepType.id" :key="stepType.id">{{stepType.name}}</option>
-                    </select>
-                    <div class="setting" v-if="step.type == 'stop' && gyms">
-                        <label>Arène liée</label>
-                        <select v-model="step.stop_id">
-                            <option v-for="gym in gyms" :value="gym.id" :key="gym.id">{{gym.name}}</option>
-                        </select>
+                        </div>
+                        <div class="setting">
+                            <label>Description</label>
+                            <input v-model="step.description" type="text">
+                        </div>
+                        <v-btn small flat fab @click="removeStep(index)"><v-icon>delete</v-icon></v-btn>                        
                     </div>
-                    <label>Description</label>
-                    <input v-model="step.description" type="text">
-                    <v-btn small flat fab @click="removeStep(index)"><v-icon>delete</v-icon></v-btn>
                 </div>
                 <div class="alias__add">
                     <v-btn small fab @click="addStep"><v-icon>add</v-icon></v-btn>

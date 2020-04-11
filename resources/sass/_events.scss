@@ -48,6 +48,11 @@
         }
     }
     &.template-events-event {
+        .step--grey {
+            .v-timeline-item__body {
+                color: #ccc !important;
+            }
+        }
         .v-timeline-item__body {
             font-size: 16px;
         }
@@ -62,6 +67,41 @@
         }
         .stop__marker img {
             height: 24px;
+        }
+    }
+}
+
+.setting {
+    .step {
+        display: flex;
+        padding-bottom: 20px;
+        .step__num {
+            margin-top: 15px;
+            flex-basis: 30px;
+            min-width: 30px;
+            max-width: 30px;
+            background: $primary;
+            border-radius: 50px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            color: #fff;
+        }
+        .step__content {
+            margin-left: 10px;
+            background: $bg_light_grey;
+            border-radius: 20px;
+            &:before {
+                content: "";
+                width: 0;
+                height: 0;
+                border-top: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+                border-right:5px solid $bg_light_grey;
+                margin-left: -5px;
+                margin-top: 20px;
+                position: absolute;
+            }
         }
     }
 }
