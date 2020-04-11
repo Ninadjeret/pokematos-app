@@ -27,7 +27,7 @@
 
         <div class="py-0">
             <v-timeline align-top dense>
-                <v-timeline-item v-for="(step, index) in event.relation.steps" :key="step.id" :color="getStepColor(step)" small :class="'step step--'+getStepColor(step)">
+                <v-timeline-item v-for="(step, index) in event.relation.steps" :key="step.id" :color="getStepColor(step, index)" small :class="'step step--'+getStepColor(step, index)">
                     <v-layout pt-3>
                     <v-flex xs3>
                         <strong>{{getStepTime(step)}}</strong>
@@ -93,9 +93,9 @@
             getStepTime(step) {
                 return moment(step.start_time).format('HH[h]mm');
             },
-            getStepColor(step) {
-                if( step.type != 'stop' ) return 'grey';
-                return ( step.checked ) ? 'grey' : 'green' ;
+            getStepColor(step, index) {
+                if( this.displayCheck( step, index ) ) return 'green';
+                return ( step.checked ) ? 'grey' : 'blue' ;
             },
             userCan( param ) {
                 let auth = false;
