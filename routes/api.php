@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/guilds/{guild}', 'GuildController@getOne');
 
     Route::get('user/cities/{city}/active-gyms', 'UserController@getActivePOIs');
+    Route::get('user/cities/{city}/gyms', 'UserController@getPOIs');
     Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
     Route::post('user/cities/{city}/raids', 'RaidController@create');
     Route::put('user/cities/{city}/raids/{raid}', 'RaidController@create');
@@ -117,9 +118,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     //Events
     Route::get('user/cities/{city}/events', 'EventController@getActiveEvents');
     Route::get('user/cities/{city}/events/{event}', 'EventController@getEvent');
-    Route::post('user/cities/{city}/events', 'EventController@createEvent');
-    Route::put('user/cities/{city}/events/{event}', 'EventController@updateEvent');
-    Route::delete('user/cities/{city}/events/{event}', 'EventController@deleteEvent');
+    
+    Route::post('user/guilds/{guild}/events', 'EventController@createEvent');
+    Route::put('user/guilds/{guild}/events/{event}', 'EventController@updateEvent');
+    Route::delete('user/guilds/{guild}/events/{event}', 'EventController@deleteEvent');
+    Route::get('user/guilds/{guild}/events', 'EventController@getGuildEvents');
     Route::post('user/guilds/{guild}/events/{event}/steps/{step}/check', 'EventController@checkStep');
     Route::post('user/guilds/{guild}/events/{event}/steps/{step}/uncheck', 'EventController@uncheckStep');
 

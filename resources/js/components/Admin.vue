@@ -127,6 +127,12 @@
                         permission: 'guild_manage'
                     },
                     {
+                        label: 'Évents',
+                        route: 'admin.events.home',
+                        icon: 'event',
+                        permission: 'guild_manage'
+                    },
+                    {
                         label: 'Message de bienvenue',
                         route: 'admin.welcome',
                         icon: 'insert_comment',

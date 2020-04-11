@@ -37,6 +37,9 @@ import AdminQuestsConnector from "./components/admin/quests/Connecteur.vue";
 
 import Events from "./components/Events.vue";
 import Event from "./components/Event.vue";
+import AdminEventsHome from "./components/admin/events/Home.vue";
+import AdminEvents from "./components/admin/events/Events.vue";
+import AdminEvent from "./components/admin/events/Event.vue";
 
 const routes = [
     {
@@ -105,6 +108,44 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminWelcome
+            },
+            {
+                path: ":id/events",
+                name: "admin.events.home",
+                meta: {
+                    title: "Évents",
+                    parent: "admin"
+                },
+                component: AdminEventsHome,
+                children: [
+                    {
+                        path: "add",
+                        name: "admin.events.add",
+                        meta: {
+                            title: "Ajouter un évent",
+                            parent: "admin.events"
+                        },
+                        component: AdminEvent
+                    },
+                    {
+                        path: "events",
+                        name: "admin.events",
+                        meta: {
+                            title: "Évents",
+                            parent: "admin.events.home"
+                        },
+                        component: AdminEvents
+                    },
+                    {
+                        path: "events/:event_id",
+                        name: "admin.events.edit",
+                        meta: {
+                            title: "Modifier l'évent",
+                            parent: "admin.events"
+                        },
+                        component: AdminEvent
+                    },
+                ]
             },
             {
                 path: ":id/roles",

@@ -37,6 +37,7 @@
         "vue2-leaflet": "^1.2.3",
         "vuetify": "^1.5.21",
         "vuex": "^3.1.2",
-        "vuex-persist": "^2.2.0"
+        "vuex-persist": "^2.2.0",
+        "vuetify-datetime-picker": "^2.1.1"
     }
 }

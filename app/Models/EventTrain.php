@@ -12,6 +12,6 @@ class EventTrain extends Model
     protected $appends = ['steps'];
 
     public function getStepsAttribute() {
-        return EventTrainStep::where('train_id', $this->id)->get();
+        return EventTrainStep::where('train_id', $this->id)->orderBy('start_time', 'ASC')->get();
     }
 }

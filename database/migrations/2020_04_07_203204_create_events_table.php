@@ -19,18 +19,18 @@ class CreateEventsTable extends Migration
             $table->integer('city_id');
             $table->integer('guild_id');
             $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->dateTime('end_time')->nullable();
             $table->string('type');
-            $table->integer('relation_id');
+            $table->integer('relation_id')->nullable();
             $table->boolean('discord_link')->default(0);
-            $table->string('channel_discord_id');
+            $table->string('channel_discord_id')->nullable();
             $table->timestamps();
         });
 
         Schema::create('event_trains', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('event_id');
-            $table->string('message_discord_id');
+            $table->string('message_discord_id')->nullable();
             $table->timestamps();
         });
 

@@ -23,6 +23,7 @@ import appStore from './store/store';
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import 'vuetify/dist/vuetify.min.css'
+import DatetimePicker from 'vuetify-datetime-picker'
 
 Vue.use(Vuex)
 Vue.use(Vuetify, {
@@ -36,6 +37,7 @@ Vue.use(Vuetify, {
 });
 
 Vue.use(VModal)
+Vue.use(DatetimePicker)
 Vue.component('l-map', LMap)
 Vue.component('l-tile-layer', LTileLayer)
 Vue.component('l-marker', LMarker)

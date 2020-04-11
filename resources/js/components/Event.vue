@@ -95,7 +95,7 @@
             },
             getStepColor(step) {
                 if( step.type != 'stop' ) return 'grey';
-                return ( step.checked ) ? 'green' : 'red' ;
+                return ( step.checked ) ? 'grey' : 'green' ;
             },
             userCan( param ) {
                 let auth = false;
