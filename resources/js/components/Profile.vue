@@ -40,7 +40,7 @@
             </div>
         </div>
     </div>
-    <div class="settings-section about">
+    <div class="settings-section">
         <div class="section__title">Merci pour votre soutien</div>
         <p class="donation">
             Les frais de fonctionnement de Pokématos représentent <strong>{{totalCouts}}€</strong> depuis le 01/01/2019. Grace à vous, nous avons déja récupéré <strong>{{totalDons}}€</strong> !
@@ -50,7 +50,7 @@
                 :value="pourcentageDons"
             ></v-progress-linear>
             <span class="text-center">
-                <v-btn href="https://www.pokematos.fr/don">Faire un don</v-btn>
+                <v-btn round large href="https://www.pokematos.fr/don">Faire un don</v-btn>
             </span>
         </p>
     </div>

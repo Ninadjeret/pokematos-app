@@ -3,8 +3,9 @@
         <v-toolbar fixed app color="primary" dark>
             <v-btn v-if="$route.meta.parent" :to="{ name: $route.meta.parent}" icon><v-icon>arrow_back</v-icon></v-btn>
             <v-spacer class="hidden-md-and-up" v-if="$route.name == 'map'"></v-spacer>
+            <img v-if="$route.name == 'map'" src="https://assets.profchen.fr/img/logo_pokematos_256.png">
             <v-toolbar-title v-if="$route.name == 'map'">
-                <img src="https://assets.profchen.fr/img/logo_pokematos.png"> POKEMATOS <small v-if="this.$store.state.currentCity">{{ this.$store.state.currentCity.name }}</small>
+                POKEMATOS <small v-if="this.$store.state.currentCity">{{ this.$store.state.currentCity.name }}</small>
             </v-toolbar-title>
             <v-toolbar-title v-if="$route.name != 'map'">{{$route.meta.title}}</v-toolbar-title>
             <v-btn v-if="cities &&  cities.length > 1 && $route.name == 'map'" icon @click.stop="dialogCities = true">
@@ -46,8 +47,9 @@
 
 
         <v-content>
-            <v-container>
-                <transition :name="transitionName">
+            <v-container fluid>
+                <div id="bg1"></div>
+                <transition name="fade">
                     <router-view></router-view>
                 </transition>
                 <snackbar></snackbar>
@@ -133,7 +135,6 @@
             return {
                 dialogCities: false,
                 dialogUpdate: true,
-                transitionName: 'fade_old',
                 mode: 'base',
             }
         },
@@ -142,7 +143,7 @@
                 await this.$store.dispatch('fetchGyms')
             } finally {
                 this.dialogUpdate = false;
-                setInterval( this.fetch, 60000, 'auto' );
+                setInterval( this.fetch, 30000, 'auto' );
             }
         },
         computed: {
@@ -162,23 +163,17 @@
             }
         },
         watch: {
-            currentCity: function( val ) {
+            /*currentCity: function( val ) {
                 if( val && val !== undefined ) this.fetch();
-            },
-            '$route' (to, from) {
-                const toDepth = to.path.split('/').length
-                const fromDepth = from.path.split('/').length
-                console.log(toDepth);
-                //console.log(fromDepth);
-                //this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-             }
+            },*/
         },
         methods: {
             changeMode(mode) {
                 this.mode = mode;
             },
             fetch() {
-                this.$store.dispatch('autoFetchData');
+                console.log('Synchronisation auto');
+                this.$store.dispatch('fetchGyms');
             },
             async changeCity( city ) {
                 this.dialogCities = false;

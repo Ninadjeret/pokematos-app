@@ -329,7 +329,7 @@ class BotController extends Controller {
      */
     public function addRaid( Request $request ) {
 
-        return response()->json('Annonce actuellement indisponible', 403);
+        //return response()->json('Annonce actuellement indisponible', 403);
 
         $url = ( isset($request->url) && !empty($request->url) ) ? $request->url : false ;
         $text = ( isset($request->text) && !empty($request->text) ) ? $request->text : false ;
@@ -400,7 +400,7 @@ class BotController extends Controller {
      */
     public function imageDecode( Request $request ) {
 
-        return response()->json('Annonce actuellement indisponible', 403);
+        //return response()->json('Annonce actuellement indisponible', 403);
 
         $url = ( isset($request->url) && !empty($request->url) ) ? $request->url : false ;
         $guild_discord_id = $request->guild_discord_id;

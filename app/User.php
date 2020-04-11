@@ -13,10 +13,12 @@ use App\Models\UserGuild;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 
 class User extends Authenticatable
 {
-     use HasApiTokens, Notifiable;
+    use HasPushSubscriptions;
+    use HasApiTokens, Notifiable;
 
     protected $fillable = [
         'name',

@@ -159,3 +159,7 @@ Route::get('stats/c/{city_slug}/ia', 'StatsController@getCityIAReport');
 //Public
 Route::get('public/pokemons', 'PokemonController@getAll');
 Route::get('public/tools/pokemon/get-pokedex-from-name/{name}', 'PokemonController@getPokedexIdFromNameFr');
+
+//Subscriptions
+Route::post('subscription', 'SubscriptionController@store');
+Route::post('subscription/delete', 'SubscriptionController@destroy');

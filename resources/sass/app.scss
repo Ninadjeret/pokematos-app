@@ -9,6 +9,7 @@
 @import '~bootstrap/scss/bootstrap';
 
 @import 'vuetify';
+@import 'transitions';
 @import 'header';
 @import 'nav';
 @import 'map';
@@ -81,16 +82,6 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     width: 100%;
     max-width: 100%;
 }
-
-
-.fade-enter-active {
-  transition: all .3s ease;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
-
 .bt {
     display: inline-block;
     background: $primary;
@@ -160,7 +151,8 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     display: flex;
     flex-direction: row;
     padding: 10px 15px;
-    border-bottom: 1px solid #eee;
+    margin: 10px 0;
+    background: $bg_light_grey;
 }
 .raid__img {
     min-width: 80px;
@@ -172,7 +164,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
 }
 .raid__content h3 {
     font-family: 'Teko';
-    font-size: 24px;
+    font-size: 22px;
     margin: 5px 0 7px 0;
     line-height: 24px;
 }
@@ -434,7 +426,7 @@ range_button:active {
         font-size: 46px;
         line-height: 40px;
         text-align: center;
-        color: #5a6cae;
+        color: $primary;
         margin: 0px 00px;
     }
     div.wrapper {
@@ -463,15 +455,6 @@ range_button:active {
     .v-progress-linear__bar__determinate {
         border-radius: 50px;
     }
-    .v-btn {
-        background: transparent !important;
-        border: 2px solid $primary;
-        border-radius: 50px;
-        box-shadow: none;
-        .v-btn__content {
-            color: $primary;
-        }
-    }
 }
 
 /*.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
@@ -481,7 +464,7 @@ range_button:active {
     background-color: inherit;
 }
 
-.v-tabs {
+/*.v-tabs {
     background: $primary;
     z-index: 2000;
     .theme--light.v-tabs__bar .v-tabs__div {
@@ -491,4 +474,4 @@ range_button:active {
         color: #fff;
         text-decoration: none;
     }
-}
+}*/

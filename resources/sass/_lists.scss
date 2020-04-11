@@ -14,3 +14,35 @@
         }
     }
 }
+#app__container .v-tabs {
+    background: #fff;
+    .v-tabs__wrapper {
+        border-radius: 0;
+        .v-tabs__item {
+            font-family: 'Teko';
+            font-weight: 600;
+            font-size: 20px;
+            &.v-tabs__item--active {
+                color: $accent;
+            }
+            &:hover {
+                color: $accent;
+                text-decoration: none;
+            }
+        }
+    }
+    .theme--light.v-tabs__bar .v-tabs__div {
+        color: $grey;
+    }
+    .items__counter {
+        font-family: Roboto;
+        font-size: 13px;
+        width: 24px;
+        height: 24px;
+        margin-left: 5px;
+        background: #fafafa;
+        line-height: 24px;
+        text-align: center;
+    }
+}
+
