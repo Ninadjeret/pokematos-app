@@ -11497,6 +11497,12 @@ a.text-dark:focus {
   margin: 10px 0;
 }
 
+#app__container .v-btn.v-btn--large.v-btn--round.secondary {
+  color: #5a6cae;
+  border: 4px solid #5a6cae;
+  background: #fff;
+}
+
 #app__container.template-map .v-toolbar.v-toolbar--fixed.theme--dark.primary {
   background: -webkit-gradient(linear, left top, right top, from(#5a6cae), to(#8e56d9));
   background: linear-gradient(to right, #5a6cae, #8e56d9);
@@ -14085,45 +14091,76 @@ body.logged-out .denied a {
 }
 
 .event__card {
-  margin: 15px;
-  padding: 15px;
-  background: -webkit-gradient(linear, left top, right top, from(#157d74), to(#ffcd5c));
-  background: linear-gradient(to right, #157d74, #ffcd5c);
+  margin-bottom: 20px;
   border-radius: 20px;
   position: relative;
 }
 
 .event__card a {
-  color: #fff;
   text-decoration: none;
+  display: -webkit-box;
+  display: flex;
+  background: #fafafa;
+  border-radius: 20px;
 }
 
-.event__card h3 {
+.event__card .event__img {
+  flex-basis: 80px;
+  max-width: 80px;
+  /*background: linear-gradient(to right, $primary, $accent);*/
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.event__card .event__img img {
+  width: 80px;
+  padding-top: 10px;
+}
+
+.event__card .event__content {
+  flex-basis: auto;
+  padding: 10px;
+  color: #212529;
+}
+
+.event__card .event__content h3 {
   font-family: "Teko";
   font-size: 30px;
   margin-bottom: 0;
+  color: #212529;
 }
 
-.event__card p {
+.event__card .event__content p {
   margin-bottom: 5px;
+  color: #212529;
 }
 
-.event__card img {
-  position: absolute;
-  top: 0;
-  right: 10px;
-  height: 100%;
-}
-
-.event__single .v-card__title {
+#app__container .event__single.theme--dark.v-sheet {
   background: #fff;
-  color: #5a6cae;
 }
 
-.event__single .flex.xs3 {
+#app__container .event__single .v-card__title .title {
+  font-family: "Teko" !important;
+  font-size: 30px !important;
+}
+
+#app__container.template-events-event .v-timeline-item__body {
+  font-size: 16px;
+}
+
+#app__container.template-events-event .flex.xs3 {
   flex-basis: 20%;
-  max-width: 20%;
-  min-width: 20%;
+  max-width: 20% !important;
+  min-width: 20% !important;
+}
+
+#app__container.template-events-event .caption {
+  margin-top: 5px;
+  font-size: 13px !important;
+}
+
+#app__container.template-events-event .stop__marker img {
+  height: 24px;
 }
 
 html {

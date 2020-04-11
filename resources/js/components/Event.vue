@@ -9,16 +9,16 @@
 
         <div v-if="!loading">
         <v-card dark flat class="event__single">
-            <v-card-title>
-                <h3 class="title">{{event.name}}</h3>
-            </v-card-title>
             <v-img src="https://assets.profchen.fr/img/app/event_train_plain.jpg" gradient="to top, rgba(0,0,0,.44), rgba(0,0,0,.44)">
-            <v-container fill-height>
+            <v-container >
+                <v-card-title>
+                    <h3 class="title">{{event.name}}</h3>
+                </v-card-title>
                 <v-layout align-center>
-                    <strong class="display-4 font-weight-regular mr-4">8</strong>
+                    <strong class="display-4 font-weight-regular mr-4">{{date.day}}</strong>
                     <v-layout column justify-end>
-                        <div class="headline font-weight-light">Monday</div>
-                        <div class="text-uppercase font-weight-light">February 2015</div>
+                        <div class="headline font-weight-light">{{date.weekDay}}</div>
+                        <div class="text-uppercase font-weight-light">{{date.month}} {{date.year}}</div>
                     </v-layout>
                 </v-layout>
             </v-container>
@@ -34,23 +34,28 @@
                     </v-flex>
                     <v-flex>
                         <strong v-if="step.stop" @click="showModal(step.stop)">
+                            <span class="stop__marker">
+                                <img v-if="step.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
+                                <img v-if="!step.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
+                            </span>
                             <span v-if="step.stop && step.stop.zone">{{step.stop.zone.name}} - </span>
                             {{step.stop.name}}
                         </strong>
+                        <strong v-if="step.type == 'transport'"><v-icon>directions_car</v-icon>&nbsp;Trajet en voiture/bus</strong>
                         <div v-if="step.description" class="caption">{{step.description}}</div>
-                        <v-btn v-if="userCan('guild_manage') && displayCheck(step, index)" round large @click="checkstep(step, 'check')">Check</v-btn>
-                        <v-btn v-if="userCan('guild_manage') && displayUncheck(step, index)" round large @click="checkstep(step, 'uncheck')">Annuler le check</v-btn>
+                        <v-btn v-if="userCan('guild_manage') && displayCheck(step, index)" round large @click="checkstep(step, 'check')"><v-icon>done</v-icon>Check</v-btn>
+                        <v-btn class="secondary" v-if="userCan('guild_manage') && displayUncheck(step, index)" round large @click="checkstep(step, 'uncheck')"><v-icon>close</v-icon>Uncheck</v-btn>
                     </v-flex>
                     </v-layout>
-                </v-timeline-item>                
+                </v-timeline-item>
             </v-timeline>
         </div>
 
         <v-btn v-if="event && event.channel_discord_id" round large :href="'https://discordapp.com/channels/'+event.guild.discord_id+'/'+event.channel_discord_id">Rejoindre la conversation</v-btn>
 
-        </div> 
+        </div>
 
-        <gym-modal ref="gymModal"></gym-modal>       
+        <gym-modal ref="gymModal"></gym-modal>
     </div>
 </template>
 
@@ -70,9 +75,23 @@
                 this.fetch();
             }
         },
-        computed: mapState([
-                'currentCity', 'user'
-        ]),
+        computed:{
+            user() {
+                return this.$store.state.user;
+            },
+            currentCity() {
+                return this.$store.state.currentCity;
+            },
+            date() {
+                moment.locale('fr');
+                return {
+                    day: moment(this.event.start_time).format('D'),
+                    weekDay: moment(this.event.start_time).format('dddd'),
+                    month: moment(this.event.start_time).format('MMMM'),
+                    year: moment(this.event.start_time).format('YYYY'),
+                }
+            },
+        },
         methods: {
             fetch() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/events/'+this.$route.params.event_id).then( res => {

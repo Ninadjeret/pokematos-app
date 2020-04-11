@@ -11,10 +11,14 @@
         <div v-if="!loading">
             <div class="event__card" v-for="event in events" :key="event.id">
                 <router-link :to="{ name: 'events.event', params: { event_id: event.id }}">
-                    <h3>{{event.name}}</h3>
-                    <p>Débute le {{getDate(event)}}</p>
-                    <p>Proposé par <strong>{{event.guild.name}}</strong></p>
-                    <img :src="'https://assets.profchen.fr/img/app/event_'+event.type+'.png'">
+                    <div class="event__img">
+                        <img :src="'https://assets.profchen.fr/img/app/event_'+event.type+'.png'">
+                    </div>
+                    <div class="event__content">
+                        <h3>{{event.name}}</h3>
+                        <p>Débute {{getDate(event)}}</p>
+                        <p>Proposé par <strong>{{event.guild.name}}</strong></p>
+                    </div>
                 </router-link>
             </div>
         </div>
@@ -49,7 +53,8 @@
                 });
             },
             getDate(event) {
-                return moment(event.start_time).format('DD/MM à HH[h]mm');
+                moment.locale('fr');
+                return moment(event.start_time).format('dddd DD/MM à HH[h]mm');
             }
         }
     }
