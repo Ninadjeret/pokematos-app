@@ -77,6 +77,7 @@
             <v-divider></v-divider>
             <div v-if="getId">
                 <v-subheader v-if="">Autres actions</v-subheader>
+                <v-list-tile color="pink" @click="duplicate()">Dupliquer l'évent</v-list-tile>
                 <v-list-tile color="pink" @click="dialog = true">Supprimer l'évent</v-list-tile>
             </div>
 
@@ -219,6 +220,28 @@
                     this.$router.push({ name: this.$route.meta.parent })
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
+                    if( err.response.data ) {
+                        message = err.response.data;
+                    }
+                    this.$store.commit('setSnackbar', {
+                        message: message,
+                        timeout: 1500
+                    })
+                    this.loading = false
+                });
+            },
+            duplicate() {
+                this.loading = true;
+                axios.post('/api/user/guilds/'+this.$route.params.id+'/events/'+this.getId+'/clone').then( res => {
+                    let newEvent = res.data;
+                    this.$store.commit('setSnackbar', {
+                        message: 'Duplication effectuée',
+                        timeout: 1500
+                    })
+                    this.loading = false
+                    this.$router.push({ name: 'admin.events.edit', params: { event_id: newEvent.id } })
+                }).catch( err => {
+                    let message = 'Problème lors de la duplication';
                     if( err.response.data ) {
                         message = err.response.data;
                     }

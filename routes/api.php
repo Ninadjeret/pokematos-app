@@ -118,8 +118,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     //Events
     Route::get('user/cities/{city}/events', 'EventController@getActiveEvents');
     Route::get('user/cities/{city}/events/{event}', 'EventController@getEvent');
-    
+
     Route::post('user/guilds/{guild}/events', 'EventController@createEvent');
+    Route::post('user/guilds/{guild}/events/{event}/clone', 'EventController@cloneEvent');
     Route::put('user/guilds/{guild}/events/{event}', 'EventController@updateEvent');
     Route::delete('user/guilds/{guild}/events/{event}', 'EventController@deleteEvent');
     Route::get('user/guilds/{guild}/events', 'EventController@getGuildEvents');

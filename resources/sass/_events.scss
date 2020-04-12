@@ -106,7 +106,8 @@
     }
 }
 
-#app__container.template-admin-events-edit {
+#app__container.template-admin-events-edit,
+#app__container.template-admin-events-add {
     .v-dialog {
         .v-tabs__bar {
             .v-tabs__item--active {

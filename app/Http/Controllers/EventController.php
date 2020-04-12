@@ -74,6 +74,28 @@ class EventController extends Controller
         return response()->json($event, 200);
     }
 
+    public function cloneEvent( Request $request, Guild $guild, Event $event ) {
+        $args['event'] = [
+            'name' => $event->name.' - copie',
+            'guild_id' => $guild->id,
+            'city_id' => $guild->city->id,
+            'type' => $event->type,
+            'start_time' => $event->start_time,
+        ];
+
+        $train = EventTrain::where('event_id', $event->id)->first();
+        if( !empty($train->steps) ) {
+            $args['steps'] = $train->steps->toArray();
+            foreach( $args['steps'] as &$step ) {
+                unset($step['id']);
+                unset($step['train_id']);
+            }
+        }
+
+        $event = Event::add($args);
+        return response()->json($event, 200);
+    }
+
     public  function updateEvent( Request $request, Guild $guild, Event $event ) {
         $user = Auth::user();
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
