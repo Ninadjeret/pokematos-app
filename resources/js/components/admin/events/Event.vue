@@ -8,12 +8,15 @@
                 <input v-model="name" type="text">
             </div>
 
-            <div class="setting">
+            <div class="setting datetime">
+                <label>Début de l'évent</label>
                 <v-datetime-picker
                     label="Début de l'évent"
                     v-model="start_time"
                     date-format="dd/MM/yyyy"
                     time-format="HH:mm"
+                    :datePickerProps="{locale: 'fr'}"
+                    :timePickerProps="{format: '24hr'}"
                 ></v-datetime-picker>
             </div>
 
@@ -54,15 +57,16 @@
                         </div>
                         <div class="setting" v-if="step.type == 'stop' && gyms">
                             <label>Arène liée</label>
-                            <select v-model="step.stop_id">
-                                <option v-for="gym in gyms" :value="gym.id" :key="gym.id">{{gym.name}}</option>
-                            </select>
+                            <multiselect v-model="step.stop" track-by="id" label="name" placeholder="Choisir une arène" :options="gyms" :searchable="true" :allow-empty="false">
+                              <template slot="singleLabel" slot-scope="{ option }"><span v-if="option.ex">[EX] </span><span v-if="option.zone">{{ option.zone.name }} - </span>{{ option.name }}</template>
+                              <template slot="option" slot-scope="props"><span v-if="props.option.ex">[EX] </span><span v-if="props.option.zone">{{ props.option.zone.name }} - </span>{{ props.option.name }}</template>
+                            </multiselect>
                         </div>
                         <div class="setting">
                             <label>Description</label>
                             <input v-model="step.description" type="text">
                         </div>
-                        <v-btn small flat fab @click="removeStep(index)"><v-icon>delete</v-icon></v-btn>                        
+                        <v-btn small flat fab @click="removeStep(index)"><v-icon>delete</v-icon></v-btn>
                     </div>
                 </div>
                 <div class="alias__add">
@@ -96,8 +100,10 @@
 
 <script>
     import moment from 'moment';
+    import Multiselect from 'vue-multiselect'
     export default {
         name: 'AdminEvent',
+        components: { Multiselect },
         data() {
             return {
                 loading: false,
@@ -132,7 +138,7 @@
                 return( this.$route.params.event_id && Number.isInteger(parseInt(this.$route.params.event_id)) ) ? parseInt(this.$route.params.event_id) : false ;
             },
             gyms() {
-                return this.$store.state.gyms;
+                return this.$store.state.gyms.filter( gym => gym.gym);
             }
         },
         created() {

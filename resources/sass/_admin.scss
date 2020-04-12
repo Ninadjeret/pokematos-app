@@ -71,6 +71,24 @@
             font-size: 16px;
         }
     }
+    &.datetime {
+        .v-input {
+            margin-top: 0;
+            padding-top: 0;
+            .v-text-field__slot label {
+                display: none;
+            }
+            .v-input__slot {
+                margin-bottom: 0;
+            }
+            .v-text-field__details {
+                display: none;
+            }
+        }
+        .v-dialog__container {
+            display: none;
+        }
+    }
     label {
         width: 100%;
         font-size: 16px;

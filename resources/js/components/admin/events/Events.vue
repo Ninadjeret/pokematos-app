@@ -50,7 +50,7 @@
     import { mapState } from 'vuex'
     import moment from 'moment';
     export default {
-        name: 'AdminEvents',
+        name: 'AdminEvents',    
         data() {
             return {
                 events: [],
@@ -70,7 +70,7 @@
                     let endTime = moment(event.end_time);
                     let now = moment();
                     return now.isAfter(endTime);
-                });                
+                });
             }
         },
         created() {

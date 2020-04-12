@@ -12294,6 +12294,27 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   font-size: 16px;
 }
 
+.setting.datetime .v-input {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.setting.datetime .v-input .v-text-field__slot label {
+  display: none;
+}
+
+.setting.datetime .v-input .v-input__slot {
+  margin-bottom: 0;
+}
+
+.setting.datetime .v-input .v-text-field__details {
+  display: none;
+}
+
+.setting.datetime .v-dialog__container {
+  display: none;
+}
+
 .setting label {
   width: 100%;
   font-size: 16px;
@@ -14202,6 +14223,58 @@ body.logged-out .denied a {
   margin-left: -5px;
   margin-top: 20px;
   position: absolute;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-tabs__bar .v-tabs__item--active i {
+  color: #5a6cae;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-date-picker-title {
+  color: #5a6cae !important;
+  font-family: "Teko";
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-picker__title__btn {
+  border-radius: 0;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-date-picker-table .v-btn--active {
+  background-color: #8e56d9;
+  color: #fff;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-card__actions .grey {
+  background: none !important;
+  box-shadow: none !important;
+  color: #5a6cae !important;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-card__actions .green {
+  background: #5a6cae !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-time-picker-title {
+  color: #5a6cae;
+  -webkit-box-pack: center;
+          justify-content: center;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-time-picker-clock {
+  border-radius: 100%;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-time-picker-clock__hand {
+  background-color: #5a6cae !important;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-time-picker-clock__item--active {
+  background-color: #5a6cae !important;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-picker.v-card {
+  box-shadow: none;
 }
 
 html {

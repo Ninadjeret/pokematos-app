@@ -105,3 +105,56 @@
         }
     }
 }
+
+#app__container.template-admin-events-edit {
+    .v-dialog {
+        .v-tabs__bar {
+            .v-tabs__item--active {
+                i {
+                    color: $primary;
+                }
+            }
+        }
+        .v-date-picker-title {
+            color: $primary !important;
+            font-family: 'Teko';
+        }
+        .v-picker__title__btn {
+            border-radius: 0;
+        }
+        .v-date-picker-table {
+            .v-btn--active {
+                background-color: $accent;
+                color: #fff;
+            }
+        }
+        .v-card__actions {
+            .grey {
+                background: none !important;
+                box-shadow: none !important;
+                color: $primary !important;
+            }
+            .green {
+                background: $primary !important;
+                color: #fff !important;
+                border-radius: 20px !important;
+            }
+        }
+        .v-time-picker-title {
+            color: $primary;
+            justify-content: center;
+        }
+        .v-time-picker-clock {
+            border-radius: 100%;
+        }
+        .v-time-picker-clock__hand {
+            background-color: $primary !important;
+        }
+        .v-time-picker-clock__item--active {
+            background-color: $primary !important;
+        }
+        .v-picker.v-card {
+            box-shadow: none;
+        }
+    }
+}
