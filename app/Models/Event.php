@@ -7,6 +7,9 @@ use App\Models\Event;
 use App\Models\EventTrain;
 use App\Models\EventTrainStep;
 use Illuminate\Support\Facades\Log;
+use App\Events\Events\EventCreated;
+use App\Events\Events\TrainCreated;
+use App\Events\Events\TrainUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
@@ -35,6 +38,9 @@ class Event extends Model
 
         $event = Event::create( $args['event'] );
 
+        //Event
+        event(new EventCreated($event, $event->guild));
+
         if( array_key_exists('steps', $args) ) {
 
             $train = EventTrain::create([
@@ -59,17 +65,20 @@ class Event extends Model
                 $step->change($arg);
             }
 
+            //Event
+            event(new TrainCreated($train, $event, $event->guild));
+
         }
     }
 
     /**
      * Mise à jour d'un event
-     * 
-     * @param array $args 
+     *
+     * @param array $args
      */
     public function change( $args ) {
         $this->update($args['event']);
-    
+
         if( array_key_exists('steps', $args) ) {
 
             $train = EventTrain::firstOrCreate(['event_id' => $this->id]);
@@ -84,7 +93,7 @@ class Event extends Model
                         'train_id' => $train->id,
                     ]);
                 } else {
-                    $step = EventTrainStep::find($args['id']);    
+                    $step = EventTrainStep::find($args['id']);
                 }
 
                 //Calcul de start_time
@@ -102,6 +111,9 @@ class Event extends Model
 
             //On supprime les anciennes steps
             EventTrainStep::whereNotIn('id', $saved_steps)->delete();
+
+            //Event
+            event(new TrainUpdated($train, $this, $this->guild));
 
         }
 

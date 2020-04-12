@@ -6,9 +6,11 @@ use App\Models\City;
 use App\Models\Event;
 use App\Models\Guild;
 use App\Helpers\Helpers;
+use App\Models\EventTrain;
 use Illuminate\Http\Request;
 use App\Models\EventTrainStep;
 use Illuminate\Support\Facades\Log;
+use App\Events\Events\EventDeleted;
 use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
@@ -21,8 +23,8 @@ class EventController extends Controller
         $matching_ids = array_intersect( $user_guild_ids, $city_guild_ids );
 
         $events = Event::where('end_time', '>', date('Y-m-d H:i:s'))
-            ->whereIn('guild_id', $matching_ids)    
-            ->get(); 
+            ->whereIn('guild_id', $matching_ids)
+            ->get();
 
         return response()->json($events, 200);
     }
@@ -31,9 +33,9 @@ class EventController extends Controller
         $user = Auth::user();
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
-        }  
-        
-        $events = Event::where('guild_id', $guild->id)->get(); 
+        }
+
+        $events = Event::where('guild_id', $guild->id)->get();
 
         return response()->json($events, 200);
     }
@@ -43,7 +45,7 @@ class EventController extends Controller
 
         $user_guild_ids = Helpers::extractIds( $user->getGuilds() );
         if( !in_array($event->guild_id, $user_guild_ids) ) {
-            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);    
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
         return response()->json($event, 200);
@@ -98,16 +100,17 @@ class EventController extends Controller
         }
 
         $event_id = $event->id;
+        event(new EventDeleted($event, $event->guild));
         Event::destroy($event_id);
 
         $train = EventTrain::where('event_id', $event_id)->first();
         if( $train ) {
             $train_id = $train->id;
-            EventTrain::destroy($train_id);  
-            
-            $steps = EventTrainSteps::where('train_id', $train_id)->get();
+            EventTrain::destroy($train_id);
+
+            $steps = EventTrainStep::where('train_id', $train_id)->get();
             if( !empty($steps) ) {
-                EventTrainSteps::destroy($steps);
+                EventTrainStep::destroy($steps);
             }
         }
 

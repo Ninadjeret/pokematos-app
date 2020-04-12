@@ -7,7 +7,7 @@ use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
 
 class Discord {
-    public static function translate( $message, $guild, $user ) {
+    public static function encode( $message, $guild, $user ) {
 
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $roles = $discord->guild->getGuildRoles(array(
@@ -75,7 +75,7 @@ class Discord {
             foreach( $mentions as $mention ) {
                 $role = Role::where('discord_id', $mention[1])->first();
                 if( $role ) {
-                    $message = str_replace($mention[0], $role->name, $message);    
+                    $message = str_replace($mention[0], $role->name, $message);
                 }
             }
         }

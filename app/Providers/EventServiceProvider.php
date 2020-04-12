@@ -56,6 +56,22 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\RocketInvasionDeleted' => [
             'App\Listeners\PurgeDiscordInvasionData',
         ],
+
+        //Events
+        'App\Events\Events\EventCreated' => [
+            'App\Listeners\Discord\CreateChannel',
+        ],
+        'App\Events\Events\EventDeleted' => [
+            'App\Listeners\Discord\DeleteChannel',
+        ],
+        'App\Events\Events\TrainCreated' => [
+            'App\Listeners\Discord\PostTrainMessage',
+        ],
+        'App\Events\Events\TrainUpdated' => [
+            'App\Listeners\Discord\PostTrainMessage',
+        ],
+
+        //Courant
         'App\Events\DayChanged' => [
             'App\Listeners\PurgeDiscordQuestInstanceData',
             'App\Listeners\PurgeDiscordInvasionData',

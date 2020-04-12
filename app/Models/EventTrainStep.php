@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Models\Stop;
+use App\Models\Event;
+Use App\Models\EventTrain;
+use App\Events\Events\TrainUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class EventTrainStep extends Model
@@ -32,11 +35,23 @@ class EventTrainStep extends Model
 
     public function check() {
         $this->update(['checked' => 1]);
+
+        //Event
+        $train = EventTrain::find($this->train_id);
+        $event = Event::find($train->event_id);
+        event(new TrainUpdated($train, $event, $this->guild));
+
         return true;
     }
 
     public function uncheck() {
         $this->update(['checked' => 0]);
+
+        //Event
+        $train = EventTrain::find($this->train_id);
+        $event = Event::find($train->event_id);
+        event(new TrainUpdated($train, $event, $this->guild));
+
         return true;
     }
 }
