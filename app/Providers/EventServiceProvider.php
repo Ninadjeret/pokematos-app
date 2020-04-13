@@ -74,7 +74,7 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Discord\PostTrainMessage',
         ],
         'App\Events\Events\TrainStepUnchecked' => [
-            'App\Listeners\Discord\PostTrainMessage',
+            'App\Listeners\Discord\DeleteMessage',
         ],
 
         //Courant
