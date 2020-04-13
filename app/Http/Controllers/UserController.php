@@ -493,4 +493,14 @@ class UserController extends Controller {
         return response()->json($logs, 200);
     }
 
+    public function uploadImage(Request $request) {
+        $user = Auth::user();
+        if( !empty( $request->image ) ) {
+            $imageName = time().'.'.$request->image->getClientOriginalExtension();
+            $path = "app/public/user/{$user->id}";
+            $request->image->move(storage_path($path), $imageName);
+        }
+        return $imageName;
+    }
+
 }

@@ -11,8 +11,7 @@
         <div v-if="!loading">
             <div class="event__card" v-for="event in events" :key="event.id">
                 <router-link :to="{ name: 'events.event', params: { event_id: event.id }}">
-                    <div class="event__img">
-                        <img :src="'https://assets.profchen.fr/img/app/event_'+event.type+'.png'">
+                    <div class="event__img" :style="'background-image: url('+event.image+')'">
                     </div>
                     <div class="event__content">
                         <h3>{{event.name}}</h3>

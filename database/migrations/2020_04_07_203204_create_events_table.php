@@ -22,6 +22,7 @@ class CreateEventsTable extends Migration
             $table->dateTime('end_time')->nullable();
             $table->string('type');
             $table->integer('relation_id')->nullable();
+            $table->string('image')->nullable();
             $table->boolean('discord_link')->default(0);
             $table->string('channel_discord_id')->nullable();
             $table->timestamps();

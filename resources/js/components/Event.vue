@@ -9,7 +9,7 @@
 
         <div v-if="!loading">
         <v-card dark flat class="event__single">
-            <v-img src="https://assets.profchen.fr/img/app/event_train_plain.jpg" gradient="to top, rgba(0,0,0,.44), rgba(0,0,0,.44)">
+            <v-img :src="event.image" gradient="to top, rgba(0,0,0,.44), rgba(0,0,0,.44)">
             <v-container >
                 <v-card-title>
                     <h3 class="title">{{event.name}}</h3>

@@ -20,6 +20,17 @@
                 ></v-datetime-picker>
             </div>
 
+            <div class="setting image">
+                <label>Image</label>
+                <span v-if="image !== null" class="preview">
+                    <v-btn fab dark small color="rgba(0,0,0,0.5)" @click="image = null">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                    <img :src="image">
+                </span>
+                <input type="file" class="form-control" v-on:change="onImageChange">
+            </div>
+
             <div class="setting">
                 <label>Type d'évent</label>
                 <select v-model="type">
@@ -113,6 +124,7 @@
                 start_time: null,
                 type: 'train',
                 steps: [],
+                image: null,
                 exAllowedHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
                 exAllowedMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
                 types: {
@@ -140,6 +152,9 @@
             },
             gyms() {
                 return this.$store.state.gyms.filter( gym => gym.gym);
+            },
+            user() {
+                return this.$store.state.user;
             }
         },
         created() {
@@ -154,6 +169,7 @@
                     this.start_time = new Date(res.data.start_time);
                     this.type = res.data.type;
                     this.steps = res.data.relation.steps;
+                    this.image = res.data.image;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response && err.response.data ) {
@@ -163,6 +179,16 @@
                         message: message,
                         timeout: 1500
                     })
+                });
+            },
+            onImageChange(e){
+                let toUpload = e.target.files[0];
+                let formData = new FormData();
+                let that = this;
+                formData.append('image', toUpload);
+                axios.post( 'api/user/upload', formData,{headers: {'Content-Type': 'multipart/form-data'}}
+                ).then(function(res){
+                    that.image = '/storage/user/'+that.user.id+'/'+res.data;
                 });
             },
             addStep() {
@@ -178,6 +204,7 @@
                     type: this.type,
                     start_time: start_time.format('YYYY-MM-DD HH:mm:SS'),
                     steps: this.steps,
+                    image: this.image,
                 };
                 if( this.getId ) {
                     this.save(args);

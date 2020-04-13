@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = ['city_id', 'guild_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id'];
+    protected $fillable = ['city_id', 'guild_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id', 'image'];
     protected $appends = ['relation', 'guild'];
 
     public function getRelationAttribute() {
@@ -31,10 +31,18 @@ class Event extends Model
         return Guild::find($this->guild_id);
     }
 
+    public function getImageAttribute( $value ) {
+        if( empty($value) ) {
+            return 'https://assets.profchen.fr/img/app/event_train_plain.jpg';
+        }
+        return $value;
+    }
+
     public static function add($args) {
 
         $start_time = new \DateTime($args['event']['start_time']);
         $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
+        if( !empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen') ) unset($args['event']['image']);
 
         $event = Event::create( $args['event'] );
 
@@ -78,6 +86,7 @@ class Event extends Model
      * @param array $args
      */
     public function change( $args ) {
+        if( !empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen') ) unset($args['event']['image']);
         $this->update($args['event']);
 
         if( array_key_exists('steps', $args) ) {

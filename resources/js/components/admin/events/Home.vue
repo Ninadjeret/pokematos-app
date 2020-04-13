@@ -52,12 +52,15 @@
                     <label>Message à publier</label>
                     <p class="description">Vous pouvez en personnaliser le contenu avec différents tags :<br>
                         <ul>
-                            <li>{next_etape_nom} : Nom de l'étape</li>
-                            <li>{next_etape_heure} : Heure de l'étape</li>
-                            <li>{next_etape_description} : Description de l'étape</li>
+                            <li>{etape_nom}</li>
+                            <li>{etape_heure}</li>
+                            <li>{etape_description}</li>
+                            <li>{next_etape_nom}</li>
+                            <li>{next_etape_heure}</li>
+                            <li>{next_etape_description}</li>
                         </ul>
                     </p>
-                    <input v-model="events_trains_message_check" type="text">
+                    <textarea v-model="events_trains_message_check"></textarea>
                 </div>
                 <v-btn dark fixed bottom right fab @click="submit()">
                     <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>

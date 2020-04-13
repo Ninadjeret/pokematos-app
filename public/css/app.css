@@ -11580,6 +11580,10 @@ a.text-dark:focus {
   border-top-right-radius: 0px !important;
 }
 
+#app__container .v-footer .v-item-group.v-bottom-nav .v-btn {
+  min-width: 70px;
+}
+
 footer .theme--light.v-bottom-nav {
   z-index: 5000;
 }
@@ -12292,6 +12296,18 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   margin-bottom: 0;
   padding-bottom: 0;
   font-size: 16px;
+}
+
+.setting.image .preview {
+  display: inline-block;
+  position: relative;
+}
+
+.setting.image .preview button {
+  position: absolute;
+  display: block;
+  top: 0px;
+  right: 0px;
 }
 
 .setting.datetime .v-input {
@@ -14121,7 +14137,7 @@ body.logged-out .denied a {
   text-decoration: none;
   display: -webkit-box;
   display: flex;
-  background: #fafafa;
+  /*background: #fafafa;*/
   border-radius: 20px;
 }
 
@@ -14131,6 +14147,9 @@ body.logged-out .denied a {
   /*background: linear-gradient(to right, $primary, $accent);*/
   padding: 10px;
   border-radius: 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .event__card .event__img img {

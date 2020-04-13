@@ -71,6 +71,18 @@
             font-size: 16px;
         }
     }
+    &.image {
+        .preview {
+            display: inline-block;
+            position: relative;
+            button {
+                position: absolute;
+                display: block;
+                top: 0px;
+                right: 0px;
+            }
+        }
+    }
     &.datetime {
         .v-input {
             margin-top: 0;

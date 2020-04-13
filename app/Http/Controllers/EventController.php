@@ -64,6 +64,7 @@ class EventController extends Controller
             'city_id' => $guild->city->id,
             'type' => $request->type,
             'start_time' => $request->start_time,
+            'image' => $request->image,
         ];
 
         if( !empty($request->steps) ) {
@@ -81,6 +82,7 @@ class EventController extends Controller
             'city_id' => $guild->city->id,
             'type' => $event->type,
             'start_time' => $event->start_time,
+            'image' => $event->image,
         ];
 
         $train = EventTrain::where('event_id', $event->id)->first();
@@ -105,7 +107,8 @@ class EventController extends Controller
         $args['event'] = [
             'name' => $request->name,
             'type' => $request->type,
-            'start_time' => $request->start_time
+            'start_time' => $request->start_time,
+            'image' => $request->image,
         ];
         if( !empty($request->steps) ) {
             $args['steps'] = $request->steps;
