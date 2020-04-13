@@ -25,7 +25,7 @@
             </div>
 
             <div class="settings-section">
-                <v-subheader>Réglages</v-subheader>
+                <v-subheader>Réglages généraux</v-subheader>
                 <div class="setting d-flex switch">
                     <div>
                         <label>Créer des salons temporaires pour les évents ?</label>
@@ -39,6 +39,25 @@
                     <select v-if="channels_categories" v-model="events_channel_discord_id">
                         <option v-for="channel in channels_categories" :value="channel.id.toString()">{{channel.name}}</option>
                     </select>
+                </div>
+                <v-subheader>Réglages des Pokétrains</v-subheader>
+                <div v-if="events_create_channels" class="setting d-flex switch">
+                    <div>
+                        <label>Publier un message à chaque validation d'étape ?</label>
+                        <p class="description">Cela créera un nouveau message dans le salon de l'évent pour annoncer la prochaine étape du parcours</p>
+                    </div>
+                    <v-switch v-model="events_trains_add_messages"></v-switch>
+                </div>
+                <div v-if="events_trains_add_messages && events_create_channels" class="setting">
+                    <label>Message à publier</label>
+                    <p class="description">Vous pouvez en personnaliser le contenu avec différents tags :<br>
+                        <ul>
+                            <li>{next_etape_nom} : Nom de l'étape</li>
+                            <li>{next_etape_heure} : Heure de l'étape</li>
+                            <li>{next_etape_description} : Description de l'étape</li>
+                        </ul>
+                    </p>
+                    <input v-model="events_trains_message_check" type="text">
                 </div>
                 <v-btn dark fixed bottom right fab @click="submit()">
                     <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
@@ -73,6 +92,8 @@
                 channels_categories: [],
                 events_create_channels: false,
                 events_channel_discord_id: false,
+                events_trains_add_messages: false,
+                events_trains_message_check: '@here nous passons à la prochaine étape : {etape_nom}. RDV à {etape_heure}',
 
             }
         },
@@ -90,6 +111,8 @@
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/settings').then( res => {
                     this.events_create_channels = res.data.events_create_channels;
                     this.events_channel_discord_id = res.data.events_channel_discord_id;
+                    this.events_trains_add_messages = res.data.events_trains_add_messages;
+                    this.events_trains_message_check = res.data.events_trains_message_check;
                 }).catch( err => {
                     //No error
                 });
@@ -106,6 +129,8 @@
                     settings: {
                         events_create_channels: this.events_create_channels,
                         events_channel_discord_id: this.events_channel_discord_id,
+                        events_trains_add_messages: this.events_trains_add_messages,
+                        events_trains_message_check: this.events_trains_message_check,
                     }
                 };
                 this.save(args);

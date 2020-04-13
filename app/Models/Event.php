@@ -105,8 +105,10 @@ class Event extends Model
                 $event_start = new \DateTime( $this->start_time );
                 $start_time = "{$event_start->format('Y-m-m')} {$hour}:{$minutes}:00";
                 $args['start_time'] = $start_time;
-                if( array_key_exists('id', $args['stop']) ) {
+                if( is_array($args['stop']) && array_key_exists('id', $args['stop']) ) {
                     $args['stop_id'] = $args['stop']['id'];
+                } elseif( is_object($args['stop']) ) {
+                        $args['stop_id'] = $args['stop']->id;
                 }
 
                 $step->change($args);

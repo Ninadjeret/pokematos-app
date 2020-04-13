@@ -33,7 +33,7 @@
                         <strong>{{getStepTime(step)}}</strong>
                     </v-flex>
                     <v-flex>
-                        <strong v-if="step.stop" @click="showModal(step.stop)">
+                        <strong v-if="step.type == 'stop'" @click="showModal(step.stop)">
                             <span class="stop__marker">
                                 <img v-if="step.stop.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
                                 <img v-if="!step.stop.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">

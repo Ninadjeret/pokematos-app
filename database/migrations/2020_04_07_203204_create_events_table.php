@@ -43,6 +43,7 @@ class CreateEventsTable extends Migration
             $table->float('duration')->nullable();
             $table->text('description')->nullable();
             $table->boolean('checked')->default(0);
+            $table->string('message_discord_id')->nullable();
             $table->timestamps();
         });
     }

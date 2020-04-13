@@ -70,6 +70,12 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Events\TrainUpdated' => [
             'App\Listeners\Discord\PostTrainMessage',
         ],
+        'App\Events\Events\TrainStepChecked' => [
+            'App\Listeners\Discord\PostTrainMessage',
+        ],
+        'App\Events\Events\TrainStepUnchecked' => [
+            'App\Listeners\Discord\PostTrainMessage',
+        ],
 
         //Courant
         'App\Events\DayChanged' => [

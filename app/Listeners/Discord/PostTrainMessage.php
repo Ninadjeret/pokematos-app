@@ -7,6 +7,7 @@ use App\Events\Events\TrainUpdated;
 use App\Events\Events\TrainCreated;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 class PostTrainMessage
 {
@@ -28,8 +29,39 @@ class PostTrainMessage
      */
     public function handle($event)
     {
-        $discord = new DiscordClient(['token' => config('discord.token')]);
+        switch( get_class($event) ) {
+            case 'App\Events\Events\TrainCreated' :
+                $this->postTrainMessage($event);
+                break;
 
+            case 'App\Events\Events\TrainUpdated' :
+                $this->postTrainMessage($event);
+                break;
+
+            case 'App\Events\Events\TrainStepChecked' :
+                $this->postTrainStepCheckedMessage($event);
+                break;
+        }
+    }
+
+    public function postTrainStepCheckedMessage( $event ) {
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+        if( empty($event->event->channel_discord_id) ) return false;
+        if( !$event->guild->settings->events_create_channels ) return false;
+        if( !$event->guild->settings->events_trains_add_messages ) return false;
+        if( $event->train_step->isLast() ) return false;
+
+        $content = $event->train_step->getDiscordMessage();
+        $message = $discord->channel->createMessage(array(
+            'channel.id' => intval($event->event->channel_discord_id),
+            'content' => $content,
+        ));
+        $event->train_step->update(['message_discord_id' => $message['id']]);
+    }
+
+    public function postTrainMessage( $event ) {
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+        if( !$event->guild->settings->events_create_channels ) return false;
         if( empty($event->event->channel_discord_id) ) return false;
 
         $content = $event->train->getDiscordMessage();
@@ -51,6 +83,5 @@ class PostTrainMessage
                 'content' => $content,
             ));
         }
-
     }
 }
