@@ -69,6 +69,11 @@ class Event extends Model
                 $event_start = new \DateTime( $event->start_time );
                 $start_time = "{$event_start->format('Y-m-m')} {$hour}:{$minutes}:00";
                 $arg['start_time'] = $start_time;
+                if( array_key_exists('stop', $arg) && is_array($arg['stop']) && array_key_exists('id', $arg['stop']) ) {
+                    $arg['stop_id'] = $arg['stop']['id'];
+                } elseif( array_key_exists('stop', $arg) && is_object($arg['stop']) ) {
+                    $arg['stop_id'] = $arg['stop']->id;
+                }
 
                 $step->change($arg);
             }
@@ -114,10 +119,10 @@ class Event extends Model
                 $event_start = new \DateTime( $this->start_time );
                 $start_time = "{$event_start->format('Y-m-m')} {$hour}:{$minutes}:00";
                 $args['start_time'] = $start_time;
-                if( is_array($args['stop']) && array_key_exists('id', $args['stop']) ) {
+                if( array_key_exists('stop', $args) && is_array($args['stop']) && array_key_exists('id', $args['stop']) ) {
                     $args['stop_id'] = $args['stop']['id'];
-                } elseif( is_object($args['stop']) ) {
-                        $args['stop_id'] = $args['stop']->id;
+                } elseif( array_key_exists('stop', $args) && is_object($args['stop']) ) {
+                    $args['stop_id'] = $args['stop']->id;
                 }
 
                 $step->change($args);
@@ -125,7 +130,7 @@ class Event extends Model
             }
 
             //On supprime les anciennes steps
-            EventTrainStep::whereNotIn('id', $saved_steps)->delete();
+            EventTrainStep::where('train_id', $train->id)->whereNotIn('id', $saved_steps)->delete();
 
             //Event
             event(new TrainUpdated($train, $this, $this->guild));

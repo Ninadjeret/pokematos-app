@@ -39,6 +39,22 @@
     }
 }
 #app__container {
+    .event__empty {
+        text-align: center;
+        margin: 100px 20px 0 20px;
+        img {
+            background: #fafafa;
+            border-radius: 100%;
+            width: 128px;
+            padding: 0px;
+        }
+        h3 {
+            font-family: 'Teko';
+            margin-top: 10px;
+            font-size: 30px;
+            color: $accent;
+        }
+    }
     .event__single {
         &.theme--dark.v-sheet {
             background: #fff;

@@ -496,9 +496,10 @@ class UserController extends Controller {
     public function uploadImage(Request $request) {
         $user = Auth::user();
         if( !empty( $request->image ) ) {
-            $imageName = time().'.'.$request->image->getClientOriginalExtension();
-            $path = "app/public/user/{$user->id}";
-            $request->image->move(storage_path($path), $imageName);
+            $imageName = time().'_500x270.'.$request->image->getClientOriginalExtension();
+            $path = "app/public/user/{$user->id}/{$imageName}";
+            $image = \Intervention\Image\Facades\Image::make($request->image->getRealPath())->fit(500, 270)->save(storage_path($path));
+            //$request->image->resize(200, 200)->move(storage_path($path), $imageName);
         }
         return $imageName;
     }

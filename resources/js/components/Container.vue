@@ -23,14 +23,14 @@
                   <v-icon>notifications_active</v-icon>
                 </v-btn>
 
-                <v-btn to="/profile" color="primary" flat value="recent" >
-                  <span>Profil</span>
-                  <v-icon>person</v-icon>
-                </v-btn>
-
                 <v-btn to="/events" color="primary" flat value="recent" >
                   <span>Évents</span>
                   <v-icon>event</v-icon>
+                </v-btn>
+
+                <v-btn to="/profile" color="primary" flat value="recent" >
+                  <span>Profil</span>
+                  <v-icon>person</v-icon>
                 </v-btn>
 
                 <v-btn
@@ -69,16 +69,16 @@
                     <v-icon>notifications_active</v-icon>
                   </v-btn>
 
+                  <v-btn to="/events" color="primary" flat value="recent" >
+                    <span>Évents</span>
+                    <v-icon>event</v-icon>
+                  </v-btn>
+
                   <v-btn to="/profile" color="primary" flat value="recent" >
                     <span>Profil</span>
                     <v-icon>person</v-icon>
                   </v-btn>
-
-                  <v-btn to="/events" color="primary" flat value="recent" >
-                    <span>Évents</span>
-                    <v-icon>event</v-icon>
-                    </v-btn>
-
+                  
                   <v-btn
                       v-if="currentCity && currentCity !== undefined && isAdmin"
                       to="/admin"

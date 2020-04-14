@@ -14175,6 +14175,25 @@ body.logged-out .denied a {
   color: #212529;
 }
 
+#app__container .event__empty {
+  text-align: center;
+  margin: 100px 20px 0 20px;
+}
+
+#app__container .event__empty img {
+  background: #fafafa;
+  border-radius: 100%;
+  width: 128px;
+  padding: 0px;
+}
+
+#app__container .event__empty h3 {
+  font-family: "Teko";
+  margin-top: 10px;
+  font-size: 30px;
+  color: #8e56d9;
+}
+
 #app__container .event__single.theme--dark.v-sheet {
   background: #fff;
 }
