@@ -47,15 +47,15 @@
                 <hr>
                 <div class="dialog__content">
                     <ul>
-                        <p style="color: darkred;padding-top: 20px;">Suite aux règles de confinement actuellement en vigueur, et pour ne pas inciter les joueurs à sé déplacer, les annonces sont actuellement désactivées.</p>
-                        <!--<li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
+                        <!--<p style="color: darkred;padding-top: 20px;">Suite aux règles de confinement actuellement en vigueur, et pour ne pas inciter les joueurs à sé déplacer, les annonces sont actuellement désactivées.</p>-->
+                        <li v-if="raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
                         <li v-if="gym.gym && (raidStatus == 'none' || gym.raid.egg_level == 6)"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
                         <li v-if="!gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">explore</i><span>Annoncer une quête</span></a></li>
                         <li v-if="gym.quest && ( !gym.quest.quest_id || !gym.quest.reward_type )"><a class="modal__action update-quest" v-on:click="setScreenTo('updateQuest')"><i class="material-icons">fingerprint</i><span>Préciser la quête</span></a></li>
                         <li v-if="gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="deleteQuestConfirm()"><i class="material-icons">delete</i><span>Supprimer la quête</span></a></li>
                         <li v-if="raidStatus == 'none' && gym.ex === true && canCreateRaidEx"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
                         <li v-if="gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
-                        <li v-if="!gym.gym && !gym.invasion"><a class="modal__action create-rocketboss" v-on:click="setScreenTo('createRocketBoss')"><i class="material-icons">people_alt</i><span>Annoncer un boss Rocket</span></a></li>-->
+                        <li v-if="!gym.gym && !gym.invasion"><a class="modal__action create-rocketboss" v-on:click="setScreenTo('createRocketBoss')"><i class="material-icons">people_alt</i><span>Annoncer un boss Rocket</span></a></li>
                         <li v-if="gym.google_maps_url && gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
                         <li v-if="gym.google_maps_url && !gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers le Pokéstop</span></a></li>
                         <li v-if="canAccessCityParam('poi_edit')"><a class="modal__action" v-on:click="setScreenTo('editPOI')"><i class="material-icons">edit</i><span>Modifier le POI</span></a></li>
@@ -549,6 +549,10 @@ export default {
                     this.timeLeft = parseInt(this.endTime.diff(now, 'milliseconds'));
                     this.raidAnnonce = 'Un raid '+this.gym.raid.pokemon.name_fr+' est en cours...';
                     this.raidUrl =  this.gym.raid.pokemon.thumbnail_url;
+                } else {
+                    this.timeLeft = false;
+                    this.raidAnnonce = 'Rien pour le moment...';
+                    this.raidUrl = 'https://assets.profchen.fr/img/app/egg_0.png';
                 }
             }
 

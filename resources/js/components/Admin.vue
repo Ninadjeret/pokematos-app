@@ -1,63 +1,58 @@
 <template>
     <div>
         <div class="parent_view" v-if="$route.name == 'admin'">
-            <div class="settings-section">
 
-                <div v-if="user.permissions[guild.id].find(val => val === 'guild_manage')" v-for="guild in currentCity.guilds">
+                <div class="settings-section" v-if="user.permissions[guild.id].find(val => val === 'guild_manage')" v-for="guild in currentCity.guilds">
                     <v-subheader>Discord {{guild.name}}</v-subheader>
                     <v-list>
                     <template v-if="user.permissions[guild.id].find(val => val === item.permission)" v-for="(item, index) in discordItems">
-                        <v-list-tile :key="item.route" :to="{ name: item.route, params: { id: guild.id }}">
-                            <v-list-tile-action>
+                        <v-list-tile avatar :key="item.route" :to="{ name: item.route, params: { id: guild.id }}">
+                            <v-list-tile-avatar>
                                 <v-icon>{{item.icon}}</v-icon>
-                            </v-list-tile-action>
+                            </v-list-tile-avatar>
                             <v-list-tile-content>
                                 <v-list-tile-title>{{item.label}}</v-list-tile-title>
                             </v-list-tile-content>
                       </v-list-tile>
-                      <v-divider></v-divider>
                     </template>
                   </v-list>
               </div>
 
-              <div v-if="canAccessCityParam('zone_edit') || canAccessCityParam('poi_edit')">
+              <div class="settings-section" v-if="canAccessCityParam('zone_edit') || canAccessCityParam('poi_edit')">
                     <v-subheader v-if="currentCity">{{currentCity.name}}</v-subheader>
                     <v-list>
                     <template v-for="(item, index) in generalItems">
-                        <v-list-tile v-if="canAccessCityParam(item.permission)" :key="item.route" :to="{ name: item.route}">
-                            <v-list-tile-action>
+                        <v-list-tile avatar v-if="canAccessCityParam(item.permission)" :key="item.route" :to="{ name: item.route}">
+                            <v-list-tile-avatar>
                                 <v-icon>{{item.icon}}</v-icon>
-                            </v-list-tile-action>
+                            </v-list-tile-avatar>
                             <v-list-tile-content>
                                 <v-list-tile-title>{{item.label}}</v-list-tile-title>
                             </v-list-tile-content>
                       </v-list-tile>
-                      <v-divider></v-divider>
                     </template>
                   </v-list>
               </div>
 
 
-              <div v-if="canAccessCityParam('boss_edit') || canAccessCityParam('quest_edit')">
+              <div class="settings-section" v-if="canAccessCityParam('boss_edit') || canAccessCityParam('quest_edit')">
                     <v-subheader>Global</v-subheader>
                     <v-list>
                     <template v-for="(item, index) in commonItems">
-                        <v-list-tile v-if="canAccessCityParam(item.permission)" :key="item.route" :to="{ name: item.route}">
-                            <v-list-tile-action>
+                        <v-list-tile avatar v-if="canAccessCityParam(item.permission)" :key="item.route" :to="{ name: item.route}">
+                            <v-list-tile-avatar>
                                 <v-icon>{{item.icon}}</v-icon>
-                            </v-list-tile-action>
+                            </v-list-tile-avatar>
                             <v-list-tile-content>
                                 <v-list-tile-title>{{item.label}}</v-list-tile-title>
                             </v-list-tile-content>
                       </v-list-tile>
-                      <v-divider></v-divider>
                     </template>
                   </v-list>
               </div>
 
-            </div>
         </div>
-        <transition name="fade">
+        <transition name="slide-right">
             <router-view></router-view>
         </transition>
     </div>

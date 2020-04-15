@@ -8,7 +8,7 @@
 }
 
 .v-content__wrap .theme--dark.v-btn--floating.v-btn--fixed {
-    background-color: $primary !important;
+    background: linear-gradient(to right, $primary, $accent) !important;
     &:hover {
         text-decoration: none;
     }
@@ -42,13 +42,20 @@
         text-decoration: none;
     }
     .v-tabs {
-        background: $primary;
+        background: #fff;
         .theme--light.v-tabs__bar .v-tabs__div {
-            color: #fff;
+            color: $primary;
         }
-        a:hover {
-            color: #fff;
-            text-decoration: none;
+        .v-tabs__item {
+            font-family: 'Teko';
+            font-weight: 600;
+            &.v-tabs__item--active {
+                color: $primary;
+            }
+            &:hover {
+                color: $secondary;
+                text-decoration: none;
+            }
         }
     }
 }
