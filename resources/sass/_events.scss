@@ -39,6 +39,14 @@
     }
 }
 #app__container {
+    .events {
+        .event__single {
+            margin-bottom: 15px;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
     .event__empty {
         text-align: center;
         margin: 100px 20px 0 20px;
@@ -64,6 +72,9 @@
                 font-family: 'Teko' !important;
                 font-size: 30px !important;
             }
+        }
+        .display-4 {
+            font-size: 70px !important;
         }
     }
     &.template-events-event {

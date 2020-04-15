@@ -22,9 +22,9 @@ class CityController extends Controller {
 
     public function getZones(Request $request, City $city) {
         $user = Auth::user();
-        if( !$user->can('zone_edit', ['city_id' => $city->id]) ) {
+        /*if( !$user->can('zone_edit', ['city_id' => $city->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
-        }
+        }*/
         $zones = Zone::where('city_id', $city->id)
             ->orderBy('name', 'asc')
             ->get();
@@ -137,5 +137,24 @@ class CityController extends Controller {
         $stop->touch();
         Stop::destroy($stop->id);
         return response()->json(null, 204);
+    }
+
+    public function getLastChanges( Request $request, City $city ) {
+        $date_admin = new \DateTime('2000-01-01');
+        $date_events = new \DateTime(\DB::table('events')->orderby('updated_at', 'desc')->first()->updated_at);
+
+        $array_lists = [
+            \DB::table('raids')->max('updated_at'),
+            \DB::table('quest_instances')->max('updated_at'),
+            \DB::table('rocket_invasions')->max('updated_at'),
+        ];
+        $lists_events = new \DateTime( max($array_lists) );
+
+        $last_changes = [
+            'lists' => $lists_events->getTimestamp(),
+            'events' => $date_events->getTimestamp(),
+            'admin' => $date_admin->getTimestamp(),
+        ];
+        return response()->json($last_changes, 200);
     }
 }

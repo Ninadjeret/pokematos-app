@@ -457,6 +457,18 @@ range_button:active {
     }
 }
 
+.unread {
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: red;
+    border-radius: 100%;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    margin-left: 5px;
+}
+
 /*.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
     background: none !important;
 }*/

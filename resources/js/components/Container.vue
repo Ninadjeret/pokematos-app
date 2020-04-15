@@ -67,18 +67,20 @@
                   <v-btn to="/list" color="primary" flat value="recent" >
                     <span>Listes</span>
                     <v-icon>notifications_active</v-icon>
+                    <span v-if="lastChanges && lastChanges.lists.server > lastChanges.lists.local" class="unread"></span>
                   </v-btn>
 
                   <v-btn to="/events" color="primary" flat value="recent" >
                     <span>Évents</span>
                     <v-icon>event</v-icon>
+                    <span v-if="lastChanges && lastChanges.events.server > lastChanges.events.local" class="unread"></span>
                   </v-btn>
 
                   <v-btn to="/profile" color="primary" flat value="recent" >
                     <span>Profil</span>
                     <v-icon>person</v-icon>
                   </v-btn>
-                  
+
                   <v-btn
                       v-if="currentCity && currentCity !== undefined && isAdmin"
                       to="/admin"
@@ -140,7 +142,8 @@
         },
         async mounted() {
             try {
-                await this.$store.dispatch('fetchGyms')
+                await this.$store.dispatch('fetchGyms');
+                this.fetchLastChanges();
             } finally {
                 this.dialogUpdate = false;
                 setInterval( this.fetch, 30000, 'auto' );
@@ -155,6 +158,10 @@
             },
             user() {
                 return this.$store.state.user;
+            },
+            lastChanges() {
+                if( this.$store.state.settings === null ) return false;
+                return this.$store.state.settings.lastChanges;
             },
             isAdmin() {
                 let isAdmin = parseInt(this.currentCity.permissions) >= 30;
@@ -174,6 +181,37 @@
             fetch() {
                 console.log('Synchronisation auto');
                 this.$store.dispatch('fetchGyms');
+            },
+            fetchLastChanges() {
+                this.$store.commit('initSetting', {
+                    setting: 'lastChanges',
+                    value: {
+                        'lists':{
+                            local: Date.now() / 1000,
+                            server: Date.now() / 1000,
+                        },
+                        'events':{
+                            local: Date.now() / 1000,
+                            server: Date.now() / 1000,
+                        },
+                        'admin':{
+                            local: Date.now() / 1000,
+                            server: Date.now() / 1000,
+                        },
+                    }
+                });
+                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/last-changes').then( res => {
+                    if( this.$store.state.settings === null ) return;
+                    let lastChanges = this.$store.state.settings.lastChanges;
+                    if( this.$store.state.settings.events === null ) return;
+                    lastChanges.events.server = res.data.events;
+                    lastChanges.lists.server = res.data.lists;
+                    lastChanges.admin.server = res.data.admin;
+                    this.$store.commit('setSetting', {
+                        setting: 'lastChanges',
+                        value: lastChanges
+                    });
+                });
             },
             async changeCity( city ) {
                 this.dialogCities = false;

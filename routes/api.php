@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('user/cities/{city}/raids', 'RaidController@create');
     Route::put('user/cities/{city}/raids/{raid}', 'RaidController@create');
     Route::delete('user/cities/{city}/raids/{raid}', 'RaidController@delete');
+    Route::get('user/cities/{city}/last-changes', 'CityController@getLastChanges');
 
     //City
     Route::put('user/cities/{city}', 'UserController@updateCity');

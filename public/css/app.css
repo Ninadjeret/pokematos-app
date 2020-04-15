@@ -14175,6 +14175,14 @@ body.logged-out .denied a {
   color: #212529;
 }
 
+#app__container .events .event__single {
+  margin-bottom: 15px;
+}
+
+#app__container .events .event__single:hover {
+  text-decoration: none;
+}
+
 #app__container .event__empty {
   text-align: center;
   margin: 100px 20px 0 20px;
@@ -14201,6 +14209,10 @@ body.logged-out .denied a {
 #app__container .event__single .v-card__title .title {
   font-family: "Teko" !important;
   font-size: 30px !important;
+}
+
+#app__container .event__single .display-4 {
+  font-size: 70px !important;
 }
 
 #app__container.template-events-event .step--grey .v-timeline-item__body {
@@ -14835,6 +14847,18 @@ range_button:active {
 .donation .v-progress-linear__background,
 .donation .v-progress-linear__bar__determinate {
   border-radius: 50px;
+}
+
+.unread {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: red;
+  border-radius: 100%;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  margin-left: 5px;
 }
 
 /*.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {

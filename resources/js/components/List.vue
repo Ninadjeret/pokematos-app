@@ -373,6 +373,9 @@
                 setting: 'raidsListOrder',
                 value: 'date'
             });
+            let lastChanges = this.$store.state.settings.lastChanges
+            lastChanges.lists.local = Date.now() / 1000;
+            this.$store.commit('setSetting', {setting: 'lastChanges',value: lastChanges});
         },
         methods: {
             fetchRewards() {
