@@ -22,10 +22,6 @@ const store = new Vuex.Store({
         settings: JSON.parse(localStorage.getItem('pokematos_settings') ),
         user: JSON.parse(localStorage.getItem('pokematos_user') ),
         zones: JSON.parse(localStorage.getItem('pokematos_zones') ),
-
-        POIs: JSON.parse(localStorage.getItem('pokematos_pois') ),
-        activePOIs: JSON.parse(localStorage.getItem('pokematos_active_pois') ),
-
         snackbar: false,
     },
     mutations: {
@@ -216,12 +212,25 @@ const store = new Vuex.Store({
                 return false;
             }
         },
+        getGyms: state => {
+            if( !state.gyms || state.gyms.length === 0 ) return [];
+            return state.gyms.filter((gym) => {
+                return (gym.gym);
+            });
+        },
     },
     actions: {
         async fetchGyms ({ commit, state, getters }) {
-            var user = await axios.get('/api/user');
-            state.user = user.data;
-            localStorage.setItem('pokematos_user', JSON.stringify(state.user));
+            try {
+                var user = await axios.get('/api/user');
+                state.user = user.data;
+                localStorage.setItem('pokematos_user', JSON.stringify(state.user));
+            } catch (error) {
+                console.log(error)
+                if (error.response.status == '401') {
+                    document.location.reload(true);
+                }
+            }
 
             var cities = await axios.get('/api/user/cities/');
             commit('setCities', cities.data);

@@ -122,6 +122,12 @@
                         permission: 'guild_manage'
                     },
                     {
+                        label: 'Évents',
+                        route: 'admin.events.home',
+                        icon: 'event',
+                        permission: 'guild_manage'
+                    },
+                    {
                         label: 'Message de bienvenue',
                         route: 'admin.welcome',
                         icon: 'insert_comment',
@@ -161,7 +167,10 @@
         ]),
         watch: {
         },
-        mounted() {
+        created() {
+            let lastChanges = this.$store.state.settings.lastChanges
+            lastChanges.admin.local = Date.now() / 1000;
+            this.$store.commit('setSetting', {setting: 'lastChanges',value: lastChanges});
         },
         methods: {
             canAccessCityParam( param ) {

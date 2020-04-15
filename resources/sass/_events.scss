@@ -1,0 +1,191 @@
+.event__card {
+    margin-bottom: 20px;
+    border-radius: 20px;
+    position: relative;
+    a {
+        text-decoration: none;
+        display: flex;
+        /*background: #fafafa;*/
+        border-radius: 20px;
+    }
+    .event__img {
+        flex-basis: 80px;
+        max-width: 80px;
+        /*background: linear-gradient(to right, $primary, $accent);*/
+        padding: 10px;
+        border-radius: 20px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        img {
+            width: 80px;
+            padding-top: 10px;
+        }
+    }
+    .event__content {
+        flex-basis: auto;
+        padding: 10px;
+        color: #212529;
+        h3 {
+            font-family: 'Teko';
+            font-size: 30px;
+            margin-bottom: 0;
+            color: #212529;
+        }
+        p {
+            margin-bottom: 5px;
+            color: #212529;
+        }
+    }
+}
+#app__container {
+    .events {
+        .event__single {
+            margin-bottom: 15px;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+    .event__empty {
+        text-align: center;
+        margin: 100px 20px 0 20px;
+        img {
+            background: #fafafa;
+            border-radius: 100%;
+            width: 128px;
+            padding: 0px;
+        }
+        h3 {
+            font-family: 'Teko';
+            margin-top: 10px;
+            font-size: 30px;
+            color: $accent;
+        }
+    }
+    .event__single {
+        &.theme--dark.v-sheet {
+            background: #fff;
+        }
+        .v-card__title {
+            .title {
+                font-family: 'Teko' !important;
+                font-size: 30px !important;
+            }
+        }
+        .display-4 {
+            font-size: 70px !important;
+        }
+    }
+    &.template-events-event {
+        .step--grey {
+            .v-timeline-item__body {
+                color: #ccc !important;
+            }
+        }
+        .v-timeline-item__body {
+            font-size: 16px;
+        }
+        .flex.xs3 {
+            flex-basis: 20%;
+            max-width: 20% !important;
+            min-width: 20% !important;
+        }
+        .caption {
+            margin-top: 5px;
+            font-size: 13px !important
+        }
+        .stop__marker img {
+            height: 24px;
+        }
+    }
+}
+
+.setting {
+    .step {
+        display: flex;
+        padding-bottom: 20px;
+        .step__num {
+            margin-top: 15px;
+            flex-basis: 30px;
+            min-width: 30px;
+            max-width: 30px;
+            background: $primary;
+            border-radius: 50px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            color: #fff;
+        }
+        .step__content {
+            margin-left: 10px;
+            background: $bg_light_grey;
+            border-radius: 20px;
+            &:before {
+                content: "";
+                width: 0;
+                height: 0;
+                border-top: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+                border-right:5px solid $bg_light_grey;
+                margin-left: -5px;
+                margin-top: 20px;
+                position: absolute;
+            }
+        }
+    }
+}
+
+#app__container.template-admin-events-edit,
+#app__container.template-admin-events-add {
+    .v-dialog {
+        .v-tabs__bar {
+            .v-tabs__item--active {
+                i {
+                    color: $primary;
+                }
+            }
+        }
+        .v-date-picker-title {
+            color: $primary !important;
+            font-family: 'Teko';
+        }
+        .v-picker__title__btn {
+            border-radius: 0;
+        }
+        .v-date-picker-table {
+            .v-btn--active {
+                background-color: $accent;
+                color: #fff;
+            }
+        }
+        .v-card__actions {
+            .grey {
+                background: none !important;
+                box-shadow: none !important;
+                color: $primary !important;
+            }
+            .green {
+                background: $primary !important;
+                color: #fff !important;
+                border-radius: 20px !important;
+            }
+        }
+        .v-time-picker-title {
+            color: $primary;
+            justify-content: center;
+        }
+        .v-time-picker-clock {
+            border-radius: 100%;
+        }
+        .v-time-picker-clock__hand {
+            background-color: $primary !important;
+        }
+        .v-time-picker-clock__item--active {
+            background-color: $primary !important;
+        }
+        .v-picker.v-card {
+            box-shadow: none;
+        }
+    }
+}

@@ -25,6 +25,7 @@
 @import 'loader';
 @import 'rocket';
 @import 'status';
+@import 'events';
 
 html {
     font-size: 10px !important;
@@ -454,6 +455,18 @@ range_button:active {
     .v-progress-linear__bar__determinate {
         border-radius: 50px;
     }
+}
+
+.unread {
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: red;
+    border-radius: 100%;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    margin-left: 5px;
 }
 
 /*.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {

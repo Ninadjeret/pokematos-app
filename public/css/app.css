@@ -11497,6 +11497,12 @@ a.text-dark:focus {
   margin: 10px 0;
 }
 
+#app__container .v-btn.v-btn--large.v-btn--round.secondary {
+  color: #5a6cae;
+  border: 4px solid #5a6cae;
+  background: #fff;
+}
+
 #app__container.template-map .v-toolbar.v-toolbar--fixed.theme--dark.primary {
   background: -webkit-gradient(linear, left top, right top, from(#5a6cae), to(#8e56d9));
   background: linear-gradient(to right, #5a6cae, #8e56d9);
@@ -11572,6 +11578,10 @@ a.text-dark:focus {
 #app__container .v-footer .v-btn:last-child {
   border-bottom-right-radius: 0px !important;
   border-top-right-radius: 0px !important;
+}
+
+#app__container .v-footer .v-item-group.v-bottom-nav .v-btn {
+  min-width: 70px;
 }
 
 footer .theme--light.v-bottom-nav {
@@ -12286,6 +12296,39 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   margin-bottom: 0;
   padding-bottom: 0;
   font-size: 16px;
+}
+
+.setting.image .preview {
+  display: inline-block;
+  position: relative;
+}
+
+.setting.image .preview button {
+  position: absolute;
+  display: block;
+  top: 0px;
+  right: 0px;
+}
+
+.setting.datetime .v-input {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.setting.datetime .v-input .v-text-field__slot label {
+  display: none;
+}
+
+.setting.datetime .v-input .v-input__slot {
+  margin-bottom: 0;
+}
+
+.setting.datetime .v-input .v-text-field__details {
+  display: none;
+}
+
+.setting.datetime .v-dialog__container {
+  display: none;
 }
 
 .setting label {
@@ -14084,6 +14127,217 @@ body.logged-out .denied a {
   }
 }
 
+.event__card {
+  margin-bottom: 20px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.event__card a {
+  text-decoration: none;
+  display: -webkit-box;
+  display: flex;
+  /*background: #fafafa;*/
+  border-radius: 20px;
+}
+
+.event__card .event__img {
+  flex-basis: 80px;
+  max-width: 80px;
+  /*background: linear-gradient(to right, $primary, $accent);*/
+  padding: 10px;
+  border-radius: 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.event__card .event__img img {
+  width: 80px;
+  padding-top: 10px;
+}
+
+.event__card .event__content {
+  flex-basis: auto;
+  padding: 10px;
+  color: #212529;
+}
+
+.event__card .event__content h3 {
+  font-family: "Teko";
+  font-size: 30px;
+  margin-bottom: 0;
+  color: #212529;
+}
+
+.event__card .event__content p {
+  margin-bottom: 5px;
+  color: #212529;
+}
+
+#app__container .events .event__single {
+  margin-bottom: 15px;
+}
+
+#app__container .events .event__single:hover {
+  text-decoration: none;
+}
+
+#app__container .event__empty {
+  text-align: center;
+  margin: 100px 20px 0 20px;
+}
+
+#app__container .event__empty img {
+  background: #fafafa;
+  border-radius: 100%;
+  width: 128px;
+  padding: 0px;
+}
+
+#app__container .event__empty h3 {
+  font-family: "Teko";
+  margin-top: 10px;
+  font-size: 30px;
+  color: #8e56d9;
+}
+
+#app__container .event__single.theme--dark.v-sheet {
+  background: #fff;
+}
+
+#app__container .event__single .v-card__title .title {
+  font-family: "Teko" !important;
+  font-size: 30px !important;
+}
+
+#app__container .event__single .display-4 {
+  font-size: 70px !important;
+}
+
+#app__container.template-events-event .step--grey .v-timeline-item__body {
+  color: #ccc !important;
+}
+
+#app__container.template-events-event .v-timeline-item__body {
+  font-size: 16px;
+}
+
+#app__container.template-events-event .flex.xs3 {
+  flex-basis: 20%;
+  max-width: 20% !important;
+  min-width: 20% !important;
+}
+
+#app__container.template-events-event .caption {
+  margin-top: 5px;
+  font-size: 13px !important;
+}
+
+#app__container.template-events-event .stop__marker img {
+  height: 24px;
+}
+
+.setting .step {
+  display: -webkit-box;
+  display: flex;
+  padding-bottom: 20px;
+}
+
+.setting .step .step__num {
+  margin-top: 15px;
+  flex-basis: 30px;
+  min-width: 30px;
+  max-width: 30px;
+  background: #5a6cae;
+  border-radius: 50px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #fff;
+}
+
+.setting .step .step__content {
+  margin-left: 10px;
+  background: #fafafa;
+  border-radius: 20px;
+}
+
+.setting .step .step__content:before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 5px solid #fafafa;
+  margin-left: -5px;
+  margin-top: 20px;
+  position: absolute;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-tabs__bar .v-tabs__item--active i,
+#app__container.template-admin-events-add .v-dialog .v-tabs__bar .v-tabs__item--active i {
+  color: #5a6cae;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-date-picker-title,
+#app__container.template-admin-events-add .v-dialog .v-date-picker-title {
+  color: #5a6cae !important;
+  font-family: "Teko";
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-picker__title__btn,
+#app__container.template-admin-events-add .v-dialog .v-picker__title__btn {
+  border-radius: 0;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-date-picker-table .v-btn--active,
+#app__container.template-admin-events-add .v-dialog .v-date-picker-table .v-btn--active {
+  background-color: #8e56d9;
+  color: #fff;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-card__actions .grey,
+#app__container.template-admin-events-add .v-dialog .v-card__actions .grey {
+  background: none !important;
+  box-shadow: none !important;
+  color: #5a6cae !important;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-card__actions .green,
+#app__container.template-admin-events-add .v-dialog .v-card__actions .green {
+  background: #5a6cae !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-time-picker-title,
+#app__container.template-admin-events-add .v-dialog .v-time-picker-title {
+  color: #5a6cae;
+  -webkit-box-pack: center;
+          justify-content: center;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-time-picker-clock,
+#app__container.template-admin-events-add .v-dialog .v-time-picker-clock {
+  border-radius: 100%;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-time-picker-clock__hand,
+#app__container.template-admin-events-add .v-dialog .v-time-picker-clock__hand {
+  background-color: #5a6cae !important;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-time-picker-clock__item--active,
+#app__container.template-admin-events-add .v-dialog .v-time-picker-clock__item--active {
+  background-color: #5a6cae !important;
+}
+
+#app__container.template-admin-events-edit .v-dialog .v-picker.v-card,
+#app__container.template-admin-events-add .v-dialog .v-picker.v-card {
+  box-shadow: none;
+}
+
 html {
   font-size: 10px !important;
 }
@@ -14593,6 +14847,18 @@ range_button:active {
 .donation .v-progress-linear__background,
 .donation .v-progress-linear__bar__determinate {
   border-radius: 50px;
+}
+
+.unread {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: red;
+  border-radius: 100%;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  margin-left: 5px;
 }
 
 /*.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {

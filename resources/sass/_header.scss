@@ -74,6 +74,11 @@
         width: 100%;
         margin: 10px 0;
     }
+    .v-btn.v-btn--large.v-btn--round.secondary {
+        color: $primary;
+        border: 4px solid $primary;
+        background: #fff;
+    }
 }
 
 #app__container.template-map {
@@ -139,6 +144,9 @@
         .v-btn:last-child {
             border-bottom-right-radius: 0px !important;
             border-top-right-radius: 0px !important;
+        }
+        .v-item-group.v-bottom-nav .v-btn {
+            min-width: 70px;
         }
     }
 }

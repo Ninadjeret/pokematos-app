@@ -12,7 +12,7 @@ class Helpers {
         }
         $ids = [];
         foreach( $array as $item ) {
-            if( is_object($item) && property_exists($item, 'id') ) {
+            if( is_object($item) ) {
                 $ids[] = $item->id;
             }
             elseif( is_array($item) && array_key_exists('id', $item) ){

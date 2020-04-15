@@ -26,12 +26,15 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/guilds', 'GuildController@getAll');
     Route::get('user/guilds/{guild}', 'GuildController@getOne');
 
+    Route::post('user/upload', 'UserController@uploadImage');
+
     Route::get('user/cities/{city}/active-gyms', 'UserController@getActivePOIs');
     Route::get('user/cities/{city}/gyms', 'UserController@getPOIs');
     Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
     Route::post('user/cities/{city}/raids', 'RaidController@create');
     Route::put('user/cities/{city}/raids/{raid}', 'RaidController@create');
     Route::delete('user/cities/{city}/raids/{raid}', 'RaidController@delete');
+    Route::get('user/cities/{city}/last-changes', 'CityController@getLastChanges');
 
     //City
     Route::put('user/cities/{city}', 'UserController@updateCity');
@@ -114,6 +117,18 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/guilds/{guild}/invasionconnectors/{connector}', 'RocketController@getConnector');
     Route::put('user/guilds/{guild}/invasionconnectors/{connector}', 'RocketController@updateConnector');
     Route::delete('user/guilds/{guild}/invasionconnectors/{connector}', 'RocketController@deleteConnector');
+
+    //Events
+    Route::get('user/cities/{city}/events', 'EventController@getActiveEvents');
+    Route::get('user/cities/{city}/events/{event}', 'EventController@getEvent');
+
+    Route::post('user/guilds/{guild}/events', 'EventController@createEvent');
+    Route::post('user/guilds/{guild}/events/{event}/clone', 'EventController@cloneEvent');
+    Route::put('user/guilds/{guild}/events/{event}', 'EventController@updateEvent');
+    Route::delete('user/guilds/{guild}/events/{event}', 'EventController@deleteEvent');
+    Route::get('user/guilds/{guild}/events', 'EventController@getGuildEvents');
+    Route::post('user/guilds/{guild}/events/{event}/steps/{step}/check', 'EventController@checkStep');
+    Route::post('user/guilds/{guild}/events/{event}/steps/{step}/uncheck', 'EventController@uncheckStep');
 
 });
 

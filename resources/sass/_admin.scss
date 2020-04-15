@@ -71,6 +71,36 @@
             font-size: 16px;
         }
     }
+    &.image {
+        .preview {
+            display: inline-block;
+            position: relative;
+            button {
+                position: absolute;
+                display: block;
+                top: 0px;
+                right: 0px;
+            }
+        }
+    }
+    &.datetime {
+        .v-input {
+            margin-top: 0;
+            padding-top: 0;
+            .v-text-field__slot label {
+                display: none;
+            }
+            .v-input__slot {
+                margin-bottom: 0;
+            }
+            .v-text-field__details {
+                display: none;
+            }
+        }
+        .v-dialog__container {
+            display: none;
+        }
+    }
     label {
         width: 100%;
         font-size: 16px;

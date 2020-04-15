@@ -131,7 +131,7 @@ class UserAction extends Model {
 
             $message = $this->get_random_message($type, $position);
             if( !$message ) return;
-            $content = Discord::translate( $message['message'], $this->getGuild(), $this->getUser() );
+            $content = Discord::encode( $message['message'], $this->getGuild(), $this->getUser() );
 
             $discord = new DiscordClient(['token' => config('discord.token')]);
             $discord->channel->createMessage(array(
