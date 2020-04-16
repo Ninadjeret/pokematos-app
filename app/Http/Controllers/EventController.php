@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
+    public static $feature = 'features.events';
+    public static $feature_message = 'La fonctionnalité n\'est pas active';
+
     public function getActiveEvents( Request $request, City $city ) {
         $user = Auth::user();
 
@@ -52,6 +55,7 @@ class EventController extends Controller
     }
 
     public  function createEvent( Request $request, Guild $guild ) {
+        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
         $user = Auth::user();
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
@@ -76,6 +80,7 @@ class EventController extends Controller
     }
 
     public function cloneEvent( Request $request, Guild $guild, Event $event ) {
+        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
         $args['event'] = [
             'name' => $event->name.' - copie',
             'guild_id' => $guild->id,
@@ -99,6 +104,7 @@ class EventController extends Controller
     }
 
     public  function updateEvent( Request $request, Guild $guild, Event $event ) {
+        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
         $user = Auth::user();
         if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
