@@ -83,7 +83,7 @@
 
 #app__container.template-map {
     .v-toolbar.v-toolbar--fixed.theme--dark.primary {
-        background: linear-gradient(to right, $primary, $accent);
+        background: #fafafa;
     }
     #bg1 {
         position: absolute;
@@ -92,26 +92,38 @@
         width: 100%;
         height: 200px;
         border-radius: 0 0 20px 20px;
-        background: linear-gradient(to right, $primary, $accent);
+        background: #fafafa;
     }
-    .v-toolbar__content {
-        margin: 15px auto;
-        img {
-            width: 70px;
-        }
-        .v-toolbar__title {
-            margin: 0 20px !important;
-            color: rgba(255, 255, 255, 0.5) !important;
-            -webkit-text-fill-color: inherit !important;
-            background: none !important;
-            small {
-                display: block;
-                margin-top: -10px;
+    .current-city {
+        color: $accent;
+        font-size: 16px;
+        padding: 3px 0px;
+        margin-top: -5px;
+        &.multiple {
+            border: 1px solid $accent;
+            padding: 3px 25px 3px 15px;
+            position: relative;
+            &:after {
+                content: '';
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 5px solid $accent;
+                top: 11px;
+                position: absolute;
+                right: 10px;
             }
         }
     }
-    .v-content {
-        padding-top: 86px !important;
+    .v-toolbar__content {
+        img {
+            width: 40px;
+        }
+        .v-toolbar__title {
+            margin: 0 10px !important;
+            small {
+                margin-top: -10px;
+            }
+        }
     }
 
 }

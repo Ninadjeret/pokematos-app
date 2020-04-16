@@ -1,16 +1,15 @@
-<template>
+ <template>
 <div id="app__container" :class="'template-'+$route.name.split('.').join('-')" data-app v-if="currentCity && currentCity !== 'undefined'">
         <v-toolbar fixed app color="primary" dark>
             <v-btn v-if="$route.meta.parent" :to="{ name: $route.meta.parent}" icon><v-icon>arrow_back</v-icon></v-btn>
             <v-spacer class="hidden-md-and-up" v-if="$route.name == 'map'"></v-spacer>
             <img v-if="$route.name == 'map'" src="https://assets.profchen.fr/img/logo_pokematos_256.png">
             <v-toolbar-title v-if="$route.name == 'map'">
-                POKEMATOS <small v-if="this.$store.state.currentCity">{{ this.$store.state.currentCity.name }}</small>
+                POKEMATOS
             </v-toolbar-title>
             <v-toolbar-title v-if="$route.name != 'map'">{{$route.meta.title}}</v-toolbar-title>
-            <v-btn v-if="cities &&  cities.length > 1 && $route.name == 'map'" icon @click.stop="dialogCities = true">
-                <v-icon>location_city</v-icon>
-            </v-btn>
+            <div class="current-city" v-if="$route.name == 'map' && this.$store.state.currentCity && cities &&  cities.length === 1">{{ this.$store.state.currentCity.name }}</div>
+            <div class="current-city multiple" v-if="$route.name == 'map' && this.$store.state.currentCity && cities &&  cities.length > 1" @click.stop="dialogCities = true">{{ this.$store.state.currentCity.name }}</div>
             <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-sm-and-down">
                 <v-btn to="/" color="primary" flat value="recent" >
