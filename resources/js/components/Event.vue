@@ -127,7 +127,8 @@
                 return auth;
             },
             showModal( gym ) {
-                this.$refs.gymModal.showModal( gym );
+                let gymToDisplay = this.$store.state.gyms.find(stop => stop.id === gym.id);
+                this.$refs.gymModal.showModal( gymToDisplay );
             },
             displayCheck(step, index) {
                 if( step.checked ) return false;

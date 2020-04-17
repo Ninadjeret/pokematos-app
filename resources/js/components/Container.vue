@@ -142,6 +142,7 @@
         async mounted() {
             try {
                 await this.$store.dispatch('fetchGyms');
+                this.$store.commit('fetchPokemon');
                 this.fetchLastChanges();
             } finally {
                 this.dialogUpdate = false;
