@@ -23,8 +23,15 @@ const store = new Vuex.Store({
         user: JSON.parse(localStorage.getItem('pokematos_user') ),
         zones: JSON.parse(localStorage.getItem('pokematos_zones') ),
         snackbar: false,
+        features: JSON.parse(localStorage.getItem('pokematos_features') ),
     },
     mutations: {
+        fetchFeatures( state ) {
+            axios.get('/api/features').then( res => {
+                state.features = res.data;
+                localStorage.setItem('pokematos_features', JSON.stringify(state.features));
+            });
+        },
         fetchPokemon( state ) {
             axios.get('/api/pokemons').then( res => {
                 state.pokemons = res.data;

@@ -136,10 +136,12 @@ class Raid extends Model {
         else {
 
             //Gestion du level
-            $egg_level = $args['egg_level'];
+
             if( isset( $args['pokemon_id']) ) {
                 $pokemon = Pokemon::find($args['pokemon_id']);
                 if($pokemon) $egg_level = $pokemon->boss_level;
+            } else {
+                $egg_level = $args['egg_level'];
             }
 
             //Enregistrement

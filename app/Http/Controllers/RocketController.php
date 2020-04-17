@@ -98,6 +98,8 @@ class RocketController extends Controller
             'guild_id' => null,
         ]);
 
+        $stop->touch();
+
         event( new \App\Events\RocketInvasionCreated( $invasion, $announce ) );
 
         return response()->json($invasion, 200);
@@ -130,6 +132,8 @@ class RocketController extends Controller
             'channel_discord_id' => null,
             'guild_id' => null,
         ]);
+
+        $invasion->getStop()->touch();
 
         event( new \App\Events\RocketInvasionUpdated( $invasion, $announce ) );
 
