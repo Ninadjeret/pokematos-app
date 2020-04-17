@@ -20,6 +20,10 @@ class Controller extends BaseController
         return response()->json(config('app.version'), 200);
     }
 
+    public function getFeatures( Request $request ) {
+        return response()->json(config('features'), 200);
+    }
+
     public function test( Request $request ) {
         $guild = Guild::find(1);
         $user = User::find(1);

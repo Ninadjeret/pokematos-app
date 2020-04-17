@@ -22,7 +22,7 @@
                   <v-icon>notifications_active</v-icon>
                 </v-btn>
 
-                <v-btn to="/events" color="primary" flat value="recent" >
+                <v-btn v-if="features && features.events" to="/events" color="primary" flat value="recent" >
                   <span>Évents</span>
                   <v-icon>event</v-icon>
                 </v-btn>
@@ -69,7 +69,7 @@
                     <span v-if="lastChanges && lastChanges.lists.server > lastChanges.lists.local" class="unread"></span>
                   </v-btn>
 
-                  <v-btn to="/events" color="primary" flat value="recent" >
+                  <v-btn v-if="features && features.events" to="/events" color="primary" flat value="recent" >
                     <span>Évents</span>
                     <v-icon>event</v-icon>
                     <span v-if="lastChanges && lastChanges.events.server > lastChanges.events.local" class="unread"></span>
@@ -141,6 +141,7 @@
         },
         async mounted() {
             try {
+                this.$store.commit('fetchFeatures');
                 await this.$store.dispatch('fetchGyms');
                 this.$store.commit('fetchPokemon');
                 this.fetchLastChanges();
@@ -150,6 +151,9 @@
             }
         },
         computed: {
+            features() {
+                return this.$store.state.features;
+            },
             cities() {
                 return this.$store.state.cities;
             },

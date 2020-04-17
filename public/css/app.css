@@ -12953,13 +12953,14 @@ body.logged-out .denied a {
 }
 
 @media screen and (min-width: 960px) {
-  .template-map .v-content__wrap .container {
+  .template-map .v-content__wrap .container.fluid {
     width: 100% !important;
     max-width: 100% !important;
+    background: #fcfcfc !important;
   }
 
   body {
-    background: #eee;
+    background: #fcfcfc !important;
   }
 
   footer.v-footer {
@@ -12974,10 +12975,20 @@ body.logged-out .denied a {
     bottom: 15px;
   }
 
+  .v-toolbar {
+    background: #fcfcfc !important;
+  }
+
+  .v-toolbar__content {
+    max-width: 800px;
+    margin: auto;
+    background: #fcfcfc;
+  }
+
   .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon),
   .v-toolbar__items .v-toolbar__items .v-menu,
   .v-toolbar__items .v-toolbar__items .v-menu__activator {
-    color: rgba(255, 255, 255, 0.5);
+    color: #a8a7cf;
   }
 
   .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon).v-btn--active,
@@ -13013,10 +13024,12 @@ body.logged-out .denied a {
     max-height: 600px !important;
   }
 
-  .v-content__wrap .container {
+  .v-content__wrap .container.fluid {
     width: 800px !important;
     max-width: 800px !important;
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12) !important;
+    background: #fff;
+    padding-top: 5px !important;
   }
 }
 
