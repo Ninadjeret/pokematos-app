@@ -79,9 +79,10 @@ class DiscordController extends Controller {
         $creds = base64_encode( config('discord.id') . ':' . config('discord.secret') );
         $client = new Client();
         $res = $client->post('https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code='.$code.'&redirect_uri='.urlencode(config('discord.callback')), [
+            'http_errors' => false,
             'headers' => [
                 'Authorization' => 'Basic '.$creds,
-            ]
+            ],
         ]);
         return $res;
     }
@@ -89,6 +90,7 @@ class DiscordController extends Controller {
     public function getDiscordMe( $data ) {
         $client = new Client();
         $res = $client->get('https://discordapp.com/api/users/@me', [
+            'http_errors' => false,
             'headers' => [
                 'Authorization' => 'Bearer '.$data->access_token,
             ]
@@ -99,6 +101,7 @@ class DiscordController extends Controller {
     public function getDiscordMeGuilds( $data ) {
         $client = new Client();
         $res = $client->get('https://discordapp.com/api/users/@me/guilds', [
+            'http_errors' => false,
             'headers' => [
                 'Authorization' => 'Bearer '.$data->access_token,
             ]

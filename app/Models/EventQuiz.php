@@ -17,10 +17,10 @@ class EventQuiz extends Model
     }
 
     public function shuffleQuestions($number, $delay, $themes, $only_pogo, $difficulties) {
-        $questions = QuizQuestion::where('about_pogo', $only_pogo)
-            ->whereIn('difficulty', $difficulties)
-            ->whereIn('theme_id', $themes)
-            ->get($number);
+        $questions = QuizQuestion::where('about_pogo', $this->only_pogo)
+            ->whereIn('difficulty', $this->difficulties)
+            ->whereIn('theme_id', $this->themes)
+            ->get($this->nb_questions);
         if( !empty($questions) ) {
             $order = 0;
             foreach( $questions as $question ) {

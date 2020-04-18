@@ -88,6 +88,8 @@ class Event extends Model
             event(new TrainCreated($train, $event, $event->guild));
 
             return $event;
+        } elseif( $event->type == 'quiz' ) {
+            $event->setQuizz( $args );
         }
     }
 
@@ -98,6 +100,8 @@ class Event extends Model
      */
     public function change( $args ) {
         if( !empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen') ) unset($args['event']['image']);
+        $start_time = new \DateTime($args['event']['start_time']);
+        $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
         $this->update($args['event']);
 
         if( array_key_exists('steps', $args) ) {
@@ -141,6 +145,20 @@ class Event extends Model
             //Event
             event(new TrainUpdated($train, $this, $this->guild));
 
+        } elseif( $this->type == 'quiz' ) {
+            $this->setQuizz( $args );
+        }
+
+    }
+
+    public function setQuizz( $args ) {
+        $quiz = EventQuiz::firstOrCreate(['event_id' => $this->id]);
+        $quiz->update($args['quiz']);
+
+        $now = new \DateTime();
+        $event_start = new \DateTime($this->start_time);
+        if( $now < $event_start ) {
+            $quiz->shuffleQuestions();
         }
 
     }

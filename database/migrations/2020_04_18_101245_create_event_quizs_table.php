@@ -18,8 +18,8 @@ class CreateEventQuizsTable extends Migration
             $table->integer('event_id');
             $table->integer('nb_questions')->default(10);
             $table->integer('delay')->default(5);
-            $table->json('themes');
-            $table->json('difficulties');
+            $table->json('themes')->nullable();
+            $table->json('difficulties')->nullable();
             $table->boolean('only_pogo')->defaul(0);
             $table->string('message_discord_id')->nullable();
             $table->timestamps();

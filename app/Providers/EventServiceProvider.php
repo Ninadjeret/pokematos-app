@@ -81,6 +81,7 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\DayChanged' => [
             'App\Listeners\PurgeDiscordQuestInstanceData',
             'App\Listeners\PurgeDiscordInvasionData',
+            'App\Listeners\POI\TouchPOIs',
         ],
     ];
 

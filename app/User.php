@@ -368,7 +368,12 @@ class User extends Authenticatable
             return false;
         }
 
-        $user->refreshDiscordToken();
+        $refresh = $user->refreshDiscordToken();
+        if( !$refresh ) {
+            Auth::logout();
+            return false;
+        }
+
         sleep(1);
         $user_guilds = $user->getDiscordMeGuilds();
 
@@ -391,6 +396,7 @@ class User extends Authenticatable
         $creds = base64_encode( config('discord.id') . ':' . config('discord.secret') );
         $client = new Client();
         $res = $client->post('https://discordapp.com/api/oauth2/token?grant_type=refresh_token&scope=identify%20email%20guilds&refresh_token='.$this->discord_refresh_token.'&redirect_uri='.urlencode(config('discord.callback')), [
+            'http_errors' => false,
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'Authorization' => 'Basic '.$creds,
