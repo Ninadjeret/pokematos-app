@@ -147,8 +147,8 @@ Route::group(['middleware' => ['auth.bot']], function () {
     Route::get('bot/guilds/{guild_id}/role-categories/{categorie}', 'BotController@getRoleCategory');
     Route::delete('bot/guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
 
-    Route::post('bot/raids', 'BotController@addRaid');
-    Route::post('bot/raids/imagedecode', 'BotController@imageDecode');
+    Route::post('bot/raids', 'RaidController@addRaid');
+    Route::post('bot/raids/imagedecode', 'RaidController@imageDecode');
     Route::post('bot/conversations', 'BotController@addConversation');
 
 });
