@@ -13,7 +13,7 @@
                 <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
                 <i class="material-icons">refresh</i>
             </button>
-            <button v-on:click="toggleMap()" class="action" id="refresh">
+            <button v-if="features && features.rocket" v-on:click="toggleMap()" class="action" id="rocket">
                 <span>Radar Rocket</span>
                 <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
                 <i class="material-icons">people_alt</i>
@@ -41,6 +41,11 @@ export default {
         console.log('Component mounted.')
     },
     created() {
+    },
+    computed: {
+        features() {
+            return this.$store.state.features;
+        },
     },
     methods: {
         refresh() {
