@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Guild;
 use App\Models\Event;
+use App\Models\EventQuiz;
 use App\Models\EventTrain;
 use App\Models\EventTrainStep;
 use Illuminate\Support\Facades\Log;
@@ -22,6 +23,11 @@ class Event extends Model
             $train = EventTrain::where('event_id', $this->id)->first();
             if( $train ) {
                 return $train;
+            }
+        } elseif( $this->type == 'quiz' ) {
+            $quiz = EventQuiz::where('event_id', $this->id)->first();
+            if( $quiz ) {
+                return $quiz;
             }
         }
         return false;
