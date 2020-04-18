@@ -16,6 +16,12 @@ class CreateEventQuizsTable extends Migration
         Schema::create('event_quizs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('event_id');
+            $table->integer('nb_questions')->default(10);
+            $table->integer('delay')->default(5);
+            $table->json('themes');
+            $table->json('difficulties');
+            $table->boolean('only_pogo')->defaul(0);
+            $table->string('message_discord_id')->nullable();
             $table->timestamps();
         });
 
@@ -25,6 +31,7 @@ class CreateEventQuizsTable extends Migration
             $table->integer('question_id');
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
+            $table->integer('order')->nullable();
             $table->timestamps();
         });
 
