@@ -25,7 +25,7 @@ class DeleteChannel
      * @param  EventDeleted  $event
      * @return void
      */
-    public function handle(EventDeleted $event)
+    public function handle($event)
     {
         $discord = new DiscordClient(['token' => config('discord.token')]);
 

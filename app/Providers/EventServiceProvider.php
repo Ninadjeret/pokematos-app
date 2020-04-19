@@ -64,6 +64,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Events\EventDeleted' => [
             'App\Listeners\Discord\DeleteChannel',
         ],
+        'App\Events\Events\EventEnded' => [
+            'App\Listeners\Discord\DeleteChannel',
+        ],
         'App\Events\Events\TrainCreated' => [
             'App\Listeners\Discord\PostTrainMessage',
         ],
@@ -82,6 +85,7 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\PurgeDiscordQuestInstanceData',
             'App\Listeners\PurgeDiscordInvasionData',
             'App\Listeners\POI\TouchPOIs',
+            'App\Listeners\Events\PurgeEvents',
         ],
     ];
 
