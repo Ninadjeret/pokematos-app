@@ -277,7 +277,6 @@ class User extends Authenticatable
                             if( empty($guild->settings->map_access_rule) || $guild->settings->map_access_rule == 'everyone' ) {
                                 $auth = true;
                                 $auth_discord = true;
-                                Log::debug(print_r($guild->name, true));
                             } elseif( $guild->settings->map_access_rule == 'specific_roles' && !empty(array_intersect($guild->settings->map_access_roles, $result->roles))) {
                                 $auth_discord = true;
                                 $auth = true;

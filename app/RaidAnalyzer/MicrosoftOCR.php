@@ -39,7 +39,6 @@ class MicrosoftOCR {
         ));
         $result = curl_exec($ch);
         curl_close($ch);
-        Log::debug( print_r( $result, true) );
         return $result;
 
     }
@@ -64,7 +63,7 @@ class MicrosoftOCR {
         $iteration = 0;
         $continue = true;
         while( $continue ) {
-            Log::debug('___ iteration '.$iteration.' ___');
+            //Log::debug('___ iteration '.$iteration.' ___');
             sleep(1);
             $ch2 = curl_init($requestURL);
             curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
@@ -73,7 +72,7 @@ class MicrosoftOCR {
             ));
             $output2 = curl_exec($ch2);
             $result = json_decode($output2);
-            Log::debug( print_r( $output2, true) );
+            //Log::debug( print_r( $output2, true) );
             if( $result->status == 'Succeeded' || $iteration === 10 ) {
                 $continue = false;
             }

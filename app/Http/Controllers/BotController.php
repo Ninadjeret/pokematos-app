@@ -50,7 +50,6 @@ class BotController extends Controller {
             ]);
 
             $roles_to_add = $guild->getDiscordRoles();
-            Log::debug( print_r($roles_to_add, true) );
             if( !empty( $roles_to_add ) ) {
                 foreach( $roles_to_add as $role_to_add ) {
                     Role::create([

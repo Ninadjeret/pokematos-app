@@ -55,7 +55,7 @@ class Event extends Model
         //Event
         event(new EventCreated($event, $event->guild));
 
-        if( array_key_exists('steps', $args) ) {
+        if( $event->type == 'train' ) {
 
             $train = EventTrain::create([
                 'event_id' => $event->id,
@@ -104,7 +104,7 @@ class Event extends Model
         $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
         $this->update($args['event']);
 
-        if( array_key_exists('steps', $args) ) {
+        if( $this->type == 'train' ) {
 
             $train = EventTrain::firstOrCreate(['event_id' => $this->id]);
 
@@ -152,6 +152,10 @@ class Event extends Model
     }
 
     public function setQuizz( $args ) {
+
+        if( empty($args['quiz']['difficulties']) ) $args['quiz']['difficulties'] = null;
+        if( empty($args['quiz']['themes']) ) $args['quiz']['themes'] = null;
+
         $quiz = EventQuiz::firstOrCreate(['event_id' => $this->id]);
         $quiz->update($args['quiz']);
 

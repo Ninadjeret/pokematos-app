@@ -137,7 +137,7 @@ class Raid extends Model {
 
             //Gestion du level
 
-            if( isset( $args['pokemon_id']) ) {
+            if( isset( $args['pokemon_id']) && !empty($args['pokemon_id']) ) {
                 $pokemon = Pokemon::find($args['pokemon_id']);
                 if($pokemon) $egg_level = $pokemon->boss_level;
             } else {
@@ -239,6 +239,7 @@ class Raid extends Model {
         if( !empty( $raids_ended ) ) {
             foreach( $raids_ended as $raid ) {
                 $raid->update(['status' => 'archived']);
+                $raid->getGym()->touch();
                 event( new \App\Events\RaidEnded( $raid ) );
             }
         }

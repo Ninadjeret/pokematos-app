@@ -141,7 +141,10 @@ class CityController extends Controller {
 
     public function getLastChanges( Request $request, City $city ) {
         $date_admin = new \DateTime('2000-01-01');
-        $date_events = new \DateTime(\DB::table('events')->orderby('updated_at', 'desc')->first()->updated_at);
+
+        $date_events = new \DateTime('2000-01-01');
+        $last_event = \DB::table('events')->orderby('updated_at', 'desc')->first();
+        if( !empty($last_event) )$date_events = new \DateTime($last_event->updated_at);
 
         $array_lists = [
             \DB::table('raids')->max('updated_at'),
