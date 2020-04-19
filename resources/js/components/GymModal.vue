@@ -517,7 +517,7 @@ export default {
         },
         updateRaidBoss( pokemon ) {
             this.createRaidData.pokemon = pokemon;
-            if( this.gym.raid ) {
+            if( this.gym.raid && this.gym.raid.egg_level <= 5 ) {
                 var result = confirm('Annoncer '+this.createRaidData.pokemon.name_fr+' comme Boss pour le raid à l\'arène '+this.gym.name);
                 if( result ) {
                     this.postUpdateRaid();
