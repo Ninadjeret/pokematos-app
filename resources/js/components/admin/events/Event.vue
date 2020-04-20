@@ -39,6 +39,30 @@
                 <p class="commentaire">{{types[type].description}}</p>
             </div>
 
+            <v-subheader v-if="type == 'quiz'">PokéQuiz</v-subheader>
+            <div v-if="type == 'quiz'">
+                <v-alert :value="isQuizStarted" type="warning">Le quiz a commencé. Les questions et délais ne peuvent plus être modifiés</v-alert>
+                <div class="setting">
+                    <label>Nombre de questions</label>
+                    <select :disabled="isQuizStarted" v-model="quiz.nb_questions">
+                        <option v-for="choicesNbQuestion in choicesNbQuestions" :value="choicesNbQuestion" :key="choicesNbQuestion">{{choicesNbQuestion}}</option>
+                    </select>
+                </div>
+                <div class="setting">
+                    <label>Délai max pour fournir une bonne réponse</label>
+                    <p class="description">En minutes. Au dela de ce délai, si personne n'a la bonne réponse, Pokématos passera à la question suivante.</p>
+                    <select :disabled="isQuizStarted" v-model="quiz.delay">
+                        <option v-for="choicesDelay in choicesDelays" :value="choicesDelay" :key="choicesDelay">{{choicesDelay}}</option>
+                    </select>
+                </div>
+                <div class="setting d-flex switch">
+                    <div>
+                        <label>Proposer des questions en lien uniquement avec PokémonGO ?</label>
+                    </div>
+                    <v-switch :disabled="isQuizStarted" v-model="quiz.only_pogo"></v-switch>
+                </div>
+            </div>
+
             <v-subheader v-if="type == 'train'">Pokétrain</v-subheader>
             <div v-if="type == 'train'" class="setting">
                 <label>Étapes du Pokétrain</label>
@@ -125,6 +149,13 @@
                 type: 'train',
                 steps: [],
                 image: null,
+                quiz: {
+                    nb_questions: 10,
+                    delay: 5,
+                    themes: [],
+                    difficulties: [],
+                    only_pogo: false,
+                },
                 exAllowedHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
                 exAllowedMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
                 types: {
@@ -132,6 +163,11 @@
                         id: 'train',
                         name: 'Pokétrain',
                         description: 'Un pokétrain permet d\'orgniser un parcours d\'arènes, par exemple lors des journées à 5 pass gratuits.'
+                    },
+                    'quiz': {
+                        id: 'quiz',
+                        name: 'Pokéquiz',
+                        description: 'Organisez des quiz drôles et challengeants'
                     }
                 },
                 stepTypes: {
@@ -143,7 +179,9 @@
                         id: 'transport',
                         name: 'Trajet en voiture/bus'
                     }
-                }
+                },
+                choicesNbQuestions: [0, 5, 10, 15, 20, 25, 30],
+                choicesDelays: [0, 1, 2, 3, 4, 5],
             }
         },
         computed: {
@@ -155,6 +193,11 @@
             },
             user() {
                 return this.$store.state.user;
+            },
+            isQuizStarted() {
+                if( this.start_time === null ) return false;
+                let startTime = moment(this.start_time);
+                return startTime.isBefore();
             }
         },
         created() {
@@ -170,6 +213,7 @@
                     this.type = res.data.type;
                     this.steps = res.data.relation.steps;
                     this.image = res.data.image;
+                    if( this.type == 'quiz' ) this.quiz = res.data.relation;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response && err.response.data ) {
@@ -204,6 +248,7 @@
                     type: this.type,
                     start_time: start_time.format('YYYY-MM-DD HH:mm:SS'),
                     steps: this.steps,
+                    quiz: this.quiz,
                     image: this.image,
                 };
                 if( this.getId ) {

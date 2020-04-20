@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 class RocketController extends Controller
 {
 
+    public static $feature = 'features.rocket';
+    public static $feature_message = 'La fonctionnalité n\'est pas active';
+
     /**
      *
      */
@@ -53,7 +56,7 @@ class RocketController extends Controller
 
     public function createInvasion( City $city, Request $request ) {
 
-        //return response()->json('Annonce actuellement indisponible', 403);
+        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
 
         $user = Auth::user();
 
@@ -107,7 +110,7 @@ class RocketController extends Controller
 
     public function updateInvasion( City $city, RocketInvasion $invasion, Request $request ) {
 
-        //return response()->json('Annonce actuellement indisponible', 403);
+        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
 
         $user = Auth::user();
 
@@ -142,7 +145,7 @@ class RocketController extends Controller
 
     public function deleteInvasion( City $city, RocketInvasion $invasion, Request $request ) {
 
-        //return response()->json('Annonce actuellement indisponible', 403);
+        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
         $user = Auth::user();
 
         $announces = $invasion->getUserActions();

@@ -162,10 +162,7 @@ class UserAction extends Model {
     }
 
     public function get_random_message( $categories = false, $positions = false ) {
-
-        Log::debug( print_r($categories, true) );
-        Log::debug( print_r($positions, true) );
-
+        
         if( !is_array($categories) && !empty($categories) ) $categories = [$categories];
         if( !is_array($positions) && !empty($positions) ) $positions = [$positions];
 

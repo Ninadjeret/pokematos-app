@@ -246,6 +246,9 @@
             }
         },
         computed: {
+            features() {
+                return this.$store.state.features;
+            },
             pokemons() {
                 return this.$store.state.pokemons;
             },

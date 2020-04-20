@@ -21,7 +21,9 @@ class DayChanged
      */
     public function __construct()
     {
-        //
+        $this->today = new \DateTime();
+        $this->yesterday = clone $this->today;
+        $this->yesterday->modify('- 1 day');
     }
 
     /**

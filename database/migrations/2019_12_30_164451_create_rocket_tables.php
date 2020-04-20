@@ -95,7 +95,7 @@ class CreateRocketTables extends Migration
      */
     public function down()
     {
-        //Schema::dropIfExists('rocket_bosses');
-        //Schema::dropIfExists('rocket_invasions');
+        Schema::dropIfExists('rocket_bosses');
+        Schema::dropIfExists('rocket_invasions');
     }
 }

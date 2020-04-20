@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Event;
 use App\Models\Guild;
 use App\Helpers\Helpers;
+use App\Models\EventQuiz;
 use App\Models\EventTrain;
 use Illuminate\Http\Request;
 use App\Models\EventTrainStep;
@@ -75,6 +76,10 @@ class EventController extends Controller
             $args['steps'] = $request->steps;
         }
 
+        if( !empty($request->quiz) ) {
+            $args['quiz'] = $request->quiz;
+        }
+
         $event = Event::add($args);
         return response()->json($event, 200);
     }
@@ -119,6 +124,9 @@ class EventController extends Controller
         if( !empty($request->steps) ) {
             $args['steps'] = $request->steps;
         }
+        if( !empty($request->quiz) ) {
+            $args['quiz'] = $request->quiz;
+        }
         $event->change($args);
 
         return response()->json($event, 200);
@@ -131,19 +139,34 @@ class EventController extends Controller
         }
 
         $event_id = $event->id;
+
+        if( $event->type == 'train' ) {
+            $train = EventTrain::where('event_id', $event_id)->first();
+            if( $train ) {
+                $train_id = $train->id;
+                EventTrain::destroy($train_id);
+
+                $steps = EventTrainStep::where('train_id', $train_id)->get();
+                if( !empty($steps) ) {
+                    EventTrainStep::destroy($steps);
+                }
+            }
+        } elseif( $event->type == 'quiz' ) {
+            $quiz = EventQuiz::where('event_id', $event_id)->first();
+            if( $quiz ) {
+                $questions = $quiz->questions;
+                if( !empty($questions) ) {
+                    foreach( $questions as $question ) {
+                        EventQuizQuestion::destroy($question->id);
+                    }
+                }
+            }
+            EventQuiz::destroy($quiz->id);
+        }
+
+
         event(new EventDeleted($event, $event->guild));
         Event::destroy($event_id);
-
-        $train = EventTrain::where('event_id', $event_id)->first();
-        if( $train ) {
-            $train_id = $train->id;
-            EventTrain::destroy($train_id);
-
-            $steps = EventTrainStep::where('train_id', $train_id)->get();
-            if( !empty($steps) ) {
-                EventTrainStep::destroy($steps);
-            }
-        }
 
         return response()->json(null, 204);
     }

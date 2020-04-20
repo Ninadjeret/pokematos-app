@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Guild;
 use App\Models\Event;
+use App\Models\EventQuiz;
 use App\Models\EventTrain;
 use App\Models\EventTrainStep;
 use Illuminate\Support\Facades\Log;
@@ -23,6 +24,16 @@ class Event extends Model
             if( $train ) {
                 return $train;
             }
+        } elseif( $this->type == 'quiz' ) {
+            return $this->quiz;
+        }
+        return false;
+    }
+
+    public function getQuizAttribute() {
+        $quiz = EventQuiz::where('event_id', $this->id)->first();
+        if( $quiz ) {
+            return $quiz;
         }
         return false;
     }
@@ -49,7 +60,7 @@ class Event extends Model
         //Event
         event(new EventCreated($event, $event->guild));
 
-        if( array_key_exists('steps', $args) ) {
+        if( $event->type == 'train' ) {
 
             $train = EventTrain::create([
                 'event_id' => $event->id,
@@ -82,6 +93,8 @@ class Event extends Model
             event(new TrainCreated($train, $event, $event->guild));
 
             return $event;
+        } elseif( $event->type == 'quiz' ) {
+            $event->setQuizz( $args );
         }
     }
 
@@ -92,9 +105,11 @@ class Event extends Model
      */
     public function change( $args ) {
         if( !empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen') ) unset($args['event']['image']);
+        $start_time = new \DateTime($args['event']['start_time']);
+        $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
         $this->update($args['event']);
 
-        if( array_key_exists('steps', $args) ) {
+        if( $this->type == 'train' ) {
 
             $train = EventTrain::firstOrCreate(['event_id' => $this->id]);
 
@@ -135,7 +150,48 @@ class Event extends Model
             //Event
             event(new TrainUpdated($train, $this, $this->guild));
 
+        } elseif( $this->type == 'quiz' ) {
+            $this->setQuizz( $args );
         }
 
+    }
+
+    public function setQuizz( $args ) {
+
+        if( empty($args['quiz']['difficulties']) ) $args['quiz']['difficulties'] = null;
+        if( empty($args['quiz']['themes']) ) $args['quiz']['themes'] = null;
+
+        $quiz = EventQuiz::firstOrCreate(['event_id' => $this->id]);
+        $quiz->update($args['quiz']);
+
+        $now = new \DateTime();
+        $event_start = new \DateTime($this->start_time);
+        if( $now < $event_start ) {
+            $quiz->shuffleQuestions();
+        }
+
+    }
+
+    public static function getActiveEvents( $type = null ) {
+
+        $now = new \DateTime();
+        $yesterday = clone $now;
+        $yesterday->modify('- 1  day');
+
+        if( empty($type) ) {
+            return Event::where('start_time', '<', $now->format('Y-m-d H:i:s'))
+                ->where('end_time', '>', $now->format('Y-m-d H:i:s'))
+                ->get();
+        } elseif( is_array($type) ) {
+            return Event::where('start_time', '<', $now->format('Y-m-d H:i:s'))
+                ->where('end_time', '>', $now->format('Y-m-d H:i:s'))
+                ->whereIn('type', $type)
+                ->get();
+        } else {
+            return Event::where('start_time', '<', $now->format('Y-m-d H:i:s'))
+                ->where('end_time', '>', $now->format('Y-m-d H:i:s'))
+                ->where('type', $type)
+                ->get();
+        }
     }
 }

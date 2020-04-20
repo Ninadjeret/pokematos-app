@@ -57,5 +57,7 @@ class CreateEventsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('events');
+        Schema::dropIfExists('event_trains');
+        Schema::dropIfExists('event_train_steps');
     }
 }

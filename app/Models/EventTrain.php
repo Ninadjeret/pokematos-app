@@ -31,6 +31,7 @@ class EventTrain extends Model
 
             $name = '';
             if( $step->type == 'stop' && $step->stop ) {
+                if( $step->stop->ex ) $name .= '[EX] ';
                 if($step->stop->zone ) $name .= $step->stop->zone->name.' - ';
                 $name .= $step->stop->name;
             } else {

@@ -53,7 +53,6 @@ class EventTrainStep extends Model
 
     public function isLast() {
         $last = $this->train->steps->last();
-        Log::debug( print_r($last['id'] == $this->id, true) );
         if( $last['id'] == $this->id ) return true;
         return false;
     }
