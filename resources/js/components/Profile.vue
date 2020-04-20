@@ -90,12 +90,16 @@
         name: 'Profile',
         data() {
             return {
-                totalCouts: 317,
-                totalDons: 105,
                 dialogUpdate: false,
             }
         },
         computed: {
+            totalCouts() {
+                return window.pokematos.donation.goal;
+            },
+            totalDons() {
+                return window.pokematos.donation.current;
+            },
             pourcentageDons() {
                 return ( this.totalDons > this.totalCouts ) ? 100 : this.totalDons/this.totalCouts*100 ;
             },
@@ -103,7 +107,7 @@
                 return this.$store.state.user;
             },
             appVersion() {
-                return this.$store.getters.getSetting('appVersion');
+                return window.pokematos.version;
             }
         },
         created() {

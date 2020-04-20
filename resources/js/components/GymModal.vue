@@ -47,20 +47,20 @@
                 <hr>
                 <div class="dialog__content">
                     <ul>
-                        <!--<p style="color: darkred;padding-top: 20px;">Suite aux règles de confinement actuellement en vigueur, et pour ne pas inciter les joueurs à sé déplacer, les annonces sont actuellement désactivées.</p>-->
+                        <p v-if="config.alerts.modal != ''" style="color: darkred;padding-top: 20px;">{{config.alerts.modal}}</p>
                         <!-- Raids -->
-                        <li v-if="features && features.raid_reporting && gym.gym && (raidStatus == 'none' || gym.raid.egg_level == 6)"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
-                        <li v-if="features && features.raid_reporting && raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
-                        <li v-if="features && features.raid_reporting && gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
-                        <li v-if="features && features.raid_reporting && raidStatus == 'none' && gym.ex === true && canCreateRaidEx"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
+                        <li v-if="features.raid_reporting && gym.gym && (raidStatus == 'none' || gym.raid.egg_level == 6)"><a class="modal__action create-raid" v-on:click="setScreenTo('createRaid')"><i class="material-icons">add_alert</i><span>Annoncer un raid</span></a></li>
+                        <li v-if="features.raid_reporting && raidStatus == 'active' && gym.raid.pokemon == false && !gym.raid.ex"><a class="modal__action create-raid" v-on:click="setScreenTo('updateRaid')"><i class="material-icons">fingerprint</i><span>Préciser le Pokémon</span></a></li>
+                        <li v-if="features.raid_reporting && gym.raid && canDeleteRaid()"><a class="modal__action delete-raid" v-on:click="deleteRaidConfirm()"><i class="material-icons">delete</i><span>Supprimer le raid</span></a></li>
+                        <li v-if="features.raidex_reporting && raidStatus == 'none' && gym.ex === true && canCreateRaidEx"><a class="modal__action create-raid-ex" v-on:click="setScreenTo('createRaidEx')"><i class="material-icons">star</i><span>Annoncer un raid EX</span></a></li>
 
                         <!-- Quetes -->
-                        <li v-if="features && features.quest_reporting && !gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">explore</i><span>Annoncer une quête</span></a></li>
-                        <li v-if="features && features.quest_reporting && gym.quest && ( !gym.quest.quest_id || !gym.quest.reward_type )"><a class="modal__action update-quest" v-on:click="setScreenTo('updateQuest')"><i class="material-icons">fingerprint</i><span>Préciser la quête</span></a></li>
-                        <li v-if="features && features.quest_reporting && gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="deleteQuestConfirm()"><i class="material-icons">delete</i><span>Supprimer la quête</span></a></li>
+                        <li v-if="features.quest_reporting && !gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="setScreenTo('createQuest')"><i class="material-icons">explore</i><span>Annoncer une quête</span></a></li>
+                        <li v-if="features.quest_reporting && gym.quest && ( !gym.quest.quest_id || !gym.quest.reward_type )"><a class="modal__action update-quest" v-on:click="setScreenTo('updateQuest')"><i class="material-icons">fingerprint</i><span>Préciser la quête</span></a></li>
+                        <li v-if="features.quest_reporting && gym.quest && !gym.gym"><a class="modal__action create-quest" v-on:click="deleteQuestConfirm()"><i class="material-icons">delete</i><span>Supprimer la quête</span></a></li>
 
                         <!-- Rocket -->
-                        <li v-if="features && features.rocket && !gym.gym && !gym.invasion"><a class="modal__action create-rocketboss" v-on:click="setScreenTo('createRocketBoss')"><i class="material-icons">people_alt</i><span>Annoncer un boss Rocket</span></a></li>
+                        <li v-if="features.rocket && !gym.gym && !gym.invasion"><a class="modal__action create-rocketboss" v-on:click="setScreenTo('createRocketBoss')"><i class="material-icons">people_alt</i><span>Annoncer un boss Rocket</span></a></li>
 
                         <!-- Static -->
                         <li v-if="gym.google_maps_url && gym.gym"><a class="modal__action" :href="gym.google_maps_url"><i class="material-icons">navigation</i><span>Itinéraire vers l'arène</span></a></li>
@@ -288,7 +288,7 @@
                         <span v-if="createRaidHoraires" class="step__timer--horaires">{{createRaidHoraires}}</span>
                     </p>
                     <button v-on:click="addToTimeRange()" class="range_button" id="range__plus"><i class="material-icons">add</i></button>
-                    <input v-model="createRaidData.delai" v-on:change="updateTimeRange()" @input="updateTimeRange()" type="range" class="range" min="-60" max="45" step="1" data-orientation="horizontal">
+                    <input v-model="createRaidData.delai" v-on:change="updateTimeRange()" @input="updateTimeRange()" type="range" class="range" :min="config.raids.timing_before_eclosion" :max="config.raids.timing_after_eclosion" step="1" data-orientation="horizontal">
                 </div>
 
                 <hr>
@@ -401,7 +401,10 @@ export default {
             return active && canAccess;
         },
         features() {
-            return this.$store.state.features;
+            return window.pokematos.features;
+        },
+        config() {
+            return window.pokematos.config;
         },
         pokemons() {
             return this.$store.getters.getRaidBosses;
@@ -491,7 +494,7 @@ export default {
             var raidStartTime = moment();
             var raidEndTime = moment();
             if( this.createRaidData.delai >= 0 ) {
-                var timeLeft = 45 - this.createRaidData.delai;
+                var timeLeft = window.pokematos.config.raids.timing_after_eclosion - this.createRaidData.delai;
                 raidStartTime.subtract(this.createRaidData.delai, 'minutes').minutes();
                 raidEndTime.add( parseInt(timeLeft), 'minutes').minutes();
                 this.createRaidData.startTime = raidStartTime.format('YYYY-MM-DD HH:mm:ss');
@@ -500,7 +503,7 @@ export default {
             } else {
                 var timeLeft = Math.abs(this.createRaidData.delai);
                 raidStartTime.add(timeLeft, 'minutes').minutes();
-                raidEndTime.add( parseInt(timeLeft) + parseInt(45), 'minutes').minutes();
+                raidEndTime.add( parseInt(timeLeft) + parseInt(window.pokematos.config.raids.timing_after_eclosion), 'minutes').minutes();
                 this.createRaidData.startTime = raidStartTime.format('YYYY-MM-DD HH:mm:ss');
                 this.createRaidDelai = 'Le raid débute dans ' + timeLeft + ' min';
                 this.createRaidHoraires = 'De ' + raidStartTime.format('HH[h]mm') + ' à ' + raidEndTime.format('HH[h]mm');

@@ -21,7 +21,14 @@ class Controller extends BaseController
     }
 
     public function getFeatures( Request $request ) {
-        return response()->json(config('features'), 200);
+        $config = [
+            'donatation' => [
+                'goal' => 150,
+                'current' => 30,
+            ],
+            'features' => config('features'),
+        ];
+        return response()->json($config, 200);
     }
 
     public function test( Request $request ) {

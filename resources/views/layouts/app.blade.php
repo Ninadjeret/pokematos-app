@@ -28,6 +28,9 @@
     <!-- Scripts -->
     <!--<script src="{{ asset('js/manifest.js') }}"></script>
     <script src="{{ asset('js/vendor.js') }}"></script>-->
+    <script type="text/javascript">
+        window.pokematos = <?php echo json_encode( \App\Helpers\App::config() ); ?>;
+    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{config('app.maps_api_key')}}&libraries=places"></script>
     <script src="{{ asset('js/app.js') }}?version={{config('app.version.current')}}" defer></script>
 </body>

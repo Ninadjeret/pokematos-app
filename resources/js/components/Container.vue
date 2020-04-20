@@ -22,7 +22,7 @@
                   <v-icon>notifications_active</v-icon>
                 </v-btn>
 
-                <v-btn v-if="features && features.events" to="/events" color="primary" flat value="recent" >
+                <v-btn v-if="features.events" to="/events" color="primary" flat value="recent" >
                   <span>Évents</span>
                   <v-icon>event</v-icon>
                 </v-btn>
@@ -69,7 +69,7 @@
                     <span v-if="lastChanges && lastChanges.lists.server > lastChanges.lists.local" class="unread"></span>
                   </v-btn>
 
-                  <v-btn v-if="features && features.events" to="/events" color="primary" flat value="recent" >
+                  <v-btn v-if="features.events" to="/events" color="primary" flat value="recent" >
                     <span>Évents</span>
                     <v-icon>event</v-icon>
                     <span v-if="lastChanges && lastChanges.events.server > lastChanges.events.local" class="unread"></span>
@@ -140,6 +140,7 @@
             }
         },
         async mounted() {
+            console.log(window.pokematos);
             try {
                 this.$store.commit('fetchFeatures');
                 await this.$store.dispatch('fetchGyms');
@@ -147,12 +148,12 @@
                 this.fetchLastChanges();
             } finally {
                 this.dialogUpdate = false;
-                setInterval( this.fetch, 30000, 'auto' );
+                setInterval( this.fetch, 60000, 'auto' );
             }
         },
         computed: {
             features() {
-                return this.$store.state.features;
+                return window.pokematos.features;
             },
             cities() {
                 return this.$store.state.cities;
