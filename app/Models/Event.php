@@ -25,10 +25,15 @@ class Event extends Model
                 return $train;
             }
         } elseif( $this->type == 'quiz' ) {
-            $quiz = EventQuiz::where('event_id', $this->id)->first();
-            if( $quiz ) {
-                return $quiz;
-            }
+            return $this->quiz;
+        }
+        return false;
+    }
+
+    public function getQuizAttribute() {
+        $quiz = EventQuiz::where('event_id', $this->id)->first();
+        if( $quiz ) {
+            return $quiz;
         }
         return false;
     }
@@ -165,5 +170,28 @@ class Event extends Model
             $quiz->shuffleQuestions();
         }
 
+    }
+
+    public static function getActiveEvents( $type = null ) {
+
+        $now = new \DateTime();
+        $yesterday = clone $now;
+        $yesterday->modify('- 1  day');
+
+        if( empty($type) ) {
+            return Event::where('start_time', '<', $now->format('Y-m-d H:i:s'))
+                ->where('end_time', '>', $now->format('Y-m-d H:i:s'))
+                ->get();
+        } elseif( is_array($type) ) {
+            return Event::where('start_time', '<', $now->format('Y-m-d H:i:s'))
+                ->where('end_time', '>', $now->format('Y-m-d H:i:s'))
+                ->whereIn('type', $type)
+                ->get();
+        } else {
+            return Event::where('start_time', '<', $now->format('Y-m-d H:i:s'))
+                ->where('end_time', '>', $now->format('Y-m-d H:i:s'))
+                ->where('type', $type)
+                ->get();
+        }
     }
 }
