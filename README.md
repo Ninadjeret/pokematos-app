@@ -10,13 +10,7 @@ Collaborative map for Pokemon Go players. Raid & quest reporting, Discord notifi
 3. Install Database server (like Wamp)
 
 ## Installation
-### Auto installation
 1. Unzip all files in your project folder
-2. with your favorite CLI, run ```php artisan install```
-### Manual installation
-1. Unzip all files in your project folder
-2. with your favorite CLI, run ```npm install``` and ```composer install``` to add all needed dependencies
-3. rename ```.env.example``` in ```.env``` and add your database connexion information (host, port, database name, user & pwd)
-4. run ```php artisan key:generate```
-5. run ```php artisan migrate:fresh``` and next ```php artisan db:seed``` to add database structure & dummy data
-6. run ```php artisan serve```. Pokematos is now available at ```http://127.0.0.1:8000```
+2. Create en empty database
+3. with your favorite CLI, run ```composer install```
+4. with your favorite CLI, run ```php artisan install```. It will ask you for DB credentials & Discord bot credentials. You can setup those in minutes at https://discordapp.com/developers

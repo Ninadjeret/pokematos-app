@@ -7,7 +7,7 @@ return [
         'short_name' => 'Pokématos',
         'start_url' => '/',
         'background_color' => '#5a6cae',
-        'theme_color' => '#5a6cae',
+        'theme_color' => '#ffffff',
         'display' => 'standalone',
         'orientation'=> 'portrait',
         'icons' => [
