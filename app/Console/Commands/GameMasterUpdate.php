@@ -53,15 +53,17 @@ class GameMasterUpdate extends Command
 
         foreach( $game_master as $game_master_2 ) {
             if( is_array($game_master_2) ) { foreach( $game_master_2 as $node ) {
-            if( !isset($node->pokemonSettings) || empty($node->pokemonSettings) ) continue;
+            if( !isset($node->pokemon) || empty($node->pokemon) ) continue;
             if( strstr($node->templateId, '_NORMAL') ) continue;
             if( strstr($node->templateId, '_PURIFIED') ) continue;
             if( strstr($node->templateId, '_SHADOW') ) continue;
             if( strstr($node->templateId, '_FALL_2019') ) continue;
 
+
+
             $pokedex_id = substr($node->templateId, 2, 3);
             $name_ocr = ( isset($names_fr[(int)$pokedex_id]) ) ? $names_fr[(int)$pokedex_id - 1] : null;
-            $form_id = ( isset($node->pokemonSettings->form) ) ? $node->pokemonSettings->form : '00';
+            $form_id = ( isset($node->pokemon->form) ) ? $node->pokemon->form : '00';
 
             $forms = [
                 'ALOLA' => 'd\'Alola',
@@ -101,9 +103,9 @@ class GameMasterUpdate extends Command
                 'name_fr'   => $name_fr,
                 'name_ocr'   => $name_ocr,
                 'form_id'  => $form_id,
-                'base_att'  => $node->pokemonSettings->stats->baseAttack,
-                'base_def'  => $node->pokemonSettings->stats->baseDefense,
-                'base_sta'  => $node->pokemonSettings->stats->baseStamina,
+                'base_att'  => $node->pokemon->stats->baseAttack,
+                'base_def'  => $node->pokemon->stats->baseDefense,
+                'base_sta'  => $node->pokemon->stats->baseStamina,
                 'parent_id' => null,
             ];
 

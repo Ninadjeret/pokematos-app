@@ -28,7 +28,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //Mise à jour des status de Raid
-        $schedule->command(Raid::updateStatuses())->everyMinute();
+        $schedule->call(function () {
+            Raid::updateStatuses();
+        })->everyMinute();
 
         //On agit sur les quiz.
         $schedule->call(function () {
