@@ -20,7 +20,7 @@ class Guild extends Model
         'active',
     ];
     protected $hidden = ['city_id'];
-    protected $appends = ['city', 'settings', 'watched_channels'];
+    protected $appends = ['city', 'settings', 'watched_channels', 'event_channels'];
     protected $casts = [
         'authorized_roles' => 'array',
     ];
@@ -68,6 +68,20 @@ class Guild extends Model
         foreach( $watched_channels as $watched_channel ) {
             if( !in_array( $watched_channel->channel_discord_id, $return ) && !empty($watched_channel->channel_discord_id) ) {
                 $return[] = $watched_channel->channel_discord_id;
+            }
+        }
+        return $return;
+    }
+
+    public function getEventChannelsAttribute() {
+
+        $events = \App\Models\Event::where('guild_id', $this->id)
+            ->get();
+
+        $return = [];
+        foreach( $events as $event ) {
+            if( !in_array( $event->channel_discord_id, $return ) && !empty($event->channel_discord_id) ) {
+                $return[] = $event->channel_discord_id;
             }
         }
         return $return;

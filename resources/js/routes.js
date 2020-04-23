@@ -117,16 +117,7 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminEventsHome,
-                children: [
-                    {
-                        path: "add",
-                        name: "admin.events.add",
-                        meta: {
-                            title: "Ajouter un évent",
-                            parent: "admin.events"
-                        },
-                        component: AdminEvent
-                    },
+                children: [                
                     {
                         path: "events",
                         name: "admin.events",
@@ -135,6 +126,15 @@ const routes = [
                             parent: "admin.events.home"
                         },
                         component: AdminEvents
+                    },
+                    {
+                        path: "add",
+                        name: "admin.events.add",
+                        meta: {
+                            title: "Ajouter un évent",
+                            parent: "admin.events"
+                        },
+                        component: AdminEvent
                     },
                     {
                         path: "events/:event_id",

@@ -39,6 +39,7 @@ class Test extends Command
      */
     public function handle()
     {
+
         $quiz = \App\Models\EventQuiz::find(1);
         $quiz->process();
         /*$discord = new DiscordClient([

@@ -37,6 +37,7 @@ class CreateEventQuizsTable extends Migration
 
         Schema::create('event_quiz_answers', function (Blueprint $table) {
             $table->increments('id');
+            $table->text('answer');
             $table->integer('question_id');
             $table->integer('user_id');
             $table->integer('guild_id');

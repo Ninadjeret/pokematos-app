@@ -189,4 +189,20 @@ class EventController extends Controller
         return response()->json($event, 200);
     }
 
+    public static function addQuizAnswer( Request $request ) {
+
+        $event = Event::where('channel_discord_id', $request->channel_discord_id)->first();
+        if( !$event->quiz ) return response()->json('Cet event ne dispose pas de quiz', 400);
+
+        $args = [
+            'answer' => $request->answer,
+            'user_discord_id' => $request->user_discord_id,
+            'guild_discord_id' => $request->guild_discord_id,
+            'message_discord_id' => $request->message_discord_id,
+        ];
+
+        $event->quiz->addAnswer($args);
+        return response()->json(null, 204);
+    }
+
 }

@@ -17,7 +17,7 @@ class EventQuiz extends Model
     protected $appends = ['questions'];
 
     public function getQuestionsAttribute() {
-        return EventQuizQuestion::where('quiz_id', $this->id)->orderBy('start_time', 'ASC')->get();
+        return EventQuizQuestion::where('quiz_id', $this->id)->orderBy('order', 'ASC')->get();
     }
 
     public function getEventAttribute() {
@@ -62,6 +62,7 @@ class EventQuiz extends Model
             $question = $this->getLastQuestion();
             if( $question && $question->isEnded() ) {
                 Log::debug('nextQuestion');
+                $question->close();
                 $this->nextQuestion();
             }
         }
@@ -82,7 +83,26 @@ class EventQuiz extends Model
     }
 
     public function close() {
+        $classement = $this->getRanking();
+        $num = 0;
+        $ranking = '';
+        $best_player = '';
+        foreach( $classement as $user => $responses ) {
+            $num++;
+            if( $num === 1 ) $best_player = $user;
+            if( $num === 1 ) $ranking .= ":first_place: ";
+            if( $num === 2 ) $ranking .= ":second_place: ";
+            if( $num === 3 ) $ranking .= ":third_place: ";
+                $ranking .= "{$user} : **{$responses}**\r\n";
+        }
 
+        $this->sendToDiscord('Bravo pour ce super quiz !');
+        sleep(1);
+        $this->sendToDiscord('Voici les résultats :point_down:');
+        sleep(1);
+        $this->sendToDiscord("**----------\r\nClassement définitif\r\n----------**\r\n{$ranking}");
+        sleep(1);
+        $this->sendToDiscord("Féliciations à @{$best_player}");
     }
 
     public function isStarted() {
@@ -99,6 +119,9 @@ class EventQuiz extends Model
             ->first();
         if( empty($question->end_time) ) {
             return false;
+        }
+        if( !empty($question->correctAnswer) ) {
+            return true;
         }
         $now = new \DateTime();
         $end_time = new \DateTime($question->end_time);
@@ -121,6 +144,14 @@ class EventQuiz extends Model
         if( $question) $question->start();
     }
 
+    public function addAnswer($args) {
+        if( !$this->isStarted() || $this->isEnded() ) return false;
+
+        $question = $this->getLastQuestion();
+        if( $question->isEnded() ) return false;
+        $question->addAnswer($args);
+    }
+
     public function sendToDiscord($content) {
         $content = \App\Helpers\Discord::encode($content, $this->event->guild, false);
         $discord = new DiscordClient(['token' => config('discord.token')]);
@@ -128,5 +159,21 @@ class EventQuiz extends Model
             'channel.id' => intval($this->event->channel_discord_id),
             'content' => $content,
         ));
+    }
+
+    public function getRanking() {
+        $classement = [];
+        foreach( $this->questions as $question ) {
+            if( empty( $question->correctAnswer ) ) continue;
+            $user_name = $question->correctAnswer->user->name;
+            $points = $question->question->difficulty;
+            if( array_key_exists($user_name, $classement) ) {
+                $classement[$user_name] += $points;
+            } else {
+                $classement[$user_name] = $points;
+            }
+        }
+        asort($classement);
+        return $classement;
     }
 }

@@ -154,6 +154,7 @@ Route::group(['middleware' => ['auth.bot']], function () {
     //Events
 
 });
+Route::post('bot/events/quiz/answer', 'EventController@addQuizAnswer');
 
 Route::get('version', 'Controller@getVersion');
 Route::get('features', 'Controller@getFeatures');

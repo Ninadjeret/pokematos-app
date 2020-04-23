@@ -20,6 +20,8 @@ class Discord {
             'guild.id' => intval($guild->discord_id)
         ));
 
+        
+
         //Gestion des mentions
         if( strstr( $message, '@' ) ) {
             foreach( $roles as $role ) {
