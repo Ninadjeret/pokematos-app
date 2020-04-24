@@ -15,6 +15,11 @@
         "next": ["BOUM, et oui ! C'est l'événément **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
     },
     {
+        "text": "Ding ding dong !",
+        "type": "start_intro",
+        "next": ["BOUM, et oui ! C'est l'événément **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
+    },
+    {
         "text": "Ce Pokéquiz va se dérouler en **%quiz_nb_questions questions**. Pour chacune d'elle, vous aurez au maximum %quiz_delay minutes pour répondre.",
         "type": "start_description",
         "next": []
@@ -82,6 +87,11 @@
     {
         "text": "Dommage... La question devait être trop difficile :(",
         "type": "question_not_answered",
+        "next": []
+    },
+    {
+        "text": "%explanation",
+        "type": "question_answer_explanation",
         "next": []
     }
 ]

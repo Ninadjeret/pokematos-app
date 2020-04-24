@@ -84,8 +84,15 @@ class EventQuizQuestion extends Model
         if( !empty( $this->correctAnswer ) ) {
             $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_answer_correct', [
                 '%user' => $user,
-                '%answer' => $this->question->answer
+                '%answer' => $this->question->answer,
             ]));
+            if( !empty($this->question->explanation) ) {
+                $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_answer_explanation', [
+                    '%user' => $user,
+                    '%answer' => $this->question->answer,
+                    '%explanation' => $this->question->explanation
+                ]));
+            }
         } else {
             $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_not_answered') );
         }
