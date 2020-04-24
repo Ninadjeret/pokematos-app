@@ -41,7 +41,7 @@ class Test extends Command
     {
 
         $quiz = \App\Models\EventQuiz::find(1);
-        $quiz->process();
+        $quiz->start();
         /*$discord = new DiscordClient([
             'token' => config('discord.token'),
         ]);

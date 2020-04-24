@@ -76,6 +76,7 @@ class Guild extends Model
     public function getEventChannelsAttribute() {
 
         $events = \App\Models\Event::where('guild_id', $this->id)
+            ->where('status', 'active')
             ->get();
 
         $return = [];

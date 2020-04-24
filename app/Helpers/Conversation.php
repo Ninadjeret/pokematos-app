@@ -8,15 +8,35 @@ use Illuminate\Support\Facades\Log;
 
 class Conversation {
 
-    public static $quiz = [
-        [
-            'message' => 'Aucune idée, mais je veux bien demander à mon créateur',
-            'type' => 'question',
-            'suite' => ['Il comprend plus de choses que moi', '(heureusement :wink:)'],
-        ],
-    ];
+    public static function getRandomMessage( $type, $soustype, $args = null ) {
+        $path = resource_path("conversations/{$type}.json");
+        $conversations = json_decode(file_get_contents($path), true);
 
-    public static function getRandomMessage( $type ) {
+        $mathing_conversations = array_filter($conversations, function($line) use ($soustype) {
+            if( empty($soustype) ) return true;
+            if( is_array($soustype) ) {
+                return in_array($line['type'], $soustype);
+            } else {
+                return $soustype == $line['type'];
+            }
+        });
+
+        if( empty( $mathing_conversations ) ) {
+            return false;
+        }
+
+        $key = array_rand($mathing_conversations);
+        $mathing_conversation = $mathing_conversations[$key];
+        if( !empty($args) ) {            
+            $mathing_conversation['text'] = str_replace(array_keys($args), array_values($args), $mathing_conversation['text']);
+            if( !empty($mathing_conversation['next']) ) {
+                foreach( $mathing_conversation['next'] as &$message ) {
+                    $message = str_replace(array_keys($args), array_values($args), $message);
+                }
+            }
+        }
+
+        return $mathing_conversation;
 
     }
 

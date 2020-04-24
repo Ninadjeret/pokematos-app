@@ -30,11 +30,12 @@ class EventQuizQuestion extends Model
 
     public function start() {
 
-        if( !empty($this->quiz->event->channel_discord_id) ) {
-            $this->quiz->sendToDiscord('Attention, question en approche...');
-            sleep(10);
-            $this->quiz->sendToDiscord("__:pencil: {$this->question->question}__");
-        }
+        $this->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_announce', [
+            '%question_difficulty' => $this->event->name,
+            '%question_theme' => $this->nb_questions,
+        ]));
+        sleep(10);
+        $this->quiz->sendToDiscord("__:pencil: {$this->question->question}__");
 
         $start_time = new \DateTime();
         $end_time = new \DateTime();
@@ -69,14 +70,24 @@ class EventQuizQuestion extends Model
 
         if( $answer->isCorrect() ) {
             $this->close();
+        } else {
+            $rand = rand(1,5);
+            if( $rand === 1 ) {
+                $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_answer_wrong', [
+                    '%user' => $user,
+                ]));
+            }
         }
     }
 
     public function close() {
         if( !empty( $this->correctAnswer ) ) {
-            $this->quiz->sendToDiscord("Bravo @{$this->correctAnswer->user->name} :clap:");
+            $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_answer_correct', [
+                '%user' => $user,
+                '%answer' => $this->question->answer
+            ]));
         } else {
-            $this->quiz->sendToDiscord("Dommage... La question devait être trop difficile :(");
+            $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_not_answered') );
         }
         $this->quiz->nextQuestion();
     }

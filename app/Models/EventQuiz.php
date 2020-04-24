@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\QuizTheme;
 use RestCord\DiscordClient;
 use App\Models\QuizQuestion;
+use App\Helpers\Conversation;
 use App\Models\EventQuizQuestion;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class EventQuiz extends Model
 {
     protected $table = 'event_quizs';
-    protected $fillable = ['event_id', 'nb_questions', 'delay', 'themes', 'difficulties', 'only_pogo', 'message_discord_id'];
+    protected $fillable = ['event_id', 'nb_questions', 'delay', 'themes', 'difficulties', 'only_pogo', 'message_discord_id', 'status'];
     protected $appends = ['questions'];
 
     public function getQuestionsAttribute() {
@@ -50,18 +51,15 @@ class EventQuiz extends Model
     }
 
     public function process() {
-        Log::debug('process');
-        if( $this->isEnded() ) {
-            Log::debug('close');
+        if( $this->isClosed() || !$this->hasToStart() ) {
+            return;
+        } elseif( $this->isEnded() ) {
             $this->close();
-        } elseif( !$this->isStarted() ) {
-            Log::debug('start');
+        } elseif( $this->hasToStart() ) {
             $this->start();
         } else {
-            Log::debug('getLastQuestion');
             $question = $this->getLastQuestion();
             if( $question && $question->isEnded() ) {
-                Log::debug('nextQuestion');
                 $question->close();
                 $this->nextQuestion();
             }
@@ -70,11 +68,26 @@ class EventQuiz extends Model
 
     public function start() {
 
-        if( !empty($this->event->channel_discord_id) ) {
-            $this->sendToDiscord('Test');
-            sleep(3);
-            $this->sendToDiscord('Tutu');
+        $this->update(['status' => 'active']);
+
+        //On avertit le bot de la MAJ
+        $client = new Client();
+        $url = config('app.bot_sync_url');
+        if( !empty($url) ) {
+            $res = $client->get($url);
         }
+
+        $this->sendToDiscord(Conversation::getRandomMessage('quiz', 'start_intro', [
+            '%quiz_name' => $this->event->name,
+        ]));
+        sleep(3);
+        $this->sendToDiscord( Conversation::getRandomMessage('quiz', 'start_description', [
+            '%quiz_name' => $this->event->name,
+            '%quiz_nb_questions' => $this->nb_questions,
+            '%quiz_delay' => $this->delay
+        ]));
+        sleep(10);
+        $this->sendToDiscord( Conversation::getRandomMessage('quiz', 'start_warning') );
 
         $question = EventQuizQuestion::where('quiz_id', $this->id)
             ->orderBy('order', 'ASC')
@@ -83,6 +96,16 @@ class EventQuiz extends Model
     }
 
     public function close() {
+
+        $this->update(['status' => 'closed']);
+
+        //On avertit le bot de la MAJ
+        $client = new Client();
+        $url = config('app.bot_sync_url');
+        if( !empty($url) ) {
+            $res = $client->get($url);
+        }
+
         $classement = $this->getRanking();
         $num = 0;
         $ranking = '';
@@ -105,12 +128,17 @@ class EventQuiz extends Model
         $this->sendToDiscord("Féliciations à @{$best_player}");
     }
 
+    public function hasToStart() {
+        $now = new \DateTime();
+        $start_time = new \DateTime($this->start_time);
+        if( $this->status == 'future' && $now > $start_time ) {
+            return true;
+        }
+        return false;
+    }
+
     public function isStarted() {
-        $questions = EventQuizQuestion::where('quiz_id', $this->id)
-            ->whereNotNull('start_time')
-            ->orderBy('order', 'ASC')
-            ->get();
-        return (!empty($questions->toArray()));
+        return $this->status == 'active';
     }
 
     public function isEnded() {
@@ -126,6 +154,10 @@ class EventQuiz extends Model
         $now = new \DateTime();
         $end_time = new \DateTime($question->end_time);
         return ( $now > $end_time );
+    }
+
+    public function isClosed() {
+        return $this->status == 'closed';
     }
 
     public function getLastQuestion() {
@@ -152,13 +184,27 @@ class EventQuiz extends Model
         $question->addAnswer($args);
     }
 
-    public function sendToDiscord($content) {
-        $content = \App\Helpers\Discord::encode($content, $this->event->guild, false);
+    public function sendToDiscord($message) {
+        if( empty($this->event->channel_discord_id) ) return;
+
+        $content = \App\Helpers\Discord::encode($message['text'], $this->event->guild, false);
         $discord = new DiscordClient(['token' => config('discord.token')]);
-        $message = $discord->channel->createMessage(array(
+        $discord->channel->createMessage(array(
             'channel.id' => intval($this->event->channel_discord_id),
-            'content' => $content,
+            'content' => $message['text'],
         ));
+
+        if( array_key_exists('next', $message) && !empty($message['next']) ) {
+            foreach( $message['next'] as $content ) {
+                $content = \App\Helpers\Discord::encode($content, $this->event->guild, false);
+                usleep( strlen($content) * 75000 );
+                $discord->channel->createMessage(array(
+                    'channel.id' => intval($this->event->channel_discord_id),
+                    'content' => $content,
+                ));
+            }
+        }
+
     }
 
     public function getRanking() {
