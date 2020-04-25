@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class Conversation {
 
-    public static function getRandomMessage( $type, $soustype, $args = null ) {
+    public static function getMessage( $type, $soustype, $args = null ) {
         $path = resource_path("conversations/{$type}.json");
         $conversations = json_decode(file_get_contents($path), true);
 
@@ -27,7 +27,7 @@ class Conversation {
 
         $key = array_rand($mathing_conversations);
         $mathing_conversation = $mathing_conversations[$key];
-        if( !empty($args) ) {            
+        if( !empty($args) ) {
             $mathing_conversation['text'] = str_replace(array_keys($args), array_values($args), $mathing_conversation['text']);
             if( !empty($mathing_conversation['next']) ) {
                 foreach( $mathing_conversation['next'] as &$message ) {
@@ -38,6 +38,28 @@ class Conversation {
 
         return $mathing_conversation;
 
+    }
+
+    public static function sendToDiscord( $channel_id, $type, $soustype, $args = null ) {
+        $message = self::getMessage( $type, $soustype, $args );
+
+        $content = \App\Helpers\Discord::encode($message['text'], $this->event->guild, false);
+        $discord = new \RestCord\DiscordClient(['token' => config('discord.token')]);
+        $discord->channel->createMessage(array(
+            'channel.id' => intval($channel_id),
+            'content' => $content,
+        ));
+
+        if( array_key_exists('next', $message) && !empty($message['next']) ) {
+            foreach( $message['next'] as $content ) {
+                $content = \App\Helpers\Discord::encode($content, $this->event->guild, false);
+                usleep( strlen($content) * 75000 );
+                $discord->channel->createMessage(array(
+                    'channel.id' => intval($channel_id),
+                    'content' => $content,
+                ));
+            }
+        }
     }
 
 }

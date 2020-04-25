@@ -57,6 +57,9 @@ class Guild extends Model
         'events_trains_add_messages' => ['default' => false, 'type' => 'boolean'],
         'events_trains_message_check' => ['default' => 'Nous passons à la prochaine étape : {next_etape_nom}. RDV à {next_etape_heure}', 'type' => 'string'],
         'events_accept_invits' => ['default' => true, 'type' => 'boolean'],
+
+        'comadmin_active' => ['default' => false, 'type' => 'boolean'],
+        'comadmin_channel_discord_id' => ['default' => false, 'type' => 'string'],
     ];
 
     public function getCityAttribute() {

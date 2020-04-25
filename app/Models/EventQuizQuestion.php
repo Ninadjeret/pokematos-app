@@ -30,7 +30,7 @@ class EventQuizQuestion extends Model
 
     public function start() {
 
-        $this->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_announce', [
+        $this->sendToDiscord( Conversation::getMessage('quiz', 'question_announce', [
             '%question_difficulty' => $this->event->name,
             '%question_theme' => $this->nb_questions,
         ]));
@@ -73,7 +73,7 @@ class EventQuizQuestion extends Model
         } else {
             $rand = rand(1,5);
             if( $rand === 1 ) {
-                $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_answer_wrong', [
+                $this->quiz->sendToDiscord( Conversation::getMessage('quiz', 'question_answer_wrong', [
                     '%user' => $user,
                 ]));
             }
@@ -82,19 +82,19 @@ class EventQuizQuestion extends Model
 
     public function close() {
         if( !empty( $this->correctAnswer ) ) {
-            $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_answer_correct', [
+            $this->quiz->sendToDiscord( Conversation::getMessage('quiz', 'question_answer_correct', [
                 '%user' => $user,
                 '%answer' => $this->question->answer,
             ]));
             if( !empty($this->question->explanation) ) {
-                $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_answer_explanation', [
+                $this->quiz->sendToDiscord( Conversation::getMessage('quiz', 'question_answer_explanation', [
                     '%user' => $user,
                     '%answer' => $this->question->answer,
                     '%explanation' => $this->question->explanation
                 ]));
             }
         } else {
-            $this->quiz->sendToDiscord( Conversation::getRandomMessage('quiz', 'question_not_answered') );
+            $this->quiz->sendToDiscord( Conversation::getMessage('quiz', 'question_not_answered') );
         }
         $this->quiz->nextQuestion();
     }

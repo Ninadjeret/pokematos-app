@@ -2,6 +2,7 @@ import Map from "./components/Map.vue";
 import List from "./components/List.vue";
 import Profile from "./components/Profile.vue";
 import Admin from "./components/Admin.vue";
+import AdminSettings from "./components/admin/Settings.vue";
 import AdminGyms from "./components/admin/Gyms.vue";
 import AdminGym from "./components/admin/Gym.vue";
 import AdminZones from "./components/admin/Zones.vue";
@@ -101,6 +102,15 @@ const routes = [
                 component: AdminAccess
             },
             {
+                path: ":id/settings",
+                name: "admin.settings",
+                meta: {
+                    title: "Réglages généraux",
+                    parent: "admin"
+                },
+                component: AdminSettings
+            },
+            {
                 path: ":id/welcome",
                 name: "admin.welcome",
                 meta: {
@@ -117,7 +127,7 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminEventsHome,
-                children: [                
+                children: [
                     {
                         path: "events",
                         name: "admin.events",

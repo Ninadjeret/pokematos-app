@@ -77,17 +77,17 @@ class EventQuiz extends Model
             $res = $client->get($url);
         }
 
-        $this->sendToDiscord(Conversation::getRandomMessage('quiz', 'start_intro', [
+        $this->sendToDiscord(Conversation::getMessage('quiz', 'start_intro', [
             '%quiz_name' => $this->event->name,
         ]));
         sleep(3);
-        $this->sendToDiscord( Conversation::getRandomMessage('quiz', 'start_description', [
+        $this->sendToDiscord( Conversation::getMessage('quiz', 'start_description', [
             '%quiz_name' => $this->event->name,
             '%quiz_nb_questions' => $this->nb_questions,
             '%quiz_delay' => $this->delay
         ]));
         sleep(10);
-        $this->sendToDiscord( Conversation::getRandomMessage('quiz', 'start_warning') );
+        $this->sendToDiscord( Conversation::getMessage('quiz', 'start_warning') );
 
         $question = EventQuizQuestion::where('quiz_id', $this->id)
             ->orderBy('order', 'ASC')
@@ -191,7 +191,7 @@ class EventQuiz extends Model
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $discord->channel->createMessage(array(
             'channel.id' => intval($this->event->channel_discord_id),
-            'content' => $message['text'],
+            'content' => $content,
         ));
 
         if( array_key_exists('next', $message) && !empty($message['next']) ) {
