@@ -79,6 +79,15 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Events\TrainStepUnchecked' => [
             'App\Listeners\Discord\DeleteMessage',
         ],
+        'App\Events\Events\InvitAccepted' => [
+            'App\Listeners\Discord\CreateChannel',
+        ],
+        'App\Events\Events\InvitCanceled' => [
+            'App\Listeners\Discord\DeleteChannel',
+        ],
+        'App\Events\Events\InvitRefused' => [
+            'App\Listeners\Discord\DeleteChannel',
+        ],
 
         //Courant
         'App\Events\DayChanged' => [

@@ -19,6 +19,8 @@ class Event extends Model
     protected $fillable = ['city_id', 'guild_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id', 'image', 'multi_guilds'];
     protected $appends = ['relation', 'guild', 'guests'];
 
+    public static $multi_types = ['quiz'];
+
     public function getRelationAttribute() {
         if( $this->type == 'train' ) {
             $train = EventTrain::where('event_id', $this->id)->first();
@@ -33,7 +35,7 @@ class Event extends Model
 
     public function getGuestsAttribute() {
         if( $this->multi_guilds ) {
-            $guests = EventInvit::where('event_id', $this->id)->get();
+            return EventInvit::where('event_id', $this->id)->get();
         }
         return [];
     }
@@ -115,7 +117,11 @@ class Event extends Model
         if( !empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen') ) unset($args['event']['image']);
         $start_time = new \DateTime($args['event']['start_time']);
         $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
+
+        if( empty( $args['event']['multi_guilds'] ) ) $args['event']['multi_guilds'] = 0;
+
         $this->update($args['event']);
+
 
         if( $this->type == 'train' ) {
 
@@ -162,6 +168,57 @@ class Event extends Model
             $this->setQuizz( $args );
         }
 
+        $this->setMultiQuilds($args);
+
+    }
+
+    public function setMultiQuilds( $args ) {
+        if( in_array($this->type, self::$multi_types) ) {
+            if( $this->multi_guilds  ) {
+                $this->manageInvits($args['guests']);
+            } else {
+                $this->cancelInvits();
+            }
+        } else {
+            $this->update(['multi_guilds' => false]);
+            $this->CancelInvits();
+        }
+    }
+
+    public function manageInvits($guests) {
+
+        if( empty($guests) ) {
+                $this->CancelInvits();
+                return;
+        }
+
+        $invit_ids = [];
+        foreach( $guests as $guest ) {
+            $invit = EventInvit::where('event_id', $this->id)
+                ->where('guild_id', $guest['guild_id'])
+                ->first();
+            if( empty($invit) ) {
+                $invit = EventInvit::add([
+                    'event_id' => $this->id,
+                    'guild_id' => $guest['guild_id']
+                ]);
+            }
+            $invit_ids[] = $invit->id;
+        }
+
+        if( !empty($invit_ids) ) {
+            $this->CancelInvits($not_in = $invit_ids);
+        }
+
+    }
+
+    public function CancelInvits( $not_in = null ) {
+        $query = EventInvit::where('event_id', $this->id);
+        if( !empty($not_in) ) $query->whereNotIn('id', $not_in);
+        $invits = $query->get();
+        foreach( $invits as $invit ) {
+            $invit->cancel();
+        }
     }
 
     public function setQuizz( $args ) {

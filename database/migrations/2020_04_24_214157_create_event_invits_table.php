@@ -16,14 +16,14 @@ class CreateEventInvitsTable extends Migration
         Schema::create('event_invits', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('event_id');
-            $table->string('discord_id');
+            $table->string('guild_id');
             $table->string('status')->default('pending');
             $table->dateTime('status_time');
             $table->string('discord_channel_id')->nullable();
             $table->timestamps();
         });
         Schema::table('events', function (Blueprint $table) {
-            $table->boolean('multi_guilds')->after('type')->default(0);
+            $table->boolean('multi_guilds')->nullable()->after('type');
         });
     }
 

@@ -84,30 +84,6 @@ class EventController extends Controller
         return response()->json($event, 200);
     }
 
-    public function cloneEvent( Request $request, Guild $guild, Event $event ) {
-        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
-        $args['event'] = [
-            'name' => $event->name.' - copie',
-            'guild_id' => $guild->id,
-            'city_id' => $guild->city->id,
-            'type' => $event->type,
-            'start_time' => $event->start_time,
-            'image' => $event->image,
-        ];
-
-        $train = EventTrain::where('event_id', $event->id)->first();
-        if( !empty($train->steps) ) {
-            $args['steps'] = $train->steps->toArray();
-            foreach( $args['steps'] as &$step ) {
-                unset($step['id']);
-                unset($step['train_id']);
-            }
-        }
-
-        $event = Event::add($args);
-        return response()->json($event, 200);
-    }
-
     public  function updateEvent( Request $request, Guild $guild, Event $event ) {
         if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
         $user = Auth::user();
@@ -120,6 +96,7 @@ class EventController extends Controller
             'type' => $request->type,
             'start_time' => $request->start_time,
             'image' => $request->image,
+            'multi_guilds' => $request->multi_guilds,
         ];
         if( !empty($request->steps) ) {
             $args['steps'] = $request->steps;
@@ -127,6 +104,7 @@ class EventController extends Controller
         if( !empty($request->quiz) ) {
             $args['quiz'] = $request->quiz;
         }
+        $args['guests'] = $request->guests;
         $event->change($args);
 
         return response()->json($event, 200);
