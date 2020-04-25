@@ -129,6 +129,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/guilds/{guild}/events', 'EventController@getGuildEvents');
     Route::post('user/guilds/{guild}/events/{event}/steps/{step}/check', 'EventController@checkStep');
     Route::post('user/guilds/{guild}/events/{event}/steps/{step}/uncheck', 'EventController@uncheckStep');
+    Route::get('user/guilds/{guild}/events/guilds', 'EventController@getGuestableGuilds');
 
 });
 
@@ -152,9 +153,9 @@ Route::group(['middleware' => ['auth.bot']], function () {
     Route::post('bot/conversations', 'BotController@addConversation');
 
     //Events
+    Route::post('bot/events/quiz/answer', 'EventController@addQuizAnswer');
 
 });
-Route::post('bot/events/quiz/answer', 'EventController@addQuizAnswer');
 
 Route::get('version', 'Controller@getVersion');
 Route::get('features', 'Controller@getFeatures');

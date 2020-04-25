@@ -6,6 +6,7 @@ use App\Models\Guild;
 use App\Models\Event;
 use App\Models\EventQuiz;
 use App\Models\EventTrain;
+use App\Models\EventInvit;
 use App\Models\EventTrainStep;
 use Illuminate\Support\Facades\Log;
 use App\Events\Events\EventCreated;
@@ -15,8 +16,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = ['city_id', 'guild_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id', 'image'];
-    protected $appends = ['relation', 'guild'];
+    protected $fillable = ['city_id', 'guild_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id', 'image', 'multi_guilds'];
+    protected $appends = ['relation', 'guild', 'guests'];
 
     public function getRelationAttribute() {
         if( $this->type == 'train' ) {
@@ -28,6 +29,13 @@ class Event extends Model
             return $this->quiz;
         }
         return false;
+    }
+
+    public function getGuestsAttribute() {
+        if( $this->multi_guilds ) {
+            $guests = EventInvit::where('event_id', $this->id)->get();
+        }
+        return [];
     }
 
     public function getQuizAttribute() {

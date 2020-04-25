@@ -11436,6 +11436,10 @@ a.text-dark:focus {
   color: rgba(255, 255, 255, 0.6);
 }
 
+#app__container .v-toolbar.v-toolbar--fixed.theme--dark.primary .v-toolbar__content .v-btn.v-btn--icon {
+  color: #5a6cae;
+}
+
 #app__container .v-toolbar.v-toolbar--fixed.theme--dark.primary .v-toolbar__content .v-btn--active.v-btn {
   color: #5a6cae;
 }
@@ -14295,6 +14299,31 @@ body.logged-out .denied a {
   margin-left: -5px;
   margin-top: 20px;
   position: absolute;
+}
+
+#app__container.template-admin-events-edit .guest-hourglass_empty .v-avatar,
+#app__container.template-admin-events-add .guest-hourglass_empty .v-avatar {
+  background: #fafafa;
+}
+
+#app__container.template-admin-events-edit .guest-event_busy .v-avatar,
+#app__container.template-admin-events-add .guest-event_busy .v-avatar {
+  background: darkred;
+}
+
+#app__container.template-admin-events-edit .guest-event_busy .v-avatar .v-icon,
+#app__container.template-admin-events-add .guest-event_busy .v-avatar .v-icon {
+  color: #fff;
+}
+
+#app__container.template-admin-events-edit .guest-event_available .v-avatar,
+#app__container.template-admin-events-add .guest-event_available .v-avatar {
+  background: darkgreen;
+}
+
+#app__container.template-admin-events-edit .guest-event_available .v-avatar .v-icon,
+#app__container.template-admin-events-add .guest-event_available .v-avatar .v-icon {
+  color: #fff;
 }
 
 #app__container.template-admin-events-edit .v-dialog .v-tabs__bar .v-tabs__item--active i,

@@ -138,6 +138,21 @@
 
 #app__container.template-admin-events-edit,
 #app__container.template-admin-events-add {
+    .guest-hourglass_empty .v-avatar {
+        background: #fafafa;
+    }
+    .guest-event_busy .v-avatar {
+        background: darkred;
+        .v-icon {
+            color: #fff;
+        }
+    }
+    .guest-event_available .v-avatar {
+        background: darkgreen;
+        .v-icon {
+            color: #fff;
+        }
+    }
     .v-dialog {
         .v-tabs__bar {
             .v-tabs__item--active {

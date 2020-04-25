@@ -22,6 +22,9 @@
             }
         }
         .v-toolbar__content {
+            .v-btn.v-btn--icon {
+                color: $primary;
+            }
             .v-btn--active.v-btn {
                 color: $primary;
                 &:before {

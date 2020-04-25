@@ -189,6 +189,16 @@ class EventController extends Controller
         return response()->json($event, 200);
     }
 
+    public function getGuestableGuilds( Request $request, Guild $guild ) {
+        $guilds = Guild::where('active', 1)
+            ->where('id', '!=', $guild->id)
+            ->get();
+        $filtered = $guilds->filter(function ($value, $key) {
+            return $value->settings->events_accept_invits === true;
+        });
+        return $filtered->all();
+    }
+
     public static function addQuizAnswer( Request $request ) {
 
         $event = Event::where('channel_discord_id', $request->channel_discord_id)->first();
