@@ -60,6 +60,7 @@ class Guild extends Model
 
         'comadmin_active' => ['default' => false, 'type' => 'boolean'],
         'comadmin_channel_discord_id' => ['default' => false, 'type' => 'string'],
+        'comadmin_types' => ['default' => [], 'type' => 'array'],
     ];
 
     public function getCityAttribute() {
@@ -156,6 +157,11 @@ class Guild extends Model
             $role->id = (string) $role->id;
         }
         return $roles;
+    }
+
+    public function sendAdminMessage( $type, $args ){
+        if( !$this->settings->comadmin_active || !in_array($type, $this->settings->comadmin_types) ) return;
+        \App\Helpers\Conversation::sendToDiscord($this->settings->comadmin_channel_discord_id, $this, 'admin', $type, $args);
     }
 
 }

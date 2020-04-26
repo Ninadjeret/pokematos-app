@@ -172,7 +172,7 @@ class EventController extends Controller
             ->where('id', '!=', $guild->id)
             ->get();
         $filtered = $guilds->filter(function ($value, $key) {
-            return $value->settings->events_accept_invits === true;
+            return $value->settings->events_accept_invits == true;
         });
         return $filtered->all();
     }

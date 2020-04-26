@@ -40,10 +40,10 @@ class Conversation {
 
     }
 
-    public static function sendToDiscord( $channel_id, $type, $soustype, $args = null ) {
+    public static function sendToDiscord( $channel_id, $guild, $type, $soustype, $args = null ) {
         $message = self::getMessage( $type, $soustype, $args );
 
-        $content = \App\Helpers\Discord::encode($message['text'], $this->event->guild, false);
+        $content = \App\Helpers\Discord::encode($message['text'], $guild, false);
         $discord = new \RestCord\DiscordClient(['token' => config('discord.token')]);
         $discord->channel->createMessage(array(
             'channel.id' => intval($channel_id),
@@ -52,7 +52,7 @@ class Conversation {
 
         if( array_key_exists('next', $message) && !empty($message['next']) ) {
             foreach( $message['next'] as $content ) {
-                $content = \App\Helpers\Discord::encode($content, $this->event->guild, false);
+                $content = \App\Helpers\Discord::encode($content, $guild, false);
                 usleep( strlen($content) * 75000 );
                 $discord->channel->createMessage(array(
                     'channel.id' => intval($channel_id),

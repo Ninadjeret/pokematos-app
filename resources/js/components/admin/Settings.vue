@@ -9,6 +9,22 @@
                 </div>
                 <v-switch v-model="comadmin_active"></v-switch>
             </div>
+            <div v-if="comadmin_active" class="setting">
+                <label>Salon</label>
+                <select v-if="channels" v-model="comadmin_channel_discord_id">
+                    <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
+                </select>
+            </div>
+            <div v-if="comadmin_active" class="setting checkbox">
+                <label>Filtrer la source</label>
+                <v-checkbox
+                    v-for="(type, index) in types"
+                    v-model="comadmin_types"
+                    :key="type.value"
+                    :label="type.label"
+                    :value="type.value">
+                </v-checkbox>
+            </div>
         </div>
         <v-btn dark fixed bottom right fab @click="submit()">
             <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
@@ -25,6 +41,15 @@
                 loading: false,
                 channels: [],
                 comadmin_active: false,
+                comadmin_channel_discord_id: false,
+                comadmin_types: [],
+                types: [
+                    {value: 'news', label: 'Nouveautés de Pokématos'},
+                    {value: 'event_invit_sended', label: 'Invitation à des événments'},
+                    {value: 'event_invit_accepted', label: 'Validation d\'invitations envoyées'},
+                    {value: 'event_invit_refused', label: 'Refus d\'invitations envoyées'},
+                    {value: 'event_invit_canceled', label: 'Annulation d\'invitation par l\'hote de l\'évenement'},
+                ],
             }
         },
         created() {
@@ -35,6 +60,8 @@
             fetch() {
                 axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/settings').then( res => {
                     this.comadmin_active = res.data.comadmin_active;
+                    this.comadmin_channel_discord_id = res.data.comadmin_channel_discord_id;
+                    this.comadmin_types = res.data.comadmin_types;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response.data ) {
@@ -54,7 +81,9 @@
             submit() {
                 const args = {
                     settings: {
-                        comadmin_active: this.comadmin_active
+                        comadmin_active: this.comadmin_active,
+                        comadmin_channel_discord_id: this.comadmin_channel_discord_id,
+                        comadmin_types: this.comadmin_types,
                     }
                 };
                 this.save(args);

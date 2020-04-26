@@ -19,7 +19,7 @@ class CreateEventInvitsTable extends Migration
             $table->string('guild_id');
             $table->string('status')->default('pending');
             $table->dateTime('status_time');
-            $table->string('discord_channel_id')->nullable();
+            $table->string('channel_discord_id')->nullable();
             $table->timestamps();
         });
         Schema::table('events', function (Blueprint $table) {
