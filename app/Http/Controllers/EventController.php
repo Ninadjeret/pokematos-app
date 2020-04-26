@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Guild;
 use App\Helpers\Helpers;
 use App\Models\EventQuiz;
+use App\Models\EventInvit;
 use App\Models\EventTrain;
 use Illuminate\Http\Request;
 use App\Models\EventTrainStep;
@@ -30,7 +31,13 @@ class EventController extends Controller
             ->whereIn('guild_id', $matching_ids)
             ->get();
 
-        return response()->json($events, 200);
+        $invits = Event::where('end_time', '>', date('Y-m-d H:i:s'))
+            ->whereHas('invits', function($q) use ($matching_ids) {
+                $q->where('status', 'accepted')->whereIn('guild_id', $matching_ids);
+            })
+            ->get();
+        $merged = $events->merge($invits);
+        return response()->json($merged->all(), 200);
     }
 
     public function getGuildEvents( Request $request, Guild $guild ) {
@@ -174,7 +181,28 @@ class EventController extends Controller
         $filtered = $guilds->filter(function ($value, $key) {
             return $value->settings->events_accept_invits == true;
         });
-        return $filtered->all();
+        return response()->json($filtered->all(), 200);
+    }
+
+    public function getInvits( Request $request, Guild $guild ) {
+        $invits = EventInvit::where('guild_id', $guild->id)
+            ->whereHas('event', function($q) {
+                $q->where('start_time', '>', date('Y-m-d H:i:s'));
+            })
+            ->get()->each->setAppends(['guild','event']);
+        return response()->json($invits, 200);
+    }
+
+    public function acceptInvit(Request $request, Guild $guild, EventInvit $invit ) {
+        $invit->accept();
+        $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild','event']);
+        return response()->json($invits, 200);
+    }
+
+    public function refuseInvit(Request $request, Guild $guild, EventInvit $invit ) {
+        $invit->refuse();
+        $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild','event']);
+        return response()->json($invits, 200);
     }
 
     public static function addQuizAnswer( Request $request ) {

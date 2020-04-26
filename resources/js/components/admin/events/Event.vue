@@ -156,13 +156,14 @@
                                 placeholder="Inviter une Guild"
                                 @select="addGuest">
                             </multiselect>
-                            <div v-for="(guest, index) in guests" :class="'guest-'+getGuestStatusIcon(guest)">
+                            <div v-for="(guest, index) in guests" :class="'guest guest-'+getGuestStatusIcon(guest)">
                                 <v-list-tile avatar :key="guest.guild_id">
                                     <v-list-tile-avatar>
                                         <v-icon>{{getGuestStatusIcon(guest)}}</v-icon>
                                     </v-list-tile-avatar>
                                     <v-list-tile-content>
                                         <v-list-tile-title>{{guest.guild.name}}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{getGuestStatusLabel(guest)}} {{getGuestStatusDate(guest)}}</v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <v-btn v-if="guest.status == 'pending'" flat icon color="deep-orange" @click="removeGuest(index)">
                                         <v-icon>close</v-icon>
@@ -348,6 +349,17 @@
                 if( guest.status == 'accepted' ) return 'event_available';
                 if( guest.status == 'refused' ) return 'event_busy';
                 return 'hourglass_empty';
+            },
+            getGuestStatusLabel(guest) {
+                if( !guest.id ) return 'Prête à être envoyée';
+                if( guest.status == 'accepted' ) return 'Acceptée';
+                if( guest.status == 'refused' ) return 'Refusée';
+                return 'Envoyée';
+            },
+            getGuestStatusDate(guest) {
+                if( !guest.id ) return '';
+                let date = moment(guest.status.time);
+                return 'le '+date.format('DD/MM [à] HH[h]mm');
             },
             submit() {
                 let start_time = moment(this.start_time.toString())

@@ -1,6 +1,6 @@
 [
     {
-        "text": "Breaking news Admins ! **%guest_name** vient de valider votre invitation pour l'événement **%event_name**",
+        "text": "Breaking news Admins ! **%guest_name** vient d'accepter votre invitation pour l'événement **%event_name**",
         "type": "event_invit_accepted",
         "next": []
     },
@@ -13,5 +13,10 @@
         "text": "Arg ! Il semblerait bien que **%guest_name** vient d'annuler votre invitation pour l'événement **%event_name** (ou bien même de le supprimer)",
         "type": "event_invit_canceled",
         "next": ["Si un salon avait été créé, celui-ci a été automatiquement supprimé"]
+    },
+    {
+        "text": "Wooh,vous avez la hype ici ! **%guest_name** vient de vous inviter à participer à l'évenement **%event_name**",
+        "type": "event_invit_sended",
+        "next": []
     }
 ]

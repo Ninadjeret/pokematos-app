@@ -41,6 +41,7 @@ import Event from "./components/Event.vue";
 import AdminEventsHome from "./components/admin/events/Home.vue";
 import AdminEvents from "./components/admin/events/Events.vue";
 import AdminEvent from "./components/admin/events/Event.vue";
+import AdminEventsInvits from "./components/admin/events/Invits.vue";
 
 const routes = [
     {
@@ -154,6 +155,15 @@ const routes = [
                             parent: "admin.events"
                         },
                         component: AdminEvent
+                    },
+                    {
+                        path: "invits",
+                        name: "admin.events.invits",
+                        meta: {
+                            title: "Invitations",
+                            parent: "admin.events.home"
+                        },
+                        component: AdminEventsInvits
                     },
                 ]
             },

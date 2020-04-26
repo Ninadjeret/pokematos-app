@@ -11,6 +11,10 @@ class EventInvit extends Model
     protected $fillable = ['event_id', 'guild_id', 'status', 'status_time', 'channel_discord_id'];
     protected $appends = ['guild'];
 
+    public function event(){
+        return $this->belongsTo('App\Models\Event');
+    }
+
     public function getEventAttribute() {
         return Event::find($this->event_id);
     }
@@ -22,6 +26,11 @@ class EventInvit extends Model
     public static function add( $args ) {
         $args['status_time'] = date('Y-m-d H:i:s');
         $guest = EventInvit::create($args);
+        $guest->guild->sendAdminMessage('event_invit_sended', [
+            '%date'=> date("d/m/Y à H\mi"),
+            '%event_name' => $guest->event->name,
+            '%guest_name' => $guest->event->guild->name,
+        ]);
         return $guest;
     }
 

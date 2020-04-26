@@ -138,6 +138,11 @@
 
 #app__container.template-admin-events-edit,
 #app__container.template-admin-events-add {
+    .guest {
+        .v-list__tile {
+            padding: 0;
+        }
+    }
     .guest-hourglass_empty .v-avatar {
         background: #fafafa;
     }
@@ -201,6 +206,35 @@
         }
         .v-picker.v-card {
             box-shadow: none;
+        }
+    }
+}
+#app__container.template-admin-events-invits {
+    .invitation {
+        background: $bg_light_grey;
+        margin-bottom: 30px;
+        h3 {
+            font-family: 'Teko';
+            font-size: 30px;
+            span {
+                /*color: $accent;*/
+            }
+        }
+        .invitation__action {
+            padding: 5px 15px;
+            p {
+                padding-top: 5px;
+                margin-bottom: 0;
+            }
+            button {
+                width: calc(100% - 10px) !important;
+                &.refuse {
+                    border: 2px solid darkred;
+                    background: none;
+                    color: darkred;
+                }
+
+            }
         }
     }
 }

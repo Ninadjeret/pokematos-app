@@ -59,6 +59,10 @@ class Event extends Model
         return $value;
     }
 
+    public function invits() {
+        return $this->hasMany('App\Models\EventInvit');
+    }
+
     public static function add($args) {
 
         $start_time = new \DateTime($args['event']['start_time']);

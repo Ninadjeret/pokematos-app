@@ -103,6 +103,11 @@
                         route: 'admin.events',
                         icon: 'event'
                     },
+                    {
+                        label: 'Invitations reçues',
+                        route: 'admin.events.invits',
+                        icon: 'event_available'
+                    },
                 ],
                 channels_categories: [],
                 events_create_channels: false,
