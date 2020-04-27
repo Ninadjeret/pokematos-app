@@ -41,7 +41,7 @@
                     </select>
                 </div>
             </div>
-            <div class="settings-section">
+            <div v-if="features.events_multi" class="settings-section">
                 <v-subheader>Guild VS Guild</v-subheader>
                 <div class="setting d-flex switch">
                     <div>
@@ -119,6 +119,9 @@
             }
         },
         computed: {
+            features() {
+                return window.pokematos.features;
+            },
             currentCity() {
                 return this.$store.state.currentCity;
             },
