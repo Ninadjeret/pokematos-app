@@ -12,7 +12,7 @@
             <v-tabs v-model="tabs" color="transparent" slider-color="#8e56d9" class="">
                 <v-tab href="#description" class="primary--text">Présentation</v-tab>
                 <v-tab href="#settings" class="primary--text">Réglages</v-tab>
-                <v-tab href="#guests" class="primary--text">Guilds</v-tab>
+                <v-tab v-if="features.events_multi" href="#guests" class="primary--text">Guilds</v-tab>
             </v-tabs>
 
             <v-tabs-items v-model="tabs">
@@ -135,7 +135,7 @@
                     </div>
                 </v-tab-item>
 
-                <v-tab-item value="guests">
+                <v-tab-item v-if="features.events_multi" value="guests">
                     <div v-if="type == 'quiz'" class="settings-section invit-guets">
                         <v-subheader>Événement multi-guilds</v-subheader>
                         <div class="setting d-flex switch">
@@ -258,6 +258,9 @@
             }
         },
         computed: {
+            features() {
+                return window.pokematos.features;
+            },
             isLoaded() {
                 return this.fetchLoaded && this.fetchGuildsLoaded;
             },

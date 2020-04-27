@@ -11501,6 +11501,11 @@ a.text-dark:focus {
   margin: 10px 0;
 }
 
+#app__container .v-btn.v-btn--large.v-btn--round.v-btn--fixed {
+  width: calc(100% - 20px);
+  z-index: 1000;
+}
+
 #app__container .v-btn.v-btn--large.v-btn--round.secondary {
   color: #5a6cae;
   border: 4px solid #5a6cae;
@@ -12481,7 +12486,7 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .setting.pokemon {
-  padding: 5px 16px;
+  padding: 5px 0px;
 }
 
 .setting.pokemon img {
@@ -12603,6 +12608,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 
 .v-alert.warning {
   background: orange;
+}
+
+.multiselect__tags input.multiselect__input {
+  /*display: none;*/
 }
 
 .user__card {
@@ -12965,6 +12974,10 @@ body.logged-out .denied a {
 
   body {
     background: #fcfcfc !important;
+  }
+
+  body.logged-out {
+    background: url(https://assets.profchen.fr/img/splash_bg.jpg) top right !important;
   }
 
   footer.v-footer {
@@ -13672,6 +13685,22 @@ body.logged-out .denied a {
   background-color: #2a2a2a;
 }
 
+#app__container.template-admin-rocket-bosses .v-toolbar__content {
+  background-color: #2a2a2a;
+  border-radius: 0;
+  color: #222;
+}
+
+#app__container.template-admin-rocket-bosses .v-toolbar__content .v-toolbar__title {
+  color: #d4271b !important;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+}
+
+#app__container.template-admin-rocket-bosses .v-toolbar__content .v-btn--active {
+  color: #d4271b !important;
+}
+
 #app__container.template-admin-rocket-bosses .v-content {
   background-color: #2a2a2a;
 }
@@ -13681,12 +13710,19 @@ body.logged-out .denied a {
 }
 
 #app__container.template-admin-rocket-bosses .v-tabs__wrapper {
-  background-color: #222;
+  background-color: #2a2a2a;
+}
+
+#app__container.template-admin-rocket-bosses .settings-section {
+  margin: 0px auto;
+  border-radius: 0;
+  background-color: #2a2a2a;
+  padding: 20px 0;
 }
 
 #app__container.template-admin-rocket-bosses .v-tabs__container--icons-and-text {
   height: 140px;
-  background-color: #222;
+  background-color: #2a2a2a;
 }
 
 #app__container.template-admin-rocket-bosses .v-tabs__container--icons-and-text img {
@@ -13722,6 +13758,8 @@ body.logged-out .denied a {
 #app__container.template-admin-rocket-bosses .v-subheader {
   color: #fff !important;
   background: #222;
+  height: 40px;
+  padding-left: 10px;
 }
 
 #app__container.template-admin-rocket-bosses .multiselect__tags {
