@@ -25,6 +25,8 @@
                     <v-divider></v-divider>
                 </template>
           </v-list>
+      </div>
+      <div v-if="!loading" class="settings-section">
           <v-list>
                 <v-subheader>Évents passés</v-subheader>
                 <template v-for="(event, index) in passedEvents">
@@ -50,7 +52,7 @@
     import { mapState } from 'vuex'
     import moment from 'moment';
     export default {
-        name: 'AdminEvents',    
+        name: 'AdminEvents',
         data() {
             return {
                 events: [],

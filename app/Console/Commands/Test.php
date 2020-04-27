@@ -39,8 +39,10 @@ class Test extends Command
      */
     public function handle()
     {
-        $quiz = \App\Models\EventQuiz::find(1);
-        $quiz->process();
+        /*$invitation = \App\Models\EventInvit::find(4);
+        $invitation->refuse();*/
+        $quiz = \App\Models\EventQuiz::find(5);
+        $quiz->start();
         /*$discord = new DiscordClient([
             'token' => config('discord.token'),
         ]);

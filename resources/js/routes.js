@@ -2,6 +2,7 @@ import Map from "./components/Map.vue";
 import List from "./components/List.vue";
 import Profile from "./components/Profile.vue";
 import Admin from "./components/Admin.vue";
+import AdminSettings from "./components/admin/Settings.vue";
 import AdminGyms from "./components/admin/Gyms.vue";
 import AdminGym from "./components/admin/Gym.vue";
 import AdminZones from "./components/admin/Zones.vue";
@@ -40,6 +41,7 @@ import Event from "./components/Event.vue";
 import AdminEventsHome from "./components/admin/events/Home.vue";
 import AdminEvents from "./components/admin/events/Events.vue";
 import AdminEvent from "./components/admin/events/Event.vue";
+import AdminEventsInvits from "./components/admin/events/Invits.vue";
 
 const routes = [
     {
@@ -101,6 +103,15 @@ const routes = [
                 component: AdminAccess
             },
             {
+                path: ":id/settings",
+                name: "admin.settings",
+                meta: {
+                    title: "Réglages généraux",
+                    parent: "admin"
+                },
+                component: AdminSettings
+            },
+            {
                 path: ":id/welcome",
                 name: "admin.welcome",
                 meta: {
@@ -119,15 +130,6 @@ const routes = [
                 component: AdminEventsHome,
                 children: [
                     {
-                        path: "add",
-                        name: "admin.events.add",
-                        meta: {
-                            title: "Ajouter un évent",
-                            parent: "admin.events"
-                        },
-                        component: AdminEvent
-                    },
-                    {
                         path: "events",
                         name: "admin.events",
                         meta: {
@@ -137,6 +139,15 @@ const routes = [
                         component: AdminEvents
                     },
                     {
+                        path: "add",
+                        name: "admin.events.add",
+                        meta: {
+                            title: "Ajouter un évent",
+                            parent: "admin.events"
+                        },
+                        component: AdminEvent
+                    },
+                    {
                         path: "events/:event_id",
                         name: "admin.events.edit",
                         meta: {
@@ -144,6 +155,15 @@ const routes = [
                             parent: "admin.events"
                         },
                         component: AdminEvent
+                    },
+                    {
+                        path: "invits",
+                        name: "admin.events.invits",
+                        meta: {
+                            title: "Invitations",
+                            parent: "admin.events.home"
+                        },
+                        component: AdminEventsInvits
                     },
                 ]
             },

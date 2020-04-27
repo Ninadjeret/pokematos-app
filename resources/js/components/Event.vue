@@ -51,7 +51,7 @@
             </v-timeline>
         </div>
 
-        <v-btn v-if="event && event.channel_discord_id" round large :href="'https://discordapp.com/channels/'+event.guild.discord_id+'/'+event.channel_discord_id">Rejoindre la conversation</v-btn>
+        <v-btn v-if="event && event.channel_discord_id" fixed bottom round large :href="'https://discordapp.com/channels/'+event.guild.discord_id+'/'+event.channel_discord_id">Rejoindre la conversation</v-btn>
 
         </div>
 

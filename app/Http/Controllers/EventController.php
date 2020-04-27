@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Guild;
 use App\Helpers\Helpers;
 use App\Models\EventQuiz;
+use App\Models\EventInvit;
 use App\Models\EventTrain;
 use Illuminate\Http\Request;
 use App\Models\EventTrainStep;
@@ -30,7 +31,13 @@ class EventController extends Controller
             ->whereIn('guild_id', $matching_ids)
             ->get();
 
-        return response()->json($events, 200);
+        $invits = Event::where('end_time', '>', date('Y-m-d H:i:s'))
+            ->whereHas('invits', function($q) use ($matching_ids) {
+                $q->where('status', 'accepted')->whereIn('guild_id', $matching_ids);
+            })
+            ->get();
+        $merged = $events->merge($invits);
+        return response()->json($merged->all(), 200);
     }
 
     public function getGuildEvents( Request $request, Guild $guild ) {
@@ -84,30 +91,6 @@ class EventController extends Controller
         return response()->json($event, 200);
     }
 
-    public function cloneEvent( Request $request, Guild $guild, Event $event ) {
-        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
-        $args['event'] = [
-            'name' => $event->name.' - copie',
-            'guild_id' => $guild->id,
-            'city_id' => $guild->city->id,
-            'type' => $event->type,
-            'start_time' => $event->start_time,
-            'image' => $event->image,
-        ];
-
-        $train = EventTrain::where('event_id', $event->id)->first();
-        if( !empty($train->steps) ) {
-            $args['steps'] = $train->steps->toArray();
-            foreach( $args['steps'] as &$step ) {
-                unset($step['id']);
-                unset($step['train_id']);
-            }
-        }
-
-        $event = Event::add($args);
-        return response()->json($event, 200);
-    }
-
     public  function updateEvent( Request $request, Guild $guild, Event $event ) {
         if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
         $user = Auth::user();
@@ -120,6 +103,7 @@ class EventController extends Controller
             'type' => $request->type,
             'start_time' => $request->start_time,
             'image' => $request->image,
+            'multi_guilds' => $request->multi_guilds,
         ];
         if( !empty($request->steps) ) {
             $args['steps'] = $request->steps;
@@ -127,6 +111,7 @@ class EventController extends Controller
         if( !empty($request->quiz) ) {
             $args['quiz'] = $request->quiz;
         }
+        $args['guests'] = $request->guests;
         $event->change($args);
 
         return response()->json($event, 200);
@@ -157,7 +142,7 @@ class EventController extends Controller
                 $questions = $quiz->questions;
                 if( !empty($questions) ) {
                     foreach( $questions as $question ) {
-                        EventQuizQuestion::destroy($question->id);
+                        \App\Models\EventQuizQuestion::destroy($question->id);
                     }
                 }
             }
@@ -187,6 +172,54 @@ class EventController extends Controller
         }
         $step->uncheck();
         return response()->json($event, 200);
+    }
+
+    public function getGuestableGuilds( Request $request, Guild $guild ) {
+        $guilds = Guild::where('active', 1)
+            ->where('id', '!=', $guild->id)
+            ->get();
+        $filtered = $guilds->filter(function ($value, $key) {
+            return $value->settings->events_accept_invits == true;
+        });
+        return response()->json($filtered->all(), 200);
+    }
+
+    public function getInvits( Request $request, Guild $guild ) {
+        $invits = EventInvit::where('guild_id', $guild->id)
+            ->whereHas('event', function($q) {
+                $q->where('start_time', '>', date('Y-m-d H:i:s'));
+            })
+            ->get()->each->setAppends(['guild','event']);
+        return response()->json($invits, 200);
+    }
+
+    public function acceptInvit(Request $request, Guild $guild, EventInvit $invit ) {
+        $invit->accept();
+        $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild','event']);
+        return response()->json($invits, 200);
+    }
+
+    public function refuseInvit(Request $request, Guild $guild, EventInvit $invit ) {
+        $invit->refuse();
+        $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild','event']);
+        return response()->json($invits, 200);
+    }
+
+    public static function addQuizAnswer( Request $request ) {
+
+        $event = Event::findFromChannelId($request->channel_discord_id);
+        if( !$event->quiz ) return response()->json('Cet event ne dispose pas de quiz', 400);
+
+        $args = [
+            'answer' => $request->answer,
+            'user_discord_id' => $request->user_discord_id,
+            'user_name' => $request->user_name,
+            'guild_discord_id' => $request->guild_discord_id,
+            'message_discord_id' => $request->message_discord_id,
+        ];
+
+        $event->quiz->addAnswer($args);
+        return response()->json(null, 204);
     }
 
 }

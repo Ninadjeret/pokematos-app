@@ -34,7 +34,7 @@ class BotController extends Controller {
     public function addGuild( Request $request ) {
 
         if( !isset($request->guild_id) || empty($request->guild_id) || !isset($request->name) || empty($request->name) ) {
-            return response()->json('Paramètres manquants', 400);
+            return response()->json(__('system.missing_args'), 400);
         }
 
         $token = $request->guild_token;

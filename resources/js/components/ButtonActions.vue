@@ -13,7 +13,7 @@
                 <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
                 <i class="material-icons">refresh</i>
             </button>
-            <button v-if="features && features.rocket" v-on:click="toggleMap()" class="action" id="rocket">
+            <button v-if="features.rocket && this.$route.name == 'map'" v-on:click="toggleMap()" class="action" id="rocket">
                 <span>Radar Rocket</span>
                 <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
                 <i class="material-icons">people_alt</i>
@@ -44,7 +44,7 @@ export default {
     },
     computed: {
         features() {
-            return this.$store.state.features;
+            return window.pokematos.features;
         },
     },
     methods: {

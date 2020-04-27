@@ -40,6 +40,18 @@
                         <option v-for="channel in channels_categories" :value="channel.id.toString()">{{channel.name}}</option>
                     </select>
                 </div>
+            </div>
+            <div class="settings-section">
+                <v-subheader>Guild VS Guild</v-subheader>
+                <div class="setting d-flex switch">
+                    <div>
+                        <label>Accepter les invitations</label>
+                        <p class="description">Autoriser les autres communautés à vos défier/inviter à des événements multi-guilds</p>
+                    </div>
+                    <v-switch v-model="events_accept_invits"></v-switch>
+                </div>
+            </div>
+            <div class="settings-section">
                 <v-subheader>Réglages des Pokétrains</v-subheader>
                 <div v-if="events_create_channels" class="setting d-flex switch">
                     <div>
@@ -91,12 +103,18 @@
                         route: 'admin.events',
                         icon: 'event'
                     },
+                    {
+                        label: 'Invitations reçues',
+                        route: 'admin.events.invits',
+                        icon: 'event_available'
+                    },
                 ],
                 channels_categories: [],
                 events_create_channels: false,
                 events_channel_discord_id: false,
                 events_trains_add_messages: false,
                 events_trains_message_check: '@here nous passons à la prochaine étape : {etape_nom}. RDV à {etape_heure}',
+                events_accept_invits: true,
 
             }
         },
@@ -116,6 +134,7 @@
                     this.events_channel_discord_id = res.data.events_channel_discord_id;
                     this.events_trains_add_messages = res.data.events_trains_add_messages;
                     this.events_trains_message_check = res.data.events_trains_message_check;
+                    this.events_accept_invits = res.data.events_accept_invits;
                 }).catch( err => {
                     //No error
                 });
@@ -134,6 +153,7 @@
                         events_channel_discord_id: this.events_channel_discord_id,
                         events_trains_add_messages: this.events_trains_add_messages,
                         events_trains_message_check: this.events_trains_message_check,
+                        events_accept_invits: this.events_accept_invits,
                     }
                 };
                 this.save(args);

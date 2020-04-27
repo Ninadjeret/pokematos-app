@@ -1,4 +1,17 @@
 #app__container.template-admin-rocket-bosses {
+    .v-toolbar__content {
+        background-color: $light_rocket;
+        border-radius: 0;
+        color: $primary_rocket;
+        .v-toolbar__title {
+            color: $accent_rocket !important;
+            background: none !important;
+            -webkit-text-fill-color: initial !important;
+        }
+        .v-btn--active {
+            color: $accent_rocket !important;
+        }
+    }
     background-color: $light_rocket;
     .v-content {
         background-color: $light_rocket;
@@ -7,11 +20,17 @@
          background-color: $primary_rocket;
      }
      .v-tabs__wrapper {
-         background-color: $primary_rocket;
+         background-color: $light_rocket;
+     }
+     .settings-section {
+         margin: 0px auto;
+         border-radius: 0;
+         background-color: $light_rocket;
+         padding: 20px 0;
      }
      .v-tabs__container--icons-and-text {
          height: 140px;
-         background-color: $primary_rocket;
+         background-color: $light_rocket;
          img {
              height: 80px;
              width: auto;
@@ -40,6 +59,8 @@
      .v-subheader {
          color: #fff !important;
          background: $primary_rocket;
+         height: 40px;
+         padding-left: 10px;
      }
      .multiselect__tags {
          border-radius: 0;

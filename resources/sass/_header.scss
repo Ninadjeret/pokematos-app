@@ -22,6 +22,9 @@
             }
         }
         .v-toolbar__content {
+            .v-btn.v-btn--icon {
+                color: $primary;
+            }
             .v-btn--active.v-btn {
                 color: $primary;
                 &:before {
@@ -73,6 +76,10 @@
         box-shadow: none;
         width: 100%;
         margin: 10px 0;
+        &.v-btn--fixed {
+            width: calc(100% - 20px);
+            z-index: 1000;
+        }
     }
     .v-btn.v-btn--large.v-btn--round.secondary {
         color: $primary;

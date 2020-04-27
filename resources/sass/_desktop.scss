@@ -6,6 +6,9 @@
     }
     body {
         background: #fcfcfc !important;
+        &.logged-out {
+            background: url(https://assets.profchen.fr/img/splash_bg.jpg) top right !important;
+        }
     }
     footer.v-footer {
         height:0 !important;

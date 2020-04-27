@@ -22,6 +22,7 @@ class CreateEventQuizsTable extends Migration
             $table->json('difficulties')->nullable();
             $table->boolean('only_pogo')->default(0);
             $table->string('message_discord_id')->nullable();
+            $table->string('status')->default('future');
             $table->timestamps();
         });
 
@@ -37,6 +38,7 @@ class CreateEventQuizsTable extends Migration
 
         Schema::create('event_quiz_answers', function (Blueprint $table) {
             $table->increments('id');
+            $table->text('answer');
             $table->integer('question_id');
             $table->integer('user_id');
             $table->integer('guild_id');

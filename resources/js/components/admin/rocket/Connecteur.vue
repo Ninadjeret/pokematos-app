@@ -1,31 +1,35 @@
 <template>
     <div>
-        <div class="settings-section">
 
-            <v-tabs v-model="tabs" fixed-tabs grow color="transparent" slider-color="white">
+            <v-tabs v-model="tabs" color="transparent" slider-color="#8e56d9" class="">
                 <v-tab href="#general" class="primary--text">Général</v-tab>
                 <v-tab href="#annonces" class="primary--text">Annonces</v-tab>
             </v-tabs>
 
             <v-tabs-items v-model="tabs">
                 <v-tab-item value="general">
-                    <v-subheader>Général</v-subheader>
-                    <div class="setting">
-                        <label>Nom</label>
-                        <input v-model="name" type="text">
+                    <div class="settings-section">
+                        <v-subheader>Général</v-subheader>
+                        <div class="setting">
+                            <label>Nom</label>
+                            <input v-model="name" type="text">
+                        </div>
+                        <div class="setting">
+                            <label>Channel</label>
+                            <select v-if="channels" v-model="channel_discord_id">
+                                <option v-for="channel in channels" v-bind:key="channel.id" :value="channel.id">{{channel.name}}</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="setting">
-                        <label>Channel</label>
-                        <select v-if="channels" v-model="channel_discord_id">
-                            <option v-for="channel in channels" v-bind:key="channel.id" :value="channel.id">{{channel.name}}</option>
-                        </select>
-                    </div>
-                    <div v-if="this.$route.params.quest_connector_id">
-                        <v-subheader v-if="">Autres actions</v-subheader>
-                        <v-list-tile color="pink" @click="dialog = true">Supprimer le connecteur</v-list-tile>
+                    <div class="settings-section">
+                        <div v-if="this.$route.params.quest_connector_id">
+                            <v-subheader v-if="">Autres actions</v-subheader>
+                            <v-list-tile color="pink" @click="dialog = true">Supprimer le connecteur</v-list-tile>
+                        </div>
                     </div>
                 </v-tab-item>
                 <v-tab-item value="annonces">
+                    <div class="settings-section">
                         <v-subheader>Pokéstops</v-subheader>
                         <div class="setting">
                             <label>Filtrer les pokéstops</label>
@@ -113,6 +117,7 @@
                             <v-subheader v-if="">Autres actions</v-subheader>
                             <v-list-tile color="pink" @click="dialog = true">Supprimer le connecteur</v-list-tile>
                         </div>
+                    </div>
                 </v-tab-item>
             </v-tabs-items>
 
@@ -120,7 +125,7 @@
                 <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
                 <v-icon v-else>save</v-icon>
             </v-btn>
-        </div>
+
         <v-dialog v-model="dialog" persistent max-width="290">
         <v-card>
           <v-card-title class="headline">Supprimer {{name}} ?</v-card-title>

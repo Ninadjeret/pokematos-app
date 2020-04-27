@@ -6,6 +6,7 @@ use App\Models\Guild;
 use App\Models\Event;
 use App\Models\EventQuiz;
 use App\Models\EventTrain;
+use App\Models\EventInvit;
 use App\Models\EventTrainStep;
 use Illuminate\Support\Facades\Log;
 use App\Events\Events\EventCreated;
@@ -15,8 +16,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = ['city_id', 'guild_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id', 'image'];
-    protected $appends = ['relation', 'guild'];
+    protected $fillable = ['city_id', 'guild_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id', 'image', 'multi_guilds'];
+    protected $appends = ['relation', 'guild', 'guests'];
+
+    public static $multi_types = ['quiz'];
 
     public function getRelationAttribute() {
         if( $this->type == 'train' ) {
@@ -28,6 +31,13 @@ class Event extends Model
             return $this->quiz;
         }
         return false;
+    }
+
+    public function getGuestsAttribute() {
+        if( $this->multi_guilds ) {
+            return EventInvit::where('event_id', $this->id)->get();
+        }
+        return [];
     }
 
     public function getQuizAttribute() {
@@ -42,11 +52,27 @@ class Event extends Model
         return Guild::find($this->guild_id);
     }
 
+    public function getGuildsAttribute() {
+        $guilds = [];
+        $guilds[] = Guild::find($this->guild_id);
+        if( $this->multi_guilds ) {
+            foreach( $this->guests as $guest ) {
+                if( $guest->status != 'accepted' ) continue;
+                $guilds[] = Guild::find($guest->guild_id);
+            }
+        }
+        return $guilds;
+    }
+
     public function getImageAttribute( $value ) {
         if( empty($value) ) {
             return 'https://assets.profchen.fr/img/app/event_train_plain.jpg';
         }
         return $value;
+    }
+
+    public function invits() {
+        return $this->hasMany('App\Models\EventInvit');
     }
 
     public static function add($args) {
@@ -107,7 +133,11 @@ class Event extends Model
         if( !empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen') ) unset($args['event']['image']);
         $start_time = new \DateTime($args['event']['start_time']);
         $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
+
+        if( empty( $args['event']['multi_guilds'] ) ) $args['event']['multi_guilds'] = 0;
+
         $this->update($args['event']);
+
 
         if( $this->type == 'train' ) {
 
@@ -154,10 +184,60 @@ class Event extends Model
             $this->setQuizz( $args );
         }
 
+        $this->setMultiQuilds($args);
+
+    }
+
+    public function setMultiQuilds( $args ) {
+        if( in_array($this->type, self::$multi_types) ) {
+            if( $this->multi_guilds  ) {
+                $this->manageInvits($args['guests']);
+            } else {
+                $this->cancelInvits();
+            }
+        } else {
+            $this->update(['multi_guilds' => false]);
+            $this->CancelInvits();
+        }
+    }
+
+    public function manageInvits($guests) {
+
+        if( empty($guests) ) {
+                $this->CancelInvits();
+                return;
+        }
+
+        $invit_ids = [];
+        foreach( $guests as $guest ) {
+            $invit = EventInvit::where('event_id', $this->id)
+                ->where('guild_id', $guest['guild_id'])
+                ->first();
+            if( empty($invit) ) {
+                $invit = EventInvit::add([
+                    'event_id' => $this->id,
+                    'guild_id' => $guest['guild_id']
+                ]);
+            }
+            $invit_ids[] = $invit->id;
+        }
+
+        if( !empty($invit_ids) ) {
+            $this->CancelInvits($not_in = $invit_ids);
+        }
+
+    }
+
+    public function CancelInvits( $not_in = null ) {
+        $query = EventInvit::where('event_id', $this->id);
+        if( !empty($not_in) ) $query->whereNotIn('id', $not_in);
+        $invits = $query->get();
+        foreach( $invits as $invit ) {
+            $invit->cancel();
+        }
     }
 
     public function setQuizz( $args ) {
-
         if( empty($args['quiz']['difficulties']) ) $args['quiz']['difficulties'] = null;
         if( empty($args['quiz']['themes']) ) $args['quiz']['themes'] = null;
 
@@ -166,10 +246,17 @@ class Event extends Model
 
         $now = new \DateTime();
         $event_start = new \DateTime($this->start_time);
-        if( $now < $event_start ) {
+        if( $quiz->status == 'future' ) {
             $quiz->shuffleQuestions();
         }
 
+    }
+
+    public static function findFromChannelId( $channel_idscord_id ) {
+        $event = Event::where('channel_discord_id', $channel_idscord_id)->first();
+        if( !empty($event) ) return $event;
+        $invit = EventInvit::where('channel_discord_id', $channel_idscord_id)->first();
+        if( !empty($invit) ) return Event::find($invit->event_id);
     }
 
     public static function getActiveEvents( $type = null ) {

@@ -1,0 +1,107 @@
+[
+    {
+        "text": "**Oyé Oyé** dresseuses dresseur !\r\nBienvenue à tous les participants pour ce PokéQuiz **%quiz_name**",
+        "type": "start_intro",
+        "next": ["Ca va être un super !", "https://media.giphy.com/media/8g63zqQ5RPt60/giphy.gif"]
+    },
+    {
+        "text": "Dresseuses, dresseurs ! C'est le moment !",
+        "type": "start_intro",
+        "next": ["Venez montrer vos connaissances sur l'univers Pokémon et montrer au prof Chen que vous n'avez rien à lui envier", "L'événement **%quiz_name** va commencer"]
+    },
+    {
+        "text": "Toc toc. Qui est là ?",
+        "type": "start_intro",
+        "next": ["BOUM, et oui ! C'est l'événément **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
+    },
+    {
+        "text": "Ding ding dong !",
+        "type": "start_intro",
+        "next": ["BOUM, et oui ! C'est l'événément **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
+    },
+    {
+        "text": "Ce Pokéquiz va se dérouler en **%quiz_nb_questions questions**. Pour chacune d'elle, vous aurez au maximum %quiz_delay minutes pour répondre.",
+        "type": "start_description",
+        "next": []
+    },
+    {
+        "text": "Et c'est partiiiiiiii",
+        "type": "start_warning",
+        "next": ["https://media.giphy.com/media/11a1ludJGM6wKc/giphy.gif"]
+    },
+    {
+        "text": "Prochaine question dans les tuyaux;, préparez vos claviers :wink:",
+        "type": "question_announce",
+        "next": ["(Question sur le thème **%question_theme** et qui rapportera %question_difficulty points)"]
+    },
+    {
+        "text": "Toum toum toum. Voici la nouvelle question",
+        "type": "question_announce",
+        "next": ["suspens...", "suspens toujours...", "Thème **%question_theme** / %question_difficulty points"]
+    },
+    {
+        "text": "Toum toum toum. Voici la nouvelle question",
+        "type": "question_announce",
+        "next": ["suspens...", "suspens toujours...", "Ha on rigole bien hein ?!", "moi oui en tout cas", "Allez c'est parti", "Nan je blague", "Cette fois c'est bon", "Pour de vrai"]
+    },
+    {
+        "text": "Prochaine question en approche...",
+        "type": "question_announce",
+        "next": ["Thème **%question_theme** / %question_difficulty points"]
+    },
+    {
+        "text": "Êtes-vous prets ? Prochaine question sur le thème **%question_theme**",
+        "type": "question_announce",
+        "next": ["%question_difficulty points pour le vainqueur"]
+    },
+    {
+        "text": "Attention, question niveau Bourg-palette, sur le thème **%question_theme**",
+        "type": "question_announce_lvl1",
+        "next": []
+    },
+    {
+        "text": "**%question_theme** : question de rapidité à venir",
+        "type": "question_announce_lvl1",
+        "next": []
+    },
+    {
+        "text": "---------------\r\n__:pencil: %question__\r\n---------------",
+        "type": "question_question",
+        "next": []
+    },
+    {
+        "text": "Désolé, bien tenté %user, mais c'est à côté :/",
+        "type": "question_answer_wrong",
+        "next": []
+    },
+    {
+        "text": "Ben alors %user ? Je peux pas valider ça, désolé",
+        "type": "question_answer_wrong",
+        "next": []
+    },
+    {
+        "text": "T'es au top %user, bravo ! _%answer_ était bien ce qu'il fallait trouver",
+        "type": "question_answer_correct",
+        "next": []
+    },
+    {
+        "text": "C'était facile, mais il fallait être rapide ! GG %user !",
+        "type": "question_answer_correct_lvl1",
+        "next": []
+    },
+    {
+        "text": "Dommage... La question devait être trop difficile :(",
+        "type": "question_not_answered",
+        "next": []
+    },
+    {
+        "text": "Désolé, Un joueur de %guild a été plus rapide. C'est eux qui remportent les points en jeu pour cette question",
+        "type": "question_answer_correct_by_another",
+        "next": []
+    },
+    {
+        "text": "---------------\r\nVoici le classement en cours\r\n%ranking---------------",
+        "type": "question_multi_ranking",
+        "next": []
+    }
+]

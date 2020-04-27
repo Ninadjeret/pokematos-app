@@ -139,6 +139,12 @@
                         icon: 'lock_open',
                         permission: 'guild_manage'
                     },
+                    {
+                        label: 'Réglages générataux',
+                        route: 'admin.settings',
+                        icon: 'settings',
+                        permission: 'guild_manage'
+                    },
                 ],
                 commonItems: [
                     {

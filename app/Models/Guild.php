@@ -20,7 +20,7 @@ class Guild extends Model
         'active',
     ];
     protected $hidden = ['city_id'];
-    protected $appends = ['city', 'settings', 'watched_channels'];
+    protected $appends = ['city', 'settings', 'watched_channels', 'event_channels'];
     protected $casts = [
         'authorized_roles' => 'array',
     ];
@@ -56,6 +56,11 @@ class Guild extends Model
         'events_channel_discord_id' => ['default' => false, 'type' => 'string'],
         'events_trains_add_messages' => ['default' => false, 'type' => 'boolean'],
         'events_trains_message_check' => ['default' => 'Nous passons à la prochaine étape : {next_etape_nom}. RDV à {next_etape_heure}', 'type' => 'string'],
+        'events_accept_invits' => ['default' => true, 'type' => 'boolean'],
+
+        'comadmin_active' => ['default' => false, 'type' => 'boolean'],
+        'comadmin_channel_discord_id' => ['default' => false, 'type' => 'string'],
+        'comadmin_types' => ['default' => [], 'type' => 'array'],
     ];
 
     public function getCityAttribute() {
@@ -70,6 +75,30 @@ class Guild extends Model
                 $return[] = $watched_channel->channel_discord_id;
             }
         }
+        return $return;
+    }
+
+    public function getEventChannelsAttribute() {
+
+        $events = \App\Models\Event::where('guild_id', $this->id)
+            //->where('status', 'active')
+            ->get();
+
+        $invits = \App\Models\EventInvit::where('status', 'accepted')->where('guild_id', $this->id)->get();
+
+        $return = [];
+        foreach( $events as $event ) {
+            if( !in_array( $event->channel_discord_id, $return ) && !empty($event->channel_discord_id) ) {
+                $return[] = $event->channel_discord_id;
+            }
+        }
+        foreach( $invits as $invit ) {
+            if( !in_array( $invit->channel_discord_id, $return ) && !empty($invit->channel_discord_id) ) {
+                $return[] = $invit->channel_discord_id;
+            }
+        }
+        Log::debug('toto');
+        Log::debug( print_r($return, true) );
         return $return;
     }
 
@@ -137,6 +166,11 @@ class Guild extends Model
             $role->id = (string) $role->id;
         }
         return $roles;
+    }
+
+    public function sendAdminMessage( $type, $args ){
+        if( !$this->settings->comadmin_active || !in_array($type, $this->settings->comadmin_types) ) return;
+        \App\Helpers\Conversation::sendToDiscord($this->settings->comadmin_channel_discord_id, $this, 'admin', $type, $args);
     }
 
 }

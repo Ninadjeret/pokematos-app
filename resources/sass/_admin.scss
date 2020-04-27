@@ -212,7 +212,7 @@
     }
 }
 .setting.pokemon {
-    padding: 5px 16px;
+    padding: 5px 0px;
     img {
         max-width: 70px;
         padding-right: 10px;
@@ -317,5 +317,10 @@
 .v-alert {
     &.warning {
         background: orange;
+    }
+}
+.multiselect__tags {
+    input.multiselect__input {
+        /*display: none;*/
     }
 }
