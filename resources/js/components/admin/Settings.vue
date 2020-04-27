@@ -16,7 +16,7 @@
                 </select>
             </div>
             <div v-if="comadmin_active" class="setting checkbox">
-                <label>Filtrer la source</label>
+                <label>Types de messages</label>
                 <v-checkbox
                     v-for="(type, index) in types"
                     v-model="comadmin_types"

@@ -30,12 +30,11 @@ class EventQuizQuestion extends Model
 
     public function start() {
 
-        $this->sendToDiscord( Conversation::getMessage('quiz', 'question_announce', [
-            '%question_difficulty' => $this->event->name,
+        $this->quiz->sendToDiscord( 'question_announce', [
+            '%question_difficulty' => $this->question->difficulty,
             '%question_theme' => $this->nb_questions,
-        ]));
+        ]);
         sleep(10);
-        $this->quiz->sendToDiscord("__:pencil: {$this->question->question}__");
 
         $start_time = new \DateTime();
         $end_time = new \DateTime();
@@ -43,6 +42,10 @@ class EventQuizQuestion extends Model
         $this->update([
             'start_time' => $start_time->format('Y-m-d H:i:s'),
             'end_time' => $end_time->format('Y-m-d H:i:s'),
+        ]);
+
+        $this->quiz->sendToDiscord('question_question', [
+            '%question' => $this->question->question
         ]);
     }
 
@@ -55,7 +58,10 @@ class EventQuizQuestion extends Model
     public function addAnswer( $args ) {
         if( $this->isEnded() ) return false;
 
-        $user = \App\User::where('discord_id', $args['user_discord_id'])->first();
+        $user = \App\User::firstOrCreate(
+            ['discord_id' => $args['user_discord_id'] ],
+            ['name' => $args['user_name']]
+        );
         $guild = \App\Models\Guild::where('discord_id', $args['guild_discord_id'])->first();
 
         $answer = EventQuizAnswer::create([
@@ -73,29 +79,51 @@ class EventQuizQuestion extends Model
         } else {
             $rand = rand(1,5);
             if( $rand === 1 ) {
-                $this->quiz->sendToDiscord( Conversation::getMessage('quiz', 'question_answer_wrong', [
-                    '%user' => $user,
-                ]));
+                $this->quiz->sendToDiscord( 'question_answer_wrong', ['%user' => $user], $guild);
             }
         }
     }
 
     public function close() {
         if( !empty( $this->correctAnswer ) ) {
-            $this->quiz->sendToDiscord( Conversation::getMessage('quiz', 'question_answer_correct', [
-                '%user' => $user,
-                '%answer' => $this->question->answer,
-            ]));
-            if( !empty($this->question->explanation) ) {
-                $this->quiz->sendToDiscord( Conversation::getMessage('quiz', 'question_answer_explanation', [
+            if( $this->quiz->event->multi_guilds ) {
+                $this->quiz->sendToDiscord( 'question_answer_correct', [
+                    '%user' => $this->correctAnswer->user->name,
+                    '%answer' => $this->question->answer,
+                ], $this->correctAnswer->guild);
+                foreach( $this->getUncorrectGuilds() as $guild ) {
+                    $this->quiz->sendToDiscord( 'question_answer_correct_by_another', [
+                        '%answer' => $this->question->answer,
+                        '%guild' => $this->correctAnswer->guild->name,
+                    ], $guild);
+                }
+                $ranking = $this->quiz->FormatMultiRanking();
+                $this->quiz->sendToDiscord( 'question_multi_ranking', ['%ranking' => $ranking]);
+            } else {
+                $this->quiz->sendToDiscord( 'question_answer_correct', [
                     '%user' => $user,
                     '%answer' => $this->question->answer,
+                ]);
+            }
+            if( !empty($this->question->explanation) ) {
+                $this->quiz->sendToDiscord( 'question_answer_explanation', [
+                    '%answer' => $this->question->answer,
                     '%explanation' => $this->question->explanation
-                ]));
+                ]);
             }
         } else {
-            $this->quiz->sendToDiscord( Conversation::getMessage('quiz', 'question_not_answered') );
+            $this->quiz->sendToDiscord( 'question_not_answered' );
         }
         $this->quiz->nextQuestion();
+    }
+
+    public function getUncorrectGuilds() {
+        $guilds = [];
+        $correct_id = $this->correctAnswer->guild_id;
+        foreach( $this->quiz->event->guilds as $guild ) {
+            if( $guild->id == $correct_id ) continue;
+            $guilds[] = $guild;
+        }
+        return $guilds;
     }
 }

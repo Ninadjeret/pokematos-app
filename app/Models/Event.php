@@ -52,6 +52,18 @@ class Event extends Model
         return Guild::find($this->guild_id);
     }
 
+    public function getGuildsAttribute() {
+        $guilds = [];
+        $guilds[] = Guild::find($this->guild_id);
+        if( $this->multi_guilds ) {
+            foreach( $this->guests as $guest ) {
+                if( $guest->status != 'accepted' ) continue;
+                $guilds[] = Guild::find($guest->guild_id);
+            }
+        }
+        return $guilds;
+    }
+
     public function getImageAttribute( $value ) {
         if( empty($value) ) {
             return 'https://assets.profchen.fr/img/app/event_train_plain.jpg';
@@ -226,7 +238,6 @@ class Event extends Model
     }
 
     public function setQuizz( $args ) {
-
         if( empty($args['quiz']['difficulties']) ) $args['quiz']['difficulties'] = null;
         if( empty($args['quiz']['themes']) ) $args['quiz']['themes'] = null;
 
@@ -235,10 +246,17 @@ class Event extends Model
 
         $now = new \DateTime();
         $event_start = new \DateTime($this->start_time);
-        if( $now < $event_start ) {
+        if( $quiz->status == 'future' ) {
             $quiz->shuffleQuestions();
         }
 
+    }
+
+    public static function findFromChannelId( $channel_idscord_id ) {
+        $event = Event::where('channel_discord_id', $channel_idscord_id)->first();
+        if( !empty($event) ) return $event;
+        $invit = EventInvit::where('channel_discord_id', $channel_idscord_id)->first();
+        if( !empty($invit) ) return Event::find($invit->event_id);
     }
 
     public static function getActiveEvents( $type = null ) {

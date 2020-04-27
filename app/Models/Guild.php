@@ -81,8 +81,10 @@ class Guild extends Model
     public function getEventChannelsAttribute() {
 
         $events = \App\Models\Event::where('guild_id', $this->id)
-            ->where('status', 'active')
+            //->where('status', 'active')
             ->get();
+
+        $invits = \App\Models\EventInvit::where('status', 'accepted')->where('guild_id', $this->id)->get();
 
         $return = [];
         foreach( $events as $event ) {
@@ -90,6 +92,13 @@ class Guild extends Model
                 $return[] = $event->channel_discord_id;
             }
         }
+        foreach( $invits as $invit ) {
+            if( !in_array( $invit->channel_discord_id, $return ) && !empty($invit->channel_discord_id) ) {
+                $return[] = $invit->channel_discord_id;
+            }
+        }
+        Log::debug('toto');
+        Log::debug( print_r($return, true) );
         return $return;
     }
 

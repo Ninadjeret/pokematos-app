@@ -65,6 +65,11 @@
         "next": []
     },
     {
+        "text": "---------------\r\n__:pencil: %question__\r\n---------------",
+        "type": "question_question",
+        "next": []
+    },
+    {
         "text": "Désolé, bien tenté %user, mais c'est à côté :/",
         "type": "question_answer_wrong",
         "next": []
@@ -90,8 +95,13 @@
         "next": []
     },
     {
-        "text": "%explanation",
-        "type": "question_answer_explanation",
+        "text": "Désolé, Un joueur de %guild a été plus rapide. C'est eux qui remportent les points en jeu pour cette question",
+        "type": "question_answer_correct_by_another",
+        "next": []
+    },
+    {
+        "text": "---------------\r\nVoici le classement en cours\r\n%ranking---------------",
+        "type": "question_multi_ranking",
         "next": []
     }
 ]

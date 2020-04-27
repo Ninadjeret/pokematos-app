@@ -142,7 +142,7 @@ class EventController extends Controller
                 $questions = $quiz->questions;
                 if( !empty($questions) ) {
                     foreach( $questions as $question ) {
-                        EventQuizQuestion::destroy($question->id);
+                        \App\Models\EventQuizQuestion::destroy($question->id);
                     }
                 }
             }
@@ -207,12 +207,13 @@ class EventController extends Controller
 
     public static function addQuizAnswer( Request $request ) {
 
-        $event = Event::where('channel_discord_id', $request->channel_discord_id)->first();
+        $event = Event::findFromChannelId($request->channel_discord_id);
         if( !$event->quiz ) return response()->json('Cet event ne dispose pas de quiz', 400);
 
         $args = [
             'answer' => $request->answer,
             'user_discord_id' => $request->user_discord_id,
+            'user_name' => $request->user_name,
             'guild_discord_id' => $request->guild_discord_id,
             'message_discord_id' => $request->message_discord_id,
         ];
