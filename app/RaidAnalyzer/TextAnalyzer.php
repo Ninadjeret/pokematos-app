@@ -26,7 +26,7 @@ class TextAnalyzer {
 
         $this->start = microtime(true);
         if( $this->debug ) $this->_log('========== Début du traitement '.$source.' ==========');
- 
+
         $this->guild = $guild;
         $this->user = $user;
         $this->text = Discord::translateFrom($source, $this->guild, $this->user);
@@ -98,7 +98,7 @@ class TextAnalyzer {
 
     public function getTime() {
 
-        preg_match('/(jusqu\'a|jusqu\'à|depop|dépop|depop à|depop a|dépop à|dépop à)\s(\d?)\d(\s?)h(\s?)(\d?\d?)\b/i', $this->text, $dates_fin);
+        preg_match('/(jusqu\'a|jusqu\'à|jusqu’a|jusqu’à|depop|dépop|depop à|depop a|dépop à|dépop à|fin à)\s(\d?)\d(\s?)h(\s?)(\d?\d?)\b/i', $this->text, $dates_fin);
         if( !empty( $dates_fin ) ) {
             return $this->getTimeFromEndDate($dates_fin[0]);
         }

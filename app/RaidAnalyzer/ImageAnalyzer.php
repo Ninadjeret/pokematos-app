@@ -137,6 +137,13 @@ class ImageAnalyzer {
             $image = $this->cropImage($image, $firtPixel, $lastPixel);
         }
 
+        imagejpeg($image, $path);
+
+        $image_ocr = imagecreatefromjpeg($path);
+        $lastPixel = $this->getLastPixel($image_ocr);
+        $image_ocr = $this->cropImage($image_ocr, $lastPixel * 0.04, $lastPixel);
+        imagejpeg($image_ocr, $path_ocr);
+
         //Return data
         $imageData = (object) array(
             'source'   => $source,
@@ -152,14 +159,7 @@ class ImageAnalyzer {
         $ratio = $imageData->width / $imageData->height;
         if( $this->debug ) $this->_log('Img ratio : '.$ratio);
 
-        //Crop pour l'envoi à l'API de l'OCR
-        $image_ocr = imagecreatefromjpeg($source);
-        $lastPixel = $this->getLastPixel($image_ocr);
-        $image_ocr = $this->cropImage($image_ocr, $lastPixel * 0.04, $lastPixel);
-
-        imagejpeg($image, $path);
-        imagejpeg($image_ocr, $path_ocr);
-        imagedestroy($image_ocr);    
+        imagedestroy($image_ocr);
         imagedestroy($image);
         return $imageData;
 

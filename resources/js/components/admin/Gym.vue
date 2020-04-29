@@ -203,6 +203,7 @@
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
                 axios.put('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms/'+this.getId, args).then( res => {
+                    this.$store.dispatch('fetchGyms');
                     this.$store.commit('setSnackbar', {
                         message: 'Enregistrement effectué',
                         timeout: 1500
@@ -224,6 +225,7 @@
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
                 axios.post('/api/user/cities/'+this.$store.state.currentCity.id+'/gyms', args).then( res => {
+                    this.$store.dispatch('fetchGyms');
                     this.$store.commit('setSnackbar', {
                         message: 'Enregistrement effectué',
                         timeout: 1500

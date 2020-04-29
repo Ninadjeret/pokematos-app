@@ -13,11 +13,7 @@ return [
     |
     */
 
-    'version' => [
-        'current' => '2.3.0-beta.31',
-        'min' => '2.0.0-alpha.4.2',
-    ],
-
+    'version' => env('APP_VERSION', '1.0.0'),
     'name' => env('APP_NAME', 'Pokématos'),
 
     /*
