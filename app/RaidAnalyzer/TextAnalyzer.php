@@ -98,12 +98,12 @@ class TextAnalyzer {
 
     public function getTime() {
 
-        preg_match('/(jusqu\'a|jusqu\'à|jusqu’a|jusqu’à|depop|dépop|depop à|depop a|dépop à|dépop à|fin à)\s(\d?)\d(\s?)h(\s?)(\d?\d?)\b/i', $this->text, $dates_fin);
+        preg_match('/(jusqu\'a|jusqu\'à|jusqu’a|jusqu’à|depop|dépop|depop à|depop a|dépop à|dépop à|fin à|fin a)\s(\d?)\d(\s?)[h:](\s?)(\d?\d?)\b/i', $this->text, $dates_fin);
         if( !empty( $dates_fin ) ) {
             return $this->getTimeFromEndDate($dates_fin[0]);
         }
 
-        preg_match('/(\d?)\d(\s?)h(\s?)(\d?\d?)\b/i', $this->text, $dates_debut);
+        preg_match('/(\d?)\d(\s?)[h:](\s?)(\d?\d?)\b/i', $this->text, $dates_debut);
         if( !empty( $dates_debut ) ) {
             return $this->getTimeFromStartDate($dates_debut[0]);
         }
@@ -122,7 +122,7 @@ class TextAnalyzer {
     }
 
     public function getTimeFromStartDate( $date_string ) {
-        $dates = explode('h', $date_string);
+        $dates = ( strstr($date_string, ':') ) ? explode(':', $date_string) : explode('h', $date_string) ;
         $hours = preg_replace('`[^0-9]`', '', $dates[0]);
         $minutes = preg_replace('`[^0-9]`', '', $dates[1]);
         $date = \DateTime::createFromFormat('H:i', $hours.':'.$minutes);
@@ -130,7 +130,7 @@ class TextAnalyzer {
     }
 
     public function getTimeFromEndDate( $date_string ) {
-        $dates = explode('h', $date_string);
+        $dates = ( strstr($date_string, ':') ) ? explode(':', $date_string) : explode('h', $date_string) ;
         $hours = preg_replace('`[^0-9]`', '', $dates[0]);
         $minutes = preg_replace('`[^0-9]`', '', $dates[1]);
         $date = \DateTime::createFromFormat('H:i', $hours.':'.$minutes);

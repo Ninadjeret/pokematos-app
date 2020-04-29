@@ -144,42 +144,35 @@
             return {
                 loading: false,
                 value: null,
-                pokemons: [],
-                bosses1t: [],
-                bosses2t: [],
-                bosses3t: [],
-                bosses4t: [],
-                bosses5t: [],
-                bosses6t: [],
             }
         },
         created() {
-            this.initBosses();
-            this.fetch();
+            this.$store.commit('fetchPokemon');
+        },
+        computed: {
+            bosses1t() {
+                return this.$store.state.pokemons.filter(boss => boss.boss_level == '1');
+            },
+            bosses2t() {
+                return this.$store.state.pokemons.filter(boss => boss.boss_level == '2');
+            },
+            bosses3t() {
+                return this.$store.state.pokemons.filter(boss => boss.boss_level == '3');
+            },
+            bosses4t() {
+                return this.$store.state.pokemons.filter(boss => boss.boss_level == '4');
+            },
+            bosses5t() {
+                return this.$store.state.pokemons.filter(boss => boss.boss_level == '5');
+            },
+            bosses6t() {
+                return this.$store.state.pokemons.filter(boss => boss.boss_level == '6');
+            },
+            pokemons() {    
+                return this.$store.state.pokemons;
+            }
         },
         methods: {
-            initBosses() {
-                this.bosses1t = this.$store.state.pokemons.filter(boss => boss.boss_level == '1');
-                this.bosses2t = this.$store.state.pokemons.filter(boss => boss.boss_level == '2');
-                this.bosses3t = this.$store.state.pokemons.filter(boss => boss.boss_level == '3');
-                this.bosses4t = this.$store.state.pokemons.filter(boss => boss.boss_level == '4');
-                this.bosses5t = this.$store.state.pokemons.filter(boss => boss.boss_level == '5');
-                this.bosses6t = this.$store.state.pokemons.filter(boss => boss.boss_level == '6');
-            },
-            fetch() {
-                axios.get('/api/pokemons').then( res => {
-                    this.pokemons = res.data;
-                }).catch( err => {
-                    let message = 'Problème lors de la récupération';
-                    if( err.response.data ) {
-                        message = err.response.data;
-                    }
-                    this.$store.commit('setSnackbar', {
-                        message: message,
-                        timeout: 1500
-                    })
-                });
-            },
             addBossTo1t(selectedOption, id) {
                 if( this.bosses1t.filter( boss => boss.id == selectedOption.id ).length > 0 ) return;
                 this.bosses1t.push(selectedOption);

@@ -39,10 +39,9 @@ class Test extends Command
      */
     public function handle()
     {
-        /*$invitation = \App\Models\EventInvit::find(4);
-        $invitation->refuse();*/
-        $quiz = \App\Models\EventQuiz::find(5);
-        $quiz->start();
+
+        /*$quiz = \App\Models\EventQuiz::find(5);
+        $quiz->start();*/
         /*$discord = new DiscordClient([
             'token' => config('discord.token'),
         ]);
@@ -58,4 +57,5 @@ class Test extends Command
         //$this->line( print_r($guild, true) );
         $this->info('OK');*/
     }
+
 }

@@ -35,6 +35,7 @@ const store = new Vuex.Store({
         fetchPokemon( state ) {
             axios.get('/api/pokemons').then( res => {
                 state.pokemons = res.data;
+                //console.log(res.data);
                 localStorage.setItem('pokematos_pokemons', JSON.stringify(state.pokemons));
             }).catch( err => {
                 //No error
@@ -132,6 +133,11 @@ const store = new Vuex.Store({
             console.log(gyms)
             if( !state.gyms ) {
                 state.gyms = [];
+            }
+            try {
+               var json = JSON.parse(state.gyms);
+            } catch(e) {
+               state.gyms = [];
             }
             gyms.forEach(function(gym) {
                 state.gyms = [
