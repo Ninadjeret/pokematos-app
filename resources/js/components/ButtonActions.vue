@@ -37,9 +37,6 @@ export default {
             'menuClass': ''
         }
     },
-    mounted() {
-        console.log('Component mounted.')
-    },
     created() {
     },
     computed: {

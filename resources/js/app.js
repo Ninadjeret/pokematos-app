@@ -11,7 +11,14 @@ window.Vue = require('vue');
 import "leaflet/dist/leaflet.css"
 import 'es6-promise/auto'
 
-import Vue from 'vue'
+import Vue from 'vue';
+import * as Sentry from '@sentry/browser';
+import { Vue as VueIntegration } from '@sentry/integrations';
+Sentry.init({
+  dsn: 'https://dff629914bf3457289cd1aaee81810ee@o385969.ingest.sentry.io/5219592',
+  integrations: [new VueIntegration({Vue, attachProps: true})],
+});
+
 import Vuetify from 'vuetify';
 import fr from '../lang/fr/vuetify';
 import VModal from 'vue-js-modal'
@@ -35,6 +42,8 @@ Vue.use(Vuetify, {
     primary: '#5a6cae', // #C2185B
   },
 });
+
+
 
 Vue.use(VModal)
 Vue.use(DatetimePicker)
@@ -71,7 +80,6 @@ const router = new VueRouter({
     router,
 });*/
 const app = new Vue({
-    el: '#app',
     render: h => h(Container),
     store: appStore,
     router

@@ -113,13 +113,11 @@ class ImageAnalyzer {
         $url_ocr = env('APP_URL').Storage::url('captures/'.$filename.'-ocr.jpg');
 
         //Create Img from file
-        if( strstr($source, '.jpg') ) {
+        $mimetype = exif_imagetype($source);
+        if( $mimetype == 2 ) {
             if( $this->debug ) $this->_log('Img extension : JPG');
             $image = imagecreatefromjpeg($source);
-        } elseif( strstr($source, '.jpeg') ) {
-            if( $this->debug ) $this->_log('Img extension : JPEG');
-            $image = imagecreatefromjpeg($source);
-        } elseif( strstr($source, '.png') ) {
+        } elseif( $mimetype == 3 ) {
             if( $this->debug ) $this->_log('Img extension : PNG');
             $image = imagecreatefrompng($source);
         } else {

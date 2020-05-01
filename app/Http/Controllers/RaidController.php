@@ -14,6 +14,7 @@ use App\RaidAnalyzer\TextAnalyzer;
 use App\RaidAnalyzer\ImageAnalyzer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RaidController extends Controller {
 

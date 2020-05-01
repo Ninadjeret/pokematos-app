@@ -433,17 +433,18 @@ class UserController extends Controller {
 
     public function getPOIs(City $city, Request $request){
 
+        $query = Stop::where('city_id', '=', $city->id)
+            ->orderBy('name', 'asc');
+
         $lastUpdate = $request->last_update;
-        if( empty( $lastUpdate ) || $lastUpdate == 'false' ) {
-            $lastUpdate = '2000-01-01 00:00:00';
+        if( !empty( $lastUpdate )  ) {
+            $date = new \DateTime($lastUpdate);
+            $date->modify('-10 minutes');
+            $pois = $query->where('updated_at', '>=', $date->format('Y-m-d H:i:s'))->get();
+        } else {
+            $pois = $query->get();
         }
 
-        $date = new \DateTime($lastUpdate);
-        $date->modify('-10 minutes');
-        $pois = Stop::where('city_id', '=', $city->id)
-            ->where('updated_at', '>=', $date->format('Y-m-d H:i:s'))
-            ->orderBy('name', 'asc')
-            ->get();
         return response()->json($pois, 200);
     }
 

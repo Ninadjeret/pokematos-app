@@ -97,6 +97,11 @@ class MicrosoftOCR {
                 || $line->text == 'Walk closer to interact with this Gym.'
                 || $line->text == '+'
                 || $line->text == 'ARENE DE RAID EX'
+                || $line->text == 'BATTLE'
+                || $line->text == 'PRIVATE GROUP'
+                || $line->text == 'PC'
+                || $line->text == 'P'
+                || strstr($line->text, 'using a Remote Raid Pass')
                 || strstr($line->text, 'Raid a distance')
                 || strstr($line->text, 'utilisant un pass')
                 || $line->text == 'D'
@@ -124,26 +129,23 @@ class MicrosoftOCR {
             ) {
                 continue;
             }
-
-            if(preg_match('/^CP/', $line->text) ) {
-                //$this->cp_line = $line->text;
-                continue;
-            }
-            if(preg_match('/^[0-9]+$/', $line->text) ) {
+            if(preg_match('/^[0-9]+$/i', $line->text) ) {
                 if( strlen($line->text) === 4 || strlen($line->text) === 5 ) {
                     $this->cp_line = $line->text;
                 }
                 continue;
             }
-            if(preg_match('/^PC [0-9]+$/', $line->text) ) {
+            if(preg_match('/^PC [0-9]+$/i', $line->text) ) {
                 $line->text = str_replace('PC ', '', $line->text );
+                $line->text = str_replace('Pc', '', $line->text );
                 if( strlen($line->text) === 4 || strlen($line->text) === 5 ) {
                     $this->cp_line = $line->text;
                 }
                 continue;
             }
-            if(preg_match('/^PC[0-9]+$/', $line->text) ) {
+            if(preg_match('/^PC[0-9]+$/i', $line->text) ) {
                 $line->text = str_replace('PC', '', $line->text );
+                $line->text = str_replace('Pc', '', $line->text );
                 if( strlen($line->text) === 4 || strlen($line->text) === 5 ) {
                     $this->cp_line = $line->text;
                 }

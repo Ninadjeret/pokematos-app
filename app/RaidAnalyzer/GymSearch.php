@@ -85,7 +85,7 @@ class GymSearch {
             }
         }
 
-        if( $name ) {
+        if( $name && isset( $array[$num]) ) {
             if( preg_match( '/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $array[$num] ) ) {
                 //nothing
             } else {

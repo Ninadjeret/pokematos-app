@@ -22,7 +22,7 @@ class App {
             ],
             'donation' => [
                 'goal' => 415,
-                'current' => 216,
+                'current' => 237,
             ],
             'features' => config('features'),
         ];

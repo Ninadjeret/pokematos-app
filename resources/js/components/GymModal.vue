@@ -477,7 +477,6 @@ export default {
             return isAuthor || this.canAccessCityParam('raid_delete');
         },
         setScreenTo( value ) {
-            console.log(value);
             this.modalScreen = value;
         },
         addToTimeRange() {
@@ -533,7 +532,6 @@ export default {
             }
         },
         getRaidData() {
-            console.log('getRaidData');
             var now = moment();
             this.raidStatus = 'none';
 
@@ -610,10 +608,8 @@ export default {
                      start_time: this.createRaidData.startTime
                  },
             }).then(res => {
-                console.log(res.data);
                 this.$store.dispatch('fetchData');
             }).catch(err => {
-                console.log(err)
             });
         },
         postNewRaidEx() {
@@ -628,10 +624,8 @@ export default {
                      ex: true,
                  },
             }).then(res => {
-                console.log(res.data);
                 this.$store.dispatch('fetchData');
             }).catch(err => {
-                console.log(err)
             });
         },
         postNewQuest(questId, reward) {
@@ -658,10 +652,8 @@ export default {
                          reward_id: reward_id,
                      },
                 }).then(res => {
-                    console.log(res.data);
                     this.$store.dispatch('fetchData');
                 }).catch(err => {
-                    console.log(err)
                 });
             }
         },
@@ -676,7 +668,6 @@ export default {
             }).then(res => {
                 this.$store.dispatch('fetchData');
             }).catch(err => {
-                console.log(err)
             });
         },
 
@@ -691,7 +682,6 @@ export default {
                     timeout: 1500
                 });
             }).catch(err => {
-                console.log(err)
             });
         },
         deleteQuest() {
@@ -705,7 +695,6 @@ export default {
                     timeout: 1500
                 });
             }).catch(err => {
-                console.log(err)
             });
         },
         clickQuest(quest) {
@@ -736,7 +725,6 @@ export default {
                     this.$store.dispatch('fetchData');
 
                 }).catch(err => {
-                    console.log(err)
                 });
             }
         },

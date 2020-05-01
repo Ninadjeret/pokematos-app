@@ -21,7 +21,7 @@
             <div class="permission__content">
                 <p v-html="message"></p>
             </div>
-            <div class="permission__actions">            
+            <div class="permission__actions">
                 <v-btn v-if="open" flat @click="open = false">Valider</v-btn>
                 <v-btn v-if="!open" icon flat dark @click="open = true"><v-icon>edit</v-icon></v-btn>
                 <v-btn icon flat dark @click="$emit('delete-permission', permission)"><v-icon>delete</v-icon></v-btn>
@@ -58,7 +58,6 @@
             }
         },
         created() {
-            console.log('ttt');
             if( this.permission.id ) this.open = false;
         },
         computed: {

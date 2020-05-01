@@ -97,8 +97,7 @@ class Guild extends Model
                 $return[] = $invit->channel_discord_id;
             }
         }
-        Log::debug('toto');
-        Log::debug( print_r($return, true) );
+
         return $return;
     }
 

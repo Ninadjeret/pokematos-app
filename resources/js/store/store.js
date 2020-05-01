@@ -131,13 +131,8 @@ const store = new Vuex.Store({
         },
         setGyms( state, gyms ) {
             console.log(gyms)
-            if( !state.gyms ) {
+            if( !state.gyms || !Array.isArray(state.gyms) ) {
                 state.gyms = [];
-            }
-            try {
-               var json = JSON.parse(state.gyms);
-            } catch(e) {
-               state.gyms = [];
             }
             gyms.forEach(function(gym) {
                 state.gyms = [
@@ -271,13 +266,16 @@ const store = new Vuex.Store({
         async changeCity ({ dispatch, commit, state }, city) {
             commit('setCity', city);
             state.gyms = [];
+            localStorage.setItem('pokematos_gyms', []);
+            let lastUpdate = require('moment')()
             var result = await axios.get('/api/user/cities/'+state.currentCity.id+'/gyms');
+            commit('setGyms', result.data)
+            commit('fetchZones')
+            commit('fetchPokemon')
             commit('setSetting', {
                 setting: 'lastUpdate',
                 value: require('moment')().format('YYYY-MM-DD HH:mm:ss')
             });
-            commit('setGyms', result.data)
-            commit('fetchZones')
         },
     },
 });

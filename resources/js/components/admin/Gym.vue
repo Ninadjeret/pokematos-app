@@ -129,7 +129,6 @@
             }
         },
         created() {
-            console.log(this.$route.params);
             this.fetchZones();
             if( this.getId ) {
                 this.fetch();

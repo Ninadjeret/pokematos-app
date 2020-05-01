@@ -71,13 +71,13 @@ class Discord {
         ));
 
         //preg_match('/\<\!/i', $message, $out);
-        preg_match_all("/<@!([0-9]*)>/", $message, $mentions, PREG_SET_ORDER);
+        preg_match_all("/<@&([0-9]*)>/", $message, $mentions, PREG_SET_ORDER);
 
         if( !empty( $mentions ) ) {
             foreach( $mentions as $mention ) {
                 $role = Role::where('discord_id', $mention[1])->first();
                 if( $role ) {
-                    $message = str_replace($mention[0], $role->name, $message);
+                    $message = str_replace($mention[0], '@'.$role->name, $message);
                 }
             }
         }

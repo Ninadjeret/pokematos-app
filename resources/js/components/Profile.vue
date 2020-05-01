@@ -71,7 +71,7 @@
       >
         <v-card color="primary">
           <v-card-text>
-            <p>Mise à jour des données<br><small><i>cela peut prendre 1 à 2 min...</i></small></p>
+            <p>Mise à jour des données pour la ville {{currentCity.name}}<br><small><i>cela peut prendre quelques minutes</i></small></p>
             <v-progress-linear
               indeterminate
               color="#5a6cae"
@@ -108,6 +108,9 @@
             },
             appVersion() {
                 return window.pokematos.version;
+            },
+            currentCity() {
+                return this.$store.state.currentCity;
             }
         },
         created() {
@@ -115,13 +118,9 @@
         },
         methods: {
             async updateData() {
-                this.$store.commit('setSetting', {
-                    setting: 'lastUpdate',
-                    value: '2000-01-01 00:00:00'
-                });
                 this.dialogUpdate= true;
                 try {
-                    await this.$store.dispatch('fetchGyms')
+                    await this.$store.dispatch('changeCity', this.currentCity);
                 } finally {
                     this.dialogUpdate = false;
                 }
