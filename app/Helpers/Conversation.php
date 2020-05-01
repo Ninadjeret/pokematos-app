@@ -43,7 +43,10 @@ class Conversation {
     public static function sendToDiscord( $channel_id, $guild, $type, $soustype, $args = null ) {
         $message = self::getMessage( $type, $soustype, $args );
 
+        if( empty($message) ) return false;
+
         $content = \App\Helpers\Discord::encode($message['text'], $guild, false);
+        Log::debug('message : '.print_r($content, true));
         $discord = new \RestCord\DiscordClient(['token' => config('discord.token')]);
         $discord->channel->createMessage(array(
             'channel.id' => intval($channel_id),
