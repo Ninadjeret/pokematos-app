@@ -79,7 +79,7 @@ class EventQuizQuestion extends Model
         } else {
             $rand = rand(1,5);
             if( $rand === 1 ) {
-                $this->quiz->sendToDiscord( 'question_answer_wrong', ['%user' => $user], $guild);
+                $this->quiz->sendToDiscord( 'question_answer_wrong', ['%user' => $user->name], $guild);
             }
         }
     }
@@ -110,6 +110,7 @@ class EventQuizQuestion extends Model
                     '%answer' => $this->question->answer,
                     '%explanation' => $this->question->explanation
                 ]);
+                sleep(10);
             }
         } else {
             $this->quiz->sendToDiscord( 'question_not_answered' );

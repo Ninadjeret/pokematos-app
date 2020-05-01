@@ -39,10 +39,8 @@ class Test extends Command
      */
     public function handle()
     {
-        $image_path="https://cdn.discordapp.com/attachments/602385822339039243/704988543075876904/image0.png";
-        print_r(exif_imagetype($image_path));
-        /*$quiz = \App\Models\EventQuiz::find(5);
-        $quiz->start();*/
+        $quiz = \App\Models\EventQuiz::find(5);
+        $quiz->start();
         /*$discord = new DiscordClient([
             'token' => config('discord.token'),
         ]);

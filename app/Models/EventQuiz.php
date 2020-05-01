@@ -109,26 +109,18 @@ class EventQuiz extends Model
             $res = $client->get($url);
         }
 
-        $classement = $this->getRanking();
-        $num = 0;
-        $ranking = '';
-        $best_player = '';
-        foreach( $classement as $user => $responses ) {
-            $num++;
-            if( $num === 1 ) $best_player = $user;
-            if( $num === 1 ) $ranking .= ":first_place: ";
-            if( $num === 2 ) $ranking .= ":second_place: ";
-            if( $num === 3 ) $ranking .= ":third_place: ";
-                $ranking .= "{$user} : **{$responses}**\r\n";
+        $this->sendToDiscord('quiz_ended');
+        sleep(5);
+        if( $this->event->multi_guilds ) {
+            $this->sendToDiscord('quiz_final_score_guilds', [
+                '%ranking' => $this->formatMultiRanking(),
+                '%best_guild' => $this->getBestGuild(),
+            ]);
         }
-
-        $this->sendToDiscord('Bravo pour ce super quiz !');
-        sleep(1);
-        $this->sendToDiscord('Voici les résultats :point_down:');
-        sleep(1);
-        $this->sendToDiscord("**----------\r\nClassement définitif\r\n----------**\r\n{$ranking}");
-        sleep(1);
-        $this->sendToDiscord("Féliciations à @{$best_player}");
+        $this->sendToDiscord('quiz_final_score_players', [
+            '%ranking' => $this->formatRanking(),
+            '%best_player' => $this->getBestPlayer(),
+        ]);
     }
 
     public function hasToStart() {
@@ -176,7 +168,11 @@ class EventQuiz extends Model
             ->whereNull('start_time')
             ->orderBy('order', 'ASC')
             ->first();
-        if( $question) $question->start();
+        if($question) {
+            $question->start();
+        } else {
+            $this->close();
+        }
     }
 
     public function addAnswer($args) {
@@ -227,6 +223,27 @@ class EventQuiz extends Model
         return $classement;
     }
 
+    public function formatRanking() {
+        $classement = $this->getRanking();
+        $num = 0;
+        $ranking = '';
+        $best_player = '';
+        foreach( $classement as $user => $responses ) {
+            $num++;
+            if( $num === 1 ) $best_player = $user;
+            if( $num === 1 ) $ranking .= ":first_place: ";
+            if( $num === 2 ) $ranking .= ":second_place: ";
+            if( $num === 3 ) $ranking .= ":third_place: ";
+                $ranking .= "{$user} : **{$responses}**\r\n";
+        }
+        return $classement;
+    }
+
+    public function getBestPlayer() {
+        $classement = $this->getRanking();
+        return array_key_first($classement);
+    }
+
     public function getMultiRanking() {
         $classement = [];
         foreach( $this->questions as $question ) {
@@ -256,5 +273,10 @@ class EventQuiz extends Model
             $ranking .= "{$user} : **{$responses}**\r\n";
         }
         return $ranking;
+    }
+
+    public function getBestGuild() {
+        $classement = $this->getMultiRanking();
+        return array_key_first($classement);
     }
 }

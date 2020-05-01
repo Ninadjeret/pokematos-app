@@ -108,5 +108,15 @@
         "text": "---------------\r\nVoici le classement en cours\r\n%ranking---------------",
         "type": "question_multi_ranking",
         "next": []
+    },
+    {
+        "text": "Bravo pour ce super quiz !",
+        "type": "quiz_ended",
+        "next": []
+    },
+    {
+        "text": "Voici les résultats :point_down:",
+        "type": "quiz_final_score_players",
+        "next": ["**----------\r\nClassement définitif\r\n----------**\r\n%ranking", "Féliciations à %best_player"]
     }
 ]
