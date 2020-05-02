@@ -96,6 +96,19 @@ class Discord {
         return false;
     }
 
+    public static function deleteMessage($args) {
+        try {
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            $channel = $discord->channel->deleteOrcloseChannel([
+                'channel.id' => (int) $event->event->channel_discord_id,
+            ]);
+            $event->event->update(['channel_discord_id' => null]);
+        }
+        catch (\GuzzleHttp\Command\Exception\CommandException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+        }
+    }
+
     public static function SyncBot() {
         $client = new Client();
         $url = config('app.bot_sync_url');

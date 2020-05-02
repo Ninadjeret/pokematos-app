@@ -33,7 +33,16 @@ class DeleteMessage
 
             case 'App\Events\Events\TrainStepUnchecked' :
                 if( !empty($event->train_step->message_discord_id) && !empty($event->event->channel_discord_id) ) {
-                    $discord->channel->deleteMessage([
+                    \App\Core\Discord::deleteMessage([
+                        'channel.id' => intval($event->event->channel_discord_id),
+                        'message.id' => intval($event->train_step->message_discord_id),
+                    ]);
+                }
+                break;
+
+            case 'App\Events\Events\TrainStepUnchecked' :
+                if( !empty($event->train_step->message_discord_id) && !empty($event->event->channel_discord_id) ) {
+                    \App\Core\Discord::deleteMessage([
                         'channel.id' => intval($event->event->channel_discord_id),
                         'message.id' => intval($event->train_step->message_discord_id),
                     ]);

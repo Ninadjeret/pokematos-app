@@ -23,8 +23,11 @@ class Helpers {
     }
 
     public static function sanitize( $string ) {
-        $string = str_replace(' ', '-', $string);
-        $string = self::remove_accents($string);
+        $search = [' ', '\'', '\''];
+        $replace = ['-', '-', '-'];
+        $string = str_replace($search, $replace, $string);
+        $string = \Transliterator::create('NFD; [:Nonspacing Mark:] Remove; NFC')
+            ->transliterate($string);
         return trim(strtolower($string));
     }
 

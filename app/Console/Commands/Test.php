@@ -39,8 +39,9 @@ class Test extends Command
      */
     public function handle()
     {
+        $this->line(\App\Core\Helpers::sanitize('Héhé ça marche du tonnnèr, t\'es trop top'));
         //$quiz = \App\Models\EventQuiz::find(5)->close();
-        $question = \App\Models\EventQuizQuestion::find(186)->start();
+        //$question = \App\Models\EventQuizQuestion::find(186)->start();
         /*$discord = new DiscordClient([
             'token' => config('discord.token'),
         ]);
