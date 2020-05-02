@@ -5,9 +5,9 @@ namespace App\Models;
 use App\Models\Event;
 use GuzzleHttp\Client;
 use App\Models\QuizTheme;
+use App\Core\Conversation;
 use RestCord\DiscordClient;
 use App\Models\QuizQuestion;
-use App\Core\Conversation;
 use App\Models\EventQuizQuestion;
 use App\Core\Events\Quizs\Ranking;
 use Illuminate\Support\Facades\Log;
@@ -53,7 +53,7 @@ class EventQuiz extends Model
             ->whereIn('theme_id', $themes)
             ->inRandomOrder()
             ->take($this->nb_questions);
-        if( $this->only_pogo ) $query->where('only_pogo', 1);
+        if( $this->only_pogo ) $query->where('about_pogo', 1);
         $questions = $query->get();
 
         if( !empty($questions) ) {
@@ -85,12 +85,16 @@ class EventQuiz extends Model
      */
     public function process() {
         if( $this->isClosed() ) {
+            Log::debug('isClosed');
             return;
         } elseif( $this->isEnded() ) {
+            Log::debug('isEnded');
             $this->close();
         } elseif( $this->hasToStart() ) {
+            Log::debug('hasToStart');
             $this->start();
         } else {
+            Log::debug('else');
             $question = $this->getLastQuestion();
             if( $question && $question->isEnded() ) {
                 $question->close();
@@ -108,11 +112,7 @@ class EventQuiz extends Model
         $this->update(['status' => 'active']);
 
         //On avertit le bot de la MAJ
-        $client = new Client();
-        $url = config('app.bot_sync_url');
-        if( !empty($url) ) {
-            $res = $client->get($url);
-        }
+        \App\Core\Discord::SyncBot();
 
         $this->sendToDiscord('start_intro', [
             '%quiz_name' => $this->event->name,
@@ -142,11 +142,7 @@ class EventQuiz extends Model
         $this->update(['status' => 'closed']);
 
         //On avertit le bot de la MAJ
-        $client = new Client();
-        $url = config('app.bot_sync_url');
-        if( !empty($url) ) {
-            $res = $client->get($url);
-        }
+        \App\Core\Discord::SyncBot();
 
         $this->sendToDiscord('quiz_ended');
         sleep(5);
@@ -178,7 +174,7 @@ class EventQuiz extends Model
      */
     public function hasToStart() {
         $now = new \DateTime();
-        $start_time = new \DateTime($this->start_time);
+        $start_time = new \DateTime($this->event->start_time);
         if( $this->status == 'future' && $now > $start_time ) {
             return true;
         }

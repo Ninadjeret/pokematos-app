@@ -249,12 +249,11 @@ class Event extends Model
     public function setQuizz( $args ) {
         if( empty($args['quiz']['difficulties']) ) $args['quiz']['difficulties'] = null;
         if( empty($args['quiz']['themes']) ) $args['quiz']['themes'] = null;
+        if( empty($args['quiz']['status']) ) $args['quiz']['status'] = 'future';
 
         $quiz = EventQuiz::firstOrCreate(['event_id' => $this->id]);
         $quiz->update($args['quiz']);
 
-        $now = new \DateTime();
-        $event_start = new \DateTime($this->start_time);
         if( $quiz->status == 'future' ) {
             $quiz->shuffleQuestions();
         }

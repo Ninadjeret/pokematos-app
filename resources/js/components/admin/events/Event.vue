@@ -408,7 +408,6 @@
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
                 axios.post('/api/user/guilds/'+this.$route.params.id+'/events', args).then( res => {
-                    this.fetch();
                     this.$store.commit('setSnackbar', {
                         message: 'Enregistrement effectué',
                         timeout: 1500

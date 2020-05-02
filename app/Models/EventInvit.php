@@ -65,7 +65,7 @@ class EventInvit extends Model
         $this->guild->sendAdminMessage('event_invit_canceled', [
             '%date'=> date("d/m/Y à H\mi"),
             '%event_name' => $this->event->name,
-            '%guest_name' => $this->guild->name,
+            '%guest_name' => $this->event->guild->name,
         ]);
         EventInvit::destroy($this->id);
         return false;

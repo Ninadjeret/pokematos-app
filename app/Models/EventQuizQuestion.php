@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\EventQuiz;
 use App\Models\QuizQuestion;
 use App\Models\EventQuizQuestion;
+use App\Core\Events\Quizs\Ranking;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
@@ -101,11 +102,11 @@ class EventQuizQuestion extends Model
                         '%guild' => $this->correctAnswer->guild->name,
                     ], $guild);
                 }
-                $ranking = $this->quiz->FormatMultiRanking();
-                $this->quiz->sendToDiscord( 'question_multi_ranking', ['%ranking' => $ranking]);
+                $ranking = new Ranking($this->quiz->questions);
+                $this->quiz->sendToDiscord( 'question_multi_ranking', ['%ranking' => $ranking->formatMultiRanking()]);
             } else {
                 $this->quiz->sendToDiscord( 'question_answer_correct', [
-                    '%user' => $user,
+                    '%user' => $this->correctAnswer->user->name,
                     '%answer' => $this->question->answer,
                 ]);
             }

@@ -70,15 +70,16 @@ class EventController extends Controller
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
-        $args = [];
-        $args['event'] = [
-            'name' => $request->name,
-            'guild_id' => $guild->id,
-            'city_id' => $guild->city->id,
-            'type' => $request->type,
-            'start_time' => $request->start_time,
-            'image' => $request->image,
-            'multi_guilds' => $request->multi_guilds,
+        $args = [
+            'event' => [
+                'name' => $request->name,
+                'guild_id' => $guild->id,
+                'city_id' => $guild->city->id,
+                'type' => $request->type,
+                'start_time' => $request->start_time,
+                'image' => $request->image,
+                'multi_guilds' => $request->multi_guilds,
+            ],
             'guests' => $request->guests,
             'steps' => $request->steps,
             'quiz' => $request->quiz,
@@ -95,16 +96,19 @@ class EventController extends Controller
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
-        $args['event'] = [
-            'name' => $request->name,
-            'type' => $request->type,
-            'start_time' => $request->start_time,
-            'image' => $request->image,
-            'multi_guilds' => $request->multi_guilds,
+        $args = [
+            'event' => [
+                'name' => $request->name,
+                'type' => $request->type,
+                'start_time' => $request->start_time,
+                'image' => $request->image,
+                'multi_guilds' => $request->multi_guilds,
+            ],
             'guests' => $request->guests,
             'steps' => $request->steps,
             'quiz' => $request->quiz,
         ];
+        
         $event->change($args);
 
         return response()->json($event, 200);

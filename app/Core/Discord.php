@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Models\Role;
+use GuzzleHttp\Client;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
 
@@ -93,5 +94,13 @@ class Discord {
             return $message;
         }
         return false;
+    }
+
+    public static function SyncBot() {
+        $client = new Client();
+        $url = config('app.bot_sync_url');
+        if( !empty($url) ) {
+            $res = $client->get($url);
+        }
     }
 }
