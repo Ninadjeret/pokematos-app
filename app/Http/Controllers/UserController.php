@@ -8,7 +8,7 @@ use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Quest;
 use App\Models\Guild;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use App\Models\Connector;
 use App\Models\UserAction;
 use App\Models\QuestReward;

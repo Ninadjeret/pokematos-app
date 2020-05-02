@@ -169,7 +169,7 @@ class Guild extends Model
 
     public function sendAdminMessage( $type, $args ){
         if( !$this->settings->comadmin_active || !in_array($type, $this->settings->comadmin_types) ) return;
-        \App\Helpers\Conversation::sendToDiscord($this->settings->comadmin_channel_discord_id, $this, 'admin', $type, $args);
+        \App\Core\Conversation::sendToDiscord($this->settings->comadmin_channel_discord_id, $this, 'admin', $type, $args);
     }
 
 }

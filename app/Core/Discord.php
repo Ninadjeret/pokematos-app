@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Core;
 
 use App\Models\Role;
 use RestCord\DiscordClient;
@@ -84,5 +84,14 @@ class Discord {
 
         return $message;
 
+    }
+
+    public static function sendMessage($args) {
+        $discord = new DiscordClient(['token' => config('discord.token')]);
+        $message = $discord->channel->createMessage($args);
+        if( isset($message['id']) ){
+            return $message;
+        }
+        return false;
     }
 }

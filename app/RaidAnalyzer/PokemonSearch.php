@@ -2,7 +2,7 @@
 namespace App\RaidAnalyzer;
 
 use App\Models\Pokemon;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use Illuminate\Support\Facades\Log;
 
 class PokemonSearch {

@@ -7,8 +7,9 @@ use GuzzleHttp\Client;
 use App\Models\QuizTheme;
 use RestCord\DiscordClient;
 use App\Models\QuizQuestion;
-use App\Helpers\Conversation;
+use App\Core\Conversation;
 use App\Models\EventQuizQuestion;
+use App\Core\Events\Quizs\Ranking;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,14 +19,29 @@ class EventQuiz extends Model
     protected $fillable = ['event_id', 'nb_questions', 'delay', 'themes', 'difficulties', 'only_pogo', 'message_discord_id', 'status'];
     protected $appends = ['questions'];
 
+
+    /**
+     * [getQuestionsAttribute description]
+     * @return [type] [description]
+     */
     public function getQuestionsAttribute() {
         return EventQuizQuestion::where('quiz_id', $this->id)->orderBy('order', 'ASC')->get();
     }
 
+
+    /**
+     * [getEventAttribute description]
+     * @return [type] [description]
+     */
     public function getEventAttribute() {
         return Event::find($this->event_id);
     }
 
+
+    /**
+     * [shuffleQuestions description]
+     * @return [type] [description]
+     */
     public function shuffleQuestions() {
 
         EventQuizQuestion::where('quiz_id', $this->id)->delete();
@@ -53,8 +69,22 @@ class EventQuiz extends Model
         }
     }
 
+
+    /**
+     * [getNbQuestions description]
+     * @return [type] [description]
+     */
+    public function getNbQuestions() {
+        return count($this->questions);
+    }
+
+
+    /**
+     * [process description]
+     * @return [type] [description]
+     */
     public function process() {
-        if( $this->isClosed() || !$this->hasToStart() ) {
+        if( $this->isClosed() ) {
             return;
         } elseif( $this->isEnded() ) {
             $this->close();
@@ -64,11 +94,15 @@ class EventQuiz extends Model
             $question = $this->getLastQuestion();
             if( $question && $question->isEnded() ) {
                 $question->close();
-                $this->nextQuestion();
             }
         }
     }
 
+
+    /**
+     * [start description]
+     * @return [type] [description]
+     */
     public function start() {
 
         $this->update(['status' => 'active']);
@@ -98,6 +132,11 @@ class EventQuiz extends Model
         if($question) $question->start();
     }
 
+
+    /**
+     * [close description]
+     * @return [type] [description]
+     */
     public function close() {
 
         $this->update(['status' => 'closed']);
@@ -112,17 +151,31 @@ class EventQuiz extends Model
         $this->sendToDiscord('quiz_ended');
         sleep(5);
         if( $this->event->multi_guilds ) {
+            $ranking = new Ranking($this->questions);
             $this->sendToDiscord('quiz_final_score_guilds', [
-                '%ranking' => $this->formatMultiRanking(),
-                '%best_guild' => $this->getBestGuild(),
+                '%ranking' => $ranking->formatMultiRanking(),
+                '%best_guild' => $ranking->getBestGuild(),
+            ], null, [
+                'title' => "Serveurs - Classement définitif",
+                'thumbnail' => EventQuiz::getEmbedThumbnails()->ranking,
             ]);
         }
+
+        $ranking = new Ranking($this->questions);
         $this->sendToDiscord('quiz_final_score_players', [
-            '%ranking' => $this->formatRanking(),
-            '%best_player' => $this->getBestPlayer(),
+            '%ranking' => $ranking->formatRanking(),
+            '%best_player' => $ranking->getBestPlayer(),
+        ], null, [
+            'title' => "Joueurs - Classement définitif",
+            'thumbnail' => EventQuiz::getEmbedThumbnails()->ranking,
         ]);
     }
 
+
+    /**
+     * [hasToStart description]
+     * @return boolean [description]
+     */
     public function hasToStart() {
         $now = new \DateTime();
         $start_time = new \DateTime($this->start_time);
@@ -132,10 +185,20 @@ class EventQuiz extends Model
         return false;
     }
 
+
+    /**
+     * [isStarted description]
+     * @return boolean [description]
+     */
     public function isStarted() {
         return $this->status == 'active';
     }
 
+
+    /**
+     * [isEnded description]
+     * @return boolean [description]
+     */
     public function isEnded() {
         $question = EventQuizQuestion::where('quiz_id', $this->id)
             ->orderBy('order', 'DESC')
@@ -151,10 +214,20 @@ class EventQuiz extends Model
         return ( $now > $end_time );
     }
 
+
+    /**
+     * [isClosed description]
+     * @return boolean [description]
+     */
     public function isClosed() {
         return $this->status == 'closed';
     }
 
+
+    /**
+     * [getLastQuestion description]
+     * @return [type] [description]
+     */
     public function getLastQuestion() {
         $question = EventQuizQuestion::where('quiz_id', $this->id)
             ->whereNotNull('start_time')
@@ -163,6 +236,11 @@ class EventQuiz extends Model
         return $question;
     }
 
+
+    /**
+     * [nextQuestion description]
+     * @return [type] [description]
+     */
     public function nextQuestion() {
         $question = EventQuizQuestion::where('quiz_id', $this->id)
             ->whereNull('start_time')
@@ -175,6 +253,11 @@ class EventQuiz extends Model
         }
     }
 
+
+    /**
+     * [addAnswer description]
+     * @param [type] $args [description]
+     */
     public function addAnswer($args) {
         if( !$this->isStarted() || $this->isEnded() ) return false;
 
@@ -183,7 +266,16 @@ class EventQuiz extends Model
         $question->addAnswer($args);
     }
 
-    public function sendToDiscord( $type, $args = null, $guild = null) {
+
+    /**
+     * [sendToDiscord description]
+     * @param  [type] $type  [description]
+     * @param  [type] $args  [description]
+     * @param  [type] $guild [description]
+     * @param  [type] $embed [description]
+     * @return [type]        [description]
+     */
+    public function sendToDiscord( $type, $args = null, $guild = null, $embed = null) {
         $to_send = [];
 
         if( !empty($this->event->channel_discord_id) ) {
@@ -203,80 +295,15 @@ class EventQuiz extends Model
         if( empty($to_send) ) return;
 
         foreach( $to_send as $channel_id => $guild ) {
-            $message = \App\Helpers\Conversation::sendToDiscord($channel_id, $guild, 'quiz', $type, $args);
+            $message = \App\Core\Conversation::sendToDiscord($channel_id, $guild, 'quiz', $type, $args, $embed);
         }
     }
 
-    public function getRanking() {
-        $classement = [];
-        foreach( $this->questions as $question ) {
-            if( empty( $question->correctAnswer ) ) continue;
-            $user_name = $question->correctAnswer->user->name;
-            $points = $question->question->difficulty;
-            if( array_key_exists($user_name, $classement) ) {
-                $classement[$user_name] += $points;
-            } else {
-                $classement[$user_name] = $points;
-            }
-        }
-        arsort($classement);
-        return $classement;
-    }
 
-    public function formatRanking() {
-        $classement = $this->getRanking();
-        $num = 0;
-        $ranking = '';
-        $best_player = '';
-        foreach( $classement as $user => $responses ) {
-            $num++;
-            if( $num === 1 ) $best_player = $user;
-            if( $num === 1 ) $ranking .= ":first_place: ";
-            if( $num === 2 ) $ranking .= ":second_place: ";
-            if( $num === 3 ) $ranking .= ":third_place: ";
-                $ranking .= "{$user} : **{$responses}**\r\n";
-        }
-        return $classement;
-    }
-
-    public function getBestPlayer() {
-        $classement = $this->getRanking();
-        return array_key_first($classement);
-    }
-
-    public function getMultiRanking() {
-        $classement = [];
-        foreach( $this->questions as $question ) {
-            if( empty( $question->correctAnswer ) ) continue;
-            $guild_name = $question->correctAnswer->guild->name;
-            $points = $question->question->difficulty;
-            if( array_key_exists($guild_name, $classement) ) {
-                $classement[$guild_name] += $points;
-            } else {
-                $classement[$guild_name] = $points;
-            }
-        }
-        arsort($classement);
-        return $classement;
-    }
-
-    public function formatMultiRanking() {
-        $ranking = "";
-        $data = $this->getMultiRanking();
-        $num = 0;
-        foreach( $data as $user => $responses ) {
-            $num++;
-            if( $num === 1 ) $ranking .= ":first_place: ";
-            if( $num === 2 ) $ranking .= ":second_place: ";
-            if( $num === 3 ) $ranking .= ":third_place: ";
-            if( $num > 3 ) $ranking .= "{$num} : ";
-            $ranking .= "{$user} : **{$responses}**\r\n";
-        }
-        return $ranking;
-    }
-
-    public function getBestGuild() {
-        $classement = $this->getMultiRanking();
-        return array_key_first($classement);
+    public static function getEmbedThumbnails() {
+        return (object) [
+                'question' => 'https://assets.profchen.fr/img/app/event_quiz_question.png',
+                'ranking' => 'https://assets.profchen.fr/img/app/event_quiz_ranking.png'
+        ];
     }
 }

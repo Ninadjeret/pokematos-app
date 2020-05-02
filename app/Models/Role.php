@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Stop;
 use App\Models\Guild;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use RestCord\DiscordClient;
 use App\Models\RoleCategory;
 use Illuminate\Support\Facades\Log;

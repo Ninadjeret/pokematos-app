@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Core;
 
 use App\Models\Role;
 use RestCord\DiscordClient;

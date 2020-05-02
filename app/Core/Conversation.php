@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Core;
 
 use App\Models\Role;
 use RestCord\DiscordClient;
@@ -40,22 +40,37 @@ class Conversation {
 
     }
 
-    public static function sendToDiscord( $channel_id, $guild, $type, $soustype, $args = null ) {
-        $message = self::getMessage( $type, $soustype, $args );
+    public static function sendToDiscord( $channel_id, $guild, $type, $soustype, $args = null, $embed = null ) {
 
+        //On chope le message
+        $message = self::getMessage( $type, $soustype, $args );
         if( empty($message) ) return false;
 
-        $content = \App\Helpers\Discord::encode($message['text'], $guild, false);
-        Log::debug('message : '.print_r($content, true));
+        if( is_array($embed) ) {
+            $embed2 = [
+                'description' => \App\Core\Discord::encode($message['text'], $guild, false),
+                'color' => hexdec('5a6cae'),
+            ];
+            if( isset($embed['thumbnail']) ) { $embed2['thumbnail'] = ['url' => $embed['thumbnail']]; }
+            if( isset($embed['title']) ) { $embed2['title'] =  $embed['title']; }
+            if( isset($embed['footer']) ) { $embed2['footer'] =  $embed['footer']; }
+            $to_send = [
+                'channel.id' => intval($channel_id),
+                'embed' => $embed2
+            ];
+        } else {
+            $to_send = [
+                'channel.id' => intval($channel_id),
+                'content' => \App\Core\Discord::encode($message['text'], $guild, false),
+            ];
+        }
+
         $discord = new \RestCord\DiscordClient(['token' => config('discord.token')]);
-        $discord->channel->createMessage(array(
-            'channel.id' => intval($channel_id),
-            'content' => $content,
-        ));
+        $discord->channel->createMessage($to_send);
 
         if( array_key_exists('next', $message) && !empty($message['next']) ) {
             foreach( $message['next'] as $content ) {
-                $content = \App\Helpers\Discord::encode($content, $guild, false);
+                $content = \App\Core\Discord::encode($content, $guild, false);
                 usleep( strlen($content) * 75000 );
                 $discord->channel->createMessage(array(
                     'channel.id' => intval($channel_id),

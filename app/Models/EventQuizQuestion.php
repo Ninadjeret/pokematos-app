@@ -6,6 +6,7 @@ use App\Models\EventQuiz;
 use App\Models\QuizQuestion;
 use App\Models\EventQuizQuestion;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class EventQuizQuestion extends Model
 {
@@ -46,7 +47,10 @@ class EventQuizQuestion extends Model
 
         $this->quiz->sendToDiscord('question_question', [
             '%question' => $this->question->question
-        ]);
+        ], null, array(
+            'thumbnail' => EventQuiz::getEmbedThumbnails()->question,
+            'footer' => ['text' => "Question {$this->order}/{$this->quiz->getNbQuestions()} - {$this->question->difficulty} points - Thème"]
+        ));
     }
 
     public function isEnded() {
@@ -60,7 +64,7 @@ class EventQuizQuestion extends Model
 
         $user = \App\User::firstOrCreate(
             ['discord_id' => $args['user_discord_id'] ],
-            ['name' => $args['user_name']]
+            ['name' => $args['user_name'], 'password' => Hash::make( str_random(20) )]
         );
         $guild = \App\Models\Guild::where('discord_id', $args['guild_discord_id'])->first();
 

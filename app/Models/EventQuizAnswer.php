@@ -25,7 +25,7 @@ class EventQuizAnswer extends Model
 
     public function isCorrect() {
         $question = $this->question->question;
-        if( stristr( $this->answer, $question->answer ) ) {
+        if( strstr( strtolower($this->answer), strtolower($question->answer) ) ) {
             $this->update(['correct' => 1]);
             return true;
         }

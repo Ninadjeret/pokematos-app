@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Models\Guild;
-use App\Helpers\Discord;
+use App\Core\Discord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Bus\DispatchesJobs;

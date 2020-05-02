@@ -2,7 +2,7 @@
 
 namespace App\RaidAnalyzer;
 
-use App\Helpers\Discord;
+use App\Core\Discord;
 use App\RaidAnalyzer\GymSearch;
 use App\RaidAnalyzer\PokemonSearch;
 use Illuminate\Support\Facades\Log;
