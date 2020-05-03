@@ -162,6 +162,7 @@ Route::group(['middleware' => ['auth.bot']], function () {
 
 Route::get('version', 'Controller@getVersion');
 Route::get('features', 'Controller@getFeatures');
+Route::post('debug', 'DebugController@log');
 
 //Stats
 Route::get('stats/g/ia', 'StatsController@getGlobalIAReport');
