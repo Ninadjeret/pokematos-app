@@ -23,7 +23,7 @@ class Helpers {
     }
 
     public static function sanitize( $string ) {
-        $search = [' ', '\'', '\''];
+        $search = [' ', '\'', '’'];
         $replace = ['-', '-', '-'];
         $string = str_replace($search, $replace, $string);
         $string = \Transliterator::create('NFD; [:Nonspacing Mark:] Remove; NFC')

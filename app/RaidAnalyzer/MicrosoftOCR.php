@@ -101,6 +101,9 @@ class MicrosoftOCR {
                 || $line->text == 'PRIVATE GROUP'
                 || $line->text == 'PC'
                 || $line->text == 'P'
+                || $line->text == 'A'
+                || $line->text == 'AA'
+                || $line->text == 'AAA'
                 || strstr($line->text, 'using a Remote Raid Pass')
                 || strstr($line->text, 'Raid a distance')
                 || strstr($line->text, 'utilisant un pass')

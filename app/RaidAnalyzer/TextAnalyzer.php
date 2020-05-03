@@ -194,7 +194,7 @@ class TextAnalyzer {
             'text' => $this->text,
         ];
 
-        Log::debug(print_r($this->result, true));
+        Log::channel('raids')->info(print_r($this->result, true));
 
         //Ajout du log
         \App\Models\Log::create([

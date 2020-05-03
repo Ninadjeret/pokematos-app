@@ -436,6 +436,10 @@ class UserController extends Controller {
         $query = Stop::where('city_id', '=', $city->id)
             ->orderBy('name', 'asc');
 
+        if( !empty( $lastUpdate ) && \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) == false ) {
+            Log::error("Date dans un formation incorrect : {$lastUpdate}");
+        }
+
         $lastUpdate = $request->last_update;
         if( !empty( $lastUpdate ) && \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) !== false ) {
             $date = new \DateTime($lastUpdate);
