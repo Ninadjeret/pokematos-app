@@ -18,6 +18,10 @@ class EventQuiz extends Model
     protected $table = 'event_quizs';
     protected $fillable = ['event_id', 'nb_questions', 'delay', 'themes', 'difficulties', 'only_pogo', 'message_discord_id', 'status'];
     protected $appends = ['questions'];
+    protected $casts = [
+        'themes' => 'array',
+        'difficulties' => 'array',
+    ];
 
 
     /**
@@ -37,6 +41,16 @@ class EventQuiz extends Model
         return Event::find($this->event_id);
     }
 
+    public function getThemesAttribute($value) {
+        if( empty($value) ) return [];
+        return json_decode($value);
+    }
+
+    public function getDifficultiesAttribute($value) {
+        if( empty($value) ) return [];
+        return json_decode($value);
+    }
+
 
     /**
      * [shuffleQuestions description]
@@ -47,7 +61,10 @@ class EventQuiz extends Model
         EventQuizQuestion::where('quiz_id', $this->id)->delete();
 
         $difficulties = ( empty($this->difficulties) ) ? [1, 2, 3] : $this->difficulties ;
-        $themes = ( empty($this->themes) ) ? \DB::table('quiz_themes')->pluck('id') : $this->themes ;
+        $themes = ( empty($this->themes) ) ? \DB::table('quiz_themes')->pluck('id')->toArray() : $this->themes ;
+
+        Log::debug( print_r($difficulties, true) );
+        Log::debug( print_r($themes, true) );
 
         $query = QuizQuestion::whereIn('difficulty', $difficulties)
             ->whereIn('theme_id', $themes)

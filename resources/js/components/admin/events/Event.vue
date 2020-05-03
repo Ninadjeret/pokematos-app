@@ -79,6 +79,26 @@
                                     <option v-for="choicesDelay in choicesDelays" :value="choicesDelay" :key="choicesDelay">{{choicesDelay}}min</option>
                                 </select>
                             </div>
+                            <div class="setting checkbox">
+                                <label>Difficulté des questions</label>
+                                <v-checkbox
+                                    v-for="(level, index) in levels"
+                                    v-model="quiz.difficulties"
+                                    :key="level.id"
+                                    :label="level.label"
+                                    :value="level.id">
+                                </v-checkbox>
+                            </div>
+                            <div class="setting checkbox">
+                                <label>Thèmes des questions</label>
+                                <v-checkbox
+                                    v-for="(theme, index) in themes"
+                                    v-model="quiz.themes"
+                                    :key="theme.id"
+                                    :label="theme.name"
+                                    :value="theme.id">
+                                </v-checkbox>
+                            </div>
                             <div class="setting d-flex switch">
                                 <div>
                                     <label>Proposer des questions en lien uniquement avec PokémonGO ?</label>
@@ -213,7 +233,7 @@
                 tabs: 'description',
                 name: '',
                 start_time: null,
-                type: 'train',
+                type: 'quiz',
                 steps: [],
                 image: null,
                 multi_guilds: false,
@@ -226,18 +246,6 @@
                 },
                 exAllowedHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
                 exAllowedMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
-                types: {
-                    'train': {
-                        id: 'train',
-                        name: 'Pokétrain',
-                        description: 'Un pokétrain permet d\'orgniser un parcours d\'arènes, par exemple lors des journées à 5 pass gratuits.'
-                    },
-                    'quiz': {
-                        id: 'quiz',
-                        name: 'Pokéquiz',
-                        description: 'Organisez des quiz drôles et challengeants'
-                    }
-                },
                 stepTypes: {
                     'stop': {
                         id: 'stop',
@@ -248,12 +256,20 @@
                         name: 'Trajet en voiture/bus'
                     }
                 },
+                levels: [
+                    {id: 1, label: 'Facile'},
+                    {id: 2, label: 'Moyen'},
+                    {id: 3, label: 'Difficile'},
+                    {id: 5, label: 'Expert'},
+                ],
                 choicesNbQuestions: [5, 10, 15, 20, 25, 30],
                 choicesDelays: [1, 2, 3, 4, 5],
                 fetchLoaded: false,
                 fetchGuildsLoaded: false,
+                fetchQuizThemesLoaded: false,
                 availableGuilds: [],
                 guests : [],
+                themes: [],
                 temp: null,
             }
         },
@@ -262,7 +278,26 @@
                 return window.pokematos.features;
             },
             isLoaded() {
-                return this.fetchLoaded && this.fetchGuildsLoaded;
+                return this.fetchLoaded && this.fetchGuildsLoaded && this.fetchQuizThemesLoaded;
+            },
+            types() {
+                let types = {};
+                if( this.features.events_train ) {
+                    types['train'] = {
+                        id: 'train',
+                        name: 'Pokétrain',
+                        description: 'Un pokétrain permet d\'orgniser un parcours d\'arènes, par exemple lors des journées à 5 pass gratuits.'
+                    };
+                }
+                if( this.features.events_quiz ) {
+                    types['quiz'] = {
+                        id: 'quiz',
+                        name: 'Pokéquiz',
+                        description: 'Organisez des quiz drôles et challengeants'
+                    };
+                }
+                console.log(types);
+                return types;
             },
             getId() {
                 return( this.$route.params.event_id && Number.isInteger(parseInt(this.$route.params.event_id)) ) ? parseInt(this.$route.params.event_id) : false ;
@@ -281,6 +316,7 @@
         },
         created() {
             this.fetchGuilds();
+            this.fetchQuizThemes();
             if( this.getId ) {
                 this.fetch();
             } else {
@@ -298,6 +334,7 @@
                     this.guests = res.data.guests;
                     this.multi_guilds = res.data.multi_guilds;
                     if( this.type == 'quiz' ) this.quiz = res.data.relation;
+                    console.log(this.quiz)
                     this.fetchLoaded = true;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
@@ -314,6 +351,12 @@
                 axios.get('/api/user/guilds/'+this.$route.params.id+'/events/guilds').then( res => {
                     this.availableGuilds = res.data;
                     this.fetchGuildsLoaded = true;
+                });
+            },
+            fetchQuizThemes() {
+                axios.get('/api/events/quiz/themes').then( res => {
+                    this.themes = res.data;
+                    this.fetchQuizThemesLoaded = true;
                 });
             },
             onImageChange(e){

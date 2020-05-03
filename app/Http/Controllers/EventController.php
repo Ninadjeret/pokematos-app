@@ -108,7 +108,7 @@ class EventController extends Controller
             'steps' => $request->steps,
             'quiz' => $request->quiz,
         ];
-        
+
         $event->change($args);
 
         return response()->json($event, 200);
@@ -190,6 +190,10 @@ class EventController extends Controller
 
         $event->quiz->addAnswer($args);
         return response()->json(null, 204);
+    }
+
+    public function getThemes(Request $request) {
+        return response()->json(\App\Models\QuizTheme::all(), 200);
     }
 
 }

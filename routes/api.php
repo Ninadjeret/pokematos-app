@@ -133,6 +133,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('user/guilds/{guild}/events/invits/{invit}/refuse', 'EventController@refuseInvit');
     Route::post('user/guilds/{guild}/events/{event}/steps/{step}/check', 'EventController@checkStep');
     Route::post('user/guilds/{guild}/events/{event}/steps/{step}/uncheck', 'EventController@uncheckStep');
+    Route::get('events/quiz/themes', 'EventController@getThemes');
 
 });
 
