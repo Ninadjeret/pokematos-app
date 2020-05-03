@@ -82,5 +82,8 @@ const router = new VueRouter({
 const app = new Vue({
     render: h => h(Container),
     store: appStore,
-    router
+    router,
+    beforeCreate() {
+        this.$store.dispatch('initStore');
+    }
 }).$mount('#app')

@@ -437,7 +437,7 @@ class UserController extends Controller {
             ->orderBy('name', 'asc');
 
         $lastUpdate = $request->last_update;
-        if( !empty( $lastUpdate ) && DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) !== false ) {
+        if( !empty( $lastUpdate ) && \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) !== false ) {
             $date = new \DateTime($lastUpdate);
             $date->modify('-10 minutes');
             $pois = $query->where('updated_at', '>=', $date->format('Y-m-d H:i:s'))->get();

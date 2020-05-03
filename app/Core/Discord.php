@@ -99,13 +99,38 @@ class Discord {
     public static function deleteMessage($args) {
         try {
             $discord = new DiscordClient(['token' => config('discord.token')]);
-            $channel = $discord->channel->deleteOrcloseChannel([
-                'channel.id' => (int) $event->event->channel_discord_id,
-            ]);
-            $event->event->update(['channel_discord_id' => null]);
+            $discord->channel->deleteMessage($args);
         }
         catch (\GuzzleHttp\Command\Exception\CommandException $e) {
             $statusCode = $e->getResponse()->getStatusCode();
+            return false;
+        }
+    }
+
+    public static function bulkDeleteMessage($args) {
+        $client = new Client();
+        $res = $client->post("https://discordapp.com/api/v6/channels/{$args['channel_id']}/messages/bulk-delete?messages=".json_encode($message_ids), [
+            'http_errors' => false,
+            'headers' => [
+                'Authorization' => 'Bot '.config('discord.token'),
+                'Content-Type' => 'application/json',
+            ],
+            'body' => json_encode(['messages' => $args['messages_ids']]),
+        ]);
+        if( $res->getStatusCode() >= 300 ) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function deleteChannel($args) {
+        try {
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            $channel = $discord->channel->deleteOrcloseChannel($args);
+        }
+        catch (\GuzzleHttp\Command\Exception\CommandException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+            return false;
         }
     }
 

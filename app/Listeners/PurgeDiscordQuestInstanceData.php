@@ -76,7 +76,7 @@ class PurgeDiscordQuestInstanceData
             foreach( $deletePerChannel as $channel_id => $message_ids ) {
                 sleep(1);
                 if( count($message_ids) === 1 ) {
-                    $discord->channel->deleteMessage([
+                    \App\Core\Discord::deleteMessage([
                         'channel.id' => (int) $channel_id,
                         'message.id' => (int) $message_ids[0]
                     ]);
@@ -85,16 +85,9 @@ class PurgeDiscordQuestInstanceData
                 }
 
                 else {
-
-                    Log::debug( print_r($message_ids, true) );
-
-                    $client = new Client();
-                    $res = $client->post("https://discordapp.com/api/v6/channels/{$channel_id}/messages/bulk-delete?messages=".json_encode($message_ids), [
-                        'headers' => [
-                            'Authorization' => 'Bot '.config('discord.token'),
-                            'Content-Type' => 'application/json',
-                        ],
-                        'body' => json_encode(['messages' => $message_ids]),
+                    \App\Core\Discord::bulkDeleteMessages([
+                        'channel_id' => $channel_id,
+                        'messages_ids' => $message_ids,
                     ]);
                     foreach( $message_ids as $message_id ) {
                         $message = QuestMessage::where('message_discord_id', $message_id)->first();

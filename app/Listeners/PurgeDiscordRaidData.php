@@ -46,7 +46,7 @@ class PurgeDiscordRaidData
         if( $delete_channel ) {
             if( !empty( $event->raid->channels ) ) {
                 foreach( $event->raid->channels as $channel ) {
-                    $discord->channel->deleteOrcloseChannel(['channel.id' => (int) $channel->channel_discord_id]);
+                    \App\Core\Discord::deleteChannel(['channel.id' => (int) $channel->channel_discord_id]);
                 }
             }
         }
