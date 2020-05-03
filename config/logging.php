@@ -51,6 +51,12 @@ return [
             'level' => 'debug',
             'days' => 30,
         ],
+        'raids' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/raids/raids.log'),
+            'level' => 'debug',
+            'days' => 30,
+        ],
 
         'daily' => [
             'driver' => 'daily',

@@ -42,10 +42,10 @@ class TextAnalyzer {
 
     private function _log( $text, $extra = '' ) {
         if( is_array( $text ) ) {
-            Log::debug( print_r($text, true) );
+            Log::channel('raids')->info( print_r($text, true) );
         } else {
             $this->result->logs .= "{$text}\r\n";
-            Log::debug( $text );
+            Log::channel('raids')->info( $text );
         }
     }
 
