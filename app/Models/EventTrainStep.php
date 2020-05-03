@@ -120,6 +120,6 @@ class EventTrainStep extends Model
             $prev_step->description
         ],$event->guild->settings->events_trains_message_check);
 
-        return \App\Helpers\Discord::encode($content, $event->guild, false);
+        return \App\Core\Discord::encode($content, $event->guild, false);
     }
 }

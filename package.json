@@ -27,6 +27,8 @@
     },
     "dependencies": {
         "@chenfengyuan/vue-countdown": "^1.1.5",
+        "@sentry/browser": "^5.15.5",
+        "@sentry/integrations": "^5.15.5",
         "es6-promise": "^4.2.8",
         "moment": "^2.24.0",
         "vue-google-autocomplete": "^1.1.0",

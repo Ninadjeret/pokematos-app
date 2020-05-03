@@ -51,10 +51,15 @@ class PostTrainMessage
         if( !$event->guild->settings->events_trains_add_messages ) return false;
         if( $event->train_step->isLast() ) return false;
 
-        $content = $event->train_step->getDiscordMessage();
+        $embed = [
+            'title' => 'Avancement du Pokétrain',
+            'description' => $event->train_step->getDiscordMessage(),
+            'color' => hexdec('5a6cae'),
+        ];
+
         $message = $discord->channel->createMessage(array(
             'channel.id' => intval($event->event->channel_discord_id),
-            'content' => $content,
+            'embed' => $embed,
         ));
         $event->train_step->update(['message_discord_id' => $message['id']]);
     }
@@ -66,10 +71,17 @@ class PostTrainMessage
 
         $content = $event->train->getDiscordMessage();
 
+        $embed = [
+            'title' => 'Détail du Pokétrain',
+            'description' => $content,
+            'color' => hexdec('5a6cae'),
+            'thumbnail' => ['url' => $event->event->image]
+        ];
+
         if( empty($event->train->message_discord_id) ) {
             $message = $discord->channel->createMessage(array(
                 'channel.id' => intval($event->event->channel_discord_id),
-                'content' => $content,
+                'embed' => $embed
             ));
             $discord->channel->addPinnedChannelMessage([
                 'channel.id' => intval($event->event->channel_discord_id),
@@ -80,7 +92,7 @@ class PostTrainMessage
             $message = $discord->channel->editMessage(array(
                 'channel.id' => intval($event->event->channel_discord_id),
                 'message.id' => intval($event->train->message_discord_id),
-                'content' => $content,
+                'embed' => $embed
             ));
         }
     }

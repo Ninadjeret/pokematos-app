@@ -6,7 +6,7 @@ use App\Models\Stop;
 use App\Models\Zone;
 use App\Models\Guild;
 use App\Models\Pokemon;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use RestCord\DiscordClient;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -164,8 +164,8 @@ class Connector extends Model {
             'raid_pokemon' => ( !$raid->pokemon ) ? false : html_entity_decode( $raid->pokemon->name_fr ),
             'raid_pokemon_nettoye' => ( !$raid->pokemon ) ? false : Helpers::sanitize(html_entity_decode( $raid->pokemon->name_fr )),
             'raid_niveau' => $raid->egg_level,
-            'raid_debut' => ( $raid->egg_level == 6 ) ? $raid->getStartTime()->format('H\hi') : $raid->getStartTime()->format('d/m/y à H\hi'),
-            'raid_fin' => ( $raid->egg_level == 6 ) ? $raid->getEndTime()->format('H\hi') : $raid->getEndTime()->format('d/m/y à H\hi'),
+            'raid_debut' => ( $raid->egg_level < 6 ) ? $raid->getStartTime()->format('H\hi') : $raid->getStartTime()->format('d/m/y à H\hi'),
+            'raid_fin' => ( $raid->egg_level < 6 ) ? $raid->getEndTime()->format('H\hi') : $raid->getEndTime()->format('d/m/y à H\hi'),
 
             'arene_nom' => $raid->getGym()->niantic_name,
             'arene_nom_nettoye' => Helpers::sanitize($raid->getGym()->niantic_name),

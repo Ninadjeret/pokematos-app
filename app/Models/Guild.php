@@ -97,8 +97,7 @@ class Guild extends Model
                 $return[] = $invit->channel_discord_id;
             }
         }
-        Log::debug('toto');
-        Log::debug( print_r($return, true) );
+
         return $return;
     }
 
@@ -150,11 +149,7 @@ class Guild extends Model
         }
 
         //On avertit le bot de la MAJ
-        $client = new Client();
-        $url = config('app.bot_sync_url');
-        if( !empty($url) ) {
-            $res = $client->get($url);
-        }
+        \App\Core\Discord::SyncBot();
 
         return true;
     }
@@ -170,7 +165,7 @@ class Guild extends Model
 
     public function sendAdminMessage( $type, $args ){
         if( !$this->settings->comadmin_active || !in_array($type, $this->settings->comadmin_types) ) return;
-        \App\Helpers\Conversation::sendToDiscord($this->settings->comadmin_channel_discord_id, $this, 'admin', $type, $args);
+        \App\Core\Conversation::sendToDiscord($this->settings->comadmin_channel_discord_id, $this, 'admin', $type, $args);
     }
 
 }

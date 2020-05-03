@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use Illuminate\Database\Eloquent\Model;
 
 class Pokemon extends Model {

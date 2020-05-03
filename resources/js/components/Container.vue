@@ -142,7 +142,6 @@
         async mounted() {
             console.log(window.pokematos);
             try {
-                this.$store.commit('fetchFeatures');
                 await this.$store.dispatch('fetchGyms');
                 this.$store.commit('fetchPokemon');
                 this.fetchLastChanges();

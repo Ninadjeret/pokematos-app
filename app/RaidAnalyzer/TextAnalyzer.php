@@ -2,7 +2,7 @@
 
 namespace App\RaidAnalyzer;
 
-use App\Helpers\Discord;
+use App\Core\Discord;
 use App\RaidAnalyzer\GymSearch;
 use App\RaidAnalyzer\PokemonSearch;
 use Illuminate\Support\Facades\Log;
@@ -26,7 +26,7 @@ class TextAnalyzer {
 
         $this->start = microtime(true);
         if( $this->debug ) $this->_log('========== Début du traitement '.$source.' ==========');
- 
+
         $this->guild = $guild;
         $this->user = $user;
         $this->text = Discord::translateFrom($source, $this->guild, $this->user);
@@ -42,10 +42,10 @@ class TextAnalyzer {
 
     private function _log( $text, $extra = '' ) {
         if( is_array( $text ) ) {
-            Log::debug( print_r($text, true) );
+            Log::channel('raids')->info( print_r($text, true) );
         } else {
             $this->result->logs .= "{$text}\r\n";
-            Log::debug( $text );
+            Log::channel('raids')->info( $text );
         }
     }
 
@@ -98,12 +98,12 @@ class TextAnalyzer {
 
     public function getTime() {
 
-        preg_match('/(jusqu\'a|jusqu\'à|depop|dépop|depop à|depop a|dépop à|dépop à)\s(\d?)\d(\s?)h(\s?)(\d?\d?)\b/i', $this->text, $dates_fin);
+        preg_match('/(jusqu\'a|jusqu\'à|jusqu’a|jusqu’à|depop|dépop|depop à|depop a|dépop à|dépop à|fin à|fin a)\s(\d?)\d(\s?)[h:](\s?)(\d?\d?)\b/i', $this->text, $dates_fin);
         if( !empty( $dates_fin ) ) {
             return $this->getTimeFromEndDate($dates_fin[0]);
         }
 
-        preg_match('/(\d?)\d(\s?)h(\s?)(\d?\d?)\b/i', $this->text, $dates_debut);
+        preg_match('/(\d?)\d(\s?)[h:](\s?)(\d?\d?)\b/i', $this->text, $dates_debut);
         if( !empty( $dates_debut ) ) {
             return $this->getTimeFromStartDate($dates_debut[0]);
         }
@@ -122,7 +122,7 @@ class TextAnalyzer {
     }
 
     public function getTimeFromStartDate( $date_string ) {
-        $dates = explode('h', $date_string);
+        $dates = ( strstr($date_string, ':') ) ? explode(':', $date_string) : explode('h', $date_string) ;
         $hours = preg_replace('`[^0-9]`', '', $dates[0]);
         $minutes = preg_replace('`[^0-9]`', '', $dates[1]);
         $date = \DateTime::createFromFormat('H:i', $hours.':'.$minutes);
@@ -130,7 +130,7 @@ class TextAnalyzer {
     }
 
     public function getTimeFromEndDate( $date_string ) {
-        $dates = explode('h', $date_string);
+        $dates = ( strstr($date_string, ':') ) ? explode(':', $date_string) : explode('h', $date_string) ;
         $hours = preg_replace('`[^0-9]`', '', $dates[0]);
         $minutes = preg_replace('`[^0-9]`', '', $dates[1]);
         $date = \DateTime::createFromFormat('H:i', $hours.':'.$minutes);
@@ -194,7 +194,7 @@ class TextAnalyzer {
             'text' => $this->text,
         ];
 
-        Log::debug(print_r($this->result, true));
+        Log::channel('raids')->info(print_r($this->result, true));
 
         //Ajout du log
         \App\Models\Log::create([

@@ -2,7 +2,9 @@
 
 namespace App\Listeners\Events;
 
+use App\Models\Event;
 use App\Events\DayChanged;
+use App\Events\EventEnded;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

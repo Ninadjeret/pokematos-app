@@ -2,7 +2,7 @@
 namespace App\RaidAnalyzer;
 
 use App\Models\Stop;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use Illuminate\Support\Facades\Log;
 
 class GymSearch {
@@ -85,14 +85,14 @@ class GymSearch {
             }
         }
 
-        if( $name ) {
+        if( $name && isset( $array[$num]) ) {
             if( preg_match( '/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $array[$num] ) ) {
                 //nothing
             } else {
                 $name .= ' '.$array[$num];
             }
         }
-        Log::debug('Gym name extracted : '.$name);
+        Log::channel('raids')->info('Gym name extracted : '.$name);
         $this->gym_name = $name;
         return $name;
     }
@@ -111,7 +111,7 @@ class GymSearch {
 
         //On supprime les éventuels queries blacklistées(surimpression, etc)
         if( $this->isBlackListed($sanitizedQuery) ) {
-            Log::debug('Query black listed');
+            Log::channel('raids')->info('Query black listed');
             return false;
         }
 
@@ -258,8 +258,9 @@ class GymSearch {
     function findGymFromString( $query, $min = 50 ) {
         $this->query = $query;
         $sanitizedQuery = Helpers::sanitize($this->query);
+        Log::channel('raids')->info("Gym query : {$sanitizedQuery}");
         if( $this->isBlackListed($sanitizedQuery) ) {
-            Log::debug('Query black listed');
+            Log::channel('raids')->info('Query black listed');
             return false;
         }
         $identifiers = $this->getAllIdentifiers();

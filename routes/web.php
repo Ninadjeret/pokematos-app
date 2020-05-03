@@ -26,13 +26,8 @@ Route::get('/', function () {
     return view('login');
 })->name('home');
 
-Route::get('/maintenance', function () {
-    return view('maintenance');
-})->name('maintenance');
-
-Route::get('/status', function () {
-    return view('status');
-})->name('status');
+Route::get('/status', function () { return view('status'); })->name('status');
+Route::get('/debug', function () { return view('debug'); })->name('debug');
 
 Route::get('/ressources/img/pokemon/florked/{name}.png', function ( $name ) {
     $pokemon = \App\Models\Pokemon::where('name_fr', $name)->first();

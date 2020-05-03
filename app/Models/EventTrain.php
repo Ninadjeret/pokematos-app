@@ -22,8 +22,10 @@ class EventTrain extends Model
         $count = count($steps);
         $event = Event::find($this->event_id);
 
-        $content = "**:train::train: Suivi du Pokétrain :train::train:**\r\nLe parcours se déroule en {$count} étapes.:point_down:\r\n";
-        $content .= "   |\r\n";
+        $date = new \DateTime( $event->start_time );
+
+        $content = "Le parcours se déroule le {$date->format('d/m')} en {$count} étapes.:point_down:\r\n";
+        $content .= "\t|\r\n";
 
         $num = 0;
         foreach( $steps as $step ) {
@@ -56,9 +58,9 @@ class EventTrain extends Model
             $content .= "{$emoji} {$bold}{$time->format('H\hi')} : {$name}\r\n{$bold}";
             if( !empty($step->description) ) $content .= "   |   {$step->description}\r\n";
 
-            if( $num < $count ) $content .= "   |\r\n";
+            if( $num < $count ) $content .= "\t|\r\n";
         }
 
-        return \App\Helpers\Discord::encode($content, $event->guild, false);
+        return \App\Core\Discord::encode($content, $event->guild, false);
     }
 }

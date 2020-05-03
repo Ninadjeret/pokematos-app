@@ -51,10 +51,10 @@ class ImageAnalyzer {
 
     private function _log( $text, $extra = '' ) {
         if( is_array( $text ) ) {
-            Log::debug( print_r($text, true) );
+            Log::channel('raids')->info( print_r($text, true) );
         } else {
             $this->result->logs .= "{$text}\r\n";
-            Log::debug( $text );
+            Log::channel('raids')->info( $text );
         }
     }
 
@@ -113,13 +113,11 @@ class ImageAnalyzer {
         $url_ocr = env('APP_URL').Storage::url('captures/'.$filename.'-ocr.jpg');
 
         //Create Img from file
-        if( strstr($source, '.jpg') ) {
+        $mimetype = exif_imagetype($source);
+        if( $mimetype == 2 ) {
             if( $this->debug ) $this->_log('Img extension : JPG');
             $image = imagecreatefromjpeg($source);
-        } elseif( strstr($source, '.jpeg') ) {
-            if( $this->debug ) $this->_log('Img extension : JPEG');
-            $image = imagecreatefromjpeg($source);
-        } elseif( strstr($source, '.png') ) {
+        } elseif( $mimetype == 3 ) {
             if( $this->debug ) $this->_log('Img extension : PNG');
             $image = imagecreatefrompng($source);
         } else {
@@ -137,6 +135,13 @@ class ImageAnalyzer {
             $image = $this->cropImage($image, $firtPixel, $lastPixel);
         }
 
+        imagejpeg($image, $path);
+
+        $image_ocr = imagecreatefromjpeg($path);
+        $lastPixel = $this->getLastPixel($image_ocr);
+        $image_ocr = $this->cropImage($image_ocr, $lastPixel * 0.04, $lastPixel);
+        imagejpeg($image_ocr, $path_ocr);
+
         //Return data
         $imageData = (object) array(
             'source'   => $source,
@@ -152,14 +157,7 @@ class ImageAnalyzer {
         $ratio = $imageData->width / $imageData->height;
         if( $this->debug ) $this->_log('Img ratio : '.$ratio);
 
-        //Crop pour l'envoi à l'API de l'OCR
-        $image_ocr = imagecreatefromjpeg($source);
-        $lastPixel = $this->getLastPixel($image_ocr);
-        $image_ocr = $this->cropImage($image_ocr, $lastPixel * 0.04, $lastPixel);
-
-        imagejpeg($image, $path);
-        imagejpeg($image_ocr, $path_ocr);
-        imagedestroy($image_ocr);    
+        imagedestroy($image_ocr);
         imagedestroy($image);
         return $imageData;
 

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\User;
 use App\Models\Guild;
-use App\Helpers\Discord;
+use App\Core\Discord;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;

@@ -62,11 +62,7 @@ class BotController extends Controller {
             }
 
             //On avertit le bot de la MAJ
-            $client = new Client();
-            $url = config('app.bot_sync_url');
-            if( !empty($url) ) {
-                $res = $client->get($url);
-            }
+            \App\Core\Discord::SyncBot();
 
             return response()->json($guild, 200);
 

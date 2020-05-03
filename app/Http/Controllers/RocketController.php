@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Stop;
 use App\Models\City;
 use App\Models\Guild;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use App\Models\UserAction;
 use App\Models\RocketBoss;
 use Illuminate\Http\Request;

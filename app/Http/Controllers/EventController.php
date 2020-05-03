@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Event;
 use App\Models\Guild;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use App\Models\EventQuiz;
 use App\Models\EventInvit;
 use App\Models\EventTrain;
@@ -14,6 +14,7 @@ use App\Models\EventTrainStep;
 use Illuminate\Support\Facades\Log;
 use App\Events\Events\EventDeleted;
 use Illuminate\Support\Facades\Auth;
+
 
 class EventController extends Controller
 {
@@ -69,23 +70,20 @@ class EventController extends Controller
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
-        $args = [];
-        $args['event'] = [
-            'name' => $request->name,
-            'guild_id' => $guild->id,
-            'city_id' => $guild->city->id,
-            'type' => $request->type,
-            'start_time' => $request->start_time,
-            'image' => $request->image,
+        $args = [
+            'event' => [
+                'name' => $request->name,
+                'guild_id' => $guild->id,
+                'city_id' => $guild->city->id,
+                'type' => $request->type,
+                'start_time' => $request->start_time,
+                'image' => $request->image,
+                'multi_guilds' => $request->multi_guilds,
+            ],
+            'guests' => $request->guests,
+            'steps' => $request->steps,
+            'quiz' => $request->quiz,
         ];
-
-        if( !empty($request->steps) ) {
-            $args['steps'] = $request->steps;
-        }
-
-        if( !empty($request->quiz) ) {
-            $args['quiz'] = $request->quiz;
-        }
 
         $event = Event::add($args);
         return response()->json($event, 200);
@@ -98,20 +96,19 @@ class EventController extends Controller
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
-        $args['event'] = [
-            'name' => $request->name,
-            'type' => $request->type,
-            'start_time' => $request->start_time,
-            'image' => $request->image,
-            'multi_guilds' => $request->multi_guilds,
+        $args = [
+            'event' => [
+                'name' => $request->name,
+                'type' => $request->type,
+                'start_time' => $request->start_time,
+                'image' => $request->image,
+                'multi_guilds' => $request->multi_guilds,
+            ],
+            'guests' => $request->guests,
+            'steps' => $request->steps,
+            'quiz' => $request->quiz,
         ];
-        if( !empty($request->steps) ) {
-            $args['steps'] = $request->steps;
-        }
-        if( !empty($request->quiz) ) {
-            $args['quiz'] = $request->quiz;
-        }
-        $args['guests'] = $request->guests;
+
         $event->change($args);
 
         return response()->json($event, 200);
@@ -123,35 +120,8 @@ class EventController extends Controller
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
-        $event_id = $event->id;
-
-        if( $event->type == 'train' ) {
-            $train = EventTrain::where('event_id', $event_id)->first();
-            if( $train ) {
-                $train_id = $train->id;
-                EventTrain::destroy($train_id);
-
-                $steps = EventTrainStep::where('train_id', $train_id)->get();
-                if( !empty($steps) ) {
-                    EventTrainStep::destroy($steps);
-                }
-            }
-        } elseif( $event->type == 'quiz' ) {
-            $quiz = EventQuiz::where('event_id', $event_id)->first();
-            if( $quiz ) {
-                $questions = $quiz->questions;
-                if( !empty($questions) ) {
-                    foreach( $questions as $question ) {
-                        \App\Models\EventQuizQuestion::destroy($question->id);
-                    }
-                }
-            }
-            EventQuiz::destroy($quiz->id);
-        }
-
-
         event(new EventDeleted($event, $event->guild));
-        Event::destroy($event_id);
+        $event->suppr();
 
         return response()->json(null, 204);
     }
@@ -220,6 +190,10 @@ class EventController extends Controller
 
         $event->quiz->addAnswer($args);
         return response()->json(null, 204);
+    }
+
+    public function getThemes(Request $request) {
+        return response()->json(\App\Models\QuizTheme::all(), 200);
     }
 
 }

@@ -77,51 +77,21 @@ class Event extends Model
 
     public static function add($args) {
 
-        $start_time = new \DateTime($args['event']['start_time']);
-        $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
-        if( !empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen') ) unset($args['event']['image']);
-
+        $args = Event::formatArgs($args);
         $event = Event::create( $args['event'] );
-
-        //Event
         event(new EventCreated($event, $event->guild));
 
         if( $event->type == 'train' ) {
-
-            $train = EventTrain::create([
-                'event_id' => $event->id,
-            ]);
-
-            foreach( $args['steps'] as $arg ) {
-
-                $step = EventTrainStep::create([
-                    'train_id' => $train->id,
-                ]);
-
-                //Calcul de start_time
-                $hour = $arg['hour'];
-                if( strlen($hour) === 1 ) $hour = '0'.$hour;
-                $minutes = $arg['minutes'];
-                if( strlen($minutes) === 1 ) $minutes = '0'.$minutes;
-                $event_start = new \DateTime( $event->start_time );
-                $start_time = "{$event_start->format('Y-m-m')} {$hour}:{$minutes}:00";
-                $arg['start_time'] = $start_time;
-                if( array_key_exists('stop', $arg) && is_array($arg['stop']) && array_key_exists('id', $arg['stop']) ) {
-                    $arg['stop_id'] = $arg['stop']['id'];
-                } elseif( array_key_exists('stop', $arg) && is_object($arg['stop']) ) {
-                    $arg['stop_id'] = $arg['stop']->id;
-                }
-
-                $step->change($arg);
-            }
-
-            //Event
-            event(new TrainCreated($train, $event, $event->guild));
-
-            return $event;
+            $event->setTrain( $args );
+            $event->resetQuizz();
         } elseif( $event->type == 'quiz' ) {
             $event->setQuizz( $args );
+            $event->resetTrain();
         }
+
+        $event->setMultiQuilds($args);
+
+        return $event;
     }
 
     /**
@@ -130,64 +100,85 @@ class Event extends Model
      * @param array $args
      */
     public function change( $args ) {
-        if( !empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen') ) unset($args['event']['image']);
-        $start_time = new \DateTime($args['event']['start_time']);
-        $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
 
-        if( empty( $args['event']['multi_guilds'] ) ) $args['event']['multi_guilds'] = 0;
-
+        $args = Event::formatArgs($args);
         $this->update($args['event']);
 
-
         if( $this->type == 'train' ) {
-
-            $train = EventTrain::firstOrCreate(['event_id' => $this->id]);
-
-            //On gère toutes les donnés dispos pour les steps
-            $saved_steps = [];
-            foreach( $args['steps'] as $args ) {
-
-                //On crée ou on récupère l'étape
-                if( !array_key_exists('id', $args) || empty($args['id']) ) {
-                    $step = EventTrainStep::create([
-                        'train_id' => $train->id,
-                    ]);
-                } else {
-                    $step = EventTrainStep::find($args['id']);
-                }
-
-                //Calcul de start_time
-                $hour = $args['hour'];
-                if( strlen($hour) === 1 ) $hour = '0'.$hour;
-                $minutes = $args['minutes'];
-                if( strlen($minutes) === 1 ) $minutes = '0'.$minutes;
-                $event_start = new \DateTime( $this->start_time );
-                $start_time = "{$event_start->format('Y-m-m')} {$hour}:{$minutes}:00";
-                $args['start_time'] = $start_time;
-                if( array_key_exists('stop', $args) && is_array($args['stop']) && array_key_exists('id', $args['stop']) ) {
-                    $args['stop_id'] = $args['stop']['id'];
-                } elseif( array_key_exists('stop', $args) && is_object($args['stop']) ) {
-                    $args['stop_id'] = $args['stop']->id;
-                }
-
-                $step->change($args);
-                $saved_steps[] = $step->id;
-            }
-
-            //On supprime les anciennes steps
-            EventTrainStep::where('train_id', $train->id)->whereNotIn('id', $saved_steps)->delete();
-
-            //Event
-            event(new TrainUpdated($train, $this, $this->guild));
-
+            $this->setTrain( $args );
+            $this->resetQuizz();
         } elseif( $this->type == 'quiz' ) {
             $this->setQuizz( $args );
+            $this->resetTrain();
         }
 
         $this->setMultiQuilds($args);
 
     }
 
+    public function suppr() {
+        $this->CancelInvits();
+        $this->resetTrain();
+        $this->resetQuizz();
+        $this->delete();
+        return true;
+    }
+
+    public static function formatArgs($args) {
+        if( !empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen') ) unset($args['event']['image']);
+        $start_time = new \DateTime($args['event']['start_time']);
+        $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
+        if( empty( $args['event']['multi_guilds'] ) ) $args['event']['multi_guilds'] = 0;
+        return $args;
+    }
+
+
+    public function setTrain( $args ) {
+        $train = EventTrain::firstOrCreate(['event_id' => $this->id]);
+
+        //On gère toutes les donnés dispos pour les steps
+        $saved_steps = [];
+        foreach( $args['steps'] as $args ) {
+
+            //On crée ou on récupère l'étape
+            if( !array_key_exists('id', $args) || empty($args['id']) ) {
+                $step = EventTrainStep::create([
+                    'train_id' => $train->id,
+                ]);
+            } else {
+                $step = EventTrainStep::find($args['id']);
+            }
+
+            //Calcul de start_time
+            $hour = $args['hour'];
+            if( strlen($hour) === 1 ) $hour = '0'.$hour;
+            $minutes = $args['minutes'];
+            if( strlen($minutes) === 1 ) $minutes = '0'.$minutes;
+            $event_start = new \DateTime( $this->start_time );
+            $start_time = "{$event_start->format('Y-m-m')} {$hour}:{$minutes}:00";
+            $args['start_time'] = $start_time;
+            if( array_key_exists('stop', $args) && is_array($args['stop']) && array_key_exists('id', $args['stop']) ) {
+                $args['stop_id'] = $args['stop']['id'];
+            } elseif( array_key_exists('stop', $args) && is_object($args['stop']) ) {
+                $args['stop_id'] = $args['stop']->id;
+            }
+
+            $step->change($args);
+            $saved_steps[] = $step->id;
+        }
+
+        //On supprime les anciennes steps
+        EventTrainStep::where('train_id', $train->id)->whereNotIn('id', $saved_steps)->delete();
+
+        //Event
+        event(new TrainUpdated($train, $this, $this->guild));
+    }
+
+
+    /**
+     * [setMultiQuilds description]
+     * @param [type] $args [description]
+     */
     public function setMultiQuilds( $args ) {
         if( in_array($this->type, self::$multi_types) ) {
             if( $this->multi_guilds  ) {
@@ -201,6 +192,12 @@ class Event extends Model
         }
     }
 
+
+    /**
+     * [manageInvits description]
+     * @param  [type] $guests [description]
+     * @return [type]         [description]
+     */
     public function manageInvits($guests) {
 
         if( empty($guests) ) {
@@ -228,30 +225,67 @@ class Event extends Model
 
     }
 
+    /**
+     * [CancelInvits description]
+     * @param [type] $not_in [description]
+     */
     public function CancelInvits( $not_in = null ) {
         $query = EventInvit::where('event_id', $this->id);
         if( !empty($not_in) ) $query->whereNotIn('id', $not_in);
         $invits = $query->get();
+        if( $invits->isEmpty() ) {
+            return;
+        }
         foreach( $invits as $invit ) {
             $invit->cancel();
         }
     }
 
+
+    /**
+     * [setQuizz description]
+     * @param [type] $args [description]
+     */
     public function setQuizz( $args ) {
         if( empty($args['quiz']['difficulties']) ) $args['quiz']['difficulties'] = null;
         if( empty($args['quiz']['themes']) ) $args['quiz']['themes'] = null;
+        if( empty($args['quiz']['status']) ) $args['quiz']['status'] = 'future';
 
         $quiz = EventQuiz::firstOrCreate(['event_id' => $this->id]);
         $quiz->update($args['quiz']);
 
-        $now = new \DateTime();
-        $event_start = new \DateTime($this->start_time);
         if( $quiz->status == 'future' ) {
             $quiz->shuffleQuestions();
         }
 
     }
 
+    public function resetTrain() {
+        $train = EventTrain::where('event_id', $this->id)->first();
+        if( empty($train) ) {
+            return;
+        }
+        EventTrainStep::where('train_id', $train->id)->delete();
+        EventTrain::destroy($train->id);
+        return true;
+    }
+
+    public function resetQuizz() {
+        $quiz = EventQuiz::where('event_id', $this->id)->first();
+        if( empty($quiz) ) {
+            return;
+        }
+        EventQuizQuestion::where('quiz_id', $quiz->id)->delete();
+        EventQuiz::destroy($quiz->id);
+        return true;
+    }
+
+
+    /**
+     * [findFromChannelId description]
+     * @param  [type] $channel_idscord_id [description]
+     * @return [type]                     [description]
+     */
     public static function findFromChannelId( $channel_idscord_id ) {
         $event = Event::where('channel_discord_id', $channel_idscord_id)->first();
         if( !empty($event) ) return $event;
@@ -259,6 +293,12 @@ class Event extends Model
         if( !empty($invit) ) return Event::find($invit->event_id);
     }
 
+
+    /**
+     * [getActiveEvents description]
+     * @param  [type] $type [description]
+     * @return [type]       [description]
+     */
     public static function getActiveEvents( $type = null ) {
 
         $now = new \DateTime();

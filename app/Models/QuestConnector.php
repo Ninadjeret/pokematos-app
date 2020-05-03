@@ -6,7 +6,7 @@ use App\Models\Stop;
 use App\Models\Zone;
 use App\Models\Guild;
 use App\Models\Pokemon;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use RestCord\DiscordClient;
 use App\Models\QuestReward;
 use App\Models\QuestMessage;

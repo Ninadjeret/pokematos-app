@@ -65,7 +65,7 @@
         "next": []
     },
     {
-        "text": "---------------\r\n__:pencil: %question__\r\n---------------",
+        "text": "**%question**",
         "type": "question_question",
         "next": []
     },
@@ -95,13 +95,33 @@
         "next": []
     },
     {
-        "text": "Désolé, Un joueur de %guild a été plus rapide. C'est eux qui remportent les points en jeu pour cette question",
+        "text": "%explanation",
+        "type": "question_answer_explanation",
+        "next": []
+    },
+    {
+        "text": "Désolé, Un joueur de **%guild** a été plus rapide. C'est eux qui remportent les points en jeu pour cette question",
         "type": "question_answer_correct_by_another",
         "next": []
     },
     {
         "text": "---------------\r\nVoici le classement en cours\r\n%ranking---------------",
         "type": "question_multi_ranking",
+        "next": []
+    },
+    {
+        "text": "Bravo pour ce super quiz !",
+        "type": "quiz_ended",
+        "next": []
+    },
+    {
+        "text": "%ranking",
+        "type": "quiz_final_score_players",
+        "next": []
+    },
+    {
+        "text": "%ranking",
+        "type": "quiz_final_score_guilds",
         "next": []
     }
 ]

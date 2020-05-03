@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Models\EventQuiz;
 use App\Models\QuizQuestion;
 use App\Models\EventQuizQuestion;
+use App\Core\Events\Quizs\Ranking;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class EventQuizQuestion extends Model
 {
@@ -46,7 +48,10 @@ class EventQuizQuestion extends Model
 
         $this->quiz->sendToDiscord('question_question', [
             '%question' => $this->question->question
-        ]);
+        ], null, array(
+            'thumbnail' => EventQuiz::getEmbedThumbnails()->question,
+            'footer' => ['text' => "Question {$this->order}/{$this->quiz->getNbQuestions()} - {$this->question->difficulty} points - Thème"]
+        ));
     }
 
     public function isEnded() {
@@ -60,7 +65,7 @@ class EventQuizQuestion extends Model
 
         $user = \App\User::firstOrCreate(
             ['discord_id' => $args['user_discord_id'] ],
-            ['name' => $args['user_name']]
+            ['name' => $args['user_name'], 'password' => Hash::make( str_random(20) )]
         );
         $guild = \App\Models\Guild::where('discord_id', $args['guild_discord_id'])->first();
 
@@ -79,7 +84,7 @@ class EventQuizQuestion extends Model
         } else {
             $rand = rand(1,5);
             if( $rand === 1 ) {
-                $this->quiz->sendToDiscord( 'question_answer_wrong', ['%user' => $user], $guild);
+                $this->quiz->sendToDiscord( 'question_answer_wrong', ['%user' => $user->name], $guild);
             }
         }
     }
@@ -97,11 +102,11 @@ class EventQuizQuestion extends Model
                         '%guild' => $this->correctAnswer->guild->name,
                     ], $guild);
                 }
-                $ranking = $this->quiz->FormatMultiRanking();
-                $this->quiz->sendToDiscord( 'question_multi_ranking', ['%ranking' => $ranking]);
+                $ranking = new Ranking($this->quiz->questions);
+                $this->quiz->sendToDiscord( 'question_multi_ranking', ['%ranking' => $ranking->formatMultiRanking()]);
             } else {
                 $this->quiz->sendToDiscord( 'question_answer_correct', [
-                    '%user' => $user,
+                    '%user' => $this->correctAnswer->user->name,
                     '%answer' => $this->question->answer,
                 ]);
             }
@@ -110,6 +115,7 @@ class EventQuizQuestion extends Model
                     '%answer' => $this->question->answer,
                     '%explanation' => $this->question->explanation
                 ]);
+                sleep(10);
             }
         } else {
             $this->quiz->sendToDiscord( 'question_not_answered' );

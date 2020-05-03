@@ -144,7 +144,6 @@
             return {
                 loading: false,
                 value: null,
-                pokemons: [],
                 bosses1t: [],
                 bosses2t: [],
                 bosses3t: [],
@@ -154,8 +153,13 @@
             }
         },
         created() {
+            this.$store.commit('fetchPokemon');
             this.initBosses();
-            this.fetch();
+        },
+        computed: {
+            pokemons() {
+                return this.$store.state.pokemons;
+            }
         },
         methods: {
             initBosses() {
@@ -165,20 +169,6 @@
                 this.bosses4t = this.$store.state.pokemons.filter(boss => boss.boss_level == '4');
                 this.bosses5t = this.$store.state.pokemons.filter(boss => boss.boss_level == '5');
                 this.bosses6t = this.$store.state.pokemons.filter(boss => boss.boss_level == '6');
-            },
-            fetch() {
-                axios.get('/api/pokemons').then( res => {
-                    this.pokemons = res.data;
-                }).catch( err => {
-                    let message = 'Problème lors de la récupération';
-                    if( err.response.data ) {
-                        message = err.response.data;
-                    }
-                    this.$store.commit('setSnackbar', {
-                        message: message,
-                        timeout: 1500
-                    })
-                });
             },
             addBossTo1t(selectedOption, id) {
                 if( this.bosses1t.filter( boss => boss.id == selectedOption.id ).length > 0 ) return;

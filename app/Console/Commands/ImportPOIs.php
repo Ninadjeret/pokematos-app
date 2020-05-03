@@ -120,6 +120,7 @@ class ImportPOIs extends Command
     }
 
     public function add( $data, $city_id, $gym = true ) {
+        if( !isset($data['name']) ) return;
         $gym_type = ( $gym ) ? 1 : 0 ;
         $ex = ( array_key_exists('isEx', $data) ) ? 1 : 0;
         $stop = Stop::create([
@@ -153,7 +154,7 @@ class ImportPOIs extends Command
     }
 
     public function findPOI( $key, $data, $city_id, $type ) {
-
+        if( !isset($data['name']) ) return;
         $to_update = false;
         $import_lat = round($data['lat'], 5, PHP_ROUND_HALF_DOWN);
         $import_lng = round($data['lng'], 5, PHP_ROUND_HALF_DOWN);

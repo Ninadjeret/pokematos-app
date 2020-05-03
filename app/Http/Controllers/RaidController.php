@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\User;
 use App\Models\City;
 use App\Models\Raid;
 use App\Models\Stop;
 use App\Models\Guild;
 use App\Models\UserAction;
 use App\Models\raidChannel;
+use Illuminate\Http\Request;
+use App\RaidAnalyzer\TextAnalyzer;
+use App\RaidAnalyzer\ImageAnalyzer;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RaidController extends Controller {
 

@@ -76,7 +76,7 @@
             }
         },
         created() {
-            this.$store.commit('fetchGyms');
+            //this.$store.dispatch('fetchGyms');
         },
         methods: {
             getPoiIcon( gym ) {

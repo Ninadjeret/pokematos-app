@@ -252,6 +252,7 @@ class Raid extends Model {
                 $bosses = Pokemon::where('boss_level', $raid->egg_level)->get();
                 if( count($bosses) === 1 ) {
                     $raid->update(['pokemon_id' => $bosses[0]->id ]);
+                    $raid->getGym()->touch();
                     $announce = UserAction::create([
                         'type' => 'raid-update',
                         'source' => 'auto',

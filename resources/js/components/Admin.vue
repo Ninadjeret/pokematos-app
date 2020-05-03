@@ -140,7 +140,7 @@
                         permission: 'guild_manage'
                     },
                     {
-                        label: 'Réglages générataux',
+                        label: 'Réglages généraux',
                         route: 'admin.settings',
                         icon: 'settings',
                         permission: 'guild_manage'

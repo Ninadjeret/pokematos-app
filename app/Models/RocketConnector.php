@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Stop;
 use App\Models\Zone;
 use App\Models\Guild;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use App\Models\RocketBoss;
 use RestCord\DiscordClient;
 use App\Models\RocketMessage;

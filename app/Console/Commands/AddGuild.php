@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\City;
 use App\Models\Guild;
 use App\Models\Install;
-use App\Helpers\Helpers;
+use App\Core\Helpers;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 
