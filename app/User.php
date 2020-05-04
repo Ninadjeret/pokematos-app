@@ -82,6 +82,14 @@ class User extends Authenticatable
                 'label' => 'Gérer la guild',
                 'context' => 'guild'
             ],
+            'events_manage' => [
+                'label' => 'Gérer les évents',
+                'context' => 'guild'
+            ],
+            'events_train_check' => [
+                'label' => 'Gérer l\'avancement d\'un pokétrain',
+                'context' => 'guild'
+            ],
         ];
     }
 

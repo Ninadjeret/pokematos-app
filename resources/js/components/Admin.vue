@@ -125,7 +125,7 @@
                         label: 'Évents',
                         route: 'admin.events.home',
                         icon: 'event',
-                        permission: 'guild_manage'
+                        permission: 'events_manage'
                     },
                     {
                         label: 'Message de bienvenue',

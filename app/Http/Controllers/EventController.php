@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 class EventController extends Controller
 {
     public static $feature = 'features.events';
+    public static $capability = 'events_manage';
     public static $feature_message = 'La fonctionnalité n\'est pas active';
 
     public function getActiveEvents( Request $request, City $city ) {
@@ -43,7 +44,7 @@ class EventController extends Controller
 
     public function getGuildEvents( Request $request, Guild $guild ) {
         $user = Auth::user();
-        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
@@ -66,7 +67,7 @@ class EventController extends Controller
     public  function createEvent( Request $request, Guild $guild ) {
         if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
         $user = Auth::user();
-        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
@@ -116,7 +117,7 @@ class EventController extends Controller
 
     public function deleteEvent(Request $request, Guild $guild, Event $event ) {
         $user = Auth::user();
-        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
@@ -128,7 +129,7 @@ class EventController extends Controller
 
     public function checkStep(Request $request, Guild $guild, Event $event, EventTrainStep $step ) {
         $user = Auth::user();
-        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+        if( !$user->can('events_train_check', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $step->check();
@@ -137,7 +138,7 @@ class EventController extends Controller
 
     public function uncheckStep(Request $request, Guild $guild, Event $event, EventTrainStep $step ) {
         $user = Auth::user();
-        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+        if( !$user->can('events_train_check', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $step->uncheck();
@@ -155,6 +156,10 @@ class EventController extends Controller
     }
 
     public function getInvits( Request $request, Guild $guild ) {
+        $user = Auth::user();
+        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $invits = EventInvit::where('guild_id', $guild->id)
             ->whereHas('event', function($q) {
                 $q->where('start_time', '>', date('Y-m-d H:i:s'));
@@ -164,12 +169,20 @@ class EventController extends Controller
     }
 
     public function acceptInvit(Request $request, Guild $guild, EventInvit $invit ) {
+        $user = Auth::user();
+        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $invit->accept();
         $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild','event']);
         return response()->json($invits, 200);
     }
 
     public function refuseInvit(Request $request, Guild $guild, EventInvit $invit ) {
+        $user = Auth::user();
+        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
+        }
         $invit->refuse();
         $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild','event']);
         return response()->json($invits, 200);

@@ -43,8 +43,8 @@
                         </strong>
                         <strong v-if="step.type == 'transport'"><v-icon>directions_car</v-icon>&nbsp;Trajet en voiture/bus</strong>
                         <div v-if="step.description" class="caption">{{step.description}}</div>
-                        <v-btn v-if="userCan('guild_manage') && displayCheck(step, index)" round large @click="checkstep(step, 'check')"><v-icon>done</v-icon>Check</v-btn>
-                        <v-btn class="secondary" v-if="userCan('guild_manage') && displayUncheck(step, index)" round large @click="checkstep(step, 'uncheck')"><v-icon>close</v-icon>Uncheck</v-btn>
+                        <v-btn v-if="userCan('events_train_check') && displayCheck(step, index)" round large @click="checkstep(step, 'check')"><v-icon>done</v-icon>Check</v-btn>
+                        <v-btn class="secondary" v-if="userCan('events_train_check') && displayUncheck(step, index)" round large @click="checkstep(step, 'uncheck')"><v-icon>close</v-icon>Uncheck</v-btn>
                     </v-flex>
                     </v-layout>
                 </v-timeline-item>

@@ -92,6 +92,14 @@
                     {
                         label: 'Mettre à jour les Boss Rocket',
                         value: 'rocket_bosses_edit',
+                    },
+                    {
+                        label: 'Gérer les évents',
+                        value: 'events_manage',
+                    },
+                    {
+                        label: 'Gérer l\'avancement d\'un pokétrain',
+                        value: 'events_train_check',
                     }
                 ],
             }
