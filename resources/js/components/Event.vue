@@ -29,7 +29,7 @@
             <v-timeline align-top dense>
                 <v-timeline-item v-for="(step, index) in event.relation.steps" :key="step.id" :color="getStepColor(step, index)" small :class="'step step--'+getStepColor(step, index)">
                     <v-layout pt-3>
-                    <v-flex xs3>
+                    <v-flex v-if="step.milestone" xs3>
                         <strong>{{getStepTime(step)}}</strong>
                     </v-flex>
                     <v-flex>

@@ -17,7 +17,7 @@ class EventTrain extends Model
     }
 
     public function getStepsAttribute() {
-        return EventTrainStep::where('train_id', $this->id)->orderBy('start_time', 'ASC')->get();
+        return EventTrainStep::where('train_id', $this->id)->orderBy('order', 'ASC')->get();
     }
 
     public function getNbStepsAttribute() {
@@ -94,7 +94,6 @@ class EventTrain extends Model
         } else {
             $name = 'Trajet en voiture/bus';
         }
-        $time = new \DateTime($step->start_time);
 
         $emoji = ':white_circle:';
         $bold = '';
@@ -110,7 +109,13 @@ class EventTrain extends Model
             $bold = '';
         }
 
-        $content .= "{$emoji} {$bold}{$time->format('H\hi')} : {$name}\r\n{$bold}";
+        $time_str = '';
+        if( $step->milestone ) {
+            $time = new \DateTime($step->start_time);
+            $time_str = "{$time->format('H\hi')} : ";
+        }
+
+        $content .= "{$emoji} {$bold}{$time_str}{$name}\r\n{$bold}";
         if( !empty($step->description) ) $content .= "\t|\t{$step->description}\r\n";
         return $content;
     }

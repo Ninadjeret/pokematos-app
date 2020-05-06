@@ -108,12 +108,23 @@
         border-top: 1px solid #ccc;
         border-radius: 0px !important;
         position: relative;
+        select {
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            margin-top: 5px;
+        }
         &.sortable-chosen {
             background: #fafafa;
             border: 2px dotted #ccc;
         }
         &.sortable-drag {
             border: 2px solid $primary;
+        }
+        &.step_opened_true {
+            .step__drag {
+                display: none;
+            }
         }
         .add_step_middle {
             position: absolute;
@@ -143,6 +154,9 @@
             &.closed {
                 display: flex;
                 align-items: center;
+            }
+            .multiselect__tags {
+                border-radius: 0 !important;
             }
             .milestone {
                 margin-top: 5px;

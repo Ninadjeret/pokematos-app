@@ -14311,6 +14311,14 @@ body.logged-out .denied a {
   position: relative;
 }
 
+.setting .step select {
+  margin-bottom: 5px;
+}
+
+.setting .step input[type=text] {
+  margin-top: 5px;
+}
+
 .setting .step.sortable-chosen {
   background: #fafafa;
   border: 2px dotted #ccc;
@@ -14318,6 +14326,10 @@ body.logged-out .denied a {
 
 .setting .step.sortable-drag {
   border: 2px solid #5a6cae;
+}
+
+.setting .step.step_opened_true .step__drag {
+  display: none;
 }
 
 .setting .step .add_step_middle {
@@ -14354,6 +14366,10 @@ body.logged-out .denied a {
   display: flex;
   -webkit-box-align: center;
           align-items: center;
+}
+
+.setting .step .step__content .multiselect__tags {
+  border-radius: 0 !important;
 }
 
 .setting .step .step__content .milestone {

@@ -15,11 +15,19 @@ class EventTrainStep extends Model
 {
     protected $table = 'event_train_steps';
     protected $fillable = ['train_id', 'type', 'stop_id', 'milestone', 'order', 'start_time', 'duration', 'description', 'checked', 'message_discord_id'];
-    protected $appends = ['stop', 'hour', 'minutes'];
+    protected $appends = ['stop', 'hour', 'minutes', 'key', 'opened'];
 
     public function getStopAttribute() {
         if( empty($this->stop_id) ) return false;
         return Stop::find($this->stop_id);
+    }
+
+    public function getKeyAttribute() {
+        return 'key-'.$this->id;
+    }
+
+    public function getOpenedAttribute() {
+        return false;
     }
 
     public function getHourAttribute() {

@@ -113,7 +113,7 @@
                             <draggable v-model="steps" group="people" @start="drag=true" @end="drag=false" handle=".step__drag">
 
                             <transition-group type="transition" name="flip-list">
-                            <div class="step" v-for="(step, index) in steps" :key="step.key">
+                            <div :class="'step step_opened_'+step.opened" v-for="(step, index) in steps" :key="step.key">
                                 <div class="step__drag"><v-btn small flat fab><v-icon>reorder</v-icon></v-btn></div>
                                 <div v-if="step.opened" class="step__content">
                                     <select v-model="step.type">
