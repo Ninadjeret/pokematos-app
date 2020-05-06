@@ -108,9 +108,9 @@ class EventTrainStep extends Model
 
         $event = Event::find($this->train->event_id);
 
-        $start_time = new \DateTime($this->start_time);
+        $start_time = ($this->milestone) ? new \DateTime($this->start_time) : false;
         $prev_step = $this->getPreviousStep();
-        $prev_start_time = new \DateTime($prev_step->start_time);
+        $prev_start_time = ($prev_step->milestone) ? new \DateTime($prev_step->start_time) : false ;
 
         $content = str_replace([
             '{etape_nom}',
@@ -121,10 +121,10 @@ class EventTrainStep extends Model
             '{next_etape_description}'
         ], [
             $this->name,
-            $start_time->format('H\hi'),
+            ($start_time) ? $start_time->format('H\hi') : '',
             $this->description,
             $prev_step->name,
-            $prev_start_time->format('H\hi'),
+            ($prev_start_time) ? $prev_start_time->format('H\hi') : '',
             $prev_step->description
         ],$event->guild->settings->events_trains_message_check);
 
