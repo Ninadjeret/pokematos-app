@@ -14,10 +14,10 @@ import 'es6-promise/auto'
 import Vue from 'vue';
 import * as Sentry from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
-Sentry.init({
+/*Sentry.init({
   dsn: 'https://dff629914bf3457289cd1aaee81810ee@o385969.ingest.sentry.io/5219592',
   integrations: [new VueIntegration({Vue, attachProps: true})],
-});
+});*/
 
 import Vuetify from 'vuetify';
 import fr from '../lang/fr/vuetify';

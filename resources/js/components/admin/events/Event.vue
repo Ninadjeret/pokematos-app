@@ -110,12 +110,29 @@
                         <v-subheader v-if="type == 'train'">Pokétrain</v-subheader>
                         <div v-if="type == 'train'" class="setting">
                             <label>Étapes du Pokétrain</label>
-                            <div class="step" v-for="(step, index) in steps" :key="index">
-                                <div class="step__num">{{index+1}}</div>
-                                <div class="step__content">
-                                    <div class="setting">
-                                        <label>Heure</label>
-                                        <v-layout>
+                            <draggable v-model="steps" group="people" @start="drag=true" @end="drag=false" handle=".step__drag">
+
+                            <transition-group type="transition" name="flip-list">
+                            <div class="step" v-for="(step, index) in steps" :key="step.key">
+                                <div class="step__drag"><v-btn small flat fab><v-icon>reorder</v-icon></v-btn></div>
+                                <div v-if="step.opened" class="step__content">
+                                    <select v-model="step.type">
+                                        <option v-for="stepType in stepTypes" :value="stepType.id" :key="stepType.id">{{stepType.name}}</option>
+                                    </select>
+                                    <div v-if="step.type == 'stop' && gyms">
+                                        <multiselect v-model="step.stop" track-by="id" label="name" placeholder="Choisir une arène" :options="gyms" :searchable="true" :allow-empty="false">
+                                          <template slot="singleLabel" slot-scope="{ option }"><span v-if="option.ex">[EX] </span><span v-if="option.zone">{{ option.zone.name }} - </span>{{ option.name }}</template>
+                                          <template slot="option" slot-scope="props"><span v-if="props.option.ex">[EX] </span><span v-if="props.option.zone">{{ props.option.zone.name }} - </span>{{ props.option.name }}</template>
+                                        </multiselect>
+                                    </div>
+                                    <input v-model="step.description" type="text" placeholder="Description...">
+                                    <div class="milestone">
+                                        <v-checkbox
+                                            v-model="step.milestone"
+                                            label="Étape avec heure de RDV"
+                                            :value="step.milestone">
+                                        </v-checkbox>
+                                        <v-layout v-if="step.milestone">
                                             <v-flex xs6>
                                                 <select dir="rtl" class="hour" v-if="exAllowedHours" v-model="step.hour">
                                                     <option v-for="hour in exAllowedHours" :value="hour" :key="hour">{{hour}}h</option>
@@ -128,29 +145,36 @@
                                             </v-flex>
                                         </v-layout>
                                     </div>
-                                    <div class="setting">
-                                        <label>Type d'étape</label>
-                                        <select v-model="step.type">
-                                            <option v-for="stepType in stepTypes" :value="stepType.id" :key="stepType.id">{{stepType.name}}</option>
-                                        </select>
-                                    </div>
-                                    <div class="setting" v-if="step.type == 'stop' && gyms">
-                                        <label>Arène liée</label>
-                                        <multiselect v-model="step.stop" track-by="id" label="name" placeholder="Choisir une arène" :options="gyms" :searchable="true" :allow-empty="false">
-                                          <template slot="singleLabel" slot-scope="{ option }"><span v-if="option.ex">[EX] </span><span v-if="option.zone">{{ option.zone.name }} - </span>{{ option.name }}</template>
-                                          <template slot="option" slot-scope="props"><span v-if="props.option.ex">[EX] </span><span v-if="props.option.zone">{{ props.option.zone.name }} - </span>{{ props.option.name }}</template>
-                                        </multiselect>
-                                    </div>
-                                    <div class="setting">
-                                        <label>Description</label>
-                                        <input v-model="step.description" type="text">
-                                    </div>
-                                    <v-btn small flat fab @click="removeStep(index)"><v-icon>delete</v-icon></v-btn>
                                 </div>
+                                <div v-if="!step.opened" class="step__content closed">
+                                    <div class="step__time" v-if="step.milestone">
+                                        {{step.hour}}h{{step.minutes}}
+                                    </div>
+                                    <div class="stop__marker">
+                                        <img v-if="step.type == 'stop' && step.stop && step.stop.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
+                                        <img v-if="step.type == 'stop' && step.stop && !step.stop.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
+                                        <v-icon v-if="step.type != 'stop'">directions_car</v-icon>
+                                    </div>
+                                    <div>
+                                        <strong v-if="step.type == 'stop' && step.stop">
+                                            <span v-if="step.stop && step.stop.zone">{{step.stop.zone.name}} - </span>
+                                            {{step.stop.name}}
+                                        </strong>
+                                        <strong v-if="step.type == 'transport'">Trajet en voiture/bus</strong>
+                                        <div v-if="step.description" class="caption">{{step.description}}</div>
+                                    </div>
+                                </div>
+                                <div class="step__actions">
+                                    <v-btn v-if="step.opened" small flat fab @click="removeStep(index)"><v-icon>close</v-icon></v-btn>
+                                    <v-btn v-if="step.opened" small flat fab @click="step.opened = false"><v-icon>check</v-icon></v-btn>
+                                    <v-btn v-if="!step.opened" small flat fab @click="step.opened = true"><v-icon>edit</v-icon></v-btn>
+                                </div>
+                                <v-btn class="add_step_middle" small flat fab @click="addStep(index)"><v-icon>add</v-icon></v-btn>
                             </div>
-                            <div class="alias__add">
-                                <v-btn small fab @click="addStep"><v-icon>add</v-icon></v-btn>
-                            </div>
+                            </transition-group>
+
+                            </draggable>
+                            <v-btn style="margin-top: 20px" class="secondary"round large @click="addStep(steps.length)"><v-icon>add</v-icon>Ajouter une étape</v-btn>
                         </div>
                     </div>
                 </v-tab-item>
@@ -223,9 +247,10 @@
 <script>
     import moment from 'moment';
     import Multiselect from 'vue-multiselect'
+    import draggable from 'vuedraggable'
     export default {
         name: 'AdminEvent',
-        components: { Multiselect },
+        components: { Multiselect, draggable },
         data() {
             return {
                 loading: false,
@@ -271,6 +296,8 @@
                 guests : [],
                 themes: [],
                 temp: null,
+                drag: false,
+                numKeyStep: 0,
             }
         },
         computed: {
@@ -369,9 +396,13 @@
                     that.image = '/storage/user/'+that.user.id+'/'+res.data;
                 });
             },
-            addStep() {
+            addStep( index ) {
+                console.log(index)
                 if( typeof this.steps == "undefined" ) this.steps = [];
-                this.steps.push({id:null,name:'', type:'stop'});
+                this.numKeyStep++;
+                let toAdd = {id:null,name:'', type:'stop', opened: true, key: this.numKeyStep};
+                this.steps.splice(index, 0, toAdd);
+                //this.steps.push({id:null,name:'', type:'stop', opened: true, key: this.numKeyStep});
             },
             removeStep(index) {
                 this.steps.splice(index, 1);
@@ -488,3 +519,28 @@
         }
     }
 </script>
+
+<style>
+.button {
+  margin-top: 35px;
+}
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+.list-group {
+  min-height: 20px;
+}
+.list-group-item {
+  cursor: move;
+}
+.list-group-item i {
+  cursor: pointer;
+}
+</style>

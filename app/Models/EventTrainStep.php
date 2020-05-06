@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 class EventTrainStep extends Model
 {
     protected $table = 'event_train_steps';
-    protected $fillable = ['train_id', 'type', 'stop_id', 'start_time', 'duration', 'description', 'checked', 'message_discord_id'];
+    protected $fillable = ['train_id', 'type', 'stop_id', 'milestone', 'order', 'start_time', 'duration', 'description', 'checked', 'message_discord_id'];
     protected $appends = ['stop', 'hour', 'minutes'];
 
     public function getStopAttribute() {
