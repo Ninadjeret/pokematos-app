@@ -129,7 +129,7 @@ class EventController extends Controller
 
     public function updateSteps( Request $request, Guild $guild, Event $event ) {
         $user = Auth::user();
-        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+        if( !$user->can('events_train_check', ['guild_id' => $guild->id]) ) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $event->setTrain(['steps' => $request->steps]);

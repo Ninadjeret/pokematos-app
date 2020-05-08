@@ -55,14 +55,14 @@
 
         </div>
 
-        <v-btn dark fixed bottom right fab @click="dialog = true"><v-icon>edit</v-icon></v-btn>
+        <v-btn v-if="event && event.type == 'train' && userCan('events_train_check')" dark fixed bottom right fab @click="dialog = true"><v-icon>edit</v-icon></v-btn>
         <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
                 <v-toolbar dark color="primary">
                     <v-btn icon dark @click="dialog = false"><v-icon>close</v-icon></v-btn>
                     <v-toolbar-title>Détail du pokétrain</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-toolbar-items><v-btn dark flat @click="saveSteps()">Save</v-btn></v-toolbar-items>
+                    <v-toolbar-items><v-btn dark flat @click="saveSteps()"><v-icon>save</v-icon></v-btn></v-toolbar-items>
                  </v-toolbar>
                  <event-train ref="editableTrain" v-if="event && event.relation" :steps="event.relation.steps"></event-train>
             </v-card>

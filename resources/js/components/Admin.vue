@@ -2,7 +2,7 @@
     <div>
         <div class="parent_view" v-if="$route.name == 'admin'">
 
-                <div class="settings-section" v-if="user.permissions[guild.id].find(val => val === 'guild_manage')" v-for="guild in currentCity.guilds">
+                <div class="settings-section" v-if="user.permissions[guild.id].find(val => val === 'guild_manage' || val === 'events_manage')" v-for="guild in currentCity.guilds">
                     <v-subheader>Discord {{guild.name}}</v-subheader>
                     <v-list>
                     <template v-if="user.permissions[guild.id].find(val => val === item.permission)" v-for="(item, index) in discordItems">
