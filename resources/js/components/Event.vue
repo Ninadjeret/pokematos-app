@@ -51,9 +51,22 @@
             </v-timeline>
         </div>
 
-        <v-btn v-if="event && event.channel_discord_id" fixed bottom round large :href="'https://discordapp.com/channels/'+event.guild.discord_id+'/'+event.channel_discord_id">Rejoindre la conversation</v-btn>
+        <v-btn v-if="event && event.channel_discord_id" bottom round large :href="'https://discordapp.com/channels/'+event.guild.discord_id+'/'+event.channel_discord_id">Rejoindre la conversation</v-btn>
 
         </div>
+
+        <v-btn dark fixed bottom right fab @click="dialog = true"><v-icon>edit</v-icon></v-btn>
+        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <v-card>
+                <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="dialog = false"><v-icon>close</v-icon></v-btn>
+                    <v-toolbar-title>Détail du pokétrain</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items><v-btn dark flat @click="saveSteps()">Save</v-btn></v-toolbar-items>
+                 </v-toolbar>
+                 <event-train ref="editableTrain" v-if="event && event.relation" :steps="event.relation.steps"></event-train>
+            </v-card>
+        </v-dialog>
 
         <gym-modal ref="gymModal"></gym-modal>
     </div>
@@ -68,6 +81,8 @@
             return {
                 loading: true,
                 event: false,
+                dialog: false,
+                editableSteps: [],
             }
         },
         created() {
@@ -141,7 +156,19 @@
                 if( index === this.event.relation.steps.length - 1 ) return true;
                 if( this.event.relation.steps[index+1].checked == false ) return true;
                 return false;
-            }
+            },
+            saveSteps( args ) {
+                this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
+                axios.put('/api/user/guilds/'+this.event.guild.id+'/events/'+this.event.id+'/steps', {steps: this.$refs.editableTrain.editableSteps}).then( res => {
+                    this.dialog = false;
+                    this.fetch();
+                    this.$store.commit('setSnackbar', {
+                        message: 'Enregistrement effectué',
+                        timeout: 1500
+                    })
+                    this.loading = false
+                });
+            },
         }
     }
 </script>

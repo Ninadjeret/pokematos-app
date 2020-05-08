@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('user/guilds/{guild}/events', 'EventController@createEvent');
     Route::post('user/guilds/{guild}/events/{event}/clone', 'EventController@cloneEvent');
+    Route::put('user/guilds/{guild}/events/{event}/steps', 'EventController@updateSteps');
     Route::put('user/guilds/{guild}/events/{event}', 'EventController@updateEvent');
     Route::delete('user/guilds/{guild}/events/{event}', 'EventController@deleteEvent');
     Route::get('user/guilds/{guild}/events', 'EventController@getGuildEvents');

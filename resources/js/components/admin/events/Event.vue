@@ -145,6 +145,16 @@
                                             </v-flex>
                                         </v-layout>
                                     </div>
+                                    <div class="invitation__action">
+                                        <v-layout wrap align-content-center align-center justify-center>
+                                            <v-flex xs6>
+                                                <v-btn round large class="accept" @click="step.opened = false"><v-icon>check</v-icon>&nbsp;Valider</v-btn>
+                                            </v-flex>
+                                            <v-flex xs6>
+                                                <v-btn round large class="refuse" @click="removeStep(index)"><v-icon>close</v-icon>&nbsp;Supprimer</v-btn>
+                                            </v-flex>
+                                        </v-layout>
+                                    </div>
                                 </div>
                                 <div v-if="!step.opened" class="step__content closed">
                                     <div class="step__time" v-if="step.milestone">
@@ -269,18 +279,6 @@
                     difficulties: [],
                     only_pogo: false,
                 },
-                exAllowedHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-                exAllowedMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
-                stepTypes: {
-                    'stop': {
-                        id: 'stop',
-                        name: 'Arène'
-                    },
-                    'transport': {
-                        id: 'transport',
-                        name: 'Trajet en voiture/bus'
-                    }
-                },
                 levels: [
                     {id: 1, label: 'Facile'},
                     {id: 2, label: 'Moyen'},
@@ -296,8 +294,6 @@
                 guests : [],
                 themes: [],
                 temp: null,
-                drag: false,
-                numKeyStep: 0,
             }
         },
         computed: {
@@ -395,17 +391,6 @@
                 ).then(function(res){
                     that.image = '/storage/user/'+that.user.id+'/'+res.data;
                 });
-            },
-            addStep( index ) {
-                console.log(index)
-                if( typeof this.steps == "undefined" ) this.steps = [];
-                this.numKeyStep++;
-                let toAdd = {id:null,name:'', type:'stop', opened: true, key: this.numKeyStep};
-                this.steps.splice(index, 0, toAdd);
-                //this.steps.push({id:null,name:'', type:'stop', opened: true, key: this.numKeyStep});
-            },
-            removeStep(index) {
-                this.steps.splice(index, 1);
             },
             addGuest(selectedOption, id) {
                 if( this.guests.filter( guest => guest.guild_id == selectedOption.id ).length > 0 ) return;

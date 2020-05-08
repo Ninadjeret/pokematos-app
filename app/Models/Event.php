@@ -133,13 +133,13 @@ class Event extends Model
     }
 
 
-    public function setTrain( $args ) {
+    public function setTrain( $args2 ) {
         $train = EventTrain::firstOrCreate(['event_id' => $this->id]);
 
         //On gère toutes les donnés dispos pour les steps
         $saved_steps = [];
         $order = 0;
-        foreach( $args['steps'] as $args ) {
+        foreach( $args2['steps'] as $args ) {
             $order++;
             $args['order'] = $order;
 

@@ -125,6 +125,9 @@
             .step__drag {
                 display: none;
             }
+            .step__actions {
+                display: none;
+            }
         }
         .add_step_middle {
             position: absolute;
@@ -160,7 +163,7 @@
             }
             .milestone {
                 margin-top: 5px;
-                background: $secondary;
+                /*background: $secondary;*/
                 padding: 5px;
                 .v-input--selection-controls {
                     margin-top: 0;
@@ -268,6 +271,24 @@
         }
     }
 }
+#app__container{
+    .invitation__action {
+        padding: 5px 15px;
+        p {
+            padding-top: 5px;
+            margin-bottom: 0;
+        }
+        button {
+            width: calc(100% - 10px) !important;
+            &.refuse {
+                border: 2px solid darkred;
+                background: none !important;
+                color: darkred !important;
+            }
+
+        }
+    }
+}
 #app__container.template-admin-events-invits {
     .invitation {
         background: $bg_light_grey;
@@ -277,22 +298,6 @@
             font-size: 30px;
             span {
                 /*color: $accent;*/
-            }
-        }
-        .invitation__action {
-            padding: 5px 15px;
-            p {
-                padding-top: 5px;
-                margin-bottom: 0;
-            }
-            button {
-                width: calc(100% - 10px) !important;
-                &.refuse {
-                    border: 2px solid darkred;
-                    background: none;
-                    color: darkred;
-                }
-
             }
         }
     }
