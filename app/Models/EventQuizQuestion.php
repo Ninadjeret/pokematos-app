@@ -34,7 +34,7 @@ class EventQuizQuestion extends Model
 
         $this->quiz->sendToDiscord( 'question_announce', [
             '%question_difficulty' => $this->question->difficulty,
-            '%question_theme' => $this->nb_questions,
+            '%question_theme' => $this->question->theme->name,
         ]);
         sleep(10);
 
@@ -50,7 +50,7 @@ class EventQuizQuestion extends Model
             '%question' => $this->question->question
         ], null, array(
             'thumbnail' => EventQuiz::getEmbedThumbnails()->question,
-            'footer' => ['text' => "Question {$this->order}/{$this->quiz->getNbQuestions()} - {$this->question->difficulty} points - Thème"]
+            'footer' => ['text' => "Question {$this->order}/{$this->quiz->getNbQuestions()} - {$this->question->difficulty} points - Thème {$this->question->theme->name}"]
         ));
     }
 
