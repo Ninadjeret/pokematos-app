@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Zone;
 use App\Models\Guild;
@@ -159,6 +160,10 @@ class Connector extends Model {
 
         $username = ( $raid->getLastUserAction()->getUser() ) ? $raid->getLastUserAction()->getUser()->name : false ;
 
+        $role_poi_lie = Role::where('gym_id', $raid->gym_id)->first();
+        $role_zone_liee = ( $raid->gym->zone ) Role::where('zone_id', $raid->gym->zone->id)->first() : false ;
+        $role_pokemon_lie = Role::where('pokemon_id', $raid->pokemon_id)->first();
+
         //Gestion des tags
         $patterns = array(
             'raid_pokemon' => ( !$raid->pokemon ) ? false : html_entity_decode( $raid->pokemon->name_fr ),
@@ -175,6 +180,10 @@ class Connector extends Model {
             'arene_zone' => ( !empty(  $raid->getGym()->zone ) ) ?  $raid->getGym()->zone->name : false,
             'arene_zone_nettoye' => ( !empty(  $raid->getGym()->zone ) ) ?  Helpers::sanitize($raid->getGym()->zone->name) : false,
             'arene_gmaps' => ( !empty(  $raid->getGym()->google_maps_url ) ) ?  $raid->getGym()->google_maps_url : false,
+
+            'role_poi_lie' => ( !empty($role_poi_lie) ) ? "@{$role_poi_lie->name}" : '',
+            'role_zone_liee' => ( !empty($role_zone_liee) ) ? "@{$role_zone_liee->name}" : '',
+            'role_pokemon_lie' => ( !empty($role_pokemon_lie) ) ? "@{$role_pokemon_lie->name}" : '',
 
             'utilisateur' => $username,
         );

@@ -203,6 +203,11 @@
 }
 .multiselect {
     min-height: 50px;
+    &:not(.multiselect--active) {
+        .multiselect__input {
+            display: none;
+        }
+    }
     .multiselect__select {
         top: 7px;
     }

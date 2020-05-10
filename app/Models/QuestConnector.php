@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Zone;
 use App\Models\Guild;
@@ -151,6 +152,10 @@ class QuestConnector extends Model
     public function translate( $message, $quest ) {
         $username = ( $quest->getLastUserAction()->getUser() ) ? $quest->getLastUserAction()->getUser()->name : false;
 
+        $role_poi_lie = Role::where('gym_id', $quest->getStop()->id)->first();
+        $role_zone_liee = ( $quest->getStop()->zone ) Role::where('zone_id', $quest->getStop()->zone->id)->first() : false ;
+        $role_pokemon_lie = Role::where('pokemon_id', $quest->reward->id)->first();
+
         //Gestion des tags
         $patterns = array(
             'quete_recompense' => ( !$quest->reward ) ? false : html_entity_decode( $quest->reward->name ),
@@ -165,6 +170,10 @@ class QuestConnector extends Model
             'pokestop_zone' => ( !empty(  $quest->getStop()->zone ) ) ?  $quest->getStop()->zone->name : false,
             'pokestop_zone_nettoye' => ( !empty(  $quest->getStop()->zone ) ) ?  Helpers::sanitize($quest->getStop()->zone->name) : false,
             'pokestop_gmaps' => ( !empty(  $quest->getStop()->google_maps_url ) ) ?  $quest->getStop()->google_maps_url : false,
+
+            'role_poi_lie' => ( !empty($role_poi_lie) ) ? "@{$role_poi_lie->name}" : '',
+            'role_zone_liee' => ( !empty($role_zone_liee) ) ? "@{$role_zone_liee->name}" : '',
+            'role_pokemon_lie' => ( !empty($role_pokemon_lie) ) ? "@{$role_pokemon_lie->name}" : '',
 
             'utilisateur' => $username,
         );

@@ -12476,6 +12476,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   min-height: 50px;
 }
 
+.multiselect:not(.multiselect--active) .multiselect__input {
+  display: none;
+}
+
 .multiselect .multiselect__select {
   top: 7px;
 }
