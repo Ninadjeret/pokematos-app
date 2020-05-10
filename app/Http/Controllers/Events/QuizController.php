@@ -17,7 +17,7 @@ class QuizController extends Controller
 
         $query = QuizQuestion::whereIn('difficulty', $difficulties)
             ->whereIn('theme_id', $themes);
-        if( $request->only_pogo == 'true' ) $query->where('about_pogo', 1);
+        if( $request->only_pogo == 'true' || $request->only_pogo == 1 ) $query->where('about_pogo', 1);
         $questions = $query->get();
 
         return response()->json($questions->count(), 200);

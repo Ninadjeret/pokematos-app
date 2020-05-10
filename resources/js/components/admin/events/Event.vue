@@ -268,7 +268,6 @@
         created() {
             this.fetchGuilds();
             this.fetchQuizThemes();
-            this.fetchQuizAvailableQuestions();
             if( this.getId ) {
                 this.fetch();
             } else {
@@ -288,6 +287,7 @@
                     if( this.type == 'quiz' ) this.quiz = res.data.relation;
                     console.log(this.quiz)
                     this.fetchLoaded = true;
+                    this.fetchQuizAvailableQuestions();
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response && err.response.data ) {
@@ -369,7 +369,7 @@
                     name: this.name,
                     type: this.type,
                     start_time: start_time.format('YYYY-MM-DD HH:mm:SS'),
-                    steps: this.$refs.editableTrain.editableSteps,
+                    steps: (this.$refs.editableTrain) ? this.$refs.editableTrain.editableSteps : [],
                     quiz: this.quiz,
                     image: this.image,
                     multi_guilds: this.multi_guilds,
