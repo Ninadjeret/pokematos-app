@@ -137,7 +137,7 @@ class RocketConnector extends Model
         $username = ( $invasion->getLastUserAction()->getUser() ) ? $invasion->getLastUserAction()->getUser()->name : false;
 
         $role_poi_lie = Role::where('gym_id', $invasion->getStop()->id)->first();
-        $role_zone_liee = ( $invasion->getStop()->zone ) Role::where('zone_id', $invasion->getStop()->zone->id)->first() : false ;
+        $role_zone_liee = ( $invasion->getStop()->zone ) ? Role::where('zone_id', $invasion->getStop()->zone->id)->first() : false ;
 
         //Gestion des tags
         $patterns = array(

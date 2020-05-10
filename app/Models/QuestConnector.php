@@ -153,7 +153,7 @@ class QuestConnector extends Model
         $username = ( $quest->getLastUserAction()->getUser() ) ? $quest->getLastUserAction()->getUser()->name : false;
 
         $role_poi_lie = Role::where('gym_id', $quest->getStop()->id)->first();
-        $role_zone_liee = ( $quest->getStop()->zone ) Role::where('zone_id', $quest->getStop()->zone->id)->first() : false ;
+        $role_zone_liee = ( $quest->getStop()->zone ) ? Role::where('zone_id', $quest->getStop()->zone->id)->first() : false ;
         $role_pokemon_lie = Role::where('pokemon_id', $quest->reward->id)->first();
 
         //Gestion des tags

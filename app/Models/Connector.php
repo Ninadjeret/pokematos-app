@@ -161,7 +161,7 @@ class Connector extends Model {
         $username = ( $raid->getLastUserAction()->getUser() ) ? $raid->getLastUserAction()->getUser()->name : false ;
 
         $role_poi_lie = Role::where('gym_id', $raid->gym_id)->first();
-        $role_zone_liee = ( $raid->gym->zone ) Role::where('zone_id', $raid->gym->zone->id)->first() : false ;
+        $role_zone_liee = ( $raid->gym->zone ) ? Role::where('zone_id', $raid->gym->zone->id)->first() : false ;
         $role_pokemon_lie = Role::where('pokemon_id', $raid->pokemon_id)->first();
 
         //Gestion des tags

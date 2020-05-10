@@ -60,6 +60,7 @@ class importQuestions extends Command
                     'alt_answers' => explode(', ', $data->alt_answers),
                     'explanation' => $data->explanation,
                     'difficulty' => $data->difficulty,
+                    'about_pogo' => $data->about_pogo,
                     'theme_id' => ( !empty($data->theme) ) ? QuizTheme::firstOrCreate(['name' => $data->theme])->id : null,
                 ]);
             }
