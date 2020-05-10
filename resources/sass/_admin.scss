@@ -318,6 +318,9 @@
     &.warning {
         background: orange;
     }
+    &.info {
+        background: #2196f3!important;
+    }
 }
 .multiselect__tags {
     input.multiselect__input {

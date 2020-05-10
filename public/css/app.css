@@ -12610,6 +12610,10 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   background: orange;
 }
 
+.v-alert.info {
+  background: #2196f3 !important;
+}
+
 .multiselect__tags input.multiselect__input {
   /*display: none;*/
 }

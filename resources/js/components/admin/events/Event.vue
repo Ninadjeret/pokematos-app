@@ -82,6 +82,7 @@
                             <div class="setting checkbox">
                                 <label>Difficulté des questions</label>
                                 <v-checkbox
+                                    @change="fetchQuizAvailableQuestions()"
                                     v-for="(level, index) in levels"
                                     v-model="quiz.difficulties"
                                     :key="level.id"
@@ -89,7 +90,7 @@
                                     :value="level.id">
                                 </v-checkbox>
                             </div>
-                            <div class="setting checkbox">
+                            <!--<div class="setting checkbox">
                                 <label>Thèmes des questions</label>
                                 <v-checkbox
                                     v-for="(theme, index) in themes"
@@ -98,13 +99,14 @@
                                     :label="theme.name"
                                     :value="theme.id">
                                 </v-checkbox>
-                            </div>
+                            </div>-->
                             <div class="setting d-flex switch">
                                 <div>
                                     <label>Proposer des questions en lien uniquement avec PokémonGO ?</label>
                                 </div>
-                                <v-switch :disabled="isQuizStarted" v-model="quiz.only_pogo"></v-switch>
+                                <v-switch @change="fetchQuizAvailableQuestions()" :disabled="isQuizStarted" v-model="quiz.only_pogo"></v-switch>
                             </div>
+                            <v-alert :value="true" type="info">{{availableQuestions}} questions répondent aux critères</v-alert>
                         </div>
 
                         <v-subheader v-if="type == 'train'">Pokétrain</v-subheader>
@@ -219,6 +221,7 @@
                 guests : [],
                 themes: [],
                 temp: null,
+                availableQuestions: 0,
             }
         },
         computed: {
@@ -265,6 +268,7 @@
         created() {
             this.fetchGuilds();
             this.fetchQuizThemes();
+            this.fetchQuizAvailableQuestions();
             if( this.getId ) {
                 this.fetch();
             } else {
@@ -305,6 +309,17 @@
                 axios.get('/api/events/quiz/themes').then( res => {
                     this.themes = res.data;
                     this.fetchQuizThemesLoaded = true;
+                });
+            },
+            fetchQuizAvailableQuestions() {
+                const args = {
+                    nb_questions: this.quiz.nb_questions,
+                    themes: this.quiz.themes,
+                    difficulties: this.quiz.difficulties,
+                    only_pogo: this.quiz.only_pogo,
+                };
+                axios.get('/api/events/quiz/available-questions', {params:args}).then( res => {
+                    this.availableQuestions = res.data;
                 });
             },
             onImageChange(e){
