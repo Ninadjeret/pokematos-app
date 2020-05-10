@@ -106,14 +106,17 @@
     },
     {
         "text": "%user ?? Alors ? ça va pas ?",
+        "type": "question_answer_wrong",
         "next": []
     },
     {
         "text": "Quelle belle réponse %user, mais c'est à côté :/",
+        "type": "question_answer_wrong",
         "next": []
     },
     {
         "text": "Alors moi je veux bien tout entendre, mais là vraiement je peux pas. Désolé %user",
+        "type": "question_answer_wrong",
         "next": []
     },
     {
