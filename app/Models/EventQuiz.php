@@ -60,11 +60,8 @@ class EventQuiz extends Model
 
         EventQuizQuestion::where('quiz_id', $this->id)->delete();
 
-        $difficulties = ( empty($this->difficulties) ) ? [1, 2, 3] : $this->difficulties ;
+        $difficulties = ( empty($this->difficulties) ) ? [1, 2, 3, 5] : $this->difficulties ;
         $themes = ( empty($this->themes) ) ? \DB::table('quiz_themes')->pluck('id')->toArray() : $this->themes ;
-
-        Log::debug( print_r($difficulties, true) );
-        Log::debug( print_r($themes, true) );
 
         $query = QuizQuestion::whereIn('difficulty', $difficulties)
             ->whereIn('theme_id', $themes)

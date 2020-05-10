@@ -41,26 +41,39 @@
                     <v-btn value="poi">Un POI</v-btn>
                     <v-btn value="zone">Une zone</v-btn>
                     <v-btn value="pokemon">Un Pokémon</v-btn>
-                    <v-btn value="other">Autre chose</v-btn>
+                    <v-btn value="other">Autre</v-btn>
                 </v-btn-toggle>
             </div>
             <div class="setting" v-if="type == 'poi' && gyms">
-                <label>Arène liée</label>
-                <select v-model="gym_id">
-                    <option v-for="gym in gyms" :value="gym.id">{{gym.name}}</option>
-                </select>
+                <label>POI lié</label>
+                <multiselect v-model="gym" track-by="id" label="name" placeholder="Choisir une arène" :options="gyms" :searchable="true" :allow-empty="false">
+                  <template slot="singleLabel" slot-scope="{ option }"><span v-if="option.ex">[EX] </span><span v-if="option.zone">{{ option.zone.name }} - </span>{{ option.name }}</template>
+                  <template slot="option" slot-scope="props"><span v-if="props.option.ex">[EX] </span><span v-if="props.option.zone">{{ props.option.zone.name }} - </span>{{ props.option.name }}</template>
+                </multiselect>
             </div>
             <div class="setting" v-if="type == 'zone' && zones">
                 <label>Zone géographique liée</label>
-                <select v-model="zone_id">
-                    <option v-for="zone in zones" :value="zone.id">{{zone.name}}</option>
-                </select>
+                <multiselect
+                    v-model="zone"
+                    track-by="id"
+                    label="name"
+                    placeholder="Choisir une zone"
+                    :options="zones"
+                    :searchable="true"
+                    :allow-empty="false">
+                </multiselect>
             </div>
             <div class="setting" v-if="type == 'pokemon' && pokemons">
                 <label>Pokémon lié</label>
-                <select v-model="pokemon_id">
-                    <option v-for="pokemon in pokemons" :value="pokemon.id">{{pokemon.name_fr}}</option>
-                </select>
+                <multiselect
+                    v-model="pokemon"
+                    track-by="id"
+                    label="name"
+                    placeholder="Choisir une zone"
+                    :options="pokemons"
+                    :searchable="true"
+                    :allow-empty="false">
+                </multiselect>
             </div>
             <v-divider></v-divider>
             <div v-if="this.$route.params.role_id">
@@ -89,10 +102,10 @@
 <script>
     import Swatches from 'vue-swatches'
     import "vue-swatches/dist/vue-swatches.min.css"
-
+    import Multiselect from 'vue-multiselect'
     export default {
         name: 'AdminRolesEdit',
-        components: { Swatches },
+        components: { Multiselect, Swatches },
         data() {
             return {
                 loading: false,
@@ -102,8 +115,11 @@
                 color: '#000000',
                 type: 'other',
                 gym_id: '',
+                gym: false,
                 zone_id: '',
+                zone: false,
                 pokemon_id: '',
+                pokemon: false,
                 category_id: '',
                 categories: [],
                 gyms: []
@@ -134,6 +150,9 @@
                     this.zone_id = res.data.zone_id;
                     this.pokemon_id = res.data.pokemon_id;
                     this.category_id = res.data.category_id;
+                    this.gym = res.data.gym;
+                    this.zone = res.data.zone;
+                    this.pokemon = res.data.pokemon;
                     console.log(this.channel_id);
                 }).catch( err => {
                     //No error
@@ -165,9 +184,9 @@
                     color_type: this.color_type,
                     color: this.color,
                     type: this.type,
-                    gym_id: this.gym_id,
-                    zone_id: this.zone_id,
-                    pokemon_id: this.pokemon_id,
+                    gym_id: (this.type == 'poi') ? this.gym.id : '',
+                    zone_id: (this.type == 'zone') ? this.zone.id : '',
+                    pokemon_id: (this.type == 'pokemon') ? this.pokemon.id : '',
                     category_id: this.category_id,
                 };
                 if( this.$route.params.role_id ) {

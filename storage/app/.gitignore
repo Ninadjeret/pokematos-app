@@ -1,3 +1,5 @@
 *
 !public/
+!questions/
+!questions/*
 !.gitignore

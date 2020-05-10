@@ -250,7 +250,7 @@ const store = new Vuex.Store({
             if( localStorage.getItem('pokematos_gyms') == '' ) {
                 commit('setSetting', {
                     setting: 'lastUpdate',
-                    value: '2000-01-01 00:00:00'
+                    value: 'initial'
                 });
             }
         },
@@ -268,15 +268,22 @@ const store = new Vuex.Store({
 
             var cities = await axios.get('/api/user/cities/');
             commit('setCities', cities.data);
+            commit('fetchZones')
 
             var lastUpdate = getters.getSetting('lastUpdate');
             var result = await axios.get('/api/user/cities/'+state.currentCity.id+'/gyms?last_update='+lastUpdate);
+            commit('setGyms', result.data)
+            if( lastUpdate == 'initial' ) {
+                let updateDate = require('moment')().format('YYYY-MM-DD')+'00:00:00';
+                var result = await axios.get('/api/user/cities/'+state.currentCity.id+'/gyms?last_update='+updateDate);
+                commit('setGyms', result.data)
+            }
+
             commit('setSetting', {
                 setting: 'lastUpdate',
                 value: require('moment')().format('YYYY-MM-DD HH:mm:ss')
             });
-            commit('setGyms', result.data)
-            commit('fetchZones')
+
         },
         async fetchData (context) {
             context.commit('setSnackbar', {
@@ -298,6 +305,11 @@ const store = new Vuex.Store({
             commit('setGyms', result.data)
             commit('fetchZones')
             commit('fetchPokemon')
+
+            let updateDate = require('moment')().format('YYYY-MM-DD')+'00:00:00';
+            var result = await axios.get('/api/user/cities/'+state.currentCity.id+'/gyms?last_update='+updateDate);
+            commit('setGyms', result.data)
+
             commit('setSetting', {
                 setting: 'lastUpdate',
                 value: require('moment')().format('YYYY-MM-DD HH:mm:ss')

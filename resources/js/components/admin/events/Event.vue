@@ -82,6 +82,7 @@
                             <div class="setting checkbox">
                                 <label>Difficulté des questions</label>
                                 <v-checkbox
+                                    @change="fetchQuizAvailableQuestions()"
                                     v-for="(level, index) in levels"
                                     v-model="quiz.difficulties"
                                     :key="level.id"
@@ -89,7 +90,7 @@
                                     :value="level.id">
                                 </v-checkbox>
                             </div>
-                            <div class="setting checkbox">
+                            <!--<div class="setting checkbox">
                                 <label>Thèmes des questions</label>
                                 <v-checkbox
                                     v-for="(theme, index) in themes"
@@ -98,59 +99,19 @@
                                     :label="theme.name"
                                     :value="theme.id">
                                 </v-checkbox>
-                            </div>
+                            </div>-->
                             <div class="setting d-flex switch">
                                 <div>
                                     <label>Proposer des questions en lien uniquement avec PokémonGO ?</label>
                                 </div>
-                                <v-switch :disabled="isQuizStarted" v-model="quiz.only_pogo"></v-switch>
+                                <v-switch @change="fetchQuizAvailableQuestions()" :disabled="isQuizStarted" v-model="quiz.only_pogo"></v-switch>
                             </div>
+                            <v-alert :value="true" type="info">{{availableQuestions}} questions répondent aux critères</v-alert>
                         </div>
 
                         <v-subheader v-if="type == 'train'">Pokétrain</v-subheader>
-                        <div v-if="type == 'train'" class="setting">
-                            <label>Étapes du Pokétrain</label>
-                            <div class="step" v-for="(step, index) in steps" :key="index">
-                                <div class="step__num">{{index+1}}</div>
-                                <div class="step__content">
-                                    <div class="setting">
-                                        <label>Heure</label>
-                                        <v-layout>
-                                            <v-flex xs6>
-                                                <select dir="rtl" class="hour" v-if="exAllowedHours" v-model="step.hour">
-                                                    <option v-for="hour in exAllowedHours" :value="hour" :key="hour">{{hour}}h</option>
-                                                </select>
-                                            </v-flex>
-                                            <v-flex xs6>
-                                                <select class="minutes" v-if="exAllowedMinutes" v-model="step.minutes">
-                                                    <option v-for="minutes in exAllowedMinutes" :value="minutes" :key="minutes">{{minutes}}</option>
-                                                </select>
-                                            </v-flex>
-                                        </v-layout>
-                                    </div>
-                                    <div class="setting">
-                                        <label>Type d'étape</label>
-                                        <select v-model="step.type">
-                                            <option v-for="stepType in stepTypes" :value="stepType.id" :key="stepType.id">{{stepType.name}}</option>
-                                        </select>
-                                    </div>
-                                    <div class="setting" v-if="step.type == 'stop' && gyms">
-                                        <label>Arène liée</label>
-                                        <multiselect v-model="step.stop" track-by="id" label="name" placeholder="Choisir une arène" :options="gyms" :searchable="true" :allow-empty="false">
-                                          <template slot="singleLabel" slot-scope="{ option }"><span v-if="option.ex">[EX] </span><span v-if="option.zone">{{ option.zone.name }} - </span>{{ option.name }}</template>
-                                          <template slot="option" slot-scope="props"><span v-if="props.option.ex">[EX] </span><span v-if="props.option.zone">{{ props.option.zone.name }} - </span>{{ props.option.name }}</template>
-                                        </multiselect>
-                                    </div>
-                                    <div class="setting">
-                                        <label>Description</label>
-                                        <input v-model="step.description" type="text">
-                                    </div>
-                                    <v-btn small flat fab @click="removeStep(index)"><v-icon>delete</v-icon></v-btn>
-                                </div>
-                            </div>
-                            <div class="alias__add">
-                                <v-btn small fab @click="addStep"><v-icon>add</v-icon></v-btn>
-                            </div>
+                        <div v-if="type == 'train'">
+                            <event-train ref="editableTrain" :steps="steps"></event-train>
                         </div>
                     </div>
                 </v-tab-item>
@@ -223,9 +184,10 @@
 <script>
     import moment from 'moment';
     import Multiselect from 'vue-multiselect'
+    import draggable from 'vuedraggable'
     export default {
         name: 'AdminEvent',
-        components: { Multiselect },
+        components: { Multiselect, draggable },
         data() {
             return {
                 loading: false,
@@ -244,18 +206,6 @@
                     difficulties: [],
                     only_pogo: false,
                 },
-                exAllowedHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-                exAllowedMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
-                stepTypes: {
-                    'stop': {
-                        id: 'stop',
-                        name: 'Arène'
-                    },
-                    'transport': {
-                        id: 'transport',
-                        name: 'Trajet en voiture/bus'
-                    }
-                },
                 levels: [
                     {id: 1, label: 'Facile'},
                     {id: 2, label: 'Moyen'},
@@ -271,6 +221,7 @@
                 guests : [],
                 themes: [],
                 temp: null,
+                availableQuestions: 0,
             }
         },
         computed: {
@@ -336,6 +287,7 @@
                     if( this.type == 'quiz' ) this.quiz = res.data.relation;
                     console.log(this.quiz)
                     this.fetchLoaded = true;
+                    this.fetchQuizAvailableQuestions();
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
                     if( err.response && err.response.data ) {
@@ -359,6 +311,17 @@
                     this.fetchQuizThemesLoaded = true;
                 });
             },
+            fetchQuizAvailableQuestions() {
+                const args = {
+                    nb_questions: this.quiz.nb_questions,
+                    themes: this.quiz.themes,
+                    difficulties: this.quiz.difficulties,
+                    only_pogo: this.quiz.only_pogo,
+                };
+                axios.get('/api/events/quiz/available-questions', {params:args}).then( res => {
+                    this.availableQuestions = res.data;
+                });
+            },
             onImageChange(e){
                 let toUpload = e.target.files[0];
                 let formData = new FormData();
@@ -368,13 +331,6 @@
                 ).then(function(res){
                     that.image = '/storage/user/'+that.user.id+'/'+res.data;
                 });
-            },
-            addStep() {
-                if( typeof this.steps == "undefined" ) this.steps = [];
-                this.steps.push({id:null,name:'', type:'stop'});
-            },
-            removeStep(index) {
-                this.steps.splice(index, 1);
             },
             addGuest(selectedOption, id) {
                 if( this.guests.filter( guest => guest.guild_id == selectedOption.id ).length > 0 ) return;
@@ -413,7 +369,7 @@
                     name: this.name,
                     type: this.type,
                     start_time: start_time.format('YYYY-MM-DD HH:mm:SS'),
-                    steps: this.steps,
+                    steps: (this.$refs.editableTrain) ? this.$refs.editableTrain.editableSteps : [],
                     quiz: this.quiz,
                     image: this.image,
                     multi_guilds: this.multi_guilds,
@@ -488,3 +444,28 @@
         }
     }
 </script>
+
+<style>
+.button {
+  margin-top: 35px;
+}
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+.list-group {
+  min-height: 20px;
+}
+.list-group-item {
+  cursor: move;
+}
+.list-group-item i {
+  cursor: pointer;
+}
+</style>

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Zone;
 use App\Models\Stop;
 use App\Models\Guild;
 use App\Core\Helpers;
+use App\Models\Pokemon;
 use RestCord\DiscordClient;
 use App\Models\RoleCategory;
 use Illuminate\Support\Facades\Log;
@@ -29,10 +31,25 @@ class Role extends Model {
         'channel_discord_id',
         'message_discord_id'
     ];
-    protected $appends = ['category'];
+    protected $appends = ['category', 'gym', 'zone', 'pokemon'];
     protected $casts = [
         'restricted' => 'boolean'
     ];
+
+    public function getGymAttribute() {
+        if( $this->type =! 'poi' || empty($this->gym_id) ) return false;
+        return Stop::find($this->gym_id);
+    }
+
+    public function getZoneAttribute() {
+        if( $this->type =! 'zone' || empty($this->zone_id) ) return false;
+        return Zone::find($this->gym_id);
+    }
+
+    public function getPokemonAttribute() {
+        if( $this->type =! 'pokemon' || empty($this->pokemon_id) ) return false;
+        return Pokemon::find($this->gym_id);
+    }
 
     public function getGuildAttribute() {
         return Guild::find($this->guild_id);

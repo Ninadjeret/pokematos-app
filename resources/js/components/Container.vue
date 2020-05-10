@@ -169,7 +169,7 @@
             },
             isAdmin() {
                 let isAdmin = parseInt(this.currentCity.permissions) >= 30;
-                let isModo =  this.canAccessCityParam('raid_delete') || this.canAccessCityParam('raidex_add')
+                let isModo =  this.canAccessCityParam('poi_edit') || this.canAccessCityParam('zone_edit') || this.canAccessCityParam('events_manage') || this.canAccessCityParam('boss_edit') || this.canAccessCityParam('quest_edit') || this.canAccessCityParam('rocket_bosses_edit')
                 return isAdmin || isModo;
             }
         },

@@ -39,6 +39,7 @@
         "vue-select": "^3.10.1",
         "vue-swatches": "^1.0.4",
         "vue2-leaflet": "^1.2.3",
+        "vuedraggable": "^2.23.2",
         "vuetify": "^1.5.24",
         "vuetify-datetime-picker": "^2.1.1",
         "vuex": "^3.2.0",

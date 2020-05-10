@@ -103,6 +103,8 @@
                                 {pokestop_zone}<br>
                                 {pokestop_gmaps}<br>
                                 {utilisateur}<br>
+                                {role_poi_lie}<br>
+                                {role_zone_liee}<br>
                             </p>
                             <input v-model="custom_message" type="text">
                         </div>

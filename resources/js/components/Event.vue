@@ -29,7 +29,7 @@
             <v-timeline align-top dense>
                 <v-timeline-item v-for="(step, index) in event.relation.steps" :key="step.id" :color="getStepColor(step, index)" small :class="'step step--'+getStepColor(step, index)">
                     <v-layout pt-3>
-                    <v-flex xs3>
+                    <v-flex v-if="step.milestone" xs3>
                         <strong>{{getStepTime(step)}}</strong>
                     </v-flex>
                     <v-flex>
@@ -43,17 +43,30 @@
                         </strong>
                         <strong v-if="step.type == 'transport'"><v-icon>directions_car</v-icon>&nbsp;Trajet en voiture/bus</strong>
                         <div v-if="step.description" class="caption">{{step.description}}</div>
-                        <v-btn v-if="userCan('guild_manage') && displayCheck(step, index)" round large @click="checkstep(step, 'check')"><v-icon>done</v-icon>Check</v-btn>
-                        <v-btn class="secondary" v-if="userCan('guild_manage') && displayUncheck(step, index)" round large @click="checkstep(step, 'uncheck')"><v-icon>close</v-icon>Uncheck</v-btn>
+                        <v-btn v-if="userCan('events_train_check') && displayCheck(step, index)" round large @click="checkstep(step, 'check')"><v-icon>done</v-icon>Check</v-btn>
+                        <v-btn class="secondary" v-if="userCan('events_train_check') && displayUncheck(step, index)" round large @click="checkstep(step, 'uncheck')"><v-icon>close</v-icon>Uncheck</v-btn>
                     </v-flex>
                     </v-layout>
                 </v-timeline-item>
             </v-timeline>
         </div>
 
-        <v-btn v-if="event && event.channel_discord_id" fixed bottom round large :href="'https://discordapp.com/channels/'+event.guild.discord_id+'/'+event.channel_discord_id">Rejoindre la conversation</v-btn>
+        <v-btn v-if="event && event.channel_discord_id" bottom round large :href="'https://discordapp.com/channels/'+event.guild.discord_id+'/'+event.channel_discord_id">Rejoindre la conversation</v-btn>
 
         </div>
+
+        <v-btn v-if="event && event.type == 'train' && userCan('events_train_check')" dark fixed bottom right fab @click="dialog = true"><v-icon>edit</v-icon></v-btn>
+        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <v-card>
+                <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="dialog = false"><v-icon>close</v-icon></v-btn>
+                    <v-toolbar-title>Détail du pokétrain</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items><v-btn dark flat @click="saveSteps()"><v-icon>save</v-icon></v-btn></v-toolbar-items>
+                 </v-toolbar>
+                 <event-train ref="editableTrain" v-if="event && event.relation" :steps="event.relation.steps"></event-train>
+            </v-card>
+        </v-dialog>
 
         <gym-modal ref="gymModal"></gym-modal>
     </div>
@@ -68,6 +81,8 @@
             return {
                 loading: true,
                 event: false,
+                dialog: false,
+                editableSteps: [],
             }
         },
         created() {
@@ -141,7 +156,19 @@
                 if( index === this.event.relation.steps.length - 1 ) return true;
                 if( this.event.relation.steps[index+1].checked == false ) return true;
                 return false;
-            }
+            },
+            saveSteps( args ) {
+                this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
+                axios.put('/api/user/guilds/'+this.event.guild.id+'/events/'+this.event.id+'/steps', {steps: this.$refs.editableTrain.editableSteps}).then( res => {
+                    this.dialog = false;
+                    this.fetch();
+                    this.$store.commit('setSnackbar', {
+                        message: 'Enregistrement effectué',
+                        timeout: 1500
+                    })
+                    this.loading = false
+                });
+            },
         }
     }
 </script>

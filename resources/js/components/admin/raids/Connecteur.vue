@@ -140,6 +140,8 @@
                                 {raid_debut}<br>
                                 {raid_fin}<br>
                                 {utilisateur}<br>
+                                {role_poi_lie}<br>
+                                {role_zone_liee}<br>
                             </p>
                             <input v-model="custom_message_before" type="text">
                         </div>
@@ -157,6 +159,9 @@
                                 {raid_debut}<br>
                                 {raid_fin}<br>
                                 {utilisateur}<br>
+                                {role_poi_lie}<br>
+                                {role_zone_liee}<br>
+                                {role_pokemon_lie}<br>
                             </p>
                             <input v-model="custom_message_after" type="text">
                         </div>

@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('user/guilds/{guild}/events', 'EventController@createEvent');
     Route::post('user/guilds/{guild}/events/{event}/clone', 'EventController@cloneEvent');
+    Route::put('user/guilds/{guild}/events/{event}/steps', 'EventController@updateSteps');
     Route::put('user/guilds/{guild}/events/{event}', 'EventController@updateEvent');
     Route::delete('user/guilds/{guild}/events/{event}', 'EventController@deleteEvent');
     Route::get('user/guilds/{guild}/events', 'EventController@getGuildEvents');
@@ -134,6 +135,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('user/guilds/{guild}/events/{event}/steps/{step}/check', 'EventController@checkStep');
     Route::post('user/guilds/{guild}/events/{event}/steps/{step}/uncheck', 'EventController@uncheckStep');
     Route::get('events/quiz/themes', 'EventController@getThemes');
+    Route::get('events/quiz/available-questions', 'Events\QuizController@getAvailableQuestions');
 
 });
 

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\User;
+use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Pokemon;
 use App\Models\UserAction;
@@ -11,6 +11,7 @@ use App\Models\raidChannel;
 use App\Models\RaidMessage;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 
 class Raid extends Model {
 
@@ -18,9 +19,9 @@ class Raid extends Model {
     protected $hidden = ['gym_id', 'city_id', 'pokemon_id'];
     protected $appends = ['end_time', 'pokemon', 'source', 'channels', 'messages', 'thumbnail_url'];
 
-    /*public function getGymAttribute() {
+    public function getGymAttribute() {
         return Stop::find($this->gym_id);
-    }*/
+    }
 
     public function getEndTImeAttribute() {
         $endTime = new \DateTime($this->start_time);

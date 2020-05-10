@@ -38,6 +38,8 @@ class CreateEventsTable extends Migration
         Schema::create('event_train_steps', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('train_id');
+            $table->integer('order')->nullable();
+            $table->boolean('milestone')->default(0);
             $table->string('type')->default('stop');
             $table->integer('stop_id')->nullable();
             $table->dateTime('start_time')->nullable();

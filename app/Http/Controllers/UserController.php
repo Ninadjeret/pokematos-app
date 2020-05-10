@@ -436,17 +436,16 @@ class UserController extends Controller {
         $query = Stop::where('city_id', '=', $city->id)
             ->orderBy('name', 'asc');
 
-        if( !empty( $lastUpdate ) && \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) == false ) {
+        $lastUpdate = $request->last_update;
+        if( $lastUpdate != 'initial' && !empty( $lastUpdate ) && \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) == false ) {
             Log::error("Date dans un formation incorrect : {$lastUpdate}");
         }
-
-        $lastUpdate = $request->last_update;
-        if( !empty( $lastUpdate ) && \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) !== false ) {
+        if( $lastUpdate != 'initial' && !empty( $lastUpdate ) && \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) !== false ) {
             $date = new \DateTime($lastUpdate);
             $date->modify('-10 minutes');
             $pois = $query->where('updated_at', '>=', $date->format('Y-m-d H:i:s'))->get();
         } else {
-            $pois = $query->get();
+            $pois = $query->get()->each->setAppends(['zone', 'city', 'google_maps_url', 'aliases']);
         }
 
         return response()->json($pois, 200);

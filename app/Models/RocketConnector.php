@@ -136,6 +136,9 @@ class RocketConnector extends Model
     public function translate( $message, $invasion ) {
         $username = ( $invasion->getLastUserAction()->getUser() ) ? $invasion->getLastUserAction()->getUser()->name : false;
 
+        $role_poi_lie = Role::where('gym_id', $invasion->getStop()->id)->first();
+        $role_zone_liee = ( $invasion->getStop()->zone ) ? Role::where('zone_id', $invasion->getStop()->zone->id)->first() : false ;
+
         //Gestion des tags
         $patterns = array(
             'rocketboss_name' => html_entity_decode( $invasion->boss->name ),
@@ -151,6 +154,9 @@ class RocketConnector extends Model
             'pokestop_zone' => ( !empty(  $invasion->getStop()->zone ) ) ?  $invasion->getStop()->zone->name : false,
             'pokestop_zone_nettoye' => ( !empty(  $invasion->getStop()->zone ) ) ?  Helpers::sanitize($invasion->getStop()->zone->name) : false,
             'pokestop_gmaps' => ( !empty(  $invasion->getStop()->google_maps_url ) ) ?  $invasion->getStop()->google_maps_url : false,
+
+            'role_poi_lie' => ( !empty($role_poi_lie) ) ? "@{$role_poi_lie->name}" : '',
+            'role_zone_liee' => ( !empty($role_zone_liee) ) ? "@{$role_zone_liee->name}" : '',
 
             'utilisateur' => $username,
         );

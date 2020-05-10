@@ -133,30 +133,38 @@ class Event extends Model
     }
 
 
-    public function setTrain( $args ) {
+    public function setTrain( $args2 ) {
         $train = EventTrain::firstOrCreate(['event_id' => $this->id]);
 
         //On gère toutes les donnés dispos pour les steps
         $saved_steps = [];
-        foreach( $args['steps'] as $args ) {
+        $order = 0;
+        foreach( $args2['steps'] as $args ) {
+            $order++;
+            $args['order'] = $order;
 
             //On crée ou on récupère l'étape
             if( !array_key_exists('id', $args) || empty($args['id']) ) {
                 $step = EventTrainStep::create([
                     'train_id' => $train->id,
+                    'order' => $order,
                 ]);
             } else {
                 $step = EventTrainStep::find($args['id']);
             }
 
             //Calcul de start_time
-            $hour = $args['hour'];
-            if( strlen($hour) === 1 ) $hour = '0'.$hour;
-            $minutes = $args['minutes'];
-            if( strlen($minutes) === 1 ) $minutes = '0'.$minutes;
-            $event_start = new \DateTime( $this->start_time );
-            $start_time = "{$event_start->format('Y-m-m')} {$hour}:{$minutes}:00";
-            $args['start_time'] = $start_time;
+            $args['start_time'] = null;
+            if( isset($args['milestone']) && $args['milestone'] == 1 ) {
+                $hour = $args['hour'];
+                if( strlen($hour) === 1 ) $hour = '0'.$hour;
+                $minutes = $args['minutes'];
+                if( strlen($minutes) === 1 ) $minutes = '0'.$minutes;
+                $event_start = new \DateTime( $this->start_time );
+                $start_time = "{$event_start->format('Y-m-m')} {$hour}:{$minutes}:00";
+                $args['start_time'] = $start_time;
+            }
+
             if( array_key_exists('stop', $args) && is_array($args['stop']) && array_key_exists('id', $args['stop']) ) {
                 $args['stop_id'] = $args['stop']['id'];
             } elseif( array_key_exists('stop', $args) && is_object($args['stop']) ) {

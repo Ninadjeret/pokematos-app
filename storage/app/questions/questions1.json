@@ -1,0 +1,1073 @@
+[
+ {
+   "question": "Quel Pokémon apparaissait sur le premier écran de chargement ?",
+   "answer": "Léviator",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel est le Pokémon disposant du plus grand nombre d'attaques chargées disponibles ?",
+   "answer": "Queulorior",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Histoire",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel a été le premier Pokémon chromatique disponible ?",
+   "answer": "Magicarpe",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 1
+ },
+ {
+   "question": "Comment s'appelait le professeur Willow au lancement du jeu en France ?",
+   "answer": "Professeur Saule",
+   "alt_answers": "Saule",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Histoire",
+   "about_pogo": 1
+ },
+ {
+   "question": "En quelle année est sortie le jeu Pokémon Go ?",
+   "answer": "2016",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel niveau faut-il atteindre pour choisir sa couleur d'équipe ?",
+   "answer": "5",
+   "alt_answers": "cinq",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Comment s'appelle la région de la première génération ?",
+   "answer": "Kanto",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 0
+ },
+ {
+   "question": "Comment s'appelle la région de la deuxième génération ?",
+   "answer": "Johto",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 0
+ },
+ {
+   "question": "Comment s'appelle la région de la troisième génération ?",
+   "answer": "Hoenn",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 0
+ },
+ {
+   "question": "Comment s'appelle la région de la quatrième génération ?",
+   "answer": "Sinnoh",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 0
+ },
+ {
+   "question": "Comment s'appelle la région de la cinquième génération ?",
+   "answer": "Unys",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 0
+ },
+ {
+   "question": "Quelle baie augmente considérablement le taux de capture ?",
+   "answer": "La baie Framby dorée",
+   "alt_answers": "Framby dorée",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quelle baie permet d'obtenir plus de bonbons ?",
+   "answer": "La baie Nanana",
+   "alt_answers": "Nanana",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quelle baie permet de calmer le Pokémon pour qu'il arrête de bouger ?",
+   "answer": "La baie Nanab",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de temps faut-il rester en arène pour avoir l'intégralité de ses pièces journalières ?",
+   "answer": "8h20",
+   "alt_answers": "8h et 20",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Tourner un pokéstop peut-il donner une pierre Sinnoh ou Unys ?",
+   "answer": "Non",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Qu'obtient-on dans le Boîte Mystère ?",
+   "answer": "Meltan",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Au bout de combien de jours devient-on bon ami ?",
+   "answer": "1",
+   "alt_answers": "un",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Au bout de combien de jours devient-on grand ami ?",
+   "answer": "7",
+   "alt_answers": "sept",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Au bout de combien de jours devient-on excellent ami ?",
+   "answer": "30",
+   "alt_answers": "trente",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Au bout de combien de jours devient-on meilleur ami ?",
+   "answer": "90",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel pokémon est apparu en premier sur les photobombs ?",
+   "answer": "Queulorior",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Histoire",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de pokémon du même type doit-on capturer pour obtenir la médaille d'or de ce type ?",
+   "answer": "200",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quelle attaque Jirachi est-il le seul a pouvoir apprendre ?",
+   "answer": "Carnareket",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Combat & attaques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de Zarbi différents existe-t-il ?",
+   "answer": "26",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 0
+ },
+ {
+   "question": "Combien de Pokémon comprend la première génération ?",
+   "answer": "151",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Culture générale",
+   "about_pogo": 0
+ },
+ {
+   "question": "Quel Pokémon n'apparait que pendant les évènements de Noël ?",
+   "answer": "Cadoizo",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Culture générale",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel est le seul type super efficace sur les pokémons électriques ?",
+   "answer": "Sol",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Combat & attaques",
+   "about_pogo": 0
+ },
+ {
+   "question": "Combien de type de Pokéball sont utilisables dans Pokémon Go ?",
+   "answer": "4",
+   "alt_answers": "",
+   "explanation": "Il y a la Poké-ball, la Super-ball, la Hyper-ball et la Honor ball, disponible lors des raids et invasions Rocket",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel type est sensible aux attaques normales ?",
+   "answer": "aucun",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Combat & attaques",
+   "about_pogo": 0
+ },
+ {
+   "question": "Quel objet permet d'évoluer un Porygon ?",
+   "answer": "Un améliorator",
+   "alt_answers": "améliorator",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel pokémon peut devenir le pokémon qu'il combat ?",
+   "answer": "Métamorph",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Combat & attaques",
+   "about_pogo": 0
+ },
+ {
+   "question": "Quelle attaque Métamorph est-il le seul a pouvoir apprendre ?",
+   "answer": "Morphing",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Combat & attaques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quelle attaque Lucario est-il le seul à pouvoir apprendre ?",
+   "answer": "Aura",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Combat & attaques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Au début du jeu, quelle était la capacité de stockage du sac ?",
+   "answer": "350",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Histoire",
+   "about_pogo": 1
+ },
+ {
+   "question": "Vrai ou Faux: les pokémons d'Alola ont les même statistiques que leur confrères de Kanto ?",
+   "answer": "faux",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Au début du jeu, quelle est la capacité du stockage de Pokémon ?",
+   "answer": "250",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Histoire",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de pokémon au maximum peut-on placer en arène en même temps ?",
+   "answer": "20",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien d'œufs de différentes distance existe-t-il ?",
+   "answer": "4",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Une caserne de pompier pourrait-elle être un potentiel futur pokestop ?",
+   "answer": "Non",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel est l'IV minimum que l'on peut obtenir en raid ?",
+   "answer": "67%",
+   "alt_answers": "10-10-10, 10.10.10, 67",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel est l'IV minimum que l'on peut obtenir lors d'un échange chanceux ?",
+   "answer": "80%",
+   "alt_answers": "12-12-12, 12.12.12, 80",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de type de météo y a-t-il ?",
+   "answer": "8",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de Pokémon peuvent-être posés dans une Arène pour la défendre ?",
+   "answer": "6",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "A quel Pokémon appartient la seule voix doublée dans le jeu?",
+   "answer": "Pikachu",
+   "alt_answers": "",
+   "explanation": "Elle est doublée par Ikue Ōtani",
+   "difficulty": 5,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 1
+ },
+ {
+   "question": "Gagne t'on un œuf chance en atteignant le niveau 40 ?",
+   "answer": "Oui",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "A partir de quel niveau peut-on obtenir les rappels max ?",
+   "answer": "30",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel Pokémon n'a que 10 PV quel que soit son niveau et ses IVs ?",
+   "answer": "Munja",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "A partir de quel niveau peut-on obtenir les potions max ?",
+   "answer": "25",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Au début du jeu, entre combien de pokémon peut-on choisir ?",
+   "answer": "4",
+   "alt_answers": "quatre",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Culture générale",
+   "about_pogo": 1
+ },
+ {
+   "question": "En quoi était déguisé Pikachu lors de l'évènement d'Halloween 2019 ?",
+   "answer": "En Mimiqui",
+   "alt_answers": "mimiqui",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Histoire",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle couleur est Hypnomade shiny?",
+   "answer": "Rose",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 0
+ },
+ {
+   "question": "Combien d'échanges spéciaux peut-on faire par jour ?",
+   "answer": "1",
+   "alt_answers": "un",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien peut-on faire d'échanges au maximum par jour ?",
+   "answer": "100",
+   "alt_answers": "cent",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel est le seul Pikachu non disponible shiny?",
+   "answer": "Détective Pikachu",
+   "alt_answers": "détective",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Dans quelle partie du monde trouve t on le pokemon regional Relicanth?",
+   "answer": "Nouvelle Zelande",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "à l'origine combien de pokemons pouvait contenir une arène?",
+   "answer": "10",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "quel level ont les pokemons qui sortent des œufs ?",
+   "answer": "20",
+   "alt_answers": "vinht",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de Km doit-on marcher avec Ptiravi pour qu'il puisse évoluer ?",
+   "answer": "15",
+   "alt_answers": "quinze",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel numéro caractérise Spiritomb ?",
+   "answer": "108",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de fois peut on obtenir Spiritomb (hors échange) ?",
+   "answer": "2",
+   "alt_answers": "deux",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Culture générale",
+   "about_pogo": 1
+ },
+ {
+   "question": "Qu'est ce qui différencie magicarpe male et femelle ?",
+   "answer": "La couleur des moustaches",
+   "alt_answers": "moustache",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel était le pokemon du cd du mois de février 2020 ? ",
+   "answer": "Rhinocorne",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Histoire",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel a été l'intitulé de la 1ère quête du professeur Willow ?",
+   "answer": "Une découverte fabuleuse",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Histoire",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel pokemon de type eau a besoin de faire 20km et 100 bonbons pour évoluer ",
+   "answer": "Barpau",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Que doit faire hypnomade avant d'aller chercher ses proies ? ",
+   "answer": "nettoyer son pendule",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 0
+ },
+ {
+   "question": "Qui est surnommé \"avatar du croissant de lune\" ?",
+   "answer": "Cresselia",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 0
+ },
+ {
+   "question": "Il y a 500 ans qui fut emprisonné dans une clé de voûte en guise de punition ? ",
+   "answer": "Spiritomb",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Histoire",
+   "about_pogo": 0
+ },
+ {
+   "question": "D'après la légende grâce à qui groudon et kyogre ont cessé de se battre ? ",
+   "answer": "Rayquaza",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Histoire",
+   "about_pogo": 0
+ },
+ {
+   "question": "A quelle vitesse peut voler airmure? ",
+   "answer": "300Km/h",
+   "alt_answers": "300",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 0
+ },
+ {
+   "question": "Que tient leuphorie dans ses bras ? ",
+   "answer": "un oeuf",
+   "alt_answers": "oeuf",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 0
+ },
+ {
+   "question": "Quel objet permet de se libérer du cauchemar de Darkrai ?",
+   "answer": "Une plume de Cresselia",
+   "alt_answers": "plume",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 0
+ },
+ {
+   "question": "Combien de points sont nécessaires pour avoir le badge bronze d'une arène ?",
+   "answer": "500",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de points sont nécessaires pour avoir le badge argent d'une arène ?",
+   "answer": "4000",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien de points sont nécessaires pour avoir le badge or d'une arène ?",
+   "answer": "30000",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Sciences et techniques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Ludicolo ?",
+   "answer": "Hoenn",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Cerfrousse ?",
+   "answer": "Johto",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Hyporoi ?",
+   "answer": "Johto",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Scarhino ?",
+   "answer": "Johto",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Charmina ?",
+   "answer": "Hoenn",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Kaorine ?",
+   "answer": "Hoenn",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Latias ?",
+   "answer": "Hoenn",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Absol ?",
+   "answer": "Hoenn",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Marill ?",
+   "answer": "Johto",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Pharamp ?",
+   "answer": "Johto",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Germignon ?",
+   "answer": "Johto",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Kranidos ?",
+   "answer": "Sinnoh",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Ptiravi ?",
+   "answer": "Sinnoh",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Mammochon ?",
+   "answer": "Sinnoh",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Lucario ?",
+   "answer": "Sinnoh",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quelle région est issu le Pokémon Ouisticram ?",
+   "answer": "Sinnoh",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 1
+ },
+ {
+   "question": "Sur Pokémon Rouge ou Bleu, dans quelle ville commence le jeu ?",
+   "answer": "Bourg Palette",
+   "alt_answers": "Bourg-Palette",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Géographie & lieux emblématiques",
+   "about_pogo": 0
+ },
+ {
+   "question": "Comment s'apellent lses agents de police dans la série animée ?",
+   "answer": "Agen Jenny",
+   "alt_answers": "Jenny",
+   "explanation": "Les agents Jenny sont des agents de Police du dessin animé. Elles sont toutes semblables.",
+   "difficulty": 1,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 0
+ },
+ {
+   "question": "Comment s'appelle la petite-fille du professeur Chen ?",
+   "answer": "Nina",
+   "alt_answers": "",
+   "explanation": "Nina Chen est un personnage apparu pour la première fois dans Pokémon Rouge et Bleu. Elle est la petite-fille du Professeur Chen et la grande sœur de Blue. Malgré son apparition dans beaucoup d'incarnations du monde Pokémon, elle n'est jamais apparue dans le dessin animé.",
+   "difficulty": 5,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 0
+ },
+ {
+   "question": "Comment s'appelle les infirmières dans la série animée ?",
+   "answer": "Joelle",
+   "alt_answers": "",
+   "explanation": "Toutes les grandes villes de Pokémon Island disposent d'un Centre Pokémon. Celui-ci est tenu par une Infirmière Joëlle qui s'occupe avec son Leveinard (à Kanto, Johto, Hoenn et Sinnoh), Nanméouïe (à Unys), Grodoudou (à Kalos) et ses Leuphorie et Guérilande (à Alola) de soigner les Pokémon des dresseurs.",
+   "difficulty": 1,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 0
+ },
+ {
+   "question": "Comment s'appelle le petit-fils du professeur Chen ?",
+   "answer": "Régis",
+   "alt_answers": "",
+   "explanation": "Régis est le petit-fils du Professeur Chen et le principal rival de Sacha dans les cycles Kanto et Johto.",
+   "difficulty": 3,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 0
+ },
+ {
+   "question": "Qui est la championne de l'arène d'Azuria ?",
+   "answer": "Ondine",
+   "alt_answers": "",
+   "explanation": "Ondine est la Championne d’Arène de l’Arène d’Azuria dans la région de Kanto, spécialisée dans les Pokémon Eau. Elle donne le Badge Cascade aux Dresseurs qui gagnent contre elle dans un combat Pokémon.",
+   "difficulty": 2,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 0
+ },
+ {
+   "question": "Quel objet permet de faire évoluer Insécateur en Cizayox ?",
+   "answer": "Un peau métal",
+   "alt_answers": "peau métal",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Comment se nomme le cousin du Professeur Chen qui vit à Alola ?",
+   "answer": "Raphaël",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 0
+ },
+ {
+   "question": "Ectoplasma est de deux types : Spectre et ?",
+   "answer": "Poison",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Léviator est de deux Types, Eau et ?",
+   "answer": "Vol",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quel type est Qulbutoké ?",
+   "answer": "Psy",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quel pokémon Ortide est-il l'évolution ?",
+   "answer": "Mystherbe",
+   "alt_answers": "mysterbe, mistherbe, misterbe",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Latios est de deux types, Dragon et ?",
+   "answer": "Psy",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quel Pokémon Dracaufeu est-il l'évolution ?",
+   "answer": "Reptincel",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "De quel Pokémon Métalosse est-il l'évolution ?",
+   "answer": "Métang",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "En quoi Ptitard évolue-t-il ?",
+   "answer": "Tétarte",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel est le nom de famille de Sacha ?",
+   "answer": "Ketchum",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 0
+ },
+ {
+   "question": "Comment s'appelle l'équipe composée de Jessie, James et Miaouss ?",
+   "answer": "Le Team Rocket",
+   "alt_answers": "Team Rocket",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 0
+ },
+ {
+   "question": "Quel est le premier Pokémon du Pokédex National ?",
+   "answer": "Bulbizarre",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Culture générale",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel double-type n'existe pas ?",
+   "answer": "Glace - insecte",
+   "alt_answers": "insecte - Glace, Insecte glace, glace insecte, Insecte et glace, glace et insecte",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 0
+ },
+ {
+   "question": "Combien y avait-il de Pokémon de type spectre dans la première génération ?",
+   "answer": "3",
+   "alt_answers": "trois",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel Pokémon, de type psy, a le pouvoir de voyager dans le temps ?",
+   "answer": "Celebi",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 0
+ },
+ {
+   "question": "Quel Pokémon légendaire Sacha voit-il dans le premier épisode de la première saison ?",
+   "answer": "Ho-Oh",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Histoire",
+   "about_pogo": 0
+ },
+ {
+   "question": "Quel Pokémon légendaire vivait autrefois sur la tour Feraille ?",
+   "answer": "Lugia",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 3,
+   "theme": "Histoire",
+   "about_pogo": 0
+ },
+ {
+   "question": "En combien de Pokémon différents Débugant peut-il évoluer ?",
+   "answer": "3",
+   "alt_answers": "trois",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Combien y a-t-il de Pokémon dans la deuxième génération ?",
+   "answer": "100",
+   "alt_answers": "cent",
+   "explanation": "",
+   "difficulty": 1,
+   "theme": "Culture générale",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel est le 493e Pokémon ?",
+   "answer": "Arceus",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 2,
+   "theme": "Pokénaturalisme",
+   "about_pogo": 1
+ },
+ {
+   "question": "Quel est le prénom du professeur Chen ?",
+   "answer": "Samuel",
+   "alt_answers": "",
+   "explanation": "",
+   "difficulty": 5,
+   "theme": "Personnages & Célébrités",
+   "about_pogo": 0
+ }
+]

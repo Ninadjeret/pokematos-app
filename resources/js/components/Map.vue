@@ -146,13 +146,13 @@
                 let filters = this.$store.getters.getSetting('mapFilters');
                 if( filters && filters.length > 0 ) {
                     auth = false;
-                    if( filters.includes( 'empty_gyms' ) && gym.gym && !gym.raid ) {
+                    if( filters.includes( 'empty_gyms' ) && gym.gym && (!gym.raid || gym.raid === 'undefined') ) {
                         auth = true;
                     }
                     if( filters.includes( 'active_gyms' ) && gym.gym && gym.raid ) {
                         auth = true;
                     }
-                    if( filters.includes( 'empty_stops' ) && !gym.gym && !gym.quest ) {
+                    if( filters.includes( 'empty_stops' ) && !gym.gym && (!gym.quest || gym.quest === 'undefined') ) {
                         auth = true;
                     }
                     if( filters.includes( 'active_stops' ) && !gym.gym && gym.quest ) {
@@ -191,7 +191,7 @@
 
                 var html = '<img class="'+imgclassname+'" src="'+url+'"/>';
 
-                if( gym.raid !== false ) {
+                if( gym.raid ) {
 
                     var now = moment();
                     var raidStartTime = moment(gym.raid.start_time, '"YYYY-MM-DD HH:mm:ss"');

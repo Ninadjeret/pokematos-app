@@ -14,12 +14,20 @@ use Illuminate\Support\Facades\Log;
 class EventTrainStep extends Model
 {
     protected $table = 'event_train_steps';
-    protected $fillable = ['train_id', 'type', 'stop_id', 'start_time', 'duration', 'description', 'checked', 'message_discord_id'];
-    protected $appends = ['stop', 'hour', 'minutes'];
+    protected $fillable = ['train_id', 'type', 'stop_id', 'milestone', 'order', 'start_time', 'duration', 'description', 'checked', 'message_discord_id'];
+    protected $appends = ['stop', 'hour', 'minutes', 'key', 'opened'];
 
     public function getStopAttribute() {
         if( empty($this->stop_id) ) return false;
         return Stop::find($this->stop_id);
+    }
+
+    public function getKeyAttribute() {
+        return 'key-'.$this->id;
+    }
+
+    public function getOpenedAttribute() {
+        return false;
     }
 
     public function getHourAttribute() {
@@ -100,9 +108,9 @@ class EventTrainStep extends Model
 
         $event = Event::find($this->train->event_id);
 
-        $start_time = new \DateTime($this->start_time);
+        $start_time = ($this->milestone) ? new \DateTime($this->start_time) : false;
         $prev_step = $this->getPreviousStep();
-        $prev_start_time = new \DateTime($prev_step->start_time);
+        $prev_start_time = ($prev_step->milestone) ? new \DateTime($prev_step->start_time) : false ;
 
         $content = str_replace([
             '{etape_nom}',
@@ -113,10 +121,10 @@ class EventTrainStep extends Model
             '{next_etape_description}'
         ], [
             $this->name,
-            $start_time->format('H\hi'),
+            ($start_time) ? $start_time->format('H\hi') : '',
             $this->description,
             $prev_step->name,
-            $prev_start_time->format('H\hi'),
+            ($prev_start_time) ? $prev_start_time->format('H\hi') : '',
             $prev_step->description
         ],$event->guild->settings->events_trains_message_check);
 
