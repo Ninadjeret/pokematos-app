@@ -1,6 +1,6 @@
 [
     {
-        "text": "**Oyé Oyé** dresseuses dresseur !\r\nBienvenue à tous les participants pour ce PokéQuiz **%quiz_name**",
+        "text": "**Oyé Oyé** dresseuses dresseurs !\r\nBienvenue à tous les participants pour ce PokéQuiz **%quiz_name**",
         "type": "start_intro",
         "next": ["Ca va être un super !", "https://media.giphy.com/media/8g63zqQ5RPt60/giphy.gif"]
     },
@@ -20,6 +20,11 @@
         "next": ["BOUM, et oui ! C'est l'événément **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
     },
     {
+        "text": "Coucou ici ! Est oui, c'est moi !",
+        "type": "start_intro",
+        "next": ["Je serai votre maitre de cérémonie pour cet événement : **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
+    },
+    {
         "text": "Ce Pokéquiz va se dérouler en **%quiz_nb_questions questions**. Pour chacune d'elle, vous aurez au maximum %quiz_delay minutes pour répondre.",
         "type": "start_description",
         "next": []
@@ -28,6 +33,16 @@
         "text": "Et c'est partiiiiiiii",
         "type": "start_warning",
         "next": ["https://media.giphy.com/media/11a1ludJGM6wKc/giphy.gif"]
+    },
+    {
+        "text": "Allez, GO !",
+        "type": "start_warning",
+        "next": []
+    },
+    {
+        "text": "En voiture Simone, c'est parti !",
+        "type": "start_warning",
+        "next": []
     },
     {
         "text": "Prochaine question dans les tuyaux;, préparez vos claviers :wink:",
@@ -55,6 +70,16 @@
         "next": ["%question_difficulty points pour le vainqueur"]
     },
     {
+        "text": "Maintenant question à **%question_difficulty points**",
+        "type": "question_announce",
+        "next": ["Thème **%question_theme**"]
+    },
+    {
+        "text": "Pas de panique, une question arrive !",
+        "type": "question_announce",
+        "next": ["Je compte sur vous !"]
+    },
+    {
         "text": "Attention, question niveau Bourg-palette, sur le thème **%question_theme**",
         "type": "question_announce_lvl1",
         "next": []
@@ -80,7 +105,39 @@
         "next": []
     },
     {
-        "text": "T'es au top %user, bravo ! _%answer_ était bien ce qu'il fallait trouver",
+        "text": "%user ?? Alors ? ça va pas ?",
+        "next": []
+    },
+    {
+        "text": "Quelle belle réponse %user, mais c'est à côté :/",
+        "next": []
+    },
+    {
+        "text": "Alors moi je veux bien tout entendre, mais là vraiement je peux pas. Désolé %user",
+        "next": []
+    },
+    {
+        "text": "T'es au top %user, bravo ! **%answer** était bien ce qu'il fallait trouver",
+        "type": "question_answer_correct",
+        "next": []
+    },
+    {
+        "text": "Mais quel talent ! GG %user ! C'était bien **%answer**",
+        "type": "question_answer_correct",
+        "next": []
+    },
+    {
+        "text": ":clap: :clap: :clap: **%answer** ! Super, bien joué %user !",
+        "type": "question_answer_correct",
+        "next": []
+    },
+    {
+        "text": ":clap: Félicitations %user ! Il fallait répondre **%answer**",
+        "type": "question_answer_correct",
+        "next": []
+    },
+    {
+        "text": "Toi t'as bossé, et ça se voit ! GG %user pour cette bonne réponse : **%answer**",
         "type": "question_answer_correct",
         "next": []
     },
@@ -93,6 +150,21 @@
         "text": "Dommage... La question devait être trop difficile :(",
         "type": "question_not_answered",
         "next": []
+    },
+    {
+        "text": "Ben alors ça dort la dedans ? Dommage, temps écoulé.",
+        "type": "question_not_answered",
+        "next": []
+    },
+    {
+        "text": "Ting ting tong. Nous vous annonçons que le délai autorisé pour répondre est dépassé...",
+        "type": "question_not_answered",
+        "next": []
+    },
+    {
+        "text": "ça glande, ça glande, et puis au moment de répondre y'a plus personne :/.",
+        "type": "question_not_answered",
+        "next": ["Tant pis, aucun point pour cette question"]
     },
     {
         "text": "%explanation",
