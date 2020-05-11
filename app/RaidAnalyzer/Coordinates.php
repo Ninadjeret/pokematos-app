@@ -169,9 +169,9 @@ class Coordinates {
 
     public function forEggLevel() {
 
-		Log::debug('Ratio forEggLevel = ' . $this->ratio );
-		Log::debug('image_height Init = ' . $this->image_height );
-		Log::debug('image_width Init = ' . $this->image_width );
+		Log::channel('raids')->info('Ratio forEggLevel = ' . $this->ratio );
+		Log::channel('raids')->info('image_height Init = ' . $this->image_height );
+		Log::channel('raids')->info('image_width Init = ' . $this->image_width );
 
 
         if( $this->ratio > 0.7 ) {

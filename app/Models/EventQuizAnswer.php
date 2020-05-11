@@ -30,8 +30,8 @@ class EventQuizAnswer extends Model
             return true;
         }
         if( empty($this->question->alt_answers) && is_array($this->question->alt_answers) ) {
-            foreach( $this->question->alt_answers as $enswer ) {
-                if( strstr( \App\Core\Helpers::sanitize($this->answer), \App\Core\Helpers::sanitize($question->answer) ) ) {
+            foreach( $this->question->alt_answers as $answer ) {
+                if( strstr( \App\Core\Helpers::sanitize($answer), \App\Core\Helpers::sanitize($question->answer) ) ) {
                     $this->update(['correct' => 1]);
                     return true;
                 }
