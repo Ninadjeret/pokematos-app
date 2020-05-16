@@ -41,17 +41,21 @@ class EventQuizQuestion extends Model
         $start_time = new \DateTime();
         $end_time = new \DateTime();
         $end_time->modify('+ '.$this->quiz->delay.' minutes');
+
+        //On empeche de déclencher deux fois la question
+        if( !empty($this->start_time) ) return;
+
         $this->update([
             'start_time' => $start_time->format('Y-m-d H:i:s'),
             'end_time' => $end_time->format('Y-m-d H:i:s'),
         ]);
-
         $this->quiz->sendToDiscord('question_question', [
             '%question' => $this->question->question
         ], null, array(
             'thumbnail' => EventQuiz::getEmbedThumbnails()->question,
             'footer' => ['text' => "Question {$this->order}/{$this->quiz->getNbQuestions()} - {$this->question->difficulty} points - Thème {$this->question->theme->name}"]
         ));
+
     }
 
     public function isEnded() {

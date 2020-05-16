@@ -20,7 +20,7 @@
         "next": ["BOUM, et oui ! C'est l'événément **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
     },
     {
-        "text": "Coucou ici ! Est oui, c'est moi !",
+        "text": "Coucou ici ! Et oui, c'est moi !",
         "type": "start_intro",
         "next": ["Je serai votre maitre de cérémonie pour cet événement : **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
     },

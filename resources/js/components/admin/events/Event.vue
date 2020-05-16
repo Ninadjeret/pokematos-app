@@ -329,7 +329,7 @@
                 formData.append('image', toUpload);
                 axios.post( 'api/user/upload', formData,{headers: {'Content-Type': 'multipart/form-data'}}
                 ).then(function(res){
-                    that.image = '/storage/user/'+that.user.id+'/'+res.data;
+                    that.image = '/storage/user/'+that.user.id+'-'+res.data;
                 });
             },
             addGuest(selectedOption, id) {

@@ -107,7 +107,7 @@ class Discord {
         }
     }
 
-    public static function bulkDeleteMessage($args) {
+    public static function bulkDeleteMessages($args) {
         $client = new Client();
         $res = $client->post("https://discordapp.com/api/v6/channels/{$args['channel_id']}/messages/bulk-delete?messages=".json_encode($message_ids), [
             'http_errors' => false,
