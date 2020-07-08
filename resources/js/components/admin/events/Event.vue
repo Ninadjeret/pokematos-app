@@ -52,6 +52,32 @@
                             <p class="commentaire">{{types[type].description}}</p>
                         </div>
                     </div>
+
+                    <div class="settings-section">
+                        <v-subheader>Lien avec Discord</v-subheader>
+                        <div class="setting">
+                            <label>Lier l'évent avec Discord ?</label>
+                            <v-btn-toggle v-model="channel_discord_type" mandatory>
+                                <v-btn value="none">Aucun lien</v-btn>
+                                <v-btn value="existing">Salon exstant</v-btn>
+                                <v-btn value="new">Nouveau salon</v-btn>
+                            </v-btn-toggle>
+                        </div>
+                        <div v-if="channel_discord_type == 'new'" class="setting">
+                            <label>Catégorie de salon</label>
+                            <p class="description">Le salon temporaire sera créé dans la catégorie choisie. (les droits appliqués au salon seront les mêmes que ceux de la catégorie)</p>
+                            <select v-if="channels_categories" v-model="category_discord_id">
+                                <option v-for="channel in channels_categories" :value="channel.id.toString()">{{channel.name}}</option>
+                            </select>
+                        </div>
+                        <div v-if="channel_discord_type == 'existing'" class="setting">
+                            <label>Salon</label>
+                            <select v-if="channels" v-model="channel_discord_id">
+                                <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="settings-section">
                         <v-divider></v-divider>
                         <div v-if="getId">
@@ -217,11 +243,18 @@
                 fetchLoaded: false,
                 fetchGuildsLoaded: false,
                 fetchQuizThemesLoaded: false,
+                fetchDiscordChannelCategoriesLoaded: false,
+                fetchDiscordChannelsLoaded: false,
                 availableGuilds: [],
                 guests : [],
                 themes: [],
                 temp: null,
                 availableQuestions: 0,
+                channel_discord_type: 'none',
+                channel_discord_id: null,
+                channels_categories: [],
+                channels: [],
+                category_discord_id: null,
             }
         },
         computed: {
@@ -229,7 +262,7 @@
                 return window.pokematos.features;
             },
             isLoaded() {
-                return this.fetchLoaded && this.fetchGuildsLoaded && this.fetchQuizThemesLoaded;
+                return this.fetchLoaded && this.fetchGuildsLoaded && this.fetchQuizThemesLoaded && this.fetchDiscordChannelCategoriesLoaded && this.fetchDiscordChannelsLoaded ;
             },
             types() {
                 let types = {};
@@ -268,6 +301,8 @@
         created() {
             this.fetchGuilds();
             this.fetchQuizThemes();
+            this.fetchDiscordChannelCategories();
+            this.fetchDiscordChannels();
             if( this.getId ) {
                 this.fetch();
             } else {
@@ -285,6 +320,8 @@
                     this.guests = res.data.guests;
                     this.multi_guilds = res.data.multi_guilds;
                     if( this.type == 'quiz' ) this.quiz = res.data.relation;
+                    this.channel_discord_id = res.data.channel_discord_id;
+                    this.channel_discord_type = res.data.channel_discord_type;
                     console.log(this.quiz)
                     this.fetchLoaded = true;
                     this.fetchQuizAvailableQuestions();
@@ -310,6 +347,20 @@
                     this.themes = res.data;
                     this.fetchQuizThemesLoaded = true;
                 });
+            },
+            fetchDiscordChannelCategories() {
+                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/channelcategories').then( res => {
+                    this.fetchDiscordChannelCategoriesLoaded = true;
+                    this.channels_categories = res.data;
+                }).catch( err => {
+                    //No error
+                });
+            },
+            fetchDiscordChannels() {
+                axios.get('/api/user/cities/'+this.$store.state.currentCity.id+'/guilds/'+this.$route.params.id+'/channels').then( res => {
+                    this.fetchDiscordChannelsLoaded = true;
+                    this.channels = res.data;
+                })
             },
             fetchQuizAvailableQuestions() {
                 const args = {
@@ -374,6 +425,9 @@
                     image: this.image,
                     multi_guilds: this.multi_guilds,
                     guests: this.guests,
+                    channel_discord_type: this.channel_discord_type,
+                    channel_discord_id: this.channel_discord_id,
+                    category_discord_id: this.category_discord_id,
                 };
                 if( this.getId ) {
                     this.save(args);

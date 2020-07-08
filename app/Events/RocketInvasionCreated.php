@@ -23,7 +23,7 @@ class RocketInvasionCreated
      *
      * @return void
      */
-    public function __construct( RocketInvasion $invasion, UserAction $announce )
+    public function __construct(RocketInvasion $invasion, UserAction $announce)
     {
         $this->invasion = $invasion;
         $this->announce = $announce;

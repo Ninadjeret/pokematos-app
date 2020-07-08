@@ -127,6 +127,19 @@ class Discord {
         try {
             $discord = new DiscordClient(['token' => config('discord.token')]);
             $channel = $discord->channel->deleteOrcloseChannel($args);
+            return true;
+        }
+        catch (\GuzzleHttp\Command\Exception\CommandException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+            return false;
+        }
+    }
+
+    public static function createChannel( $args ) {
+        try {
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            $channel = $discord->guild->createGuildChannel($args);
+            return $channel;
         }
         catch (\GuzzleHttp\Command\Exception\CommandException $e) {
             $statusCode = $e->getResponse()->getStatusCode();
