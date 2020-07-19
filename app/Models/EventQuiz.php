@@ -99,16 +99,12 @@ class EventQuiz extends Model
      */
     public function process() {
         if( $this->isClosed() ) {
-            Log::debug('isClosed');
             return;
         } elseif( $this->isEnded() ) {
-            Log::debug('isEnded');
             $this->close();
         } elseif( $this->hasToStart() ) {
-            Log::debug('hasToStart');
             $this->start();
         } else {
-            Log::debug('else');
             $question = $this->getLastQuestion();
             if( $question && $question->isEnded() ) {
                 $question->close();

@@ -11,9 +11,9 @@ class ColorPicker {
 
     private function _log( $text ) {
         if( is_array( $text ) ) {
-            Log::debug( print_r($text, true) );
+            Log::channel('raids')->info( print_r($text, true) );
         } else {
-            Log::debug( $text );
+            Log::channel('raids')->info( $text );
         }
     }
 

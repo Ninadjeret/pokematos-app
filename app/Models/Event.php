@@ -16,9 +16,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = ['city_id', 'guild_id', 'name', 'type', 'relation_id', 'start_time', 'end_time', 'discord_link', 'channel_discord_id', 'image', 'multi_guilds'];
+    protected $fillable = [
+        'city_id',
+        'guild_id',
+        'name',
+        'type',
+        'relation_id',
+        'start_time',
+        'end_time',
+        'channel_discord_type',
+        'delete_after_end',
+        'channel_discord_id',
+        'image',
+        'multi_guilds'
+    ];
     protected $appends = ['relation', 'guild', 'guests'];
-
     public static $multi_types = ['quiz'];
 
     public function getRelationAttribute() {
@@ -89,6 +101,7 @@ class Event extends Model
             $event->resetTrain();
         }
 
+        $event->manageChannels($args['event']);
         $event->setMultiQuilds($args);
 
         return $event;
@@ -112,6 +125,7 @@ class Event extends Model
             $this->resetTrain();
         }
 
+        $this->manageChannels($args['event']);
         $this->setMultiQuilds($args);
 
     }
@@ -130,6 +144,43 @@ class Event extends Model
         $args['event']['end_time'] = $start_time->format('Y-m-d').' 23:59:00';
         if( empty( $args['event']['multi_guilds'] ) ) $args['event']['multi_guilds'] = 0;
         return $args;
+    }
+
+
+    public function manageChannels( $args ) {
+
+        $to_delete = false;
+        $this->update(['channel_discord_type' => $args['channel_discord_type']]);
+
+        if( $args['channel_discord_type'] == 'none' ) {
+            if( !empty($this->channel_discord_id) ) $to_delete = $this->channel_discord_id;
+            $this->update(['channel_discord_id' => null]);
+        }
+
+        if( $args['channel_discord_type'] == 'existing' ) {
+            if( !empty($this->channel_discord_id) && $args['channel_discord_id'] != $this->channel_discord_id ) $to_delete = $this->channel_discord_id;
+            $this->update(['channel_discord_id' => $args['channel_discord_id']]);
+        }
+
+        if( $args['channel_discord_type'] == 'new' ) {
+            if( !empty($this->channel_discord_id) ) $to_delete = $this->channel_discord_id;
+            $result = \App\Core\Discord::createChannel([
+                'guild.id' => (int) $this->guild->discord_id,
+                'name' => $this->name,
+                'type' => 0,
+                'parent_id' => (int) $args['category_discord_id'],
+            ]);
+            if( $result ) $this->update([
+                'channel_discord_id' => $result->id,
+                'channel_discord_type' => 'existing'
+            ]);
+        }
+
+        if( $to_delete ) {
+            \App\Core\Discord::deleteChannel([
+                'channel.id' => (int) $to_delete
+            ]);
+        }
     }
 
 
