@@ -28,13 +28,13 @@ class TouchPOIs
      */
     public function handle(DayChanged $event)
     {
-        $quests = QuestInstance::where('date', $event->yesterday->format('Y-m-d').' 00:00:00')->get();
-        foreach( $quests as $quest ) {
+        $quests = QuestInstance::where('date', $event->yesterday->format('Y-m-d') . ' 00:00:00')->get();
+        foreach ($quests as $quest) {
             $quest->getStop()->touch();
         }
 
         $invasions = RocketInvasion::where('date', $event->yesterday->format('Y-m-d'))->get();
-        foreach( $invasions as $invasion ) {
+        foreach ($invasions as $invasion) {
             $invasion->getStop()->touch();
         }
     }

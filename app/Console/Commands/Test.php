@@ -39,8 +39,7 @@ class Test extends Command
      */
     public function handle()
     {
-        $result = \DateTime::createFromFormat('Y-m-d H:i:s', '2018-05-05');
-        $this->line(print_r($result, true));
+        event(new \App\Events\DayChanged());
         //$this->line(\App\Core\Helpers::sanitize('Héhé ça marche du tonnnèr, t\'es trop top'));
         //$quiz = \App\Models\EventQuiz::find(5)->close();
         //$question = \App\Models\EventQuizQuestion::find(186)->start();
@@ -59,5 +58,4 @@ class Test extends Command
         //$this->line( print_r($guild, true) );
         $this->info('OK');*/
     }
-
 }

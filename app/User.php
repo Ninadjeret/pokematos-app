@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -44,7 +45,8 @@ class User extends Authenticatable
         'superadmin' => 'boolean'
     ];
 
-    public static function getPermissions() {
+    public static function getPermissions()
+    {
         return [
             'raid_delete' => [
                 'label' => 'Supprimer des raids',
@@ -93,18 +95,19 @@ class User extends Authenticatable
         ];
     }
 
-    public function getGuilds() {
+    public function getGuilds()
+    {
         $guilds = [];
 
         $userGuilds = UserGuild::where('user_id', $this->id)
             ->get();
-        if( empty( $userGuilds ) ) {
+        if (empty($userGuilds)) {
             return $guilds;
         }
 
-        foreach( $userGuilds as $userGuild ) {
+        foreach ($userGuilds as $userGuild) {
             $guild_to_add = Guild::where('id', $userGuild->guild_id)->first();
-            if( $guild_to_add ) {
+            if ($guild_to_add) {
                 $guild_to_add->permissions = $userGuild->permissions;
                 $guilds[] = $guild_to_add;
             }
@@ -113,7 +116,8 @@ class User extends Authenticatable
         return $guilds;
     }
 
-    public function getStatsAttribute() {
+    public function getStatsAttribute()
+    {
         $stats = ['total' => []];
 
         $stats['total']['raidCreate'] = UserAction::where('user_id', $this->id)
@@ -132,14 +136,14 @@ class User extends Authenticatable
             ->count();
 
         return $stats;
-
     }
 
-    public function getPermissionsAttribute() {
+    public function getPermissionsAttribute()
+    {
         $permissions = User::getPermissions();
         $userPermissions = [];
-        foreach( $this->getGuilds() as $guild ) {
-            switch( $guild->permissions ) {
+        foreach ($this->getGuilds() as $guild) {
+            switch ($guild->permissions) {
                 case 30:
                     $userPermissions[$guild->id] = array_keys($permissions);
                     break;
@@ -158,81 +162,83 @@ class User extends Authenticatable
         return $userPermissions;
     }
 
-    public function can($permission, $context = []) {
+    public function can($permission, $context = [])
+    {
         $permissions = User::getPermissions();
         $userPermissions = $this->permissions;
 
-        if( !array_key_exists($permission, $permissions) ) {
+        if (!array_key_exists($permission, $permissions)) {
             return false;
         }
 
-        if( empty( $userPermissions ) ) {
+        if (empty($userPermissions)) {
             return false;
         }
 
         $permissionContext = $permissions[$permission]['context'];
-        switch( $permissionContext ) {
+        switch ($permissionContext) {
             case 'global':
-                foreach( $userPermissions as $guild_id => $guild_permissions ) {
+                foreach ($userPermissions as $guild_id => $guild_permissions) {
                     $guild = Guild::find($guild_id);
-                    if( !$guild ) {
+                    if (!$guild) {
                         continue;
                     }
-                    if( in_array( $permission, $guild_permissions ) ) {
+                    if (in_array($permission, $guild_permissions)) {
                         return true;
                     }
                 }
                 return false;
                 break;
             case 'city':
-                foreach( $userPermissions as $guild_id => $guild_permissions ) {
+                foreach ($userPermissions as $guild_id => $guild_permissions) {
                     $guild = Guild::find($guild_id);
-                    if( !$guild ) {
+                    if (!$guild) {
                         continue;
                     }
-                    if( $guild->city_id == $context['city_id'] && in_array( $permission, $guild_permissions ) ) {
+                    if ($guild->city_id == $context['city_id'] && in_array($permission, $guild_permissions)) {
                         return true;
                     }
                 }
                 return false;
                 break;
             case 'guild':
-            foreach( $userPermissions as $guild_id => $guild_permissions ) {
-                $guild = Guild::find($guild_id);
-                if( !$guild ) {
-                    continue;
+                foreach ($userPermissions as $guild_id => $guild_permissions) {
+                    $guild = Guild::find($guild_id);
+                    if (!$guild) {
+                        continue;
+                    }
+                    if ($guild->id == $context['guild_id'] && in_array($permission, $guild_permissions)) {
+                        return true;
+                    }
                 }
-                if( $guild->id == $context['guild_id'] && in_array( $permission, $guild_permissions ) ) {
-                    return true;
-                }
-            }
-            return false;
-            break;
+                return false;
+                break;
         }
 
         return false;
     }
 
-    public function getCities() {
+    public function getCities()
+    {
         $cities = [];
         $cities_ids = [];
         $user_guilds = $this->getGuilds();
-        if( empty( $user_guilds ) ) return $cities;
+        if (empty($user_guilds)) return $cities;
 
-        foreach( $user_guilds as $guild ) {
-            if( !in_array($guild->city_id, $cities_ids) ) {
+        foreach ($user_guilds as $guild) {
+            if (!in_array($guild->city_id, $cities_ids)) {
                 $cities_ids[] = $guild->city_id;
                 $city_to_add = City::find($guild->city_id);
                 $city_to_add = $city_to_add->toArray();
-                if( $city_to_add ) {
+                if ($city_to_add) {
                     $city_to_add['guilds'] = [$guild];
                     $city_to_add['permissions'] = $guild->permissions;
                     $cities[] = $city_to_add;
                 }
             } else {
-                foreach( $cities as &$city ) {
-                    if( $city['id'] == $guild->city_id ) {
-                        if( $guild->permissions > $city['permissions'] ) {
+                foreach ($cities as &$city) {
+                    if ($city['id'] == $guild->city_id) {
+                        if ($guild->permissions > $city['permissions']) {
                             $city['permissions'] = $guild->permissions;
                         }
                         $city['guilds'][] = $guild;
@@ -243,17 +249,18 @@ class User extends Authenticatable
         return $cities;
     }
 
-    public function checkGuilds( $user_guilds ) {
+    public function checkGuilds($user_guilds)
+    {
         $auth = false;
         $guilds = [];
         $discord = new DiscordClient(['token' => config('discord.token')]);
 
         //Get all communities acces for super admin
-        if( $this->superadmin ) {
+        if ($this->superadmin) {
             $auth = true;
             $allguilds = Guild::where('active', 1)->get();
-            if( !empty( $allguilds ) ) {
-                foreach( $allguilds as $allguild ) {
+            if (!empty($allguilds)) {
+                foreach ($allguilds as $allguild) {
                     $guilds[] = [
                         'id' => $allguild->id,
                         'permissions' => 30,
@@ -263,15 +270,15 @@ class User extends Authenticatable
         }
 
         //for basic users
-        elseif(  !empty( $user_guilds ) ) {
-            foreach( $user_guilds as $user_guild ) {
+        elseif (!empty($user_guilds)) {
+            foreach ($user_guilds as $user_guild) {
                 $error = 2;
                 $auth_discord = false;
                 $admin = 0;
-                $guild = Guild::where( 'discord_id', $user_guild->id )
+                $guild = Guild::where('discord_id', $user_guild->id)
                     ->where('active', 1)
                     ->first();
-                if( $guild ) {
+                if ($guild) {
 
                     try {
                         $result = $discord->guild->getGuildMember(array(
@@ -279,13 +286,13 @@ class User extends Authenticatable
                             'user.id' => (int) $this->discord_id,
                         ));
 
-                        if( $result ) {
+                        if ($result) {
 
                             //Gestion des droits d'accès
-                            if( empty($guild->settings->map_access_rule) || $guild->settings->map_access_rule == 'everyone' ) {
+                            if (empty($guild->settings->map_access_rule) || $guild->settings->map_access_rule == 'everyone') {
                                 $auth = true;
                                 $auth_discord = true;
-                            } elseif( $guild->settings->map_access_rule == 'specific_roles' && !empty(array_intersect($guild->settings->map_access_roles, $result->roles))) {
+                            } elseif ($guild->settings->map_access_rule == 'specific_roles' && !empty(array_intersect($guild->settings->map_access_roles, $result->roles))) {
                                 $auth_discord = true;
                                 $auth = true;
                             } else {
@@ -293,33 +300,32 @@ class User extends Authenticatable
                             }
 
                             //Gestion des prvilèges de modo
-                            if ( !empty($guild->settings->map_access_moderation_roles) && !empty(array_intersect($guild->settings->map_access_moderation_roles, $result->roles))) {
+                            if (!empty($guild->settings->map_access_moderation_roles) && !empty(array_intersect($guild->settings->map_access_moderation_roles, $result->roles))) {
                                 $admin = 10;
                                 $auth = true;
                                 $auth_discord = true;
                             }
 
                             //Gestion des prvilèges d'admin
-                            if ( !empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $result->roles))) {
+                            if (!empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $result->roles))) {
                                 $admin = 30;
                                 $auth = true;
                                 $auth_discord = true;
                             }
 
                             //Si l'utilisateur a les permission d'admin sur Discrod, alors il les hérite sur la map
-                            if( $user_guild->permissions >= 2146958847 ) {
+                            if ($user_guild->permissions >= 2146958847) {
                                 $admin = 30;
                                 $auth = true;
                                 $auth_discord = true;
                             }
 
-                            if( $auth_discord ) {
+                            if ($auth_discord) {
                                 $guilds[] = [
                                     'id' => $guild->id,
                                     'permissions' => $admin,
                                 ];
                             }
-
                         }
                     } catch (Exception $e) {
                         error_log('Exception reçue : ' . $e->getMessage());
@@ -328,7 +334,7 @@ class User extends Authenticatable
             }
         }
 
-        if( $auth ) $error = false;
+        if ($auth) $error = false;
         $this->saveGuilds($guilds);
         return (object) [
             'auth' => $auth,
@@ -336,14 +342,15 @@ class User extends Authenticatable
         ];
     }
 
-    public function saveGuilds( $guilds ) {
+    public function saveGuilds($guilds)
+    {
         $old_guilds = [];
-        if( !empty($guilds) ) {
-            foreach( $guilds as $guild ) {
+        if (!empty($guilds)) {
+            foreach ($guilds as $guild) {
                 $finded_guild = UserGuild::where('user_id', $this->id)
                     ->where('guild_id', $guild['id'])
                     ->first();
-                if( $finded_guild ) {
+                if ($finded_guild) {
                     $finded_guild->permissions = $guild['permissions'];
                     $finded_guild->save();
                 } else {
@@ -360,23 +367,23 @@ class User extends Authenticatable
         $guilds_to_delete = UserGuild::where('user_id', $this->id)
             ->whereNotIn('id', $old_guilds)
             ->get();
-        if( !empty($guilds_to_delete) ) {
-            foreach( $guilds_to_delete as $guild_to_delete ) {
+        if (!empty($guilds_to_delete)) {
+            foreach ($guilds_to_delete as $guild_to_delete) {
                 UserGuild::destroy($guild_to_delete->id);
             }
         }
-
     }
 
-    public static function isValid() {
+    public static function isValid()
+    {
         $user = Auth::user();
 
-        if( !$user ) {
+        if (!$user) {
             return false;
         }
 
         $refresh = $user->refreshDiscordToken();
-        if( !$refresh ) {
+        if (!$refresh) {
             Auth::logout();
             return false;
         }
@@ -384,33 +391,49 @@ class User extends Authenticatable
         sleep(1);
         $user_guilds = $user->getDiscordMeGuilds();
 
-        if( !$user_guilds ) {
+        if (!$user_guilds) {
             return false;
         }
 
         $auth = $user->checkGuilds($user_guilds);
 
-        if( $auth ) {
+        if ($auth) {
             return true;
         } else {
             Auth::logout();
             return false;
         }
-
     }
 
-    public function refreshDiscordToken() {
-        $creds = base64_encode( config('discord.id') . ':' . config('discord.secret') );
+    public function refreshDiscordToken()
+    {
+        $creds = base64_encode(config('discord.id') . ':' . config('discord.secret'));
         $client = new Client();
-        $res = $client->post('https://discordapp.com/api/oauth2/token?grant_type=refresh_token&scope=identify%20email%20guilds&refresh_token='.$this->discord_refresh_token.'&redirect_uri='.urlencode(config('discord.callback')), [
+        /*$res = $client->post('https://discord.com/api/oauth2/token?grant_type=refresh_token&scope=identify%20email%20guilds&refresh_token='.$this->discord_refresh_token.'&redirect_uri='.urlencode(config('discord.callback')), [
             'http_errors' => false,
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'Authorization' => 'Basic '.$creds,
 
             ]
+        ]);*/
+
+        $res = $client->post('https://discord.com/api/oauth2/token', [
+            'http_errors' => false,
+            'headers' => [
+                'Authorization' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'client_id' => config('discord.id'),
+                'client_secret' => config('discord.secret'),
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $this->discord_refresh_token,
+                'redirect_uri' => config('discord.callback'),
+                'scope' => 'identify email guilds'
+            ]
         ]);
-        if( $res->getStatusCode() == '200' ) {
+
+        if ($res->getStatusCode() == '200') {
             $body = json_decode($res->getBody());
             $this->update([
                 'discord_access_token' => $body->access_token,
@@ -422,20 +445,20 @@ class User extends Authenticatable
         return false;
     }
 
-    public function getDiscordMeGuilds() {
+    public function getDiscordMeGuilds()
+    {
 
         $client = new Client();
-        $res = $client->get('https://discordapp.com/api/users/@me/guilds', [
+        $res = $client->get('https://discord.com/api/users/@me/guilds', [
             'headers' => [
-                'Authorization' => 'Bearer '.$this->discord_access_token,
+                'Authorization' => 'Bearer ' . $this->discord_access_token,
             ]
         ]);
 
-        if( $res->getStatusCode() == '200' ) {
+        if ($res->getStatusCode() == '200') {
             return json_decode($res->getBody());
         }
 
         return false;
     }
-
 }
