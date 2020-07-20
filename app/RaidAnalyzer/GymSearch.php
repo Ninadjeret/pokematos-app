@@ -1,16 +1,19 @@
 <?php
+
 namespace App\RaidAnalyzer;
 
 use App\Models\Stop;
 use App\Core\Helpers;
 use Illuminate\Support\Facades\Log;
 
-class GymSearch {
+class GymSearch
+{
 
     /**
      *
      */
-    function __construct( $guild ) {
+    function __construct($guild)
+    {
         $this->debug = false;
         $this->query = false;
         $this->gyms = Stop::where('gym', 1)
@@ -26,16 +29,17 @@ class GymSearch {
      *
      * @return type
      */
-    function getSanitizedNames() {
+    function getSanitizedNames()
+    {
         $names = array();
-        foreach( $this->gyms as $gym ) {
+        foreach ($this->gyms as $gym) {
             $names[Helpers::sanitize($gym->niantic_name)] = $gym->id;
-            if( $gym->niantic_name != $gym->name ) {
+            if ($gym->niantic_name != $gym->name) {
                 $names[Helpers::sanitize($gym->name)] = $gym->id;
             }
-            if( !empty($gym->aliases) ) {
-                foreach( $gym->aliases as $alias ) {
-                    if( !array_key_exists($alias->name, $names) ) {
+            if (!empty($gym->aliases)) {
+                foreach ($gym->aliases as $alias) {
+                    if (!array_key_exists($alias->name, $names)) {
                         $names[Helpers::sanitize($alias->name)] = $gym->id;
                     }
                 }
@@ -56,10 +60,11 @@ class GymSearch {
      * @param type $query
      * @return boolean
      */
-    function isBlackListed( $query ) {
+    function isBlackListed($query)
+    {
         $black_list = array('bonus');
-        foreach( $black_list as $pattern ) {
-            if( strstr($query, $pattern) ) {
+        foreach ($black_list as $pattern) {
+            if (strstr($query, $pattern)) {
                 return true;
             }
         }
@@ -72,27 +77,28 @@ class GymSearch {
      * @param  [type] $array [description]
      * @return [type]        [description]
      */
-    public function extractGymName($array) {
-        if( !is_array($array) ) return false;
+    public function extractGymName($array)
+    {
+        if (!is_array($array)) return false;
         $num = 0;
         $i = 0;
         $name = false;
-        foreach( $array as $line ) {
+        foreach ($array as $line) {
             $i++;
-            if( empty(preg_match( '/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $line )) ) {
+            if (empty(preg_match('/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $line))) {
                 $name = $line;
                 $num = $i;
             }
         }
 
-        if( $name && isset( $array[$num]) ) {
-            if( preg_match( '/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $array[$num] ) ) {
+        if ($name && isset($array[$num])) {
+            if (preg_match('/^[0-9]:[0-9][0-9]:[0-9][0-9]/i', $array[$num])) {
                 //nothing
             } else {
-                $name .= ' '.$array[$num];
+                $name .= ' ' . $array[$num];
             }
         }
-        Log::channel('raids')->info('Gym name extracted : '.$name);
+        Log::channel('raids')->info('Gym name extracted : ' . $name);
         $this->gym_name = $name;
         return $name;
     }
@@ -104,65 +110,64 @@ class GymSearch {
      * @param  integer $min   [description]
      * @return [type]         [description]
      */
-    public function findExactGym( $query, $min = 50  ) {
+    public function findExactGym($query, $min = 50)
+    {
 
         $sanitizedQuery = Helpers::sanitize($query);
         $array_probabilities = [];
 
         //On supprime les éventuels queries blacklistées(surimpression, etc)
-        if( $this->isBlackListed($sanitizedQuery) ) {
+        if ($this->isBlackListed($sanitizedQuery)) {
             Log::channel('raids')->info('Query black listed');
             return false;
         }
 
         /**
-        * ==================================================================
-        * PREMIER TOUR
-        * ==================================================================
-        */
-        foreach( $this->sanitizedNames as $name => $gym_id ) {
-            if( $name == $sanitizedQuery ) {
+         * ==================================================================
+         * PREMIER TOUR
+         * ==================================================================
+         */
+        foreach ($this->sanitizedNames as $name => $gym_id) {
+            if ($name == $sanitizedQuery) {
                 return (object) [
                     'gym_id' => $gym_id,
                     'probability' => 100
                 ];
-            }
-            elseif( strpos($name, $sanitizedQuery) === 0 ) {
+            } elseif (strpos($name, $sanitizedQuery) === 0) {
                 $array_probabilities[$gym_id] = 90;
             }
         }
 
         $result = $this->extractBestProba($array_probabilities, $min, 0.25);
-        if( $result ) {
+        if ($result) {
             return $result;
         }
 
         /**
-        * ==================================================================
-        * DEUXIEME TOUR
-        * ==================================================================
-        */
-        foreach( $this->sanitizedNames as $name => $gym_id ) {
+         * ==================================================================
+         * DEUXIEME TOUR
+         * ==================================================================
+         */
+        foreach ($this->sanitizedNames as $name => $gym_id) {
             $similarity = similar_text($sanitizedQuery, $name, $perc);
-            if( $perc >= 100 ) {
+            if ($perc >= 100) {
                 return (object) [
                     'gym_id' => $gym_id,
                     'probability' => 100
                 ];
-            } elseif( $perc > $min ) {
-                if( !array_key_exists($gym_id, $array_probabilities) || $array_probabilities[$gym_id] < $perc ) {
+            } elseif ($perc > $min) {
+                if (!array_key_exists($gym_id, $array_probabilities) || $array_probabilities[$gym_id] < $perc) {
                     $array_probabilities[$gym_id] = $perc * 0.8;
                 }
             }
         }
 
         $result = $this->extractBestProba($array_probabilities, $min, 0.15);
-        if( $result ) {
+        if ($result) {
             return $result;
         }
 
         return false;
-
     }
 
 
@@ -172,17 +177,18 @@ class GymSearch {
      * @param type $min
      * @return boolean|\POGO_gym
      */
-    function findGym( $query, $min = 50 ) {
+    function findGym($query, $min = 50)
+    {
 
         $array_probabilities = [];
         $this->query = $query;
 
         //On checke si on trouve un résultat exact
-        if( is_array($query) ) {
+        if (is_array($query)) {
             $gymName = $this->extractGymName($query);
-            if( $gymName ) {
+            if ($gymName) {
                 $result = $this->findExactGym($gymName, $min);
-                if( $result ) {
+                if ($result) {
                     return (object) [
                         'gym' => Stop::find($result->gym_id),
                         'probability' => $result->probability
@@ -190,15 +196,12 @@ class GymSearch {
                 }
             }
             return false;
-        }
-
-        else {
-            $result = $this->findGymFromString( $query, $min );
+        } else {
+            $result = $this->findGymFromString($query, $min);
             return $result;
         }
 
         return false;
-
     }
 
 
@@ -206,31 +209,43 @@ class GymSearch {
      *
      * @return type
      */
-    function getAllIdentifiers() {
+    function getAllIdentifiers()
+    {
         $identifiers = array();
-        foreach( $this->gyms as $gym ) {
-            foreach( array( $gym->niantic_name, $gym->name ) as $name ) {
+        foreach ($this->gyms as $gym) {
+
+            $names = [$gym->niantic_name, $gym->name];
+            if (!empty($gym->aliases)) {
+                foreach ($gym->aliases as $alias) {
+                    if (!in_array($alias->name, $names)) {
+                        $names[] = $alias->name;
+                    }
+                }
+            }
+
+            foreach ($names as $name) {
                 $name = Helpers::sanitize($name);
                 $nb_chars = strlen($name);
                 //Parcours
                 $debut = 0;
-                while( $debut < $nb_chars - 1) {
+                while ($debut < $nb_chars - 1) {
                     $fin = $nb_chars - $debut;
-                    while( $fin > 2 ) {
+                    while ($fin > 2) {
                         $pattern = mb_strimwidth($name, $debut, $fin);
                         //echo $pattern.'<br>';
                         $is_find = 0;
-                        foreach( $this->sanitizedNames as $sanitizedName ) {
-                            if( strstr($sanitizedName, $pattern) ) {
+                        foreach ($this->sanitizedNames as $sanitizedName) {
+                            if (strstr($sanitizedName, $pattern)) {
                                 $is_find++;
                             }
                         }
-                        if( $is_find === 1 ) {
+                        if ($is_find === 1) {
                             //echo 'Identifiant OK<br>';
                             $identifiers[$pattern] = (object) array(
                                 'gymId' => $gym->id,
-                                'percent' => round( strlen($pattern) * 100 / $nb_chars )
-                            );$gym->id;
+                                'percent' => round(strlen($pattern) * 100 / $nb_chars)
+                            );
+                            $gym->id;
                         }
                         $fin--;
                     }
@@ -255,17 +270,18 @@ class GymSearch {
      * @param type $min
      * @return boolean|\POGO_gym
      */
-    function findGymFromString( $query, $min = 50 ) {
+    function findGymFromString($query, $min = 50)
+    {
         $this->query = $query;
         $sanitizedQuery = Helpers::sanitize($this->query);
         Log::channel('raids')->info("Gym query : {$sanitizedQuery}");
-        if( $this->isBlackListed($sanitizedQuery) ) {
+        if ($this->isBlackListed($sanitizedQuery)) {
             Log::channel('raids')->info('Query black listed');
             return false;
         }
         $identifiers = $this->getAllIdentifiers();
-        foreach($identifiers as $pattern => $data ) {
-            if( strstr($sanitizedQuery, $pattern) && $data->percent >= $min ) {
+        foreach ($identifiers as $pattern => $data) {
+            if (strstr($sanitizedQuery, $pattern) && $data->percent >= $min) {
                 $gym = Stop::find($data->gymId);
                 return (object) [
                     'gym' => $gym,
@@ -281,29 +297,29 @@ class GymSearch {
      * [extractBestProba description]
      * @return [type] [description]
      */
-     private function extractBestProba($array_probabilities, $min, $coefPart) {
-         if( empty( $array_probabilities ) ) {
-             return false;
-         }
+    private function extractBestProba($array_probabilities, $min, $coefPart)
+    {
+        if (empty($array_probabilities)) {
+            return false;
+        }
 
-         arsort($array_probabilities);
-         $best_proba = array_key_first($array_probabilities);
+        arsort($array_probabilities);
+        $best_proba = array_key_first($array_probabilities);
 
-         if( count($array_probabilities) > 1 ) {
-             $count = count($array_probabilities);
-             $coef =  1 - ( $count * $coefPart );
-             if( $coef <= 0.5 ) $coef = 0.5;
-             $array_probabilities[$best_proba] = $array_probabilities[$best_proba] - ($array_probabilities[$best_proba] * $coef);
-         }
+        if (count($array_probabilities) > 1) {
+            $count = count($array_probabilities);
+            $coef =  1 - ($count * $coefPart);
+            if ($coef <= 0.5) $coef = 0.5;
+            $array_probabilities[$best_proba] = $array_probabilities[$best_proba] - ($array_probabilities[$best_proba] * $coef);
+        }
 
-         if( $array_probabilities[$best_proba] >= $min ) {
-             return (object) [
-                 'gym_id' => $best_proba,
-                 'probability' => round($array_probabilities[$best_proba])
-             ];
-         }
+        if ($array_probabilities[$best_proba] >= $min) {
+            return (object) [
+                'gym_id' => $best_proba,
+                'probability' => round($array_probabilities[$best_proba])
+            ];
+        }
 
-         return false;
-     }
-
+        return false;
+    }
 }
