@@ -137,6 +137,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('events/quiz/themes', 'EventController@getThemes');
     Route::get('events/quiz/available-questions', 'Events\QuizController@getAvailableQuestions');
 
+    Route::get('quiz/questions', 'Events\QuizQuestionController@index');
+    Route::get('quiz/themes', 'Events\QuizThemeController@index');
 });
 
 Route::group(['middleware' => ['auth.bot']], function () {
@@ -160,7 +162,6 @@ Route::group(['middleware' => ['auth.bot']], function () {
 
     //Events
     Route::post('bot/events/quiz/answer', 'EventController@addQuizAnswer');
-
 });
 
 Route::get('version', 'Controller@getVersion');

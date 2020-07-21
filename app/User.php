@@ -91,7 +91,7 @@ class User extends Authenticatable
             'events_train_check' => [
                 'label' => 'Gérer l\'avancement d\'un pokétrain',
                 'context' => 'guild'
-            ],
+            ]
         ];
     }
 
