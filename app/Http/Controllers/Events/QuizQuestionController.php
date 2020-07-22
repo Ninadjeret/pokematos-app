@@ -24,4 +24,10 @@ class QuizQuestionController extends Controller
     QuizQuestion::destroy($question->id);
     return response()->json(null, 204);
   }
+
+  public function update(QuizQuestion $question, Request $request)
+  {
+    $question->update($request->all());
+    return response()->json($question, 200);
+  }
 }

@@ -142,11 +142,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('events/quiz/themes', 'EventController@getThemes');
     Route::get('events/quiz/available-questions', 'Events\QuizController@getAvailableQuestions');
 
-    Route::group(['middleware' => ['can:quiz_manage']], function () {
-        Route::get('quiz/questions', 'Events\QuizQuestionController@index');
-        Route::get('quiz/questions/{question}', 'Events\QuizQuestionController@show');
-        Route::delete('quiz/questions/{question}', 'Events\QuizQuestionController@destroy');
-        Route::get('quiz/themes', 'Events\QuizThemeController@index');
+    Route::group([
+        'prefix' => 'quiz',
+        'middleware' => ['can:quiz_manage']
+    ], function () {
+        Route::resource('questions', 'Events\QuizQuestionController');
+        Route::resource('themes', 'Events\QuizThemeController');
     });
 });
 

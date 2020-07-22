@@ -14,6 +14,29 @@
         <label>Question</label>
         <input v-model="question" type="text" />
       </div>
+      <div class="setting">
+        <label>Réponse</label>
+        <textarea v-model="answer">{{answer}}</textarea>
+      </div>
+      <div class="setting">
+        <label>Explication (facultatif)</label>
+        <p
+          class="description"
+        >L'explication sera transmise par le bot si la bonne réponse est trouvée. L'explication peut expliquer la bonne réponse ou donner des informations de contexte</p>
+        <textarea v-model="explanation">{{explanation}}</textarea>
+      </div>
+      <div class="setting">
+        <label>Thème</label>
+        <select v-model="theme_id">
+          <option :key="theme.id" v-for="theme in themes" :value="theme.id">{{theme.name}}</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label>Difficulté</label>
+        <select v-model="difficulty">
+          <option :key="lvl" v-for="lvl in [1,2,3,5]" :value="lvl">{{lvl}}</option>
+        </select>
+      </div>
       <v-divider></v-divider>
       <div v-if="getId">
         <v-subheader>Autres actions</v-subheader>
@@ -46,6 +69,9 @@ export default {
       loading: false,
       dialog: false,
       question: "",
+      answer: "",
+      difficulty: 1,
+      theme_id: 1,
       themes: [],
       fetchLoaded: false,
       fetchedThemes: false
@@ -77,6 +103,9 @@ export default {
         .then(res => {
           this.fetchLoaded = true;
           this.question = res.data.question;
+          this.answer = res.data.answer;
+          this.difficulty = res.data.difficulty;
+          this.theme_id = resa.data.theme_id;
         })
         .catch(err => {
           let message = "Problème lors de la récupération";
@@ -97,9 +126,10 @@ export default {
     },
     submit() {
       const args = {
-        name: this.name,
-        reward_ids: reward_ids,
-        pokemon_ids: pokemon_ids
+        question: this.question,
+        answer: this.answer,
+        difficulty: this.difficulty,
+        theme_id: this.theme_id
       };
       console.log(args);
       if (this.getId) {
@@ -112,7 +142,7 @@ export default {
       this.$store.commit("setSnackbar", { message: "Enregistrement en cours" });
       this.loading = true;
       axios
-        .put("/api/quests/" + this.$route.params.id, args)
+        .put("/api/quiz/questions/" + this.getId, args)
         .then(res => {
           this.$store.commit("setSnackbar", {
             message: "Enregistrement effectué",
@@ -136,7 +166,7 @@ export default {
       this.$store.commit("setSnackbar", { message: "Enregistrement en cours" });
       this.loading = true;
       axios
-        .post("/api/quests", args)
+        .post("/api/quiz/quests", args)
         .then(res => {
           this.$store.commit("setSnackbar", {
             message: "Enregistrement effectué",
