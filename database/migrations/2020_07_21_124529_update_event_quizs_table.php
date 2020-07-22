@@ -26,7 +26,7 @@ class UpdateEventQuizsTable extends Migration
     public function down()
     {
         Schema::table('quiz_questions', function (Blueprint $table) {
-            $table->dropColumn('quiz_questions');
+            $table->dropColumn('author_id');
         });
     }
 }

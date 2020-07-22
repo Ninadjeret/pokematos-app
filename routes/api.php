@@ -60,8 +60,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/cities/{city}/guilds/{guild}/roles', 'DiscordController@getRoles');
     Route::get('user/cities/{city}/guilds/{guild}/channels', 'DiscordController@getChannels');
     Route::get('user/cities/{city}/guilds/{guild}/channelcategories', 'DiscordController@getChannelCategories');
-    Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
-    Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
+
+    Route::group(['middleware' => ['can:rocket_bosses_edit']], function () {
+        Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
+        Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
+    });
 
     Route::get('user/guilds/{guild}/roles', 'UserController@getRoles');
     Route::post('user/guilds/{guild}/roles', 'UserController@createRole');
@@ -87,8 +90,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/guilds/{guild}/questconnectors/{connector}', 'UserController@updateQuestConnector');
     Route::delete('user/guilds/{guild}/questconnectors/{connector}', 'UserController@deleteQuestConnector');
 
-    Route::get('user/guilds/{guild}/logs', 'UserController@getGuildLogs');
-    Route::get('user/cities/{city}/logs', 'UserController@getCityLogs');
+    Route::group(['middleware' => ['can:logs_manage']], function () {
+        Route::get('user/guilds/{guild}/logs', 'UserController@getGuildLogs');
+        Route::get('user/cities/{city}/logs', 'UserController@getCityLogs');
+    });
 
     Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
@@ -137,8 +142,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('events/quiz/themes', 'EventController@getThemes');
     Route::get('events/quiz/available-questions', 'Events\QuizController@getAvailableQuestions');
 
-    Route::get('quiz/questions', 'Events\QuizQuestionController@index');
-    Route::get('quiz/themes', 'Events\QuizThemeController@index');
+    Route::group(['middleware' => ['can:quiz_manage']], function () {
+        Route::get('quiz/questions', 'Events\QuizQuestionController@index');
+        Route::get('quiz/questions/{question}', 'Events\QuizQuestionController@show');
+        Route::delete('quiz/questions/{question}', 'Events\QuizQuestionController@destroy');
+        Route::get('quiz/themes', 'Events\QuizThemeController@index');
+    });
 });
 
 Route::group(['middleware' => ['auth.bot']], function () {

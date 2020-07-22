@@ -8,7 +8,7 @@
         <template v-for="(item) in filteredItems">
           <v-list-tile
             :key="item.id"
-            :to="{ name: 'admin.quiz.questions.edit', params: { id: item.id } }"
+            :to="{ name: 'admin.quiz.questions.edit', params: { question_id: item.id } }"
           >
             <v-list-tile-content>
               <v-list-tile-title>

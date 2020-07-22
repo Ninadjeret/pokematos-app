@@ -485,7 +485,7 @@ const routes = [{
                 },
                 component: AdminQuiz
             }, {
-                path: "quiz/questions/:id",
+                path: "quiz/questions/:question_id",
                 name: "admin.quiz.questions.edit",
                 meta: {
                     title: "Modifier la question",

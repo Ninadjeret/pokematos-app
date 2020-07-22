@@ -91,6 +91,10 @@ class User extends Authenticatable
             'events_train_check' => [
                 'label' => 'Gérer l\'avancement d\'un pokétrain',
                 'context' => 'guild'
+            ],
+            'quiz_manage' => [
+                'label' => 'Gérer les quizs',
+                'context' => 'personal'
             ]
         ];
     }
@@ -167,6 +171,10 @@ class User extends Authenticatable
         $permissions = User::getPermissions();
         $userPermissions = $this->permissions;
 
+        if ($this->superadmin) {
+            return true;
+        }
+
         if (!array_key_exists($permission, $permissions)) {
             return false;
         }
@@ -212,6 +220,12 @@ class User extends Authenticatable
                     }
                 }
                 return false;
+                break;
+            case 'personal':
+                $result = \App\Models\UserPermission::where('user_id', $this->id)
+                    ->where('permission', $permission)
+                    ->first();
+                return (!empty($result)) ? true : false;
                 break;
         }
 
