@@ -16,26 +16,9 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function getVersion( Request $request ) {
-        return response()->json(config('app.version'), 200);
-    }
-
-    public function getFeatures( Request $request ) {
-        $config = [
-            'donatation' => [
-                'goal' => 150,
-                'current' => 30,
-            ],
-            'features' => config('features'),
-        ];
-        return response()->json($config, 200);
-    }
-
-    public function test( Request $request ) {
-        $guild = Guild::find(1);
+    public function test(Request $request)
+    {
         $user = User::find(1);
-        $message = "Coucou <@!287549031087996928> <@!630740660537786371>";
-        $decoded = Discord::translateFrom($message, $guild, $user);
-        return response()->json($decoded, 200);
+        return response()->json($user, 200);
     }
 }

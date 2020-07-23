@@ -144,8 +144,12 @@ class User extends Authenticatable
 
     public function getPermissionsAttribute()
     {
-        $permissions = User::getPermissions();
+        //Get all existing permission, without personal permissions which do not depends on guilds
+        $permissions = array_filter(User::getPermissions(), function ($permission) {
+            return $permission['context'] != 'personal';
+        });
         $userPermissions = [];
+
         foreach ($this->getGuilds() as $guild) {
             switch ($guild->permissions) {
                 case 30:
@@ -162,6 +166,10 @@ class User extends Authenticatable
                     break;
             }
             $userPermissions[$guild->id][] = 'access'; //we add access permission to all users
+            $specificPermissions = \App\Models\UserPermission::where('user_id', $this->id)
+                ->get()
+                ->pluck('permission')->toArray();
+            $userPermissions[$guild->id] = array_merge($userPermissions[$guild->id], $specificPermissions);
         }
 
         return $userPermissions;
