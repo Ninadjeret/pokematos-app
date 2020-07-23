@@ -25,6 +25,13 @@ class QuizQuestionController extends Controller
     return response()->json(null, 204);
   }
 
+  public function store(Request $request)
+  {
+    $question = QuizQuestion::create($request->all());
+    $question->update(['author_id' => $request->user()->id]);
+    return response()->json($question, 200);
+  }
+
   public function update(QuizQuestion $question, Request $request)
   {
     $question->update($request->all());
