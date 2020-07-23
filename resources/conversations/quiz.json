@@ -1,5 +1,4 @@
-[
-    {
+[{
         "text": "**Oyé Oyé** dresseuses dresseurs !\r\nBienvenue à tous les participants pour ce PokéQuiz **%quiz_name**",
         "type": "start_intro",
         "next": ["Ca va être un super !", "https://media.giphy.com/media/8g63zqQ5RPt60/giphy.gif"]
@@ -52,12 +51,7 @@
     {
         "text": "Toum toum toum. Voici la nouvelle question",
         "type": "question_announce",
-        "next": ["suspens...", "suspens toujours...", "Thème **%question_theme** / %question_difficulty points"]
-    },
-    {
-        "text": "Toum toum toum. Voici la nouvelle question",
-        "type": "question_announce",
-        "next": ["suspens...", "suspens toujours...", "Ha on rigole bien hein ?!", "moi oui en tout cas", "Allez c'est parti", "Nan je blague", "Cette fois c'est bon", "Pour de vrai"]
+        "next": ["Thème **%question_theme** / %question_difficulty points"]
     },
     {
         "text": "Prochaine question en approche...",
@@ -77,7 +71,6 @@
     {
         "text": "Pas de panique, une question arrive !",
         "type": "question_announce",
-        "next": ["Je compte sur vous !"]
     },
     {
         "text": "Attention, question niveau Bourg-palette, sur le thème **%question_theme**",
@@ -87,6 +80,11 @@
     {
         "text": "**%question_theme** : question de rapidité à venir",
         "type": "question_announce_lvl1",
+        "next": []
+    },
+    {
+        "text": "Question à venir niveau hardcore, sur le thèeme **%question_theme**",
+        "type": "question_announce_lvl5",
         "next": []
     },
     {
@@ -105,6 +103,11 @@
         "next": []
     },
     {
+        "text": "%user :thinking: ? c'est ton dernier mot ? Désolé, c'est à côté",
+        "type": "question_answer_wrong",
+        "next": []
+    },
+    {
         "text": "%user ?? Alors ? ça va pas ?",
         "type": "question_answer_wrong",
         "next": []
@@ -116,6 +119,11 @@
     },
     {
         "text": "Alors moi je veux bien tout entendre, mais là vraiement je peux pas. Désolé %user",
+        "type": "question_answer_wrong",
+        "next": []
+    },
+    {
+        "text": "nop, mauvaise réponse %user. je suis sur que tu sais pourtant ;) courage !",
         "type": "question_answer_wrong",
         "next": []
     },
@@ -185,7 +193,12 @@
         "next": []
     },
     {
-        "text": "Bravo pour ce super quiz !",
+        "text": "Bravo pour ce super quiz qui s'achève !",
+        "type": "quiz_ended",
+        "next": []
+    },
+    {
+        "text": "Quiz terminé, merci et bravos à tous pour votre participation",
         "type": "quiz_ended",
         "next": []
     },

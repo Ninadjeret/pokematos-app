@@ -29,17 +29,19 @@ class EventQuizAnswer extends Model
 
     public function isCorrect()
     {
-        $question = $this->question->question;
-        if (strstr(\App\Core\Helpers::sanitize($this->answer), \App\Core\Helpers::sanitize($question->answer))) {
-            $this->update(['correct' => 1]);
-            return true;
-        }
+        //Agregration et sanitize for all answers
+        $answers = [\App\Core\Helpers::sanitize($this->question->question->answer)];
         if (empty($this->question->alt_answers) && is_array($this->question->alt_answers)) {
             foreach ($this->question->alt_answers as $answer) {
-                if (strstr(\App\Core\Helpers::sanitize($answer), \App\Core\Helpers::sanitize($question->answer))) {
-                    $this->update(['correct' => 1]);
-                    return true;
-                }
+                $answers[] = \App\Core\Helpers::sanitize($answer);
+            }
+        }
+
+        //Check for correct answer
+        foreach ($answers as $answer) {
+            if (strstr(\App\Core\Helpers::sanitize($this->answer), $answer)) {
+                $this->update(['correct' => 1]);
+                return true;
             }
         }
         return false;

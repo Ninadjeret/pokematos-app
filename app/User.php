@@ -161,6 +161,7 @@ class User extends Authenticatable
                     $userPermissions[$guild->id] = [];
                     break;
             }
+            $userPermissions[$guild->id][] = 'access'; //we add access permission to all users
         }
 
         return $userPermissions;

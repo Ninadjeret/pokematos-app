@@ -34,12 +34,11 @@ class EventQuizQuestion extends Model
 
     public function start()
     {
-
-        $this->quiz->sendToDiscord('question_announce', [
+        /*$this->quiz->sendToDiscord('question_announce', [
             '%question_difficulty' => $this->question->difficulty,
             '%question_theme' => $this->question->theme->name,
-        ]);
-        sleep(10);
+        ]);*/
+        sleep(5);
 
         $start_time = new \DateTime();
         $end_time = new \DateTime();
