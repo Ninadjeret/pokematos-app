@@ -31,7 +31,7 @@ class CheckPermission
       case 'global':
         $context_data = [];
         break;
-      case 'personal':
+      case 'specific':
         $context_data = [];
         break;
       case 'city':

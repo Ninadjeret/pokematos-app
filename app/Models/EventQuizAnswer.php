@@ -39,7 +39,7 @@ class EventQuizAnswer extends Model
 
         //Check for correct answer
         foreach ($answers as $answer) {
-            if (strstr(\App\Core\Helpers::sanitize($this->answer), $answer)) {
+            if (\App\Core\Helpers::sanitize($this->answer) == $answer)) {
                 $this->update(['correct' => 1]);
                 return true;
             }

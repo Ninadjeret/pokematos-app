@@ -193,7 +193,7 @@ export default {
           label: "Gérer les questions de Quiz",
           route: "admin.quiz.questions",
           icon: "device_unknown",
-          permission: "guild_manage"
+          permission: "quiz_manage"
         }
       ]
     };

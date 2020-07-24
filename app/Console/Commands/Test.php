@@ -39,23 +39,6 @@ class Test extends Command
      */
     public function handle()
     {
-        event(new \App\Events\DayChanged());
-        //$this->line(\App\Core\Helpers::sanitize('Héhé ça marche du tonnnèr, t\'es trop top'));
-        //$quiz = \App\Models\EventQuiz::find(5)->close();
-        //$question = \App\Models\EventQuizQuestion::find(186)->start();
-        /*$discord = new DiscordClient([
-            'token' => config('discord.token'),
-        ]);
-
-        try {
-            $guild = $discord->guild->getGuild(['guild.id' => 48065406879879]);;
-        }
-        catch (GuzzleHttp\Exception\ClientException $e) {
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-        }
-        //Log::debug( print_r($discord, true) );
-        //$this->line( print_r($guild, true) );
-        $this->info('OK');*/
+        $this->line(print_r(preg_match('/test$/', 'tata : test'), true));
     }
 }
