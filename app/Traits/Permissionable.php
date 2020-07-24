@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Guild;
+use Illuminate\Support\Facades\Log;
 
 trait Permissionable
 {
@@ -121,10 +122,6 @@ trait Permissionable
     }
 
     if (!array_key_exists($permission, $permissions)) {
-      return false;
-    }
-
-    if (empty($userPermissions)) {
       return false;
     }
 

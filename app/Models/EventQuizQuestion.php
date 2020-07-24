@@ -37,8 +37,8 @@ class EventQuizQuestion extends Model
         /*$this->quiz->sendToDiscord('question_announce', [
             '%question_difficulty' => $this->question->difficulty,
             '%question_theme' => $this->question->theme->name,
-        ]);*/
-        sleep(5);
+        ]);
+        sleep(5);*/
 
         $start_time = new \DateTime();
         $end_time = new \DateTime();
@@ -75,6 +75,11 @@ class EventQuizQuestion extends Model
             ['name' => $args['user_name'], 'password' => Hash::make(str_random(20))]
         );
         $guild = \App\Models\Guild::where('discord_id', $args['guild_discord_id'])->first();
+
+        //Quiz managers, as they can edit all questions, are not able to play quizs
+        if ($user->can('quiz_manage')) {
+            return;
+        }
 
         $answer = EventQuizAnswer::create([
             'answer' => $args['answer'],

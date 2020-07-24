@@ -39,6 +39,9 @@ class Test extends Command
      */
     public function handle()
     {
-        $this->line(print_r(preg_match('/test$/', 'tata : test'), true));
+        $user = \App\User::find(2);
+        if ($user->can('quiz_manage')) {
+            $this->line('toto');
+        }
     }
 }
