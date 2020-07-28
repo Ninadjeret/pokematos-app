@@ -149,6 +149,11 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::resource('questions', 'Events\QuizQuestionController');
         Route::resource('themes', 'Events\QuizThemeController');
     });
+
+    Route::group(['middleware' => ['can:settings_manage']], function () {
+
+        Route::put('settings', 'SettingController@update');
+    });
 });
 
 Route::group(['middleware' => ['auth.bot']], function () {
@@ -188,3 +193,5 @@ Route::get('public/tools/pokemon/get-pokedex-from-name/{name}', 'PokemonControll
 //Subscriptions
 Route::post('subscription', 'SubscriptionController@store');
 Route::post('subscription/delete', 'SubscriptionController@destroy');
+
+Route::get('settings', 'SettingController@get');

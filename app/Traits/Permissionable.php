@@ -63,6 +63,10 @@ trait Permissionable
     'quiz_manage' => [
       'label' => 'Gérer les quizs',
       'context' => 'specific'
+    ],
+    'settings_manage' => [
+      'label' => 'Gérer les réglages généraux',
+      'context' => 'global'
     ]
   ];
 
