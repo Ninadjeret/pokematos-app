@@ -13,7 +13,7 @@ class Setting extends Model
         'timing_after_eclosion' => ['default' => 45, 'type' => 'integer'],
     ];
 
-    public static function get()
+    public static function get($value = null)
     {
         $return = [];
         $settings = Setting::all();
@@ -39,6 +39,7 @@ class Setting extends Model
                 }
             }
         }
+        if (!empty($value)) return $return[$value];
         return (object) $return;
     }
 

@@ -32,19 +32,39 @@ class DeleteChannel
             'token' => config('discord.token')
         ]);
 
-        if( !empty($event->event->channel_discord_id) ) {
-            try {
-                $channel = $discord->channel->deleteOrcloseChannel([
-                    'channel.id' => (int) $event->event->channel_discord_id,
-                ]);
-                $event->event->update(['channel_discord_id' => null]);
-            }
-            catch (\GuzzleHttp\Command\Exception\CommandException $e) {
-                $statusCode = $e->getResponse()->getStatusCode();
-                if( $statusCode == 404 ) {
-                    $event->event->update(['channel_discord_id' => null]);
+        switch (get_class($event)) {
+
+            case 'App\Events\Events\InvitCanceled':
+                if (!empty($event->event->channel_discord_id)) {
+                    \App\Core\Discord::deleteChannel([
+                        'channel.id' => (int) $event->event->channel_discord_id
+                    ]);
                 }
-            }
+                break;
+
+            case 'App\Events\Events\InvitRefused':
+                if (!empty($event->event->channel_discord_id)) {
+                    \App\Core\Discord::deleteChannel([
+                        'channel.id' => (int) $event->event->channel_discord_id
+                    ]);
+                }
+                break;
+
+            case 'App\Events\Events\EventEnded':
+                if (!empty($event->event->channel_discord_id) && $event->event->channel_discord_type == 'temp') {
+                    \App\Core\Discord::deleteChannel([
+                        'channel.id' => (int) $event->event->channel_discord_id
+                    ]);
+                }
+                break;
+
+            case 'App\Events\Events\EventDeleted':
+                if (!empty($event->event->channel_discord_id) && $event->event->channel_discord_type == 'temp') {
+                    \App\Core\Discord::deleteChannel([
+                        'channel.id' => (int) $event->event->channel_discord_id
+                    ]);
+                }
+                break;
         }
     }
 }

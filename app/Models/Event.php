@@ -134,7 +134,7 @@ class Event extends Model
             $this->resetTrain();
         }
 
-        $this->manageChannels($args['event']);
+        //$this->manageChannels($args['event']);
         $this->setMultiQuilds($args);
     }
 
@@ -175,7 +175,7 @@ class Event extends Model
             }
         }
 
-        if ($args['channel_discord_type'] == 'new') {
+        if ($args['channel_discord_type'] == 'temp') {
             //if (!empty($this->channel_discord_id)) $to_delete = $this->channel_discord_id;
             $result = \App\Core\Discord::createChannel([
                 'guild.id' => (int) $this->guild->discord_id,
@@ -184,16 +184,15 @@ class Event extends Model
                 'parent_id' => (int) $args['category_discord_id'],
             ]);
             if ($result) $this->update([
-                'channel_discord_id' => $result->id,
-                'channel_discord_type' => 'existing'
+                'channel_discord_id' => $result->id
             ]);
         }
 
-        if ($to_delete) {
+        /*if ($to_delete) {
             \App\Core\Discord::deleteChannel([
                 'channel.id' => (int) $to_delete
             ]);
-        }
+        }*/
     }
 
 

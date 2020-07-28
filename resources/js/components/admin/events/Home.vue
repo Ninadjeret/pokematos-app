@@ -24,23 +24,6 @@
               </v-list>
             </div>
 
-            <div class="settings-section">
-                <v-subheader>Réglages généraux</v-subheader>
-                <div class="setting d-flex switch">
-                    <div>
-                        <label>Créer des salons temporaires pour les évents ?</label>
-                        <p class="description">Cela permettra à Pokématos d'organiser les évents et publiant messages et réactions. La fonctionnalité doit être activée pour certains événements (comme les Pokéquiz).</p>
-                    </div>
-                    <v-switch v-model="events_create_channels"></v-switch>
-                </div>
-                <div v-if="events_create_channels" class="setting">
-                    <label>Catégorie de salon</label>
-                    <p class="description">Le salon temporaire sera créé dans la catégorie choisie. (les droits appliqués au salon seront les mêmes que ceux de la catégorie)</p>
-                    <select v-if="channels_categories" v-model="events_channel_discord_id">
-                        <option v-for="channel in channels_categories" :value="channel.id.toString()">{{channel.name}}</option>
-                    </select>
-                </div>
-            </div>
             <div v-if="features.events_multi" class="settings-section">
                 <v-subheader>Guild VS Guild</v-subheader>
                 <div class="setting d-flex switch">
@@ -49,6 +32,13 @@
                         <p class="description">Autoriser les autres communautés à vos défier/inviter à des événements multi-guilds</p>
                     </div>
                     <v-switch v-model="events_accept_invits"></v-switch>
+                </div>
+                <div v-if="events_accept_invits" class="setting">
+                    <label>Catégorie de salon</label>
+                    <p class="description">Pour chaque invitation acceptée, un salon temporaire sera créé. Ce salon sera créé dans la catégorie choisie. (les droits appliqués au salon seront les mêmes que ceux de la catégorie)</p>
+                    <select v-if="channels_categories" v-model="events_channel_discord_id">
+                        <option v-for="channel in channels_categories" :value="channel.id.toString()">{{channel.name}}</option>
+                    </select>
                 </div>
             </div>
             <div class="settings-section">
