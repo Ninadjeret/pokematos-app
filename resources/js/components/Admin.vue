@@ -174,7 +174,7 @@ export default {
         {
           label: "Réglages généraux",
           route: "admin.settings",
-          icon: "settings",
+          icon: "build",
           permission: "settings_manage",
         },
         {
