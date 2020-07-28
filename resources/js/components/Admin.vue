@@ -93,109 +93,115 @@ export default {
           label: "Carte",
           route: "admin.map",
           icon: "map",
-          permission: "guild_manage"
+          permission: "guild_manage",
         },
         {
           label: "POI",
           route: "admin.gyms",
           icon: "place",
-          permission: "poi_edit"
+          permission: "poi_edit",
         },
         {
           label: "Zones géographiques",
           route: "admin.zones",
           icon: "map",
-          permission: "zone_edit"
+          permission: "zone_edit",
         },
         {
           label: "Logs",
           route: "admin.logs",
           icon: "receipt",
-          permission: "logs_manage"
-        }
+          permission: "logs_manage",
+        },
       ],
       discordItems: [
         {
           label: "Signalements de raids",
           route: "admin.raids",
           icon: "add_alert",
-          permission: "guild_manage"
+          permission: "guild_manage",
         },
         {
           label: "Signalements de raids EX",
           route: "admin.raidsex",
           icon: "star",
-          permission: "guild_manage"
+          permission: "guild_manage",
         },
         {
           label: "Signalements de quêtes",
           route: "admin.quests.home",
           icon: "explore",
-          permission: "guild_manage"
+          permission: "guild_manage",
         },
         {
           label: "Signalements de boss Rocket",
           route: "admin.rocket.home",
           icon: "people_alt",
-          permission: "guild_manage"
+          permission: "guild_manage",
         },
         {
           label: "Roles personnalisés",
           route: "admin.roles",
           icon: "alternate_email",
-          permission: "guild_manage"
+          permission: "guild_manage",
         },
         {
           label: "Évents",
           route: "admin.events.home",
           icon: "event",
-          permission: "events_manage"
+          permission: "events_manage",
         },
         {
           label: "Message de bienvenue",
           route: "admin.welcome",
           icon: "insert_comment",
-          permission: "guild_manage"
+          permission: "guild_manage",
         },
         {
           label: "Droits d'accès",
           route: "admin.access",
           icon: "lock_open",
-          permission: "guild_manage"
+          permission: "guild_manage",
         },
+        {
+          label: "Réglages de la communauté",
+          route: "admin.guildsettings",
+          icon: "settings",
+          permission: "guild_manage",
+        },
+      ],
+      commonItems: [
         {
           label: "Réglages généraux",
           route: "admin.settings",
           icon: "settings",
-          permission: "guild_manage"
-        }
-      ],
-      commonItems: [
+          permission: "settings_manage",
+        },
         {
           label: "Gérer les boss",
           route: "admin.bosses",
           icon: "fingerprint",
-          permission: "boss_edit"
+          permission: "boss_edit",
         },
         {
           label: "Gérer les quêtes",
           route: "admin.quests",
           icon: "explore",
-          permission: "quest_edit"
+          permission: "quest_edit",
         },
         {
           label: "Gérer les Boss Rocket",
           route: "admin.rocket.bosses",
           icon: "people_alt",
-          permission: "rocket_bosses_edit"
+          permission: "rocket_bosses_edit",
         },
         {
           label: "Gérer les questions de Quiz",
           route: "admin.quiz.questions",
           icon: "device_unknown",
-          permission: "quiz_manage"
-        }
-      ]
+          permission: "quiz_manage",
+        },
+      ],
     };
   },
   computed: mapState(["currentCity", "user"]),
@@ -205,7 +211,7 @@ export default {
     lastChanges.admin.local = Date.now() / 1000;
     this.$store.commit("setSetting", {
       setting: "lastChanges",
-      value: lastChanges
+      value: lastChanges,
     });
   },
   methods: {
@@ -213,12 +219,12 @@ export default {
       let auth = false;
       let that = this;
       this.currentCity.guilds.forEach((guild, index) => {
-        if (that.user.permissions[guild.id].find(val => val === param)) {
+        if (that.user.permissions[guild.id].find((val) => val === param)) {
           auth = true;
         }
       });
       return auth;
-    }
-  }
+    },
+  },
 };
 </script>

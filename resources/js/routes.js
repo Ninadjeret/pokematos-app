@@ -3,6 +3,7 @@ import List from "./components/List.vue";
 import Profile from "./components/Profile.vue";
 import Admin from "./components/Admin.vue";
 import AdminSettings from "./components/admin/Settings.vue";
+import AdminGuildSettings from "./components/admin/GuildSettings.vue";
 import AdminGyms from "./components/admin/Gyms.vue";
 import AdminGym from "./components/admin/Gym.vue";
 import AdminZones from "./components/admin/Zones.vue";
@@ -105,12 +106,12 @@ const routes = [{
             },
             {
                 path: ":id/settings",
-                name: "admin.settings",
+                name: "admin.guildsettings",
                 meta: {
-                    title: "Réglages généraux",
+                    title: "Réglages de la communauté",
                     parent: "admin"
                 },
-                component: AdminSettings
+                component: AdminGuildSettings
             },
             {
                 path: ":id/welcome",
@@ -422,6 +423,15 @@ const routes = [{
                     parent: "admin"
                 },
                 component: AdminLogs
+            },
+            {
+                path: "settings",
+                name: "admin.settings",
+                meta: {
+                    title: "Réglages généraux",
+                    parent: "admin"
+                },
+                component: AdminSettings
             },
             {
                 path: "bosses",

@@ -151,7 +151,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 
     Route::group(['middleware' => ['can:settings_manage']], function () {
-
+        Route::get('settings', 'SettingController@get');
         Route::put('settings', 'SettingController@update');
     });
 });
@@ -193,5 +193,3 @@ Route::get('public/tools/pokemon/get-pokedex-from-name/{name}', 'PokemonControll
 //Subscriptions
 Route::post('subscription', 'SubscriptionController@store');
 Route::post('subscription/delete', 'SubscriptionController@destroy');
-
-Route::get('settings', 'SettingController@get');
