@@ -329,7 +329,6 @@ export default {
           description: "Organisez des quiz drôles et challengeants",
         };
       }
-      console.log(types);
       return types;
     },
     getId() {
@@ -358,6 +357,7 @@ export default {
     this.fetchQuizThemes();
     this.fetchDiscordChannelCategories();
     this.fetchDiscordChannels();
+    this.fetchQuizAvailableQuestions();
     if (this.getId) {
       this.fetch();
     } else {
@@ -384,7 +384,6 @@ export default {
           if (this.type == "quiz") this.quiz = res.data.relation;
           this.channel_discord_id = res.data.channel_discord_id;
           this.channel_discord_type = res.data.channel_discord_type;
-          console.log(this.quiz);
           this.fetchLoaded = true;
           this.fetchQuizAvailableQuestions();
         })
