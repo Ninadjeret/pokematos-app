@@ -188,6 +188,16 @@
         "next": []
     },
     {
+        "text": "Désolé, la bonne réponse a déja été trouvée.",
+        "type": "question_already_answered",
+        "next": []
+    },
+    {
+        "text": "Bien joué %user, mais il aurait fallu être plus rapide.",
+        "type": "question_already_answered",
+        "next": []
+    },
+    {
         "text": "---------------\r\nVoici le classement en cours\r\n%ranking---------------",
         "type": "question_multi_ranking",
         "next": []

@@ -4,7 +4,7 @@
       <div class="search__wrapper">
         <v-text-field single-line hide-details outline v-model="search" label="Recherche"></v-text-field>
       </div>
-      <v-list class="quests hidden-md-and-up">
+      <v-list three-line class="quests hidden-md-and-up">
         <template v-for="(item) in filteredItems">
           <v-list-tile
             :key="item.id"
@@ -47,14 +47,14 @@ export default {
         { text: "Question", value: "question" },
         { text: "Réponse", value: "reponse" },
         { text: "Difficulté", value: "difficulte" },
-        { text: "Réponse", value: "reponse2" }
+        { text: "Réponse", value: "reponse2" },
       ],
-      items: []
+      items: [],
     };
   },
   computed: {
     filteredItems() {
-      return this.items.filter(item => {
+      return this.items.filter((item) => {
         let matchingTitle = 1;
         if (this.search != null) {
           matchingTitle =
@@ -62,7 +62,7 @@ export default {
         }
         return matchingTitle;
       });
-    }
+    },
   },
   created() {
     this.fetchQuizQuestions();
@@ -71,13 +71,13 @@ export default {
     fetchQuizQuestions() {
       axios
         .get("/api/quiz/questions")
-        .then(res => {
+        .then((res) => {
           this.items = res.data;
         })
-        .catch(err => {
+        .catch((err) => {
           //No error
         });
-    }
-  }
+    },
+  },
 };
 </script>

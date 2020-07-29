@@ -5,6 +5,7 @@ namespace App\Models;
 use App\User;
 use App\Models\Guild;
 use App\Models\EventQuizQuestion;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 
 class EventQuizAnswer extends Model
@@ -31,15 +32,17 @@ class EventQuizAnswer extends Model
     {
         //Agregration et sanitize for all answers
         $answers = [\App\Core\Helpers::sanitize($this->question->question->answer)];
-        if (empty($this->question->alt_answers) && is_array($this->question->alt_answers)) {
-            foreach ($this->question->alt_answers as $answer) {
+        $alt_answers = $this->question->question->alt_answers;
+        if (!empty($alt_answers) && is_array($alt_answers)) {
+            foreach ($alt_answers as $answer) {
                 $answers[] = \App\Core\Helpers::sanitize($answer);
             }
         }
 
         //Check for correct answer
         foreach ($answers as $answer) {
-            if (\App\Core\Helpers::sanitize($this->answer) == $answer) {
+            $toto = \App\Core\Helpers::sanitize($this->answer);
+            if (strstr(\App\Core\Helpers::sanitize($this->answer), $answer)) {
                 $this->update(['correct' => 1]);
                 return true;
             }

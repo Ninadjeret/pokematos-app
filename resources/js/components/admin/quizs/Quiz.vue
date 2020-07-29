@@ -92,9 +92,9 @@ export default {
       difficulty: 1,
       theme_id: 1,
       themes: [],
-      about_pogo: "",
+      about_pogo: 0,
       fetchLoaded: false,
-      fetchedThemes: false
+      fetchedThemes: false,
     };
   },
   created() {
@@ -114,13 +114,13 @@ export default {
       return Number.isInteger(parseInt(this.$route.params.question_id))
         ? parseInt(this.$route.params.question_id)
         : false;
-    }
+    },
   },
   methods: {
     fetch() {
       axios
         .get("/api/quiz/questions/" + this.getId)
-        .then(res => {
+        .then((res) => {
           console.log(res.data);
           this.fetchLoaded = true;
           this.about_pogo = res.data.about_pogo;
@@ -131,7 +131,7 @@ export default {
           this.difficulty = res.data.difficulty;
           this.theme_id = resa.data.theme_id;
         })
-        .catch(err => {
+        .catch((err) => {
           let message = "Problème lors de la récupération";
           message = err.response;
           if (err.response && err.response.data) {
@@ -139,12 +139,12 @@ export default {
           }
           this.$store.commit("setSnackbar", {
             message: message,
-            timeout: 1500
+            timeout: 1500,
           });
         });
     },
     fetchThemes() {
-      axios.get("/api/quiz/themes").then(res => {
+      axios.get("/api/quiz/themes").then((res) => {
         this.fetchedThemes = true;
         this.themes = res.data;
       });
@@ -157,7 +157,7 @@ export default {
         explanation: this.explanation,
         difficulty: this.difficulty,
         theme_id: this.theme_id,
-        about_pogo: this.about_pogo
+        about_pogo: this.about_pogo,
       };
       console.log(args);
       if (this.getId) {
@@ -171,21 +171,21 @@ export default {
       this.loading = true;
       axios
         .put("/api/quiz/questions/" + this.getId, args)
-        .then(res => {
+        .then((res) => {
           this.$store.commit("setSnackbar", {
             message: "Enregistrement effectué",
-            timeout: 1500
+            timeout: 1500,
           });
           this.loading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           let message = "Problème lors de l'enregistrement";
           if (err.response.data) {
             message = err.response.data;
           }
           this.$store.commit("setSnackbar", {
             message: message,
-            timeout: 1500
+            timeout: 1500,
           });
           this.loading = false;
         });
@@ -195,22 +195,22 @@ export default {
       this.loading = true;
       axios
         .post("/api/quiz/questions", args)
-        .then(res => {
+        .then((res) => {
           this.$store.commit("setSnackbar", {
             message: "Enregistrement effectué",
-            timeout: 1500
+            timeout: 1500,
           });
           this.loading = false;
           this.$router.push({ name: this.$route.meta.parent });
         })
-        .catch(err => {
+        .catch((err) => {
           let message = "Problème lors de l'enregistrement";
           if (err.response.data) {
             message = err.response.data;
           }
           this.$store.commit("setSnackbar", {
             message: message,
-            timeout: 1500
+            timeout: 1500,
           });
           this.loading = false;
         });
@@ -220,24 +220,24 @@ export default {
       this.$store.commit("setSnackbar", { message: "Suppression en cours" });
       axios
         .delete("/api/quiz/questions/" + this.getId)
-        .then(res => {
+        .then((res) => {
           this.$store.commit("setSnackbar", {
             message: "suppression effectuée",
-            timeout: 1500
+            timeout: 1500,
           });
           this.$router.push({ name: this.$route.meta.parent });
         })
-        .catch(err => {
+        .catch((err) => {
           let message = "Problème lors de la suppression";
           if (err.response.data) {
             message = err.response.data;
           }
           this.$store.commit("setSnackbar", {
             message: message,
-            timeout: 1500
+            timeout: 1500,
           });
         });
-    }
-  }
+    },
+  },
 };
 </script>

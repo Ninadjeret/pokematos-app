@@ -364,7 +364,9 @@ class Event extends Model
      */
     public static function findFromChannelId($channel_idscord_id)
     {
-        $event = Event::where('channel_discord_id', $channel_idscord_id)->first();
+        $event = Event::where('channel_discord_id', $channel_idscord_id)
+            ->orderBy('start_time', 'ASC')
+            ->first();
         if (!empty($event)) return $event;
         $invit = EventInvit::where('channel_discord_id', $channel_idscord_id)->first();
         if (!empty($invit)) return Event::find($invit->event_id);

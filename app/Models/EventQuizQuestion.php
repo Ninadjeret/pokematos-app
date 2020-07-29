@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\EventQuiz;
 use App\Models\QuizQuestion;
+use App\Models\EventQuizAnswer;
 use App\Core\Events\Quizs\Ranking;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
@@ -37,8 +38,8 @@ class EventQuizQuestion extends Model
         /*$this->quiz->sendToDiscord('question_announce', [
             '%question_difficulty' => $this->question->difficulty,
             '%question_theme' => $this->question->theme->name,
-        ]);
-        sleep(5);*/
+        ]);*/
+        sleep(5);
 
         $start_time = new \DateTime();
         $end_time = new \DateTime();
@@ -51,6 +52,7 @@ class EventQuizQuestion extends Model
             'start_time' => $start_time->format('Y-m-d H:i:s'),
             'end_time' => $end_time->format('Y-m-d H:i:s'),
         ]);
+
         $this->quiz->sendToDiscord('question_question', [
             '%question' => $this->question->question
         ], null, array(
@@ -91,10 +93,12 @@ class EventQuizQuestion extends Model
             'correct' => 0
         ]);
 
-        if ($answer->isCorrect()) {
+        if ($this->isAlreadyAnswered()) {
+            $this->quiz->sendToDiscord('question_already_answered', ['%user' => $user->name], $guild);
+        } elseif ($answer->isCorrect()) {
             $this->close();
         } else {
-            $rand = rand(1, 5);
+            $rand = rand(1, 4);
             if ($rand === 1) {
                 $this->quiz->sendToDiscord('question_answer_wrong', ['%user' => $user->name], $guild);
             }
@@ -103,6 +107,9 @@ class EventQuizQuestion extends Model
 
     public function close()
     {
+        $end_time = new \DateTime();
+        $this->update(['end_time' => $end_time->format('Y-m-d H:i:s')]);
+
         if (!empty($this->correctAnswer)) {
             if ($this->quiz->event->multi_guilds) {
                 $this->quiz->sendToDiscord('question_answer_correct', [
@@ -134,6 +141,15 @@ class EventQuizQuestion extends Model
             $this->quiz->sendToDiscord('question_not_answered');
         }
         $this->quiz->nextQuestion();
+    }
+
+    public function isAlreadyAnswered()
+    {
+        $answer = EventQuizAnswer::where('question_id', $this->id)
+            ->where('correct', 1)
+            ->orderBy('answer_time', 'ASC')
+            ->first();
+        return (empty($answer)) ? false : true;
     }
 
     public function getUncorrectGuilds()

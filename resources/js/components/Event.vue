@@ -161,7 +161,7 @@ export default {
         month: moment(this.event.start_time).format("MMMM"),
         year: moment(this.event.start_time).format("YYYY"),
         hours: moment(this.event.start_time).format("HH"),
-        minutes: moment(this.event.start_time).format("MM"),
+        minutes: moment(this.event.start_time).format("mm"),
       };
     },
   },
