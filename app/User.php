@@ -67,6 +67,15 @@ class User extends Authenticatable
         return $guilds;
     }
 
+    public function getNickname($guild_id)
+    {
+        $user_guild = UserGuild::where('user_id', $this->id)->where('guild_id', $guild_id)->first();
+        if (!empty($user_guild) && !empty($user_guild->user_nickname)) {
+            return $user_guild->user_nickname;
+        }
+        return $this->name;
+    }
+
     public function getStatsAttribute()
     {
         $stats = ['total' => []];
@@ -200,6 +209,7 @@ class User extends Authenticatable
                                 $guilds[] = [
                                     'id' => $guild->id,
                                     'permissions' => $admin,
+                                    'nickname'  => $result->nick
                                 ];
                             }
                         }
@@ -218,7 +228,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function CheckGuildPermissions($guild, $roles, $discord_permissions)
+    public function CheckGuildPermissions($guild, $roles, $discord_permissions, $nickname = null)
     {
         $permissions = 0;
         $auth = false;
@@ -248,7 +258,7 @@ class User extends Authenticatable
         if ($auth) {
             \App\Models\UserGuild::firstOrCreate(
                 ['guild_id' => $guild->id, 'user_id' => $this->id],
-                ['permissions' => $permissions]
+                ['permissions' => $permissions, 'user_nickname' => $nickname]
             );
         }
     }
@@ -263,12 +273,14 @@ class User extends Authenticatable
                     ->first();
                 if ($finded_guild) {
                     $finded_guild->permissions = $guild['permissions'];
+                    $finded_guild->user_nickname = $guild['nickname'];
                     $finded_guild->save();
                 } else {
                     $finded_guild = UserGuild::create([
                         'guild_id' => $guild['id'],
                         'user_id' => $this->id,
-                        'permissions' => $guild['permissions']
+                        'permissions' => $guild['permissions'],
+                        'user_nickname' => $guild['nickname']
                     ]);
                 }
                 $old_guilds[] = $finded_guild->id;

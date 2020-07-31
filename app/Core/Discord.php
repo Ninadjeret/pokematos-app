@@ -37,6 +37,10 @@ class Discord
             $message = str_replace('@{utilisateur}', '<@!' . $user->discord_id . '>', $message);
         }
 
+        if (strstr($message, '{utilisateur}')) {
+            $message = str_replace('{utilisateur}', $user->getNickname($guild->id), $message);
+        }
+
         //Gestion des salons #
         if (strstr($message, '#')) {
             foreach ($channels as $channel) {
