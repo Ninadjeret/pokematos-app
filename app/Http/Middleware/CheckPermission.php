@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Core\Conversation;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class CheckPermission
@@ -17,7 +19,6 @@ class CheckPermission
    */
   public function handle($request, Closure $next, $permission)
   {
-    Log::debug(print_r($request->city, true));
 
     //We check if permission exists. must be registered in permissions array
     $permissions = \App\User::getPermissions();
@@ -35,17 +36,36 @@ class CheckPermission
         $context_data = [];
         break;
       case 'city':
-        $context_data = ['city_id' => $request->city->id];
+        $city_id = (isset($request->city)) ? $request->city->id : false;
+        $context_data = ['city_id' => $city_id];
         break;
       case 'guild':
-        $context_data = ['guild_id' => $request->guild->id];
+        $guild_id = (isset($request->guild)) ? $request->guild->id : \App\Models\Guild::where('discord_id', $request->guild_discord_id)->first()->id;
+        $context_data = ['guild_id' => $guild_id];
         break;
     }
 
-    //Permission check
-    $user = $request->user();
-    if (!$user->can($permission, $context_data)) {
-      return response()->json('Vous n\'avez pas les droits suffisants pour cette action', 403);
+    //get user & Permission check
+    if (isset($request->user_discord_id) && isset($request->user_discord_roles)) {
+
+      $user = \App\User::firstOrCreate(
+        ['discord_id' => $request->user_discord_id],
+        ['name' => $request->user_discord_name, 'password' => Hash::make(str_random(20))]
+      );
+
+      $guild = \App\Models\Guild::where('discord_id', $request->guild_discord_id)->first();
+      if (empty($guild)) return response()->json('La guild n\'existe pas', 403);
+
+      $user->CheckGuildPermissions($guild, $request->user_discord_roles, $request->user_discord_permissions);
+      if (!$user->can($permission, $context_data)) {
+        Conversation::sendToDiscord($request->channel_discord_id, $guild, 'bot', 'cmd_no_permission');
+        return response()->json('Vous n\'avez pas les droits suffisants pour cette action', 403);
+      }
+    } else {
+      $user = $request->user();
+      if (!$user->can($permission, $context_data)) {
+        return response()->json('Vous n\'avez pas les droits suffisants pour cette action', 403);
+      }
     }
 
     //If user has permissions

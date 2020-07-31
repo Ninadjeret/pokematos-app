@@ -1,0 +1,16 @@
+[{
+        "text": "Il semblerait qu'il n'y ait pas d'évent en cours dans ce salon",
+        "type": "cmd_no_current_event",
+        "next": []
+    },
+    {
+        "text": "Il semblerait que l'évent en cours ne soint pas un Pokétrain",
+        "type": "cmd_event_not_train",
+        "next": []
+    },
+    {
+        "text": "Désolé, tu n'as pas la permission pour utiliser cette commande",
+        "type": "cmd_no_permission",
+        "next": []
+    }
+]

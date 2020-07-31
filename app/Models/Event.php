@@ -63,6 +63,14 @@ class Event extends Model
         return false;
     }
 
+    public function getTrainAttribute()
+    {
+        if ($this->type == 'train') {
+            return $this->relation;
+        }
+        return false;
+    }
+
     public function getGuildAttribute()
     {
         return Guild::find($this->guild_id);
@@ -365,7 +373,7 @@ class Event extends Model
     public static function findFromChannelId($channel_idscord_id)
     {
         $event = Event::where('channel_discord_id', $channel_idscord_id)
-            ->orderBy('start_time', 'ASC')
+            ->orderBy('start_time', 'DESC')
             ->first();
         if (!empty($event)) return $event;
         $invit = EventInvit::where('channel_discord_id', $channel_idscord_id)->first();

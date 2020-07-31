@@ -156,27 +156,31 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 });
 
-Route::group(['middleware' => ['auth.bot']], function () {
+Route::group(['prefix' => 'bot', 'middleware' => ['auth.bot']], function () {
 
-    Route::get('bot/guilds', 'BotController@getGuilds');
-    Route::post('bot/guilds', 'BotController@addGuild');
+    Route::get('guilds', 'BotController@getGuilds');
+    Route::post('guilds', 'BotController@addGuild');
 
-    Route::get('bot/guilds/{guild_id}/roles', 'BotController@getRoles');
-    Route::post('bot/guilds/{guild_id}/roles', 'BotController@createRole');
-    Route::delete('bot/guilds/{guild_id}/roles/{role}', 'BotController@deleteRole');
-    Route::get('bot/guilds/{guild_id}/roles/{role}', 'BotController@getRole');
-    Route::put('bot/guilds/{guild_id}/roles/{role}', 'BotController@updateRole');
+    Route::get('guilds/{guild_id}/roles', 'BotController@getRoles');
+    Route::post('guilds/{guild_id}/roles', 'BotController@createRole');
+    Route::delete('guilds/{guild_id}/roles/{role}', 'BotController@deleteRole');
+    Route::get('guilds/{guild_id}/roles/{role}', 'BotController@getRole');
+    Route::put('guilds/{guild_id}/roles/{role}', 'BotController@updateRole');
 
-    Route::get('bot/guilds/{guild_id}/role-categories', 'BotController@getRoleCategories');
-    Route::get('bot/guilds/{guild_id}/role-categories/{categorie}', 'BotController@getRoleCategory');
-    Route::delete('bot/guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
+    Route::get('guilds/{guild_id}/role-categories', 'BotController@getRoleCategories');
+    Route::get('guilds/{guild_id}/role-categories/{categorie}', 'BotController@getRoleCategory');
+    Route::delete('guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
 
-    Route::post('bot/raids', 'RaidController@addRaid');
-    Route::post('bot/raids/imagedecode', 'RaidController@imageDecode');
-    Route::post('bot/conversations', 'BotController@addConversation');
+    Route::post('raids', 'RaidController@addRaid');
+    Route::post('raids/imagedecode', 'RaidController@imageDecode');
+    Route::post('conversations', 'BotController@addConversation');
 
     //Events
-    Route::post('bot/events/quiz/answer', 'EventController@addQuizAnswer');
+    Route::post('events/quiz/answer', 'EventController@addQuizAnswer');
+    Route::group(['middleware' => ['can:events_train_check']], function () {
+        Route::post('events/train/step/check', 'Bot\Event\Train\StepController@check');
+        Route::post('events/train/step/uncheck', 'Bot\Event\Train\StepController@uncheck');
+    });
 });
 
 Route::get('test', 'Controller@test');

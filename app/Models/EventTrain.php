@@ -12,84 +12,91 @@ class EventTrain extends Model
     protected $fillable = ['event_id', 'message_discord_id'];
     protected $appends = ['steps'];
 
-    public function getEventAttribute() {
+    public function getEventAttribute()
+    {
         return Event::find($this->event_id);
     }
 
-    public function getStepsAttribute() {
+    public function getStepsAttribute()
+    {
         return EventTrainStep::where('train_id', $this->id)->orderBy('order', 'ASC')->get();
     }
 
-    public function getNbStepsAttribute() {
+    public function getNbStepsAttribute()
+    {
         return count($this->steps);
     }
 
-    public function getDiscordMessage() {
+    public function getDiscordMessage()
+    {
 
         $content = $this->getIntroMessage();
         $content .= $this->getWholeTrainMessage();
 
-        if( strlen($content) > 1950 ) {
+        if (strlen($content) > 1950) {
             $content = $this->getIntroMessage();
             $content .= $this->getPartialTrainMessage();
         }
 
         return $content;
-
     }
 
-    private function getWholeTrainMessage() {
+    private function getWholeTrainMessage()
+    {
         $num = 0;
         $content = '';
-        foreach( $this->steps as $step ) {
+        foreach ($this->steps as $step) {
             $num++;
             $content .= $this->getStepMessage($step, $num);
-            if( $num < $this->nb_steps ) $content .= "\t|\r\n";
+            if ($num < $this->nb_steps) $content .= "\t|\r\n";
         }
         return \App\Core\Discord::encode($content, $this->event->guild, false);
     }
 
-    private function getPartialTrainMessage() {
+    private function getPartialTrainMessage()
+    {
         $steps_before = 3;
         $steps_after = 5;
         $nb_steps = $this->nb_steps;
-        $current_step = $this->getCurrentStep();
+        $current_step = $this->getCurrentStep()->order;
 
-        $first_step = ( $current_step - $steps_before > 0 ) ? $current_step - $steps_before : 1 ;
-        $last_step = ( $current_step + $steps_after <= $nb_steps ) ? $current_step + $steps_after : $nb_steps ;
+        $first_step = ($current_step - $steps_before > 0) ? $current_step - $steps_before : 1;
+        $last_step = ($current_step + $steps_after <= $nb_steps) ? $current_step + $steps_after : $nb_steps;
 
         $hidden_before = ($first_step > 1) ? $first_step - 1 : 0;
-        $hidden_after = ( $last_step < $nb_steps ) ? $nb_steps - $last_step : 0 ;
+        $hidden_after = ($last_step < $nb_steps) ? $nb_steps - $last_step : 0;
 
         $num = 0;
-        $content = ( $hidden_before > 0 ) ? "**{$hidden_before} étapes avant...**\r\n\t|\r\n" : "" ;
-        foreach( $this->steps as $step ) {
+        $content = ($hidden_before > 0) ? "**{$hidden_before} étapes avant...**\r\n\t|\r\n" : "";
+        foreach ($this->steps as $step) {
             $num++;
-            if( $num >= $first_step && $num <= $last_step ) {
+            if ($num >= $first_step && $num <= $last_step) {
                 $content .= $this->getStepMessage($step, $num);
-                if( $num < $this->nb_steps ) $content .= "\t|\r\n";
+                if ($num < $this->nb_steps) $content .= "\t|\r\n";
             }
         }
-        $content .= ( $hidden_after > 0 ) ? "**{$hidden_after} étapes après...**" : "" ;
+        $content .= ($hidden_after > 0) ? "**{$hidden_after} étapes après...**" : "";
         return \App\Core\Discord::encode($content, $this->event->guild, false);
     }
 
-    private function getIntroMessage() {
+    private function getIntroMessage()
+    {
         $event = Event::find($this->event_id);
-        $date = new \DateTime( $event->start_time );
+        $date = new \DateTime($event->start_time);
         $content = "Le parcours se déroule le {$date->format('d/m')} en {$this->nb_steps} étapes.:point_down:\r\n";
         $content .= "\t|\r\n";
         return $content;
     }
 
-    private function getStepMessage($step, $num) {
+    private function getStepMessage($step, $num)
+    {
         $name = '';
         $content = '';
         $steps = $this->steps;
 
-        if( $step->type == 'stop' && $step->stop ) {
-            if( $step->stop->ex ) $name .= '[EX] ';
-            if($step->stop->zone ) $name .= $step->stop->zone->name.' - ';
+        if ($step->type == 'stop' && $step->stop) {
+            if ($step->stop->ex) $name .= '[EX] ';
+            if ($step->stop->zone) $name .= $step->stop->zone->name . ' - ';
             $name .= $step->stop->name;
         } else {
             $name = 'Trajet en voiture/bus';
@@ -97,35 +104,35 @@ class EventTrain extends Model
 
         $emoji = ':white_circle:';
         $bold = '';
-        $previous_step = ($num === 1) ? false : $steps[$num-2] ;
-        if( !$step->checked && $previous_step && $previous_step->checked ) {
+        $previous_step = ($num === 1) ? false : $steps[$num - 2];
+        if (!$step->checked && $previous_step && $previous_step->checked) {
             $emoji = ':green_circle:';
             $bold = '**';
-        } elseif( !$step->checked && !$previous_step) {
+        } elseif (!$step->checked && !$previous_step) {
             $emoji = ':green_circle:';
             $bold = '**';
-        } elseif( !$step->checked ) {
+        } elseif (!$step->checked) {
             $emoji = ':radio_button:';
             $bold = '';
         }
 
         $time_str = '';
-        if( $step->milestone ) {
+        if ($step->milestone) {
             $time = new \DateTime($step->start_time);
             $time_str = "{$time->format('H\hi')} : ";
         }
 
         $content .= "{$emoji} {$bold}{$time_str}{$name}\r\n{$bold}";
-        if( !empty($step->description) ) $content .= "\t|\t{$step->description}\r\n";
+        if (!empty($step->description)) $content .= "\t|\t{$step->description}\r\n";
         return $content;
     }
 
-    public function getCurrentStep() {
-        $num = 0;
-        foreach( $this->steps as $step ) {
-            $num++;
-            if( !$step->checked ) return $num;
-        }
-        return $num;
+    public function getCurrentStep()
+    {
+        $step = EventTrainStep::where('train_id', $this->id)
+            ->where('checked', 0)
+            ->orderBy('order', 'ASC')
+            ->first();
+        return (!empty($step)) ? $step : false;
     }
 }

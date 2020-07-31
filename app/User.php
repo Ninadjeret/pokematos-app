@@ -218,6 +218,41 @@ class User extends Authenticatable
         ];
     }
 
+    public function CheckGuildPermissions($guild, $roles, $discord_permissions)
+    {
+        $permissions = 0;
+        $auth = false;
+        if (empty($guild->settings->map_access_rule) || $guild->settings->map_access_rule == 'everyone') {
+            $auth = true;
+        } elseif ($guild->settings->map_access_rule == 'specific_roles' && !empty(array_intersect($guild->settings->map_access_roles, $roles))) {
+            $auth = true;
+        }
+
+        //Gestion des prvilèges de modo
+        if (!empty($guild->settings->map_access_moderation_roles) && !empty(array_intersect($guild->settings->map_access_moderation_roles, $roles))) {
+            $permissions = 10;
+            $auth = true;
+        }
+
+        //Gestion des prvilèges d'admin
+        if (!empty($guild->settings->map_access_admin_roles) && !empty(array_intersect($guild->settings->map_access_admin_roles, $roles))) {
+            $permissions = 30;
+            $auth = true;
+        }
+
+        if ($discord_permissions >= 2146958847) {
+            $permissions = 30;
+            $auth = true;
+        }
+
+        if ($auth) {
+            \App\Models\UserGuild::firstOrCreate(
+                ['guild_id' => $guild->id, 'user_id' => $this->id],
+                ['permissions' => $permissions]
+            );
+        }
+    }
+
     public function saveGuilds($guilds)
     {
         $old_guilds = [];
