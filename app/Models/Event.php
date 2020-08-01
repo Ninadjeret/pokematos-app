@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Guild;
-use App\Models\Event;
 use App\Models\EventQuiz;
 use App\Models\EventTrain;
 use App\Models\EventInvit;

@@ -26,6 +26,7 @@ class Guild extends Model
     ];
 
     protected $allowedSettings = [
+        'prefix' => ['default' => '+', 'type' => 'string'],
         'map_access_rule' => ['default' => 'everyone', 'type' => 'string'],
         'map_access_roles' => ['default' => [], 'type' => 'array'],
         'map_access_admin_roles' => ['default' => [], 'type' => 'array'],
