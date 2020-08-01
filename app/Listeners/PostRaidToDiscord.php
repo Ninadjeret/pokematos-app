@@ -29,48 +29,53 @@ class PostRaidToDiscord
      * @param  RaidCreated  $event
      * @return void
      */
-    public function handle($event) {
-        $city = City::find( $event->raid->city_id );
+    public function handle($event)
+    {
+        $city = City::find($event->raid->city_id);
 
-        $gym = Stop::find( $event->raid->gym_id );
-        $zone_id = ( $gym->zone_id ) ? $gym->zone_id : false ;
-        $gym_id = $gym->id ;
-        $pokemon_id = ( $event->raid->pokemon_id ) ? $event->raid->pokemon_id : false;
+        $gym = Stop::find($event->raid->gym_id);
+        $zone_id = ($gym->zone_id) ? $gym->zone_id : false;
+        $gym_id = $gym->id;
+        $pokemon_id = ($event->raid->pokemon_id) ? $event->raid->pokemon_id : false;
 
-        $connectors = Connector::whereIn( 'guild_id', $city->getGuildsIds() )
+        $connectors = Connector::whereIn('guild_id', $city->getGuildsIds())
             ->get();
 
-        foreach( $connectors as $connector ) {
+        foreach ($connectors as $connector) {
 
-            if( $connector->filter_gym_type == 'zone' ) {
-                if( !$zone_id ) continue;
-                if( !in_array( $zone_id, $connector->filter_gym_zone ) ) continue;
+            if ($connector->filter_gym_type == 'zone') {
+                if (!$zone_id) continue;
+                if (!in_array($zone_id, $connector->filter_gym_zone)) continue;
             }
 
-            if( $connector->filter_gym_type == 'gym' ) {
-                if( !$gym_id ) continue;
-                if( !in_array( $gym_id, $connector->filter_gym_gym ) ) continue;
+            if ($connector->filter_gym_type == 'gym') {
+                if (!$gym_id) continue;
+                if (!in_array($gym_id, $connector->filter_gym_gym)) continue;
             }
 
-            if( $connector->filter_pokemon_type == 'level' ) {
-                if( !$event->raid->egg_level ) continue;
-                if( !in_array( $event->raid->egg_level, $connector->filter_pokemon_level ) ) continue;
+            if ($connector->filter_pokemon_type == 'level') {
+                if (!$event->raid->egg_level) continue;
+                if (!in_array($event->raid->egg_level, $connector->filter_pokemon_level)) continue;
             }
 
-            if( $connector->filter_pokemon_type == 'pokemon' ) {
-                if( !$pokemon_id ) continue;
-                if( !in_array( $pokemon_id, $connector->filter_pokemon_pokemon ) ) continue;
+            if ($connector->filter_pokemon_type == 'pokemon') {
+                if (!$pokemon_id) continue;
+                if (!in_array($pokemon_id, $connector->filter_pokemon_pokemon)) continue;
             }
 
-            if( !empty($connector->filter_source_type) ) {
-                if( !in_array( $event->raid->getLastUserAction($include_auto = true)->source, $connector->filter_source_type ) ) continue;
+            if ($connector->filter_ex_type == 'ex') {
+                if (!$gym->ex) continue;
             }
 
-            $connector->postMessage( $event->raid, $event->announce );
+            if ($connector->filter_ex_type == 'nonex') {
+                if ($gym->ex) continue;
+            }
 
+            if (!empty($connector->filter_source_type)) {
+                if (!in_array($event->raid->getLastUserAction($include_auto = true)->source, $connector->filter_source_type)) continue;
+            }
+
+            $connector->postMessage($event->raid, $event->announce);
         }
-
     }
-
-
 }

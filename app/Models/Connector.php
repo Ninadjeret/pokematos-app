@@ -22,6 +22,7 @@ class Connector extends Model
         'filter_pokemon_type',
         'filter_gym_zone',
         'filter_gym_gym',
+        'filter_ex_type',
         'filter_pokemon_level',
         'filter_pokemon_pokemon',
         'filter_source_type',
