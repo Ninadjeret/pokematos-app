@@ -216,24 +216,6 @@ class EventController extends Controller
         return response()->json($invits, 200);
     }
 
-    public static function addQuizAnswer(Request $request)
-    {
-
-        $event = Event::findFromChannelId($request->channel_discord_id);
-        if (!$event->quiz) return response()->json('Cet event ne dispose pas de quiz', 400);
-
-        $args = [
-            'answer' => $request->answer,
-            'user_discord_id' => $request->user_discord_id,
-            'user_name' => $request->user_name,
-            'guild_discord_id' => $request->guild_discord_id,
-            'message_discord_id' => $request->message_discord_id,
-        ];
-
-        $event->quiz->addAnswer($args);
-        return response()->json(null, 204);
-    }
-
     public function getThemes(Request $request)
     {
         return response()->json(\App\Models\QuizTheme::all(), 200);

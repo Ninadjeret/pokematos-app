@@ -1,5 +1,6 @@
 <?php
 
+use 
 use Illuminate\Http\Request;
 
 /*
@@ -171,12 +172,16 @@ Route::group(['prefix' => 'bot', 'middleware' => ['auth.bot']], function () {
     Route::get('guilds/{guild_id}/role-categories/{categorie}', 'BotController@getRoleCategory');
     Route::delete('guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
 
-    Route::post('raids', 'RaidController@addRaid');
     Route::post('raids/imagedecode', 'RaidController@imageDecode');
-    Route::post('conversations', 'BotController@addConversation');
+
+    //User actions
+    Route::group(['middleware' => ['can:guild_access']], function () {
+        Route::post('raids', 'RaidController@addRaid');
+        Route::post('conversations', 'BotController@addConversation');
+        Route::post('events/quiz/answer', 'Bot\Event\Quiz\AnswerController@store');
+    });
 
     //Events
-    Route::post('events/quiz/answer', 'EventController@addQuizAnswer');
     Route::group(['middleware' => ['can:events_train_check']], function () {
         Route::post('events/train/step/check', 'Bot\Event\Train\StepController@check');
         Route::post('events/train/step/uncheck', 'Bot\Event\Train\StepController@uncheck');

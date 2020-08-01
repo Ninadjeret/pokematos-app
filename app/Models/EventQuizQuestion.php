@@ -72,14 +72,11 @@ class EventQuizQuestion extends Model
     {
         if ($this->isEnded()) return false;
 
-        $user = \App\User::firstOrCreate(
-            ['discord_id' => $args['user_discord_id']],
-            ['name' => $args['user_name'], 'password' => Hash::make(str_random(20))]
-        );
+        $user = \App\User::find($args['user_id']);
         $guild = \App\Models\Guild::where('discord_id', $args['guild_discord_id'])->first();
 
         //Quiz managers, as they can edit all questions, are not able to play quizs
-        if ($user->can('quiz_manage')) {
+        if ($user->can('quiz_manage') && !$user->superadmin) {
             return;
         }
 
