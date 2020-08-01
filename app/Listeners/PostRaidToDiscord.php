@@ -32,7 +32,6 @@ class PostRaidToDiscord
     public function handle($event)
     {
         $city = City::find($event->raid->city_id);
-
         $gym = Stop::find($event->raid->gym_id);
         $zone_id = ($gym->zone_id) ? $gym->zone_id : false;
         $gym_id = $gym->id;
