@@ -186,6 +186,7 @@ class Connector extends Model
             'arene_nom_custom_nettoye' => Helpers::sanitize($raid->getGym()->name),
             'arene_description' => $raid->getGym()->description,
             'arene_zone' => (!empty($raid->getGym()->zone)) ?  $raid->getGym()->zone->name : false,
+            'arene_ex' => ($raid->getGym()->ex) ? '[EX]' : false,
             'arene_zone_nettoye' => (!empty($raid->getGym()->zone)) ?  Helpers::sanitize($raid->getGym()->zone->name) : false,
             'arene_gmaps' => (!empty($raid->getGym()->google_maps_url)) ?  $raid->getGym()->google_maps_url : false,
 
