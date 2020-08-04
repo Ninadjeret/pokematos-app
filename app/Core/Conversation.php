@@ -41,7 +41,7 @@ class Conversation
         return $mathing_conversation;
     }
 
-    public static function sendToDiscord($channel_id, $guild, $type, $soustype, $args = null, $embed = null)
+    public static function sendToDiscord($channel_id, $guild, $type, $soustype, $args = null, $embed = null, $user = false)
     {
 
         //On chope le message
@@ -69,7 +69,7 @@ class Conversation
         } else {
             $to_send = [
                 'channel.id' => intval($channel_id),
-                'content' => \App\Core\Discord::encode($message['text'], $guild, false),
+                'content' => \App\Core\Discord::encode($message['text'], $guild, $user),
             ];
         }
 
@@ -78,7 +78,7 @@ class Conversation
 
         if (array_key_exists('next', $message) && !empty($message['next'])) {
             foreach ($message['next'] as $content) {
-                $content = \App\Core\Discord::encode($content, $guild, false);
+                $content = \App\Core\Discord::encode($content, $guild, $user);
                 usleep(strlen($content) * 75000);
                 $discord->channel->createMessage(array(
                     'channel.id' => intval($channel_id),

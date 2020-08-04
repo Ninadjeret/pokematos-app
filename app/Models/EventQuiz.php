@@ -317,8 +317,10 @@ class EventQuiz extends Model
 
         if (empty($to_send)) return;
 
+        $user = (is_array($args) && array_key_exists('%user', $args)) ? $args['%user'] : false;
+
         foreach ($to_send as $channel_id => $guild) {
-            $message = \App\Core\Conversation::sendToDiscord($channel_id, $guild, 'quiz', $type, $args, $embed);
+            $message = \App\Core\Conversation::sendToDiscord($channel_id, $guild, 'quiz', $type, $args, $embed, $user);
         }
     }
 

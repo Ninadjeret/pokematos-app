@@ -14,7 +14,7 @@ class AnswerController extends Controller
     {
         $guild = Guild::where('discord_id', $request->guild_discord_id)->first();
         $event = Event::findFromChannelId($request->channel_discord_id);
-        $user = \App\User::where('discord_id', $request->user_discord_id)->fisrt();
+        $user = \App\User::where('discord_id', $request->user_discord_id)->first();
 
         if (empty($event)) {
             Conversation::sendToDiscord($request->channel_discord_id, $guild, 'bot', 'cmd_no_current_event');

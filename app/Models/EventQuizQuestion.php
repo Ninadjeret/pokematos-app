@@ -91,13 +91,13 @@ class EventQuizQuestion extends Model
         ]);
 
         if ($this->isAlreadyAnswered()) {
-            $this->quiz->sendToDiscord('question_already_answered', ['%user' => $user->name], $guild);
+            $this->quiz->sendToDiscord('question_already_answered', ['%user' => $user], $guild);
         } elseif ($answer->isCorrect()) {
             $this->close();
         } else {
             $rand = rand(1, 4);
             if ($rand === 1) {
-                $this->quiz->sendToDiscord('question_answer_wrong', ['%user' => $user->name], $guild);
+                $this->quiz->sendToDiscord('question_answer_wrong', ['%user' => $user], $guild);
             }
         }
     }
@@ -110,7 +110,7 @@ class EventQuizQuestion extends Model
         if (!empty($this->correctAnswer)) {
             if ($this->quiz->event->multi_guilds) {
                 $this->quiz->sendToDiscord('question_answer_correct', [
-                    '%user' => $this->correctAnswer->user->name,
+                    '%user' => $this->correctAnswer->user,
                     '%answer' => $this->question->answer,
                 ], $this->correctAnswer->guild);
                 foreach ($this->getUncorrectGuilds() as $guild) {
@@ -123,7 +123,7 @@ class EventQuizQuestion extends Model
                 $this->quiz->sendToDiscord('question_multi_ranking', ['%ranking' => $ranking->formatMultiRanking()]);
             } else {
                 $this->quiz->sendToDiscord('question_answer_correct', [
-                    '%user' => $this->correctAnswer->user->name,
+                    '%user' => $this->correctAnswer->user,
                     '%answer' => $this->question->answer,
                 ]);
             }
