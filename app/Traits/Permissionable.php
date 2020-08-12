@@ -102,6 +102,8 @@ trait Permissionable
           break;
         case 10:
           $userPermissions[$guild->id] = $guild->settings->access_moderation_permissions;
+          $userPermissions[$guild->id][] = 'guild_access';
+          $userPermissions[$guild->id][] = 'city_access';
           break;
         case 0:
           $userPermissions[$guild->id] = ['city_access', 'guild_access'];

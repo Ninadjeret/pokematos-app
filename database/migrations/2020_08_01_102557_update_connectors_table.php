@@ -14,7 +14,7 @@ class UpdateConnectorsTable extends Migration
     public function up()
     {
         Schema::table('connectors', function (Blueprint $table) {
-            $table->string('filter_ex_type')->defautl('none')->after('filter_gym_gym');
+            $table->string('filter_ex_type')->default('none')->after('filter_gym_gym');
         });
     }
 

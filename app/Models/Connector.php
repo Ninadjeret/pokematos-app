@@ -6,9 +6,10 @@ use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Zone;
 use App\Models\Guild;
-use App\Models\Pokemon;
 use App\Core\Helpers;
+use App\Models\Pokemon;
 use RestCord\DiscordClient;
+use App\Models\DiscordMessage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
@@ -31,6 +32,10 @@ class Connector extends Model
         'custom_message_after',
         'auto_settings',
         'delete_after_end',
+        'add_channel',
+        'channei_category_discord_id',
+        'channel_duration',
+        'add_participants'
     ];
     protected $casts = [
         'filter_gym_zone' => 'array',
@@ -39,6 +44,8 @@ class Connector extends Model
         'filter_pokemon_pokemon' => 'array',
         'filter_source_type' => 'array',
         'auto_settings' => 'array',
+        'add_channel' => 'boolean',
+        'add_participants' => 'boolean',
     ];
 
     protected $appends = ['filtered_levels', 'filtered_pokemons', 'filtered_zones', 'filtered_gyms'];
@@ -105,7 +112,7 @@ class Connector extends Model
         return $stops;
     }
 
-    public function postMessage($raid, $announce)
+    public function prepareMessage($raid)
     {
         if (empty($this->channel_discord_id)) return false;
         $guild = Guild::find($this->guild_id);
@@ -125,35 +132,85 @@ class Connector extends Model
         //Récupération du message selon le format choisi
         if ($this->format == 'auto') {
             $content = '';
-            $embed = $this->getEmbedMessage($raid, $announce, $guild);
+            $embed = $this->getEmbedMessage($raid, $guild);
         } elseif ($this->format == 'custom') {
-            $content = $this->getCustomMessage($raid, $announce, $guild);
+            $content = $this->getCustomMessage($raid, $guild);
             $embed = [];
         } elseif ($this->format == 'both') {
-            $content = $this->getCustomMessage($raid, $announce, $guild);
-            $embed = $this->getEmbedMessage($raid, $announce, $guild);
+            $content = $this->getCustomMessage($raid, $guild);
+            $embed = $this->getEmbedMessage($raid, $guild);
         }
+        return [
+            'content' => $content,
+            'embed' => $embed,
+        ];
+    }
 
+    public function editMessage($raid, $message)
+    {
+        $data = $this->prepareMessage($raid);
         //On poste le message sur Discord et on log
         try {
-            $message = $discord->channel->createMessage(array(
-                'channel.id' => intval($this->channel_discord_id),
-                'content' => $content,
-                'embed' => $embed,
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            $message = $discord->channel->editMessage(array(
+                'message.id' => intval($message->discord_id),
+                'channel.id' => intval($message->channel_discord_id),
+                'content' => $data['content'],
+                'embed ' => $data['embed'],
             ));
-            RaidMessage::create([
-                'raid_id' => $raid->id,
-                'guild_id' => $this->guild_id,
-                'message_discord_id' => $message['id'],
-                'channel_discord_id' => $message['channel_id'],
-                'delete_after_end' => $this->delete_after_end,
-            ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
 
-    public function getCustomMessage($raid, $announce, $guild)
+    public function postMessage($raid, $announce)
+    {
+
+        try {
+            $data = $this->prepareMessage($raid);
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            Log::debug(print_r($data['embed'], true));
+            $message = $discord->channel->createMessage(array(
+                'channel.id' => intval($this->channel_discord_id),
+                'content' => $data['content'],
+                'embed ' => $data['embed'],
+            ));
+
+            DiscordMessage::create([
+                'relation_type' => 'raid',
+                'relation_id' => $raid->id,
+                'guild_id' => $this->guild_id,
+                'connector_id' => $this->id,
+                'discord_id' => $message['id'],
+                'channel_discord_id' => $message['channel_id'],
+                'to_delete_at' => ($this->delete_after_end) ? $raid->end_time : null,
+            ]);
+
+            if ($this->add_participants) {
+                foreach (['👤', '🚁', '1️⃣', '2️⃣', '3️⃣', '✖️'] as $emoji) {
+                    usleep(200000);
+                    $result = $discord->channel->createReaction([
+                        'channel.id' => intval($this->channel_discord_id),
+                        'message.id' => intval($message['id']),
+                        'emoji' => $emoji,
+                    ]);
+                }
+            } elseif ($this->add_channel) {
+                foreach (['#️⃣'] as $emoji) {
+                    usleep(200000);
+                    $result = $discord->channel->createReaction([
+                        'channel.id' => intval($this->channel_discord_id),
+                        'message.id' => intval($message['id']),
+                        'emoji' => $emoji,
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function getCustomMessage($raid, $guild)
     {
         if ($raid->isFuture()) {
             $message = $this->custom_message_before;
@@ -163,7 +220,7 @@ class Connector extends Model
         return $this->translate($message, $raid, $guild);
     }
 
-    private function translate($message, $raid, $guild)
+    public function translate($message, $raid, $guild)
     {
 
         $username = ($raid->getLastUserAction()->getUser()) ? $raid->getLastUserAction()->getUser()->getNickname($guild->id) : false;
@@ -171,6 +228,8 @@ class Connector extends Model
         $role_poi_lie = Role::where('gym_id', $raid->gym_id)->first();
         $role_zone_liee = ($raid->gym->zone) ? Role::where('zone_id', $raid->gym->zone->id)->first() : false;
         $role_pokemon_lie = Role::where('pokemon_id', $raid->pokemon_id)->first();
+
+        $group = $raid->getGuildGroup($this->guild_id);
 
         //Gestion des tags
         $patterns = array(
@@ -195,7 +254,14 @@ class Connector extends Model
             'role_pokemon_lie' => (!empty($role_pokemon_lie)) ? "@{$role_pokemon_lie->name}" : '',
 
             'utilisateur' => $username,
+
+            'nb_participants' => (!empty($group)) ? $group->getNbParticipants() : '0',
+            'nb_participants_present' => (!empty($group)) ? $group->getNbParticipants('present') : '0',
+            'nb_participants_remote' => (!empty($group)) ? $group->getNbParticipants('remote') : '0',
+            'liste_participants' => (!empty($group)) ? $group->getListeParticipants() : '',
         );
+
+
         foreach ($patterns as $pattern => $valeur) {
             $message = str_replace('{' . $pattern . '}', $valeur, $message);
         }
@@ -241,7 +307,7 @@ class Connector extends Model
         return $message;
     }
 
-    public function getEmbedMessage($raid, $announce, $guild)
+    public function getEmbedMessage($raid, $guild)
     {
 
         //Gestion des infos du raid
@@ -273,7 +339,7 @@ class Connector extends Model
                     "Bost Météo : CP entre " . $raid->pokemon->cp['lvl25']['min'] . " et " . $raid->pokemon->cp['lvl25']['max'];
             }
             if (in_array('arene_desc', $this->auto_settings) && !empty($raid->getGym()->description)) {
-                $description[] = $this->translate($raid->getGym()->description, $raid);
+                $description[] = $this->translate($raid->getGym()->description, $raid, $guild);
             }
         }
 

@@ -30,12 +30,6 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get('user/cities/{city}/active-gyms', 'UserController@getActivePOIs');
 
-    Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
-    Route::post('user/cities/{city}/raids', 'RaidController@create');
-    Route::put('user/cities/{city}/raids/{raid}', 'RaidController@create');
-    Route::delete('user/cities/{city}/raids/{raid}', 'RaidController@delete');
-    Route::get('user/cities/{city}/last-changes', 'CityController@getLastChanges');
-
     //City
     Route::put('user/cities/{city}', 'UserController@updateCity');
 
@@ -77,12 +71,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@getRoleCategory');
     Route::put('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@updateRoleCategory');
     Route::delete('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@deleteRoleCategory');
-
-    Route::get('user/guilds/{guild}/connectors', 'UserController@getConnectors');
-    Route::post('user/guilds/{guild}/connectors', 'UserController@createConnector');
-    Route::get('user/guilds/{guild}/connectors/{connector}', 'UserController@getConnector');
-    Route::put('user/guilds/{guild}/connectors/{connector}', 'UserController@updateConnector');
-    Route::delete('user/guilds/{guild}/connectors/{connector}', 'UserController@deleteConnector');
 
     Route::get('user/guilds/{guild}/questconnectors', 'UserController@getQuestConnectors');
     Route::post('user/guilds/{guild}/questconnectors', 'UserController@createQuestConnector');
@@ -156,6 +144,19 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 });
 
+Route::group(['prefix' => 'user', 'middleware' => ['auth:api']], function () {
+    Route::group(['middleware' => ['can:city_access']], function () {
+        Route::get('cities/{city}/raids', 'App\Raids\RaidController@index');
+        Route::post('cities/{city}/raids', 'App\Raids\RaidController@store');
+        Route::put('cities/{city}/raids/{raid}', 'App\Raids\RaidController@store');
+        Route::delete('cities/{city}/raids/{raid}', 'App\Raids\RaidController@destroy');
+        Route::get('cities/{city}/last-changes', 'CityController@getLastChanges');
+    });
+    Route::group(['middleware' => ['can:guild_manage']], function () {
+        Route::resource('guilds/{guild}/connectors', 'App\Raids\ConnectorController');
+    });
+});
+
 Route::group(['prefix' => 'bot', 'middleware' => ['auth.bot']], function () {
 
     Route::get('guilds', 'BotController@getGuilds');
@@ -176,7 +177,10 @@ Route::group(['prefix' => 'bot', 'middleware' => ['auth.bot']], function () {
     //User actions
     Route::group(['middleware' => ['can:guild_access']], function () {
         Route::post('raids', 'RaidController@addRaid');
-        Route::post('conversations', 'BotController@addConversation');
+        Route::post('raids/channel', 'Bot\Raids\ChannelController@store');
+        Route::post('raids/participant', 'Bot\Raids\ParticipantController@store');
+        Route::delete('raids/participant', 'Bot\Raids\ParticipantController@destroy');
+        Route::post('conversations', 'Bot\ConversationController@store');
         Route::post('events/quiz/answer', 'Bot\Event\Quiz\AnswerController@store');
     });
 

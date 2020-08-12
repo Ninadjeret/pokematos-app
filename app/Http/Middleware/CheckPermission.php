@@ -59,12 +59,12 @@ class CheckPermission
       $user->CheckGuildPermissions($guild, $request->user_discord_roles, $request->user_discord_permissions);
       if (!$user->can($permission, $context_data)) {
         Conversation::sendToDiscord($request->channel_discord_id, $guild, 'bot', 'cmd_no_permission');
-        return response()->json('Vous n\'avez pas les droits suffisants pour cette action', 403);
+        return response()->json('cmd_no_permission', 403);
       }
     } else {
       $user = $request->user();
       if (!$user->can($permission, $context_data)) {
-        return response()->json('Vous n\'avez pas les droits suffisants pour cette action', 403);
+        return response()->json('cmd_no_permission', 403);
       }
     }
 

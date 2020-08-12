@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Core\Discord;
+use App\Models\Raid;
+use App\Models\RaidGroup;
 use RestCord\DiscordClient;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -39,9 +42,14 @@ class Test extends Command
      */
     public function handle()
     {
-        $user = \App\User::find(2);
-        if ($user->can('quiz_manage')) {
-            $this->line('toto');
-        }
+        request()->merge(['connector_id' => 1]);
+        $raid_group = RaidGroup::firstOrCreate(['guild_id' => 1, 'raid_id' => 57]);
+        $raid_group->add(\App\User::find(3), 'present');
+        /*$discord = new DiscordClient(['token' => config('discord.token')]);
+        $result = $discord->channel->getChannel([
+            'channel.id' => (int) 742732146384437260
+        ]);*/
+        /*$result = Discord::getGuildRoles(['guild.id' => (int) 377559922214305792], '@everyone');
+        $this->line(print_r($result, true));*/
     }
 }

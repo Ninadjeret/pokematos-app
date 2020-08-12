@@ -57,7 +57,12 @@ return [
             'level' => 'debug',
             'days' => 30,
         ],
-
+        'discord' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/discord/discord.log'),
+            'level' => 'debug',
+            'days' => 30,
+        ],
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),

@@ -213,7 +213,7 @@ class User extends Authenticatable
                                 ];
                             }
                         }
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         error_log('Exception reçue : ' . $e->getMessage());
                     }
                 }
@@ -273,15 +273,17 @@ class User extends Authenticatable
                     ->first();
                 if ($finded_guild) {
                     $finded_guild->permissions = $guild['permissions'];
-                    $finded_guild->user_nickname = $guild['nickname'];
                     $finded_guild->save();
                 } else {
                     $finded_guild = UserGuild::create([
                         'guild_id' => $guild['id'],
                         'user_id' => $this->id,
                         'permissions' => $guild['permissions'],
-                        'user_nickname' => $guild['nickname']
                     ]);
+                }
+                if (array_key_exists('nickname', $guild)) {
+                    $finded_guild->user_nickname = $guild['nickname'];
+                    $finded_guild->save();
                 }
                 $old_guilds[] = $finded_guild->id;
             }

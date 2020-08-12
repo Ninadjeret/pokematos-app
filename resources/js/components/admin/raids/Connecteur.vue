@@ -3,6 +3,7 @@
     <v-tabs v-model="tabs" color="transparent" slider-color="#8e56d9" class>
       <v-tab href="#general" class="primary--text">Général</v-tab>
       <v-tab href="#annonces" class="primary--text">Annonces</v-tab>
+      <v-tab href="#canaux" class="primary--text">Canaux</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tabs">
@@ -16,13 +17,17 @@
           <div class="setting">
             <label>Channel</label>
             <select v-if="channels" v-model="channel_discord_id">
-              <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
+              <option
+                v-for="channel in channels"
+                :value="channel.id"
+                :key="channel.id"
+              >{{channel.name}}</option>
             </select>
           </div>
         </div>
         <div class="settings-section">
           <div v-if="this.$route.params.connector_id">
-            <v-subheader v-if>Autres actions</v-subheader>
+            <v-subheader>Autres actions</v-subheader>
             <v-list-tile color="pink" @click="dialog = true">Supprimer le connecteur</v-list-tile>
           </div>
         </div>
@@ -109,7 +114,7 @@
           <div class="setting checkbox">
             <label>Filtrer la source</label>
             <v-checkbox
-              v-for="(source, index) in sources"
+              v-for="(source) in sources"
               v-model="filter_source_type"
               :key="source.value"
               :label="source.label"
@@ -128,7 +133,7 @@
           <div class="setting checkbox" v-if="format != 'custom'">
             <label>Options de l'annonce auto</label>
             <v-checkbox
-              v-for="(choice, index) in autoSettingsChoices"
+              v-for="(choice) in autoSettingsChoices"
               v-model="auto_settings"
               :key="choice.value"
               :label="choice.label"
@@ -163,7 +168,7 @@
               {role_zone_liee}
               <br />
             </p>
-            <input v-model="custom_message_before" type="text" />
+            <textarea v-model="custom_message_before"></textarea>
           </div>
           <div class="setting" v-if="format != 'auto'">
             <label>Message personalisé après pop</label>
@@ -197,7 +202,7 @@
               {role_pokemon_lie}
               <br />
             </p>
-            <input v-model="custom_message_after" type="text" />
+            <textarea v-model="custom_message_after"></textarea>
           </div>
           <div class="setting d-flex switch">
             <div>
@@ -208,6 +213,44 @@
             </div>
             <v-switch v-model="delete_after_end"></v-switch>
           </div>
+        </div>
+      </v-tab-item>
+      <v-tab-item value="canaux">
+        <div class="settings-section">
+          <v-subheader>Canaux</v-subheader>
+          <div class="setting d-flex switch">
+            <div>
+              <label>Créer des salons temporaires</label>
+              <p
+                class="description"
+              >Des réactions sous les annonces de raids permettent de rejoindre des salons temporaires dédiés à l'oganisation</p>
+            </div>
+            <v-switch v-model="add_channel"></v-switch>
+          </div>
+        </div>
+        <div v-if="add_channel" class="setting">
+          <label>Catégorie de salon</label>
+          <p class="description">Le salon temporaire sera créé dans la catégorie choisie.</p>
+          <select v-if="channels_categories" v-model="channei_category_discord_id">
+            <option
+              v-for="channel in channels_categories"
+              :value="channel.id.toString()"
+              :key="channel.id"
+            >{{channel.name}}</option>
+          </select>
+        </div>
+        <div v-if="add_channel" class="setting">
+          <label>Quand supprimer le salon ?</label>
+          <p
+            class="description"
+          >Définissez quand le salon du raid doit être supprimé. Par défaut, réservéz "En fin de journée" aux annonces de Raid EX</p>
+          <select v-model="channel_duration">
+            <option value="raidend">A la fin du raid</option>
+            <option value="15min">15 min après la fin du raid</option>
+            <option value="1h">1h après la fin du raid</option>
+            <option value="2h">2h après la fin du raid</option>
+            <option value="dayend">A la fin de journée</option>
+          </select>
         </div>
       </v-tab-item>
     </v-tabs-items>
@@ -277,6 +320,10 @@ export default {
         { value: "arene_desc", label: "Affiche la description de l'arene" },
       ],
       delete_after_end: true,
+      add_channel: false,
+      channei_category_discord_id: "",
+      channel_duration: "raidend",
+      channels_categories: [],
     };
   },
   created() {
@@ -284,6 +331,7 @@ export default {
     this.fetchPokemons();
     //this.fetchGyms();
     this.fetchZones();
+    this.fetchDiscordChannelCategories();
     if (this.$route.params.connector_id) {
       this.fetch();
     }
@@ -321,6 +369,9 @@ export default {
           this.custom_message_after = res.data.custom_message_after;
           this.auto_settings = res.data.auto_settings;
           this.delete_after_end = res.data.delete_after_end;
+          this.add_channel = res.data.add_channel;
+          this.channei_category_discord_id = res.data.channei_category_discord_id.toString();
+          this.channel_duration = res.data.channel_duration;
         })
         .catch((err) => {
           let message = "Problème lors de la récupération";
@@ -344,6 +395,22 @@ export default {
         )
         .then((res) => {
           this.channels = res.data;
+        });
+    },
+    fetchDiscordChannelCategories() {
+      axios
+        .get(
+          "/api/user/cities/" +
+            this.$store.state.currentCity.id +
+            "/guilds/" +
+            this.$route.params.id +
+            "/channelcategories"
+        )
+        .then((res) => {
+          this.channels_categories = res.data;
+        })
+        .catch((err) => {
+          //No error
         });
     },
     fetchPokemons() {
@@ -375,6 +442,9 @@ export default {
         custom_message_after: this.custom_message_after,
         auto_settings: this.auto_settings,
         delete_after_end: this.delete_after_end,
+        add_channel: this.add_channel,
+        channei_category_discord_id: this.channei_category_discord_id,
+        channel_duration: this.channel_duration,
       };
       if (this.$route.params.connector_id) {
         this.save(args);

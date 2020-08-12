@@ -95,12 +95,18 @@ class Discord
 
     public static function sendMessage($args)
     {
-        $discord = new DiscordClient(['token' => config('discord.token')]);
-        $message = $discord->channel->createMessage($args);
-        if (isset($message['id'])) {
+        try {
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            $message = $discord->channel->createMessage($args);
             return $message;
+        } catch (\GuzzleHttp\Command\Exception\CommandException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+            $message = $e->getMessage();
+            Log::channel('discord')->info("--------------------------------------------------");
+            Log::channel('discord')->info("{$statusCode} - channel->createMessage --- {$message}");
+            Log::channel('discord')->info(print_r($args, true));
+            return false;
         }
-        return false;
     }
 
     public static function deleteMessage($args)
@@ -110,6 +116,10 @@ class Discord
             $discord->channel->deleteMessage($args);
         } catch (\GuzzleHttp\Command\Exception\CommandException $e) {
             $statusCode = $e->getResponse()->getStatusCode();
+            $message = $e->getMessage();
+            Log::channel('discord')->info("--------------------------------------------------");
+            Log::channel('discord')->info("{$statusCode} - channel->deleteMessage --- {$message}");
+            Log::channel('discord')->info(print_r($args, true));
             return false;
         }
     }
@@ -139,6 +149,10 @@ class Discord
             return true;
         } catch (\GuzzleHttp\Command\Exception\CommandException $e) {
             $statusCode = $e->getResponse()->getStatusCode();
+            $message = $e->getMessage();
+            Log::channel('discord')->info("--------------------------------------------------");
+            Log::channel('discord')->info("{$statusCode} - channel->deleteOrcloseChannel --- {$message}");
+            Log::channel('discord')->info(print_r($args, true));
             return false;
         }
     }
@@ -151,6 +165,10 @@ class Discord
             return $channel;
         } catch (\GuzzleHttp\Command\Exception\CommandException $e) {
             $statusCode = $e->getResponse()->getStatusCode();
+            $message = $e->getMessage();
+            Log::channel('discord')->info("--------------------------------------------------");
+            Log::channel('discord')->info("{$statusCode} - guild->createGuildChannel --- {$message}");
+            Log::channel('discord')->info(print_r($args, true));
             return false;
         }
     }
@@ -161,6 +179,28 @@ class Discord
         $url = config('app.bot_sync_url');
         if (!empty($url)) {
             $res = $client->get($url);
+        }
+    }
+
+    public static function getGuildRoles($args, $role_name = false)
+    {
+        try {
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            $roles = $discord->guild->getGuildRoles($args);
+
+            if (!$role_name) return $roles;
+
+            foreach ($roles as $role) {
+                if ($role->name == $role_name) return $role;
+            }
+            return false;
+        } catch (\GuzzleHttp\Command\Exception\CommandException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+            $message = $e->getMessage();
+            Log::channel('discord')->info("--------------------------------------------------");
+            Log::channel('discord')->info("{$statusCode} - guild->getGuildRoles --- {$message}");
+            Log::channel('discord')->info(print_r($args, true));
+            return false;
         }
     }
 }

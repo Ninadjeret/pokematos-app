@@ -10,11 +10,16 @@ use App\Models\UserAction;
 use App\Models\raidChannel;
 use App\Models\RaidMessage;
 use RestCord\DiscordClient;
+use App\Traits\Participable;
+use App\Models\DiscordChannel;
+use App\Models\DiscordMessage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 
 class Raid extends Model
 {
+
+    use Participable;
 
     protected $fillable = ['status', 'pokemon_id', 'egg_level'];
     protected $hidden = ['gym_id', 'city_id', 'pokemon_id'];
@@ -72,6 +77,28 @@ class Raid extends Model
             return $messages;
         }
         return [];
+    }
+
+    public function channels()
+    {
+        return $this->morphMany('App\Models\DiscordChannel', 'relation');
+    }
+
+    public function messages()
+    {
+        return $this->morphMany('App\Models\DiscordMessage', 'relation');
+    }
+
+    public function groups()
+    {
+        return $this->hasMany('App\Models\RaidGroup');
+    }
+
+    public function getGuildGroup($guild_id)
+    {
+        $group = RaidGroup::where('raid_id', $this->id)->where('guild_id', $guild_id)->first();
+        if (empty($group)) return false;
+        return $group;
     }
 
     public function getLastUserAction($include_auto = false)
@@ -160,7 +187,6 @@ class Raid extends Model
         } else {
 
             //Gestion du level
-
             if (isset($args['pokemon_id']) && !empty($args['pokemon_id'])) {
                 $pokemon = Pokemon::find($args['pokemon_id']);
                 if ($pokemon) $egg_level = $pokemon->boss_level;
