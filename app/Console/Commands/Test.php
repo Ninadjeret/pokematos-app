@@ -46,7 +46,7 @@ class Test extends Command
         foreach ($images as $image) {
             $complete_path = storage_path($path) . '/' . $image;
             $analyzer = new ImageAnalyzer($complete_path, Guild::find(1));
-            $egg_level = $analyzer->getEggLevelv2();
+            $this->line($analyzer->getEggLevelv2());
         }
     }
 }

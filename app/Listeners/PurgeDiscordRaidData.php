@@ -30,13 +30,19 @@ class PurgeDiscordRaidData
     public function handle($event)
     {
 
-        if ($event instanceof \App\Events\RaidDeleted || $event instanceof \App\Events\RaidEnded) {
+        if ($event instanceof \App\Events\RaidDeleted) {
             $event->raid->channels()->get()->each(function ($channel) {
                 $channel->suppr();
             });
 
             $event->raid->messages()->get()->each(function ($message) {
                 $message->suppr();
+            });
+        }
+
+        if ($event instanceof \App\Events\RaidEnded) {
+            $event->raid->messages()->get()->each(function ($message) {
+                if (!empty($message->to_delete_at)) $message->suppr();
             });
         }
 

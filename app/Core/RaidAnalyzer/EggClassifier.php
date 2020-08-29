@@ -11,7 +11,7 @@ class EggClassifier
   public static function getLevel($image)
   {
     $dataset = new Unlabeled([[$image]]);
-    $estimator = PersistentModel::load(new Filesystem(storage_path() . '/ml/egg-classification.model'));
+    $estimator = PersistentModel::load(new Filesystem(resource_path() . '/ml/egg-classification.model'));
     $predictions = $estimator->predict($dataset);
     return $predictions[0];
   }
