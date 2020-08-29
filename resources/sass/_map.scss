@@ -1,8 +1,14 @@
+.leaflet-pane.leaflet-marker-pane {
+    position: relative;
+}
+
 .map-marker__img.raid,
 .map-marker__img.quest {
     max-width: 49px !important;
     width: 49px !important;
+    position: absolute;
 }
+
 .map-marker__label {
     top: 32px;
     width: 49px;
@@ -10,8 +16,9 @@
     color: #fff;
     position: absolute;
 }
+
 .leaflet-control-zoom {
-    display:none;
+    display: none;
 }
 
 .raid__content {

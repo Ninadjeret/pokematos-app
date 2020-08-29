@@ -22,19 +22,20 @@ class EventController extends Controller
     public static $capability = 'events_manage';
     public static $feature_message = 'La fonctionnalité n\'est pas active';
 
-    public function getActiveEvents( Request $request, City $city ) {
+    public function getActiveEvents(Request $request, City $city)
+    {
         $user = Auth::user();
 
-        $user_guild_ids = Helpers::extractIds( $user->getGuilds() );
+        $user_guild_ids = Helpers::extractIds($user->getGuilds());
         $city_guild_ids = $city->getGuildsIds();
-        $matching_ids = array_intersect( $user_guild_ids, $city_guild_ids );
+        $matching_ids = array_intersect($user_guild_ids, $city_guild_ids);
 
         $events = Event::where('end_time', '>', date('Y-m-d H:i:s'))
             ->whereIn('guild_id', $matching_ids)
             ->get();
 
         $invits = Event::where('end_time', '>', date('Y-m-d H:i:s'))
-            ->whereHas('invits', function($q) use ($matching_ids) {
+            ->whereHas('invits', function ($q) use ($matching_ids) {
                 $q->where('status', 'accepted')->whereIn('guild_id', $matching_ids);
             })
             ->get();
@@ -42,9 +43,10 @@ class EventController extends Controller
         return response()->json($merged->all(), 200);
     }
 
-    public function getGuildEvents( Request $request, Guild $guild ) {
+    public function getGuildEvents(Request $request, Guild $guild)
+    {
         $user = Auth::user();
-        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+        if (!$user->can(self::$capability, ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
@@ -53,21 +55,23 @@ class EventController extends Controller
         return response()->json($events, 200);
     }
 
-    public function getEvent( Request $request, City $city, Event $event ) {
+    public function getEvent(Request $request, City $city, Event $event)
+    {
         $user = Auth::user();
 
-        $user_guild_ids = Helpers::extractIds( $user->getGuilds() );
-        if( !in_array($event->guild_id, $user_guild_ids) ) {
+        $user_guild_ids = Helpers::extractIds($user->getGuilds());
+        if (!in_array($event->guild_id, $user_guild_ids)) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
         return response()->json($event, 200);
     }
 
-    public  function createEvent( Request $request, Guild $guild ) {
-        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
+    public  function createEvent(Request $request, Guild $guild)
+    {
+        if (!config(self::$feature)) return response()->json(self::$feature_message, 403);
         $user = Auth::user();
-        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+        if (!$user->can(self::$capability, ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
@@ -80,6 +84,9 @@ class EventController extends Controller
                 'start_time' => $request->start_time,
                 'image' => $request->image,
                 'multi_guilds' => $request->multi_guilds,
+                'channel_discord_type' => $request->channel_discord_type,
+                'channel_discord_id' => $request->channel_discord_id,
+                'category_discord_id' => $request->category_discord_id,
             ],
             'guests' => $request->guests,
             'steps' => $request->steps,
@@ -90,10 +97,11 @@ class EventController extends Controller
         return response()->json($event, 200);
     }
 
-    public  function updateEvent( Request $request, Guild $guild, Event $event ) {
-        if( !config(self::$feature) )return response()->json(self::$feature_message, 403);
+    public  function updateEvent(Request $request, Guild $guild, Event $event)
+    {
+        if (!config(self::$feature)) return response()->json(self::$feature_message, 403);
         $user = Auth::user();
-        if( !$user->can('guild_manage', ['guild_id' => $guild->id]) ) {
+        if (!$user->can('guild_manage', ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
@@ -104,6 +112,9 @@ class EventController extends Controller
                 'start_time' => $request->start_time,
                 'image' => $request->image,
                 'multi_guilds' => $request->multi_guilds,
+                'channel_discord_type' => $request->channel_discord_type,
+                'channel_discord_id' => $request->channel_discord_id,
+                'category_discord_id' => $request->category_discord_id,
             ],
             'guests' => $request->guests,
             'steps' => $request->steps,
@@ -115,9 +126,10 @@ class EventController extends Controller
         return response()->json($event, 200);
     }
 
-    public function deleteEvent(Request $request, Guild $guild, Event $event ) {
+    public function deleteEvent(Request $request, Guild $guild, Event $event)
+    {
         $user = Auth::user();
-        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+        if (!$user->can(self::$capability, ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
 
@@ -127,34 +139,38 @@ class EventController extends Controller
         return response()->json(null, 204);
     }
 
-    public function updateSteps( Request $request, Guild $guild, Event $event ) {
+    public function updateSteps(Request $request, Guild $guild, Event $event)
+    {
         $user = Auth::user();
-        if( !$user->can('events_train_check', ['guild_id' => $guild->id]) ) {
+        if (!$user->can('events_train_check', ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $event->setTrain(['steps' => $request->steps]);
         return response()->json($event, 200);
     }
 
-    public function checkStep(Request $request, Guild $guild, Event $event, EventTrainStep $step ) {
+    public function checkStep(Request $request, Guild $guild, Event $event, EventTrainStep $step)
+    {
         $user = Auth::user();
-        if( !$user->can('events_train_check', ['guild_id' => $guild->id]) ) {
+        if (!$user->can('events_train_check', ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $step->check();
         return response()->json($event, 200);
     }
 
-    public function uncheckStep(Request $request, Guild $guild, Event $event, EventTrainStep $step ) {
+    public function uncheckStep(Request $request, Guild $guild, Event $event, EventTrainStep $step)
+    {
         $user = Auth::user();
-        if( !$user->can('events_train_check', ['guild_id' => $guild->id]) ) {
+        if (!$user->can('events_train_check', ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $step->uncheck();
         return response()->json($event, 200);
     }
 
-    public function getGuestableGuilds( Request $request, Guild $guild ) {
+    public function getGuestableGuilds(Request $request, Guild $guild)
+    {
         $guilds = Guild::where('active', 1)
             ->where('id', '!=', $guild->id)
             ->get();
@@ -164,58 +180,44 @@ class EventController extends Controller
         return response()->json($filtered->all(), 200);
     }
 
-    public function getInvits( Request $request, Guild $guild ) {
+    public function getInvits(Request $request, Guild $guild)
+    {
         $user = Auth::user();
-        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+        if (!$user->can(self::$capability, ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $invits = EventInvit::where('guild_id', $guild->id)
-            ->whereHas('event', function($q) {
+            ->whereHas('event', function ($q) {
                 $q->where('start_time', '>', date('Y-m-d H:i:s'));
             })
-            ->get()->each->setAppends(['guild','event']);
+            ->get()->each->setAppends(['guild', 'event']);
         return response()->json($invits, 200);
     }
 
-    public function acceptInvit(Request $request, Guild $guild, EventInvit $invit ) {
+    public function acceptInvit(Request $request, Guild $guild, EventInvit $invit)
+    {
         $user = Auth::user();
-        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+        if (!$user->can(self::$capability, ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $invit->accept();
-        $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild','event']);
+        $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild', 'event']);
         return response()->json($invits, 200);
     }
 
-    public function refuseInvit(Request $request, Guild $guild, EventInvit $invit ) {
+    public function refuseInvit(Request $request, Guild $guild, EventInvit $invit)
+    {
         $user = Auth::user();
-        if( !$user->can(self::$capability, ['guild_id' => $guild->id]) ) {
+        if (!$user->can(self::$capability, ['guild_id' => $guild->id])) {
             return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
         }
         $invit->refuse();
-        $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild','event']);
+        $invits = EventInvit::where('guild_id', $guild->id)->get()->each->setAppends(['guild', 'event']);
         return response()->json($invits, 200);
     }
 
-    public static function addQuizAnswer( Request $request ) {
-
-        $event = Event::findFromChannelId($request->channel_discord_id);
-        if( !$event->quiz ) return response()->json('Cet event ne dispose pas de quiz', 400);
-
-        $args = [
-            'answer' => $request->answer,
-            'user_discord_id' => $request->user_discord_id,
-            'user_name' => $request->user_name,
-            'guild_discord_id' => $request->guild_discord_id,
-            'message_discord_id' => $request->message_discord_id,
-        ];
-
-        $event->quiz->addAnswer($args);
-        return response()->json(null, 204);
-    }
-
-    public function getThemes(Request $request) {
+    public function getThemes(Request $request)
+    {
         return response()->json(\App\Models\QuizTheme::all(), 200);
     }
-
 }

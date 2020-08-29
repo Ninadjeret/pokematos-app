@@ -41,65 +41,70 @@ class QuestConnector extends Model
 
     public $roles, $emojis, $channels;
 
-    public function getFilteredRewardsAttribute() {
-        if( empty($this->filter_reward_reward) ) {
+    public function getFilteredRewardsAttribute()
+    {
+        if (empty($this->filter_reward_reward)) {
             return [];
         }
         $rewards = [];
-        foreach( $this->filter_reward_reward as $reward_id ) {
+        foreach ($this->filter_reward_reward as $reward_id) {
             $reward = QuestReward::find($reward_id);
-            if( $reward ) {
+            if ($reward) {
                 $rewards[] = $reward;
             }
         }
         return $rewards;
     }
 
-    public function getFilteredPokemonsAttribute() {
-        if( empty($this->filter_reward_pokemon) ) {
+    public function getFilteredPokemonsAttribute()
+    {
+        if (empty($this->filter_reward_pokemon)) {
             return [];
         }
         $pokemons = [];
-        foreach( $this->filter_reward_pokemon as $pokemon_id ) {
+        foreach ($this->filter_reward_pokemon as $pokemon_id) {
             $pokemon = Pokemon::find($pokemon_id);
-            if( $pokemon ) {
+            if ($pokemon) {
                 $pokemons[] = $pokemon;
             }
         }
         return $pokemons;
     }
 
-    public function getFilteredZonesAttribute() {
-        if( empty($this->filter_stop_zone) ) {
+    public function getFilteredZonesAttribute()
+    {
+        if (empty($this->filter_stop_zone)) {
             return [];
         }
         $zones = [];
-        foreach( $this->filter_stop_zone as $zone_id ) {
+        foreach ($this->filter_stop_zone as $zone_id) {
             $zone = Zone::find($zone_id);
-            if( $zone ) {
+            if ($zone) {
                 $zones[] = $zone;
             }
         }
         return $zones;
     }
 
-    public function getFilteredStopsAttribute() {
-        if( empty($this->filter_stop_stop) ) {
+    public function getFilteredStopsAttribute()
+    {
+        if (empty($this->filter_stop_stop)) {
             return [];
         }
         $stops = [];
-        foreach( $this->filter_stop_stop as $stop_id ) {
+        foreach ($this->filter_stop_stop as $stop_id) {
             $stop = Stop::find($stop_id);
-            if( $stop ) {
+            if ($stop) {
                 $stops[] = $stop;
             }
         }
         return $stops;
     }
 
-    public function postMessage( $quest, $announce ) {
-        if( empty( $this->channel_discord_id ) ) return false;
-        $guild = Guild::find( $this->guild_id );
+    public function postMessage($quest, $announce)
+    {
+        if (empty($this->channel_discord_id)) return false;
+        $guild = Guild::find($this->guild_id);
 
         //On initialise les infos discord
         $discord = new DiscordClient(['token' => config('discord.token')]);
@@ -114,15 +119,15 @@ class QuestConnector extends Model
         ));
 
         //Récupération du message selon le format choisi
-        if( $this->format == 'auto' ) {
+        if ($this->format == 'auto') {
             $content = '';
-            $embed = $this->getEmbedMessage($quest, $announce);
-        } elseif( $this->format == 'custom' ) {
-            $content = $this->getCustomMessage( $quest, $announce );
+            $embed = $this->getEmbedMessage($quest, $announce, $guild);
+        } elseif ($this->format == 'custom') {
+            $content = $this->getCustomMessage($quest, $announce, $guild);
             $embed = [];
-        } elseif( $this->format == 'both' ) {
-            $content = $this->getCustomMessage( $quest, $announce );
-            $embed = $this->getEmbedMessage($quest, $announce);
+        } elseif ($this->format == 'both') {
+            $content = $this->getCustomMessage($quest, $announce, $guild);
+            $embed = $this->getEmbedMessage($quest, $announce, $guild);
         }
 
         //On poste le message sur Discord et on log
@@ -142,24 +147,25 @@ class QuestConnector extends Model
         } catch (Exception $e) {
             return false;
         }
-
     }
 
-    public function getCustomMessage( $quest, $announce ) {
-        return $this->translate( $this->custom_message, $quest );
+    public function getCustomMessage($quest, $announce, $guild)
+    {
+        return $this->translate($this->custom_message, $quest, $guild);
     }
 
-    public function translate( $message, $quest ) {
-        $username = ( $quest->getLastUserAction()->getUser() ) ? $quest->getLastUserAction()->getUser()->name : false;
+    public function translate($message, $quest, $guild)
+    {
+        $username = ($quest->getLastUserAction()->getUser()) ? $quest->getLastUserAction()->getUser()->getNickname($guild->id) : false;
 
         $role_poi_lie = Role::where('gym_id', $quest->getStop()->id)->first();
-        $role_zone_liee = ( $quest->getStop()->zone ) ? Role::where('zone_id', $quest->getStop()->zone->id)->first() : false ;
+        $role_zone_liee = ($quest->getStop()->zone) ? Role::where('zone_id', $quest->getStop()->zone->id)->first() : false;
         $role_pokemon_lie = Role::where('pokemon_id', $quest->reward->id)->first();
 
         //Gestion des tags
         $patterns = array(
-            'quete_recompense' => ( !$quest->reward ) ? false : html_entity_decode( $quest->reward->name ),
-            'quete_recompense_nettoye' => ( !$quest->reward ) ? false : Helpers::sanitize(html_entity_decode( $quest->reward->name )),
+            'quete_recompense' => (!$quest->reward) ? false : html_entity_decode($quest->reward->name),
+            'quete_recompense_nettoye' => (!$quest->reward) ? false : Helpers::sanitize(html_entity_decode($quest->reward->name)),
             'quete_nom' => $quest->name,
 
             'pokestop_nom' => $quest->getStop()->niantic_name,
@@ -167,49 +173,49 @@ class QuestConnector extends Model
             'pokestop_nom_custom' => $quest->getStop()->name,
             'pokestop_nom_custom_nettoye' => Helpers::sanitize($quest->getStop()->name),
             'pokestop_description' => $quest->getStop()->description,
-            'pokestop_zone' => ( !empty(  $quest->getStop()->zone ) ) ?  $quest->getStop()->zone->name : false,
-            'pokestop_zone_nettoye' => ( !empty(  $quest->getStop()->zone ) ) ?  Helpers::sanitize($quest->getStop()->zone->name) : false,
-            'pokestop_gmaps' => ( !empty(  $quest->getStop()->google_maps_url ) ) ?  $quest->getStop()->google_maps_url : false,
+            'pokestop_zone' => (!empty($quest->getStop()->zone)) ?  $quest->getStop()->zone->name : false,
+            'pokestop_zone_nettoye' => (!empty($quest->getStop()->zone)) ?  Helpers::sanitize($quest->getStop()->zone->name) : false,
+            'pokestop_gmaps' => (!empty($quest->getStop()->google_maps_url)) ?  $quest->getStop()->google_maps_url : false,
 
-            'role_poi_lie' => ( !empty($role_poi_lie) ) ? "@{$role_poi_lie->name}" : '',
-            'role_zone_liee' => ( !empty($role_zone_liee) ) ? "@{$role_zone_liee->name}" : '',
-            'role_pokemon_lie' => ( !empty($role_pokemon_lie) ) ? "@{$role_pokemon_lie->name}" : '',
+            'role_poi_lie' => (!empty($role_poi_lie)) ? "@{$role_poi_lie->name}" : '',
+            'role_zone_liee' => (!empty($role_zone_liee)) ? "@{$role_zone_liee->name}" : '',
+            'role_pokemon_lie' => (!empty($role_pokemon_lie)) ? "@{$role_pokemon_lie->name}" : '',
 
             'utilisateur' => $username,
         );
-        foreach( $patterns as $pattern => $valeur ) {
-            $message = str_replace( '{'.$pattern.'}', $valeur, $message );
+        foreach ($patterns as $pattern => $valeur) {
+            $message = str_replace('{' . $pattern . '}', $valeur, $message);
         }
 
         //Gestion des mentions
-        if( strstr( $message, '@' ) ) {
-            foreach( $this->roles as $role ) {
-                if( strstr( $message, '@'.$role->name ) ) {
-                    $message = str_replace('@'.$role->name, '<@&'.$role->id.'>', $message);
+        if (strstr($message, '@')) {
+            foreach ($this->roles as $role) {
+                if (strstr($message, '@' . $role->name)) {
+                    $message = str_replace('@' . $role->name, '<@&' . $role->id . '>', $message);
                 }
             }
         }
 
-        if( $username && strstr( $message, '@'.$username ) ) {
+        if ($username && strstr($message, '@' . $username)) {
             $user = $quest->getLastUserAction()->getUser();
-            $message = str_replace('@'.$username, '<@!'.$user->discord_id.'>', $message);
+            $message = str_replace('@' . $username, '<@!' . $user->discord_id . '>', $message);
         }
 
         //Gestion des salons #
-        if( strstr( $message, '#' ) ) {
-            foreach( $this->channels as $channel ) {
-                if( strstr( $message, '#'.$channel->name ) ) {
-                    $message = str_replace('#'.$channel->name, '<#'.$channel->id.'>', $message);
+        if (strstr($message, '#')) {
+            foreach ($this->channels as $channel) {
+                if (strstr($message, '#' . $channel->name)) {
+                    $message = str_replace('#' . $channel->name, '<#' . $channel->id . '>', $message);
                 }
             }
         }
 
         //Gestion des emojis
-        if( strstr( $message, ':' ) ) {
-            if( !empty($this->emojis) ) {
-                foreach( $this->emojis as $emoji ) {
-                    if( strstr( $message, ':'.$emoji->name.':' ) ) {
-                        $message = str_replace(':'.$emoji->name.':', '<:'.$emoji->name.':'.$emoji->id.'>', $message);
+        if (strstr($message, ':')) {
+            if (!empty($this->emojis)) {
+                foreach ($this->emojis as $emoji) {
+                    if (strstr($message, ':' . $emoji->name . ':')) {
+                        $message = str_replace(':' . $emoji->name . ':', '<:' . $emoji->name . ':' . $emoji->id . '>', $message);
                     }
                 }
             }
@@ -223,14 +229,15 @@ class QuestConnector extends Model
         return $message;
     }
 
-    public function getEmbedMessage( $quest, $announce ) {
+    public function getEmbedMessage($quest, $announce, $guild)
+    {
 
 
         $description = '';
-        if( !empty($quest->reward_type) ) {
+        if (!empty($quest->reward_type)) {
             $title = "Quête {$quest->reward->name} en cours";
             $img_url = $quest->reward->thumbnail_url;
-            if( !empty($quest->name) ) {
+            if (!empty($quest->name)) {
                 $description = $quest->name;
             }
         } else {
@@ -256,5 +263,4 @@ class QuestConnector extends Model
 
         return $data;
     }
-
 }

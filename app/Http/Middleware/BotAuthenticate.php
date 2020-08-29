@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Log;
 
 class BotAuthenticate
 {
@@ -17,7 +18,7 @@ class BotAuthenticate
     {
 
         $token = $request->bearerToken();
-        if( empty($token) || $token != config('app.bot_token') ) {
+        if (empty($token) || $token != config('app.bot_token')) {
             return response()->json('Wrong token', 400);
         }
         return $next($request);

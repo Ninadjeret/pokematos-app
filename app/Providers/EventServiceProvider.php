@@ -58,9 +58,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         //Events
-        'App\Events\Events\EventCreated' => [
-            'App\Listeners\Discord\CreateChannel',
-        ],
+        'App\Events\Events\EventCreated' => [],
         'App\Events\Events\EventDeleted' => [
             'App\Listeners\Discord\DeleteChannel',
         ],

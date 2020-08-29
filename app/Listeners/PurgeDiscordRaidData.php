@@ -27,41 +27,29 @@ class PurgeDiscordRaidData
      * @param  RaidDeleted  $event
      * @return void
      */
-    public function handle( $event)
+    public function handle($event)
     {
 
-        $discord = new DiscordClient(['token' => config('discord.token')]);
+        if ($event instanceof \App\Events\RaidDeleted) {
+            $event->raid->channels()->get()->each(function ($channel) {
+                $channel->suppr();
+            });
 
-        //Si l'event est une mise à joru du raid, on ne supprime pas le channel
-        $delete_channel = false;
-        if( $event instanceof \App\Events\RaidDeleted || $event instanceof \App\Events\Raidended ) {
-            $delete_channel = true;
+            $event->raid->messages()->get()->each(function ($message) {
+                $message->suppr();
+            });
         }
 
-        $force_delete = false;
-        if( $event instanceof \App\Events\RaidDeleted || $event instanceof \App\Events\RaidUpdated ) {
-            $force_delete = true;
+        if ($event instanceof \App\Events\RaidEnded) {
+            $event->raid->messages()->get()->each(function ($message) {
+                if (!empty($message->to_delete_at)) $message->suppr();
+            });
         }
 
-        if( $delete_channel ) {
-            if( !empty( $event->raid->channels ) ) {
-                foreach( $event->raid->channels as $channel ) {
-                    \App\Core\Discord::deleteChannel(['channel.id' => (int) $channel->channel_discord_id]);
-                }
-            }
-        }
-
-        if( !empty( $event->raid->messages ) ) {
-            foreach( $event->raid->messages as $message ) {
-                $discord = new DiscordClient(['token' => config('discord.token')]);
-                if( !$message->delete_after_end && !$force_delete ) continue;
-                $discord->channel->deleteMessage([
-                    'channel.id' => (int) $message->channel_discord_id,
-                    'message.id' => (int) $message->message_discord_id
-                ]);
-                //$message->update['to_delete' => 'deleted'];
-                RaidMessage::destroy($message->id);
-            }
+        if ($event instanceof \App\Events\RaidUpdated) {
+            $event->raid->messages()->get()->each(function ($message) {
+                $message->suppr();
+            });
         }
     }
 }

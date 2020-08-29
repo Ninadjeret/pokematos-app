@@ -28,9 +28,9 @@ class PurgeEvents
      */
     public function handle(DayChanged $event)
     {
-        $events = Event::where('end_time', $event->yestarday->format('Y-m-d').' 23:59:00');
-        if( empty( $events ) ) {
-            foreach( $events as $event_item ) {
+        $events = Event::where('end_time', $event->yesterday->format('Y-m-d') . ' 23:59:00');
+        if (!empty($events)) {
+            foreach ($events as $event_item) {
                 event(new EventEnded($event_item, $event_item->guild));
             }
         }

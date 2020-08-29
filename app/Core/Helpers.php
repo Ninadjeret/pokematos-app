@@ -4,25 +4,27 @@ namespace App\Core;
 
 use Illuminate\Support\Facades\Log;
 
-class Helpers {
+class Helpers
+{
 
-    public static function extractIds( $array ) {
-        if( !is_array($array) ) {
+    public static function extractIds($array)
+    {
+        if (!is_array($array)) {
             return false;
         }
         $ids = [];
-        foreach( $array as $item ) {
-            if( is_object($item) ) {
+        foreach ($array as $item) {
+            if (is_object($item)) {
                 $ids[] = $item->id;
-            }
-            elseif( is_array($item) && array_key_exists('id', $item) ){
+            } elseif (is_array($item) && array_key_exists('id', $item)) {
                 $ids[] = $item['id'];
             }
         }
         return $ids;
     }
 
-    public static function sanitize( $string ) {
+    public static function sanitize($string)
+    {
         $search = [' ', '\'', '’'];
         $replace = ['-', '-', '-'];
         $string = str_replace($search, $replace, $string);
@@ -31,12 +33,13 @@ class Helpers {
         return trim(strtolower($string));
     }
 
-    public static function remove_accents( $string ) {
-        if ( ! preg_match( '/[\x80-\xff]/', $string ) ) {
+    public static function remove_accents($string)
+    {
+        if (!preg_match('/[\x80-\xff]/', $string)) {
             return $string;
         }
 
-        if ( self::seems_utf8( $string ) ) {
+        if (self::seems_utf8($string)) {
             $chars = array(
                 // Decompositions for Latin-1 Supplement
                 'ª' => 'a',
@@ -365,7 +368,7 @@ class Helpers {
                 'Ǜ' => 'U',
                 'ǜ' => 'u',
             );
-            $string = strtr( $string, $chars );
+            $string = strtr($string, $chars);
         } else {
             $chars = array();
             // Assume ISO-8859-1 if not UTF-8
@@ -382,39 +385,40 @@ class Helpers {
 
             $chars['out'] = 'EfSZszYcYuAAAAAACEEEEIIIINOOOOOOUUUUYaaaaaaceeeeiiiinoooooouuuuyy';
 
-            $string              = strtr( $string, $chars['in'], $chars['out'] );
+            $string              = strtr($string, $chars['in'], $chars['out']);
             $double_chars        = array();
-            $double_chars['in']  = array( "\x8c", "\x9c", "\xc6", "\xd0", "\xde", "\xdf", "\xe6", "\xf0", "\xfe" );
-            $double_chars['out'] = array( 'OE', 'oe', 'AE', 'DH', 'TH', 'ss', 'ae', 'dh', 'th' );
-            $string              = str_replace( $double_chars['in'], $double_chars['out'], $string );
+            $double_chars['in']  = array("\x8c", "\x9c", "\xc6", "\xd0", "\xde", "\xdf", "\xe6", "\xf0", "\xfe");
+            $double_chars['out'] = array('OE', 'oe', 'AE', 'DH', 'TH', 'ss', 'ae', 'dh', 'th');
+            $string              = str_replace($double_chars['in'], $double_chars['out'], $string);
         }
 
         return $string;
     }
 
-    public static function seems_utf8( $str ) {
+    public static function seems_utf8($str)
+    {
         self::mbstring_binary_safe_encoding();
-        $length = strlen( $str );
+        $length = strlen($str);
         self::reset_mbstring_encoding();
-        for ( $i = 0; $i < $length; $i++ ) {
-            $c = ord( $str[ $i ] );
-            if ( $c < 0x80 ) {
+        for ($i = 0; $i < $length; $i++) {
+            $c = ord($str[$i]);
+            if ($c < 0x80) {
                 $n = 0; // 0bbbbbbb
-            } elseif ( ( $c & 0xE0 ) == 0xC0 ) {
+            } elseif (($c & 0xE0) == 0xC0) {
                 $n = 1; // 110bbbbb
-            } elseif ( ( $c & 0xF0 ) == 0xE0 ) {
+            } elseif (($c & 0xF0) == 0xE0) {
                 $n = 2; // 1110bbbb
-            } elseif ( ( $c & 0xF8 ) == 0xF0 ) {
+            } elseif (($c & 0xF8) == 0xF0) {
                 $n = 3; // 11110bbb
-            } elseif ( ( $c & 0xFC ) == 0xF8 ) {
+            } elseif (($c & 0xFC) == 0xF8) {
                 $n = 4; // 111110bb
-            } elseif ( ( $c & 0xFE ) == 0xFC ) {
+            } elseif (($c & 0xFE) == 0xFC) {
                 $n = 5; // 1111110b
             } else {
                 return false; // Does not match any model
             }
-            for ( $j = 0; $j < $n; $j++ ) { // n bytes matching 10bbbbbb follow ?
-                if ( ( ++$i == $length ) || ( ( ord( $str[ $i ] ) & 0xC0 ) != 0x80 ) ) {
+            for ($j = 0; $j < $n; $j++) { // n bytes matching 10bbbbbb follow ?
+                if ((++$i == $length) || ((ord($str[$i]) & 0xC0) != 0x80)) {
                     return false;
                 }
             }
@@ -422,36 +426,39 @@ class Helpers {
         return true;
     }
 
-    public static function mbstring_binary_safe_encoding( $reset = false ) {
+    public static function mbstring_binary_safe_encoding($reset = false)
+    {
         static $encodings  = array();
         static $overloaded = null;
 
-        if ( is_null( $overloaded ) ) {
-            $overloaded = function_exists( 'mb_internal_encoding' ) && ( ini_get( 'mbstring.func_overload' ) & 2 );
+        if (is_null($overloaded)) {
+            $overloaded = function_exists('mb_internal_encoding') && (ini_get('mbstring.func_overload') & 2);
         }
 
-        if ( false === $overloaded ) {
+        if (false === $overloaded) {
             return;
         }
 
-        if ( ! $reset ) {
+        if (!$reset) {
             $encoding = mb_internal_encoding();
-            array_push( $encodings, $encoding );
-            mb_internal_encoding( 'ISO-8859-1' );
+            array_push($encodings, $encoding);
+            mb_internal_encoding('ISO-8859-1');
         }
 
-        if ( $reset && $encodings ) {
-            $encoding = array_pop( $encodings );
-            mb_internal_encoding( $encoding );
+        if ($reset && $encodings) {
+            $encoding = array_pop($encodings);
+            mb_internal_encoding($encoding);
         }
     }
 
-    public static function reset_mbstring_encoding() {
-        self::mbstring_binary_safe_encoding( true );
+    public static function reset_mbstring_encoding()
+    {
+        self::mbstring_binary_safe_encoding(true);
     }
 
-    public static function getCpScalar( $lvl ) {
-        $lvls_scalar =array(
+    public static function getCpScalar($lvl)
+    {
+        $lvls_scalar = array(
             '1'    => 0.094,
             '1.5'  => 0.135137432,
             '2'    => 0.16639787,
@@ -535,30 +542,32 @@ class Helpers {
         return $lvls_scalar[$lvl];
     }
 
-    public static function sanitizeColor( $color ) {
-        if( empty( $color ) ) {
+    public static function sanitizeColor($color)
+    {
+        if (empty($color)) {
             return $color;
         }
         $color = substr($color, 1);
-        if( strlen($color) === 5 ) {
-            $color = '0'.$color;
+        if (strlen($color) === 5) {
+            $color = '0' . $color;
         }
-        if( strlen($color) === 4 ) {
-            $color = '00'.$color;
+        if (strlen($color) === 4) {
+            $color = '00' . $color;
         }
-        if( strlen($color) === 3 ) {
-            $color = '000'.$color;
+        if (strlen($color) === 3) {
+            $color = '000' . $color;
         }
-        if( strlen($color) === 2 ) {
-            $color = '0000'.$color;
+        if (strlen($color) === 2) {
+            $color = '0000' . $color;
         }
-        if( strlen($color) === 1 ) {
-            $color = '00000'.$color;
+        if (strlen($color) === 1) {
+            $color = '00000' . $color;
         }
-        return strtoupper('#'.$color);
+        return strtoupper('#' . $color);
     }
 
-    public static function getLevelObject($level_id) {
+    public static function getLevelObject($level_id)
+    {
         $levels = [
             1 => (object) ['id' => 1, 'name' => '1 têtes'],
             2 => (object) ['id' => 2, 'name' => '2 têtes'],
@@ -566,35 +575,37 @@ class Helpers {
             4 => (object) ['id' => 4, 'name' => '4 têtes'],
             5 => (object) ['id' => 5, 'name' => '5 têtes'],
             6 => (object) ['id' => 6, 'name' => 'EX'],
+            7 => (object) ['id' => 7, 'name' => 'Méga'],
         ];
-        if( array_key_exists( $level_id, $levels ) ) {
+        if (array_key_exists($level_id, $levels)) {
             return $levels[$level_id];
         }
         return false;
     }
 
-    public static function getPokemonFormFromName( $name ) {
+    public static function getPokemonFormFromName($name)
+    {
 
         $forms = [
-            'ALOLA' => ['id' => '61', 'name' => 'd\'Alola', 'florked' => 'A'],
-            'SPEED' => ['id' => '00', 'name' => 'Vitesse', 'florked' => ''],
-            'ATTACK' => ['id' => '00', 'name' => 'Attaque', 'florked' => ''],
-            'DEFENSE' => ['id' => '00', 'name' => 'Défense', 'florked' => ''],
-            'PLANT' => ['id' => '00', 'name' => 'Plante', 'florked' => ''],
-            'SANDY' => ['id' => '00', 'name' => 'Sable', 'florked' => ''],
-            'TRASH' => ['id' => '00', 'name' => 'Déchet', 'florked' => ''],
-            'RAINY' => ['id' => '00', 'name' => 'Pluie', 'florked' => ''],
-            'SNOWY' => ['id' => '00', 'name' => 'Neige', 'florked' => ''],
-            'SUNNY' => ['id' => '00', 'name' => 'Soleil', 'florked' => ''],
-            'OVERCAST' => ['id' => '00', 'name' => 'Couvert', 'florked' => ''],
-            'GALARIAN' => ['id' => '31', 'name' => 'de Galar', 'florked' => ''],
+            'ALOLA' => ['id' => '61', 'name' => 'd\'Alola', 'florked' => 'A', 'shuffle' => '80'],
+            'SPEED' => ['id' => '00', 'name' => 'Vitesse', 'florked' => '', 'shuffle' => ''],
+            'ATTACK' => ['id' => '00', 'name' => 'Attaque', 'florked' => '', 'shuffle' => ''],
+            'DEFENSE' => ['id' => '00', 'name' => 'Défense', 'florked' => '', 'shuffle' => ''],
+            'PLANT' => ['id' => '00', 'name' => 'Plante', 'florked' => '', 'shuffle' => ''],
+            'SANDY' => ['id' => '00', 'name' => 'Sable', 'florked' => '', 'shuffle' => ''],
+            'TRASH' => ['id' => '00', 'name' => 'Déchet', 'florked' => '', 'shuffle' => ''],
+            'RAINY' => ['id' => '00', 'name' => 'Pluie', 'florked' => '', 'shuffle' => ''],
+            'SNOWY' => ['id' => '00', 'name' => 'Neige', 'florked' => '', 'shuffle' => ''],
+            'SUNNY' => ['id' => '00', 'name' => 'Soleil', 'florked' => '', 'shuffle' => ''],
+            'OVERCAST' => ['id' => '00', 'name' => 'Couvert', 'florked' => '', 'shuffle' => ''],
+            'GALARIAN' => ['id' => '31', 'name' => 'de Galar', 'florked' => '', 'shuffle' => ''],
         ];
 
-        foreach( $forms as $form_name => $form_data ) {
-            if(  strstr(strtoupper($name), $form_name)  ) {
+        foreach ($forms as $form_name => $form_data) {
+            if (stristr(strtoupper($name), $form_name)) {
                 return $form_data;
             }
-            if(  strstr($name, $form_data['name'])  ) {
+            if (stristr($name, $form_data['name'])) {
                 return $form_data;
             }
         }

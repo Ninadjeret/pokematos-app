@@ -1,29 +1,34 @@
 <?php
-namespace App\RaidAnalyzer;
+
+namespace App\Core\RaidAnalyzer;
 
 use Illuminate\Support\Facades\Log;
 
-class MicrosoftOCR {
+class MicrosoftOCR
+{
 
-    function __construct() {
+    function __construct()
+    {
         $this->apiKey = config('app.microsoft_api_key');
         $this->baseUrl = 'https://westeurope.api.cognitive.microsoft.com/vision/v2.0/recognizeText?mode=Printed';
         $this->cp_line = false;
     }
 
-    public function read( $image_url ) {
+    public function read($image_url)
+    {
         $headers = $this->recognizeText($image_url);
         $requestURL = $this->getResultUrl($headers);
-        if( $requestURL ) {
-            return $this->getRecognizedText( $requestURL );
+        if ($requestURL) {
+            return $this->getRecognizedText($requestURL);
         }
     }
 
-    private function recognizeText( $image_url ) {
+    private function recognizeText($image_url)
+    {
 
         //Set varialbes
         $post_data = array(
-           "url" => "$image_url"
+            "url" => "$image_url"
         );
 
         //First call to perform Analizis
@@ -32,25 +37,25 @@ class MicrosoftOCR {
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data) );
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-           'Content-Type: application/json',
-           'Ocp-Apim-Subscription-Key:'.$this->apiKey
+            'Content-Type: application/json',
+            'Ocp-Apim-Subscription-Key:' . $this->apiKey
         ));
         $result = curl_exec($ch);
         curl_close($ch);
         return $result;
-
     }
 
-    private function getResultUrl( $headers ) {
-        $data = explode("\n",$headers);
-        if( empty( $data ) ) {
+    private function getResultUrl($headers)
+    {
+        $data = explode("\n", $headers);
+        if (empty($data)) {
             return false;
         }
 
-        foreach( $data as $header_line ) {
-            if( strstr($header_line, 'Operation-Location') ) {
+        foreach ($data as $header_line) {
+            if (strstr($header_line, 'Operation-Location')) {
                 return trim(str_replace('Operation-Location: ', '', $header_line));
             }
         }
@@ -58,22 +63,21 @@ class MicrosoftOCR {
         return false;
     }
 
-    private function getRecognizedText( $requestURL ) {
+    private function getRecognizedText($requestURL)
+    {
 
         $iteration = 0;
         $continue = true;
-        while( $continue ) {
-            //Log::debug('___ iteration '.$iteration.' ___');
+        while ($continue) {
             sleep(1);
             $ch2 = curl_init($requestURL);
             curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch2, CURLOPT_HTTPHEADER, array(
-               'Ocp-Apim-Subscription-Key:'.$this->apiKey
+                'Ocp-Apim-Subscription-Key:' . $this->apiKey
             ));
             $output2 = curl_exec($ch2);
             $result = json_decode($output2);
-            //Log::debug( print_r( $output2, true) );
-            if( $result->status == 'Succeeded' || $iteration === 10 ) {
+            if ($result->status == 'Succeeded' || $iteration === 10) {
                 $continue = false;
             }
             $iteration++;
@@ -83,12 +87,13 @@ class MicrosoftOCR {
         $lines = array();
         $num_ligne = 0;
         $num_ligne_invitation = 0;
-        foreach( $result->recognitionResult->lines as $line ) {
+        foreach ($result->recognitionResult->lines as $line) {
 
             $num_ligne++;
 
             //exceptions de base
-            if( $line->text == 'Cette Arene est trop loin.'
+            if (
+                $line->text == 'Cette Arene est trop loin.'
                 || $line->text == '>'
                 || $line->text == 'O'
                 || $line->text == 'X'
@@ -104,6 +109,7 @@ class MicrosoftOCR {
                 || $line->text == 'A'
                 || $line->text == 'AA'
                 || $line->text == 'AAA'
+                || $line->text == 'IV'
                 || strstr($line->text, 'using a Remote Raid Pass')
                 || strstr($line->text, 'Raid a distance')
                 || strstr($line->text, 'utilisant un pass')
@@ -113,13 +119,14 @@ class MicrosoftOCR {
             }
 
             //Exceptions raidex zone géographique
-            if( $line->text == 'INVITATION' ) $num_ligne_invitation = $num_ligne;
-            if( $num_ligne_invitation > 0 && ($num_ligne_invitation + 3) == $num_ligne ) {
+            if ($line->text == 'INVITATION') $num_ligne_invitation = $num_ligne;
+            if ($num_ligne_invitation > 0 && ($num_ligne_invitation + 3) == $num_ligne) {
                 continue;
             }
 
             //exceptions RaidEx
-            if( $line->text == 'Itineraire'
+            if (
+                $line->text == 'Itineraire'
                 || $line->text == 'Itineraire'
                 || $line->text == 'Un Excellent ami et toi etes invites a un Raid EX.'
                 || $line->text == 'INVITATION'
@@ -132,30 +139,30 @@ class MicrosoftOCR {
             ) {
                 continue;
             }
-            if(preg_match('/^[0-9]+$/i', $line->text) ) {
-                if( strlen($line->text) === 4 || strlen($line->text) === 5 ) {
+            if (preg_match('/^[0-9]+$/i', $line->text)) {
+                if (strlen($line->text) === 4 || strlen($line->text) === 5) {
                     $this->cp_line = $line->text;
                 }
                 continue;
             }
-            if(preg_match('/^(PC|CP|P) [0-9]+$/i', $line->text) ) {
-                $line->text = str_replace('PC ', '', $line->text );
-                $line->text = str_replace('Pc ', '', $line->text );
-                $line->text = str_replace('CP ', '', $line->text );
-                $line->text = str_replace('P ', '', $line->text );
-                $line->text = str_replace('p ', '', $line->text );
-                if( strlen($line->text) === 4 || strlen($line->text) === 5 ) {
+            if (preg_match('/^(PC|CP|P) [0-9]+$/i', $line->text)) {
+                $line->text = str_replace('PC ', '', $line->text);
+                $line->text = str_replace('Pc ', '', $line->text);
+                $line->text = str_replace('CP ', '', $line->text);
+                $line->text = str_replace('P ', '', $line->text);
+                $line->text = str_replace('p ', '', $line->text);
+                if (strlen($line->text) === 4 || strlen($line->text) === 5) {
                     $this->cp_line = $line->text;
                 }
                 continue;
             }
-            if(preg_match('/^(PC|CP|P)[0-9]+$/i', $line->text) ) {
-                $line->text = str_replace('PC', '', $line->text );
-                $line->text = str_replace('Pc', '', $line->text );
-                $line->text = str_replace('CP', '', $line->text );
-                $line->text = str_replace('P', '', $line->text );
-                $line->text = str_replace('P', '', $line->text );
-                if( strlen($line->text) === 4 || strlen($line->text) === 5 ) {
+            if (preg_match('/^(PC|CP|P)[0-9]+$/i', $line->text)) {
+                $line->text = str_replace('PC', '', $line->text);
+                $line->text = str_replace('Pc', '', $line->text);
+                $line->text = str_replace('CP', '', $line->text);
+                $line->text = str_replace('P', '', $line->text);
+                $line->text = str_replace('P', '', $line->text);
+                if (strlen($line->text) === 4 || strlen($line->text) === 5) {
                     $this->cp_line = $line->text;
                 }
                 continue;
@@ -165,5 +172,4 @@ class MicrosoftOCR {
 
         return $lines;
     }
-
 }

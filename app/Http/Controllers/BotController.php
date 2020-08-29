@@ -12,28 +12,31 @@ use App\Models\UserAction;
 use RestCord\DiscordClient;
 use App\Models\RoleCategory;
 use Illuminate\Http\Request;
-use App\RaidAnalyzer\TextAnalyzer;
-use App\RaidAnalyzer\ImageAnalyzer;
+use App\Core\RaidAnalyzer\TextAnalyzer;
+use App\Core\RaidAnalyzer\ImageAnalyzer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
-class BotController extends Controller {
+class BotController extends Controller
+{
 
     /**
-    * ==================================================================
-    * GESTION DES GUILDS
-    * ==================================================================
-    */
+     * ==================================================================
+     * GESTION DES GUILDS
+     * ==================================================================
+     */
 
-   public function getGuilds( Request $request ) {
-       $return = [];
-       $guilds = Guild::where('active', 1)->get();
-       return response()->json($guilds, 200);
-   }
+    public function getGuilds(Request $request)
+    {
+        $return = [];
+        $guilds = Guild::where('active', 1)->get();
+        return response()->json($guilds, 200);
+    }
 
-    public function addGuild( Request $request ) {
+    public function addGuild(Request $request)
+    {
 
-        if( !isset($request->guild_id) || empty($request->guild_id) || !isset($request->name) || empty($request->name) ) {
+        if (!isset($request->guild_id) || empty($request->guild_id) || !isset($request->name) || empty($request->name)) {
             return response()->json(__('system.missing_args'), 400);
         }
 
@@ -42,7 +45,7 @@ class BotController extends Controller {
             ->where('active', 0)
             ->first();
 
-        if( $guild ) {
+        if ($guild) {
             $guild->update([
                 'name' => $request->name,
                 'discord_id' => $request->guild_id,
@@ -50,13 +53,13 @@ class BotController extends Controller {
             ]);
 
             $roles_to_add = $guild->getDiscordRoles();
-            if( !empty( $roles_to_add ) ) {
-                foreach( $roles_to_add as $role_to_add ) {
+            if (!empty($roles_to_add)) {
+                foreach ($roles_to_add as $role_to_add) {
                     Role::create([
                         'discord_id' => $role_to_add->id,
                         'guild_id' => $guild->id,
                         'name' => $role_to_add->name,
-                        'color' => '#'.dechex($role_to_add->color),
+                        'color' => '#' . dechex($role_to_add->color),
                     ]);
                 }
             }
@@ -65,29 +68,29 @@ class BotController extends Controller {
             \App\Core\Discord::SyncBot();
 
             return response()->json($guild, 200);
-
         }
 
         return response()->json('Aucune guild en attente de création avec ce token', 400);
     }
 
     /**
-    * ==================================================================
-    * GESTION DES ROLES
-    * ==================================================================
-    */
+     * ==================================================================
+     * GESTION DES ROLES
+     * ==================================================================
+     */
 
     /**
      * [getRoles description]
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function getRoles( Request $request, $guild_id ) {
+    public function getRoles(Request $request, $guild_id)
+    {
         $guild = Guild::where('discord_id', $guild_id)
             ->where('active', 1)
             ->first();
 
-        if( !$guild ) {
+        if (!$guild) {
             return response()->json('La guild n\'a pas été trouvée', 400);
         }
 
@@ -102,22 +105,23 @@ class BotController extends Controller {
      * @param  [type]  $role    [description]
      * @return [type]           [description]
      */
-    public function getRole( Request $request, $guild_id, $role ) {
+    public function getRole(Request $request, $guild_id, $role)
+    {
 
         $guild = Guild::where('discord_id', $guild_id)
             ->where('active', 1)
             ->first();
 
-        if( !$guild ) {
+        if (!$guild) {
             return response()->json('La guild n\'a pas été trouvée', 400);
         }
 
         $role = Role::where('discord_id', $role)->first();
-        if( empty($role) ) return response()->json('Le role n\'a pas été trouvé', 400);
+        if (empty($role)) return response()->json('Le role n\'a pas été trouvé', 400);
 
         $return = $role->toArray();
         unset($return['guild']['settings']);
-        if( $return['category'] ) {
+        if ($return['category']) {
             unset($return['category']['guild']);
         }
 
@@ -130,18 +134,19 @@ class BotController extends Controller {
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function createRole( Request $request, $guild_id ) {
+    public function createRole(Request $request, $guild_id)
+    {
 
         $guild = Guild::where('discord_id', $guild_id)
             ->where('active', 1)
             ->first();
 
-        if( !$guild ) {
+        if (!$guild) {
             return response()->json('La guild n\'a pas été trouvée', 400);
         }
 
         $role = Role::where('discord_id', $request->discord_id)->first();
-        if( empty($role) ) {
+        if (empty($role)) {
             //$fromDiscord = ($request->discord_event) ? true : false;
             $fromDiscord = true;
 
@@ -150,7 +155,7 @@ class BotController extends Controller {
                 'discord_id' => $request->discord_id,
                 'name' => $request->name,
                 'color_type' => 'specific',
-                'color' => '#'.dechex($request->color),
+                'color' => '#' . dechex($request->color),
                 'permissions' => $request->permissions,
                 'mentionable' => $request->mentionable
             ];
@@ -166,18 +171,19 @@ class BotController extends Controller {
      * @param  [type]  $role    [description]
      * @return [type]           [description]
      */
-    public function deleteRole( Request $request, $guild_id, $role ) {
+    public function deleteRole(Request $request, $guild_id, $role)
+    {
 
         $guild = Guild::where('discord_id', $guild_id)
             ->where('active', 1)
             ->first();
 
-        if( !$guild ) {
+        if (!$guild) {
             return response()->json('La guild n\'a pas été trouvée', 400);
         }
 
         $role = Role::where('discord_id', $role)->first();
-        if( empty($role) ) return response()->json('Le role n\'a pas été trouvé', 400);
+        if (empty($role)) return response()->json('Le role n\'a pas été trouvé', 400);
 
         //$fromDiscord = ($request->discord_event) ? true : false;
         $fromDiscord = true;
@@ -194,25 +200,26 @@ class BotController extends Controller {
      * @param  [type]  $role    [description]
      * @return [type]           [description]
      */
-    public function updateRole( Request $request, $guild_id, $role ) {
+    public function updateRole(Request $request, $guild_id, $role)
+    {
 
         $guild = Guild::where('discord_id', $guild_id)
             ->where('active', 1)
             ->first();
 
-        if( !$guild ) {
+        if (!$guild) {
             return response()->json('La guild n\'a pas été trouvée', 400);
         }
 
         $app_role = Role::where('discord_id', $role)->first();
-        if( empty($app_role) ) return response()->json('Le role n\'a pas été trouvé', 400);
+        if (empty($app_role)) return response()->json('Le role n\'a pas été trouvé', 400);
 
         //$fromDiscord = ($request->discord_event) ? true : false;
         $fromDiscord = true;
 
         $args = [
             'name' => $request->name,
-            'color' => '#'.dechex($request->color),
+            'color' => '#' . dechex($request->color),
             'permissions' => $request->permissions,
             'mentionable' => $request->mentionable
         ];
@@ -223,28 +230,29 @@ class BotController extends Controller {
     }
 
     /**
-    * ==================================================================
-    * GESTION DES CATEGORIES DE ROLES
-    * ==================================================================
-    */
+     * ==================================================================
+     * GESTION DES CATEGORIES DE ROLES
+     * ==================================================================
+     */
 
     /**
      * [getRoleCategories description]
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function getRoleCategories( Request $request, $guild_id) {
+    public function getRoleCategories(Request $request, $guild_id)
+    {
 
         $guild = Guild::where('discord_id', $guild_id)
             ->where('active', 1)
             ->first();
 
-        if( !$guild ) {
+        if (!$guild) {
             return response()->json('La guild n\'a pas été trouvée', 400);
         }
         $roleCategories = RoleCategory::where('guild_id', $guild->id)->get();
-        if( !empty($roleCategories) ) {
-            foreach( $roleCategories as &$roleCategorie ) {
+        if (!empty($roleCategories)) {
+            foreach ($roleCategories as &$roleCategorie) {
                 $roleCategorie->addHidden('guild');
             }
         }
@@ -257,10 +265,11 @@ class BotController extends Controller {
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function createRoleCategory( Request $request ) {
+    public function createRoleCategory(Request $request)
+    {
 
         $guild = Guild::where('discord_id', $request->guild_id)->first();
-        if( empty($guild) ) return response()->json('L\'ID de la guild n\'existe pas', 400);
+        if (empty($guild)) return response()->json('L\'ID de la guild n\'existe pas', 400);
 
         $roleCategory = RoleCategory::create([
             'guild_id' => $guild->id,
@@ -271,12 +280,13 @@ class BotController extends Controller {
         return response()->json($roleCategory, 200);
     }
 
-    public function updateRoleCategory( Request $request, RoleCategory $categorie ) {
+    public function updateRoleCategory(Request $request, RoleCategory $categorie)
+    {
 
         $guild = Guild::where('discord_id', $request->guild_id)->first();
-        if( empty($guild) ) return response()->json('L\'ID de la guild n\'existe pas', 400);
+        if (empty($guild)) return response()->json('L\'ID de la guild n\'existe pas', 400);
 
-        $categorie ->update([
+        $categorie->update([
             'name' => ($request->name) ? $request->name : $categorie->name,
             'channel_discord_id' => ($request->channel_id) ? $request->channel_id : $categorie->channel_discord_id,
             'restricted' => ($request->restricted) ? $request->restricted : $categorie->restricted,
@@ -291,13 +301,14 @@ class BotController extends Controller {
      * @param  RoleCategory $categorie [description]
      * @return [type]                  [description]
      */
-    public function getRoleCategory( Request $request, $guild_id, RoleCategory $categorie ) {
+    public function getRoleCategory(Request $request, $guild_id, RoleCategory $categorie)
+    {
 
         $guild = Guild::where('discord_id', $guild_id)
             ->where('active', 1)
             ->first();
 
-        if( !$guild ) {
+        if (!$guild) {
             return response()->json('La guild n\'a pas été trouvée', 400);
         }
 
@@ -311,50 +322,9 @@ class BotController extends Controller {
      * @param  RoleCategory $categorie [description]
      * @return [type]                  [description]
      */
-    public function deleteRoleCategory( Request $request, $guild_id, RoleCategory $categorie ) {
+    public function deleteRoleCategory(Request $request, $guild_id, RoleCategory $categorie)
+    {
         RoleCategory::destroy($categorie->id);
         return response()->json(null, 204);
     }
-
-    public function addConversation( Request $request ) {
-        $message = ( isset($request->message) && !empty($request->message) ) ? $request->message : false ;
-        $username = $request->user_name;
-        $user_discord_id = $request->user_discord_id;
-        $guild_discord_id = $request->guild_discord_id;
-        $message_discord_id = $request->message_discord_id;
-        $channel_discord_id = $request->channel_discord_id;
-
-        if( empty( $guild_discord_id ) ) {
-            return response()->json('L\'ID de Guild est obligatoire', 400);
-        }
-
-        $guild = Guild::where( 'discord_id', $guild_discord_id )->first();
-
-        $user = User::where('discord_id', $user_discord_id)->first();
-        if( !$user ) {
-            $user = User::create([
-                'name' => $username,
-                'password' => Hash::make( str_random(20) ),
-                'discord_name' => $username,
-                'discord_id' => $user_discord_id,
-            ]);
-        }
-
-        $user_action = UserAction::create([
-            'type' => 'conversation',
-            'source' => 'discord',
-            'date' => date('Y-m-d H:i:s'),
-            'content' => $message,
-            'user_id' => $user->id,
-            'message_discord_id' => $message_discord_id,
-            'channel_discord_id' => $channel_discord_id,
-            'guild_id' => $guild->id,
-        ]);
-
-        $reply = $user_action->reply();
-
-        return response()->json($reply, 200);
-
-    }
-
 }

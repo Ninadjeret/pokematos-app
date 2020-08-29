@@ -1,23 +1,45 @@
-[
-    {
-        "text": "**Oyé Oyé** dresseuses dresseur !\r\nBienvenue à tous les participants pour ce PokéQuiz **%quiz_name**",
+[{
+        "text": "**Oyé Oyé** dresseuses dresseurs !\r\nBienvenue à tous les participants pour ce PokéQuiz **%quiz_name**",
         "type": "start_intro",
-        "next": ["Ca va être un super !", "https://media.giphy.com/media/8g63zqQ5RPt60/giphy.gif"]
+        "next": [
+            "Ca va être un super !",
+            "https://media.giphy.com/media/8g63zqQ5RPt60/giphy.gif"
+        ]
     },
     {
         "text": "Dresseuses, dresseurs ! C'est le moment !",
         "type": "start_intro",
-        "next": ["Venez montrer vos connaissances sur l'univers Pokémon et montrer au prof Chen que vous n'avez rien à lui envier", "L'événement **%quiz_name** va commencer"]
+        "next": [
+            "Venez montrer vos connaissances sur l'univers Pokémon et montrer au prof Chen que vous n'avez rien à lui envier",
+            "L'événement **%quiz_name** va commencer"
+        ]
     },
     {
         "text": "Toc toc. Qui est là ?",
         "type": "start_intro",
-        "next": ["BOUM, et oui ! C'est l'événément **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
+        "next": [
+            "BOUM, et oui ! C'est l'événément **%quiz_name** !",
+            ":blush:",
+            "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"
+        ]
     },
     {
         "text": "Ding ding dong !",
         "type": "start_intro",
-        "next": ["BOUM, et oui ! C'est l'événément **%quiz_name** !", ":blush:", "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"]
+        "next": [
+            "BOUM, et oui ! C'est l'événément **%quiz_name** !",
+            ":blush:",
+            "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"
+        ]
+    },
+    {
+        "text": "Coucou ici ! Et oui, c'est moi !",
+        "type": "start_intro",
+        "next": [
+            "Je serai votre maitre de cérémonie pour cet événement : **%quiz_name** !",
+            ":blush:",
+            "Préparez vos fiches de révisions, le Pokéquiz va bientot commencer :wink:"
+        ]
     },
     {
         "text": "Ce Pokéquiz va se dérouler en **%quiz_nb_questions questions**. Pour chacune d'elle, vous aurez au maximum %quiz_delay minutes pour répondre.",
@@ -27,32 +49,58 @@
     {
         "text": "Et c'est partiiiiiiii",
         "type": "start_warning",
-        "next": ["https://media.giphy.com/media/11a1ludJGM6wKc/giphy.gif"]
+        "next": [
+            "https://media.giphy.com/media/11a1ludJGM6wKc/giphy.gif"
+        ]
+    },
+    {
+        "text": "Allez, GO !",
+        "type": "start_warning",
+        "next": []
+    },
+    {
+        "text": "En voiture Simone, c'est parti !",
+        "type": "start_warning",
+        "next": []
     },
     {
         "text": "Prochaine question dans les tuyaux;, préparez vos claviers :wink:",
         "type": "question_announce",
-        "next": ["(Question sur le thème **%question_theme** et qui rapportera %question_difficulty points)"]
+        "next": [
+            "(Question sur le thème **%question_theme** et qui rapportera %question_difficulty points)"
+        ]
     },
     {
         "text": "Toum toum toum. Voici la nouvelle question",
         "type": "question_announce",
-        "next": ["suspens...", "suspens toujours...", "Thème **%question_theme** / %question_difficulty points"]
-    },
-    {
-        "text": "Toum toum toum. Voici la nouvelle question",
-        "type": "question_announce",
-        "next": ["suspens...", "suspens toujours...", "Ha on rigole bien hein ?!", "moi oui en tout cas", "Allez c'est parti", "Nan je blague", "Cette fois c'est bon", "Pour de vrai"]
+        "next": [
+            "Thème **%question_theme** / %question_difficulty points"
+        ]
     },
     {
         "text": "Prochaine question en approche...",
         "type": "question_announce",
-        "next": ["Thème **%question_theme** / %question_difficulty points"]
+        "next": [
+            "Thème **%question_theme** / %question_difficulty points"
+        ]
     },
     {
         "text": "Êtes-vous prets ? Prochaine question sur le thème **%question_theme**",
         "type": "question_announce",
-        "next": ["%question_difficulty points pour le vainqueur"]
+        "next": [
+            "%question_difficulty points pour le vainqueur"
+        ]
+    },
+    {
+        "text": "Maintenant question à **%question_difficulty points**",
+        "type": "question_announce",
+        "next": [
+            "Thème **%question_theme**"
+        ]
+    },
+    {
+        "text": "Pas de panique, une question arrive !",
+        "type": "question_announce"
     },
     {
         "text": "Attention, question niveau Bourg-palette, sur le thème **%question_theme**",
@@ -65,27 +113,77 @@
         "next": []
     },
     {
+        "text": "Question à venir niveau hardcore, sur le thèeme **%question_theme**",
+        "type": "question_announce_lvl5",
+        "next": []
+    },
+    {
         "text": "**%question**",
         "type": "question_question",
         "next": []
     },
     {
-        "text": "Désolé, bien tenté %user, mais c'est à côté :/",
+        "text": "Désolé, bien tenté {utilisateur}, mais c'est à côté :/",
         "type": "question_answer_wrong",
         "next": []
     },
     {
-        "text": "Ben alors %user ? Je peux pas valider ça, désolé",
+        "text": "Ben alors {utilisateur} ? Je peux pas valider ça, désolé",
         "type": "question_answer_wrong",
         "next": []
     },
     {
-        "text": "T'es au top %user, bravo ! _%answer_ était bien ce qu'il fallait trouver",
+        "text": "{utilisateur} :thinking: ? c'est ton dernier mot ? Désolé, c'est à côté",
+        "type": "question_answer_wrong",
+        "next": []
+    },
+    {
+        "text": "{utilisateur} ?? Alors ? ça va pas ?",
+        "type": "question_answer_wrong",
+        "next": []
+    },
+    {
+        "text": "Quelle belle réponse {utilisateur}, mais c'est à côté :/",
+        "type": "question_answer_wrong",
+        "next": []
+    },
+    {
+        "text": "Alors moi je veux bien tout entendre, mais là vraiement je peux pas. Désolé {utilisateur}",
+        "type": "question_answer_wrong",
+        "next": []
+    },
+    {
+        "text": "nop, mauvaise réponse {utilisateur}. je suis sur que tu sais pourtant ;) courage !",
+        "type": "question_answer_wrong",
+        "next": []
+    },
+    {
+        "text": "T'es au top {utilisateur}, bravo ! **%answer** était bien ce qu'il fallait trouver",
         "type": "question_answer_correct",
         "next": []
     },
     {
-        "text": "C'était facile, mais il fallait être rapide ! GG %user !",
+        "text": "Mais quel talent ! GG {utilisateur} ! C'était bien **%answer**",
+        "type": "question_answer_correct",
+        "next": []
+    },
+    {
+        "text": ":clap: :clap: :clap: **%answer** ! Super, bien joué {utilisateur} !",
+        "type": "question_answer_correct",
+        "next": []
+    },
+    {
+        "text": ":clap: Félicitations {utilisateur} ! Il fallait répondre **%answer**",
+        "type": "question_answer_correct",
+        "next": []
+    },
+    {
+        "text": "Toi t'as bossé, et ça se voit ! GG {utilisateur} pour cette bonne réponse : **%answer**",
+        "type": "question_answer_correct",
+        "next": []
+    },
+    {
+        "text": "C'était facile, mais il fallait être rapide ! GG {utilisateur} !",
         "type": "question_answer_correct_lvl1",
         "next": []
     },
@@ -93,6 +191,23 @@
         "text": "Dommage... La question devait être trop difficile :(",
         "type": "question_not_answered",
         "next": []
+    },
+    {
+        "text": "Ben alors ça dort la dedans ? Dommage, temps écoulé.",
+        "type": "question_not_answered",
+        "next": []
+    },
+    {
+        "text": "Ting ting tong. Nous vous annonçons que le délai autorisé pour répondre est dépassé...",
+        "type": "question_not_answered",
+        "next": []
+    },
+    {
+        "text": "ça glande, ça glande, et puis au moment de répondre y'a plus personne :/.",
+        "type": "question_not_answered",
+        "next": [
+            "Tant pis, aucun point pour cette question"
+        ]
     },
     {
         "text": "%explanation",
@@ -105,12 +220,27 @@
         "next": []
     },
     {
+        "text": "Désolé, la bonne réponse a déja été trouvée.",
+        "type": "question_already_answered",
+        "next": []
+    },
+    {
+        "text": "Bien joué {utilisateur}, mais il aurait fallu être plus rapide.",
+        "type": "question_already_answered",
+        "next": []
+    },
+    {
         "text": "---------------\r\nVoici le classement en cours\r\n%ranking---------------",
         "type": "question_multi_ranking",
         "next": []
     },
     {
-        "text": "Bravo pour ce super quiz !",
+        "text": "Bravo pour ce super quiz qui s'achève !",
+        "type": "quiz_ended",
+        "next": []
+    },
+    {
+        "text": "Quiz terminé, merci et bravos à tous pour votre participation",
         "type": "quiz_ended",
         "next": []
     },

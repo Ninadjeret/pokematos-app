@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,16 +26,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/cities/{city}', 'CityController@getOne');
     Route::get('user/guilds', 'GuildController@getAll');
     Route::get('user/guilds/{guild}', 'GuildController@getOne');
-    Route::get('user/cities/{city}/gyms', 'UserController@getPOIs');
+
     Route::post('user/upload', 'UserController@uploadImage');
-
-    Route::get('user/cities/{city}/active-gyms', 'UserController@getActivePOIs');
-
-    Route::get('user/cities/{city}/raids', 'RaidController@getCityRaids');
-    Route::post('user/cities/{city}/raids', 'RaidController@create');
-    Route::put('user/cities/{city}/raids/{raid}', 'RaidController@create');
-    Route::delete('user/cities/{city}/raids/{raid}', 'RaidController@delete');
-    Route::get('user/cities/{city}/last-changes', 'CityController@getLastChanges');
 
     //City
     Route::put('user/cities/{city}', 'UserController@updateCity');
@@ -60,8 +53,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/cities/{city}/guilds/{guild}/roles', 'DiscordController@getRoles');
     Route::get('user/cities/{city}/guilds/{guild}/channels', 'DiscordController@getChannels');
     Route::get('user/cities/{city}/guilds/{guild}/channelcategories', 'DiscordController@getChannelCategories');
-    Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
-    Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
+
+    Route::group(['middleware' => ['can:rocket_bosses_edit']], function () {
+        Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
+        Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
+    });
 
     Route::get('user/guilds/{guild}/roles', 'UserController@getRoles');
     Route::post('user/guilds/{guild}/roles', 'UserController@createRole');
@@ -75,20 +71,16 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@updateRoleCategory');
     Route::delete('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@deleteRoleCategory');
 
-    Route::get('user/guilds/{guild}/connectors', 'UserController@getConnectors');
-    Route::post('user/guilds/{guild}/connectors', 'UserController@createConnector');
-    Route::get('user/guilds/{guild}/connectors/{connector}', 'UserController@getConnector');
-    Route::put('user/guilds/{guild}/connectors/{connector}', 'UserController@updateConnector');
-    Route::delete('user/guilds/{guild}/connectors/{connector}', 'UserController@deleteConnector');
-
     Route::get('user/guilds/{guild}/questconnectors', 'UserController@getQuestConnectors');
     Route::post('user/guilds/{guild}/questconnectors', 'UserController@createQuestConnector');
     Route::get('user/guilds/{guild}/questconnectors/{connector}', 'UserController@getQuestConnector');
     Route::put('user/guilds/{guild}/questconnectors/{connector}', 'UserController@updateQuestConnector');
     Route::delete('user/guilds/{guild}/questconnectors/{connector}', 'UserController@deleteQuestConnector');
 
-    Route::get('user/guilds/{guild}/logs', 'UserController@getGuildLogs');
-    Route::get('user/cities/{city}/logs', 'UserController@getCityLogs');
+    Route::group(['middleware' => ['can:logs_manage']], function () {
+        Route::get('user/guilds/{guild}/logs', 'UserController@getGuildLogs');
+        Route::get('user/cities/{city}/logs', 'UserController@getCityLogs');
+    });
 
     Route::get('user/cities/{city}/guilds/{guild}/settings', 'UserController@getGuildOptions');
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
@@ -137,34 +129,67 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('events/quiz/themes', 'EventController@getThemes');
     Route::get('events/quiz/available-questions', 'Events\QuizController@getAvailableQuestions');
 
+    Route::group([
+        'prefix' => 'quiz',
+        'middleware' => ['can:quiz_manage']
+    ], function () {
+        Route::resource('questions', 'Events\QuizQuestionController');
+        Route::resource('themes', 'Events\QuizThemeController');
+    });
+
+    Route::group(['middleware' => ['can:settings_manage']], function () {
+        Route::get('settings', 'SettingController@get');
+        Route::put('settings', 'SettingController@update');
+    });
 });
 
-Route::group(['middleware' => ['auth.bot']], function () {
+Route::group(['prefix' => 'user', 'middleware' => ['auth:api']], function () {
+    Route::group(['middleware' => ['can:city_access']], function () {
+        Route::get('cities/{city}/gyms', 'App\PoisController@index');
+        Route::post('cities/{city}/raids', 'App\Raids\RaidController@store');
+        Route::put('cities/{city}/raids/{raid}', 'App\Raids\RaidController@store');
+        Route::delete('cities/{city}/raids/{raid}', 'App\Raids\RaidController@destroy');
+        Route::get('cities/{city}/last-changes', 'CityController@getLastChanges');
+    });
+    Route::group(['middleware' => ['can:guild_manage']], function () {
+        Route::resource('guilds/{guild}/connectors', 'App\Raids\ConnectorController');
+    });
+});
 
-    Route::get('bot/guilds', 'BotController@getGuilds');
-    Route::post('bot/guilds', 'BotController@addGuild');
+Route::group(['prefix' => 'bot', 'middleware' => ['auth.bot']], function () {
 
-    Route::get('bot/guilds/{guild_id}/roles', 'BotController@getRoles');
-    Route::post('bot/guilds/{guild_id}/roles', 'BotController@createRole');
-    Route::delete('bot/guilds/{guild_id}/roles/{role}', 'BotController@deleteRole');
-    Route::get('bot/guilds/{guild_id}/roles/{role}', 'BotController@getRole');
-    Route::put('bot/guilds/{guild_id}/roles/{role}', 'BotController@updateRole');
+    Route::get('guilds', 'BotController@getGuilds');
+    Route::post('guilds', 'BotController@addGuild');
 
-    Route::get('bot/guilds/{guild_id}/role-categories', 'BotController@getRoleCategories');
-    Route::get('bot/guilds/{guild_id}/role-categories/{categorie}', 'BotController@getRoleCategory');
-    Route::delete('bot/guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
+    Route::get('guilds/{guild_id}/roles', 'BotController@getRoles');
+    Route::post('guilds/{guild_id}/roles', 'BotController@createRole');
+    Route::delete('guilds/{guild_id}/roles/{role}', 'BotController@deleteRole');
+    Route::get('guilds/{guild_id}/roles/{role}', 'BotController@getRole');
+    Route::put('guilds/{guild_id}/roles/{role}', 'BotController@updateRole');
 
-    Route::post('bot/raids', 'RaidController@addRaid');
-    Route::post('bot/raids/imagedecode', 'RaidController@imageDecode');
-    Route::post('bot/conversations', 'BotController@addConversation');
+    Route::get('guilds/{guild_id}/role-categories', 'BotController@getRoleCategories');
+    Route::get('guilds/{guild_id}/role-categories/{categorie}', 'BotController@getRoleCategory');
+    Route::delete('guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
+
+    Route::post('raids/imagedecode', 'RaidController@imageDecode');
+
+
+    Route::post('raids', 'Bot\Raids\RaidController@store');
+    Route::post('raids/channel', 'Bot\Raids\ChannelController@store');
+    Route::post('raids/participant', 'Bot\Raids\ParticipantController@store');
+    Route::delete('raids/participant', 'Bot\Raids\ParticipantController@destroy');
+    Route::post('conversations', 'Bot\ConversationController@store');
+    Route::post('events/quiz/answer', 'Bot\Event\Quiz\AnswerController@store');
+
 
     //Events
-    Route::post('bot/events/quiz/answer', 'EventController@addQuizAnswer');
-
+    Route::group(['middleware' => ['can:events_train_check']], function () {
+        Route::post('events/train/step/check', 'Bot\Event\Train\StepController@check');
+        Route::post('events/train/step/uncheck', 'Bot\Event\Train\StepController@uncheck');
+    });
 });
 
-Route::get('version', 'Controller@getVersion');
-Route::get('features', 'Controller@getFeatures');
+Route::get('test', 'Controller@test');
 Route::post('debug', 'DebugController@log');
 
 //Stats

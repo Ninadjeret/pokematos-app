@@ -3,6 +3,7 @@ import List from "./components/List.vue";
 import Profile from "./components/Profile.vue";
 import Admin from "./components/Admin.vue";
 import AdminSettings from "./components/admin/Settings.vue";
+import AdminGuildSettings from "./components/admin/GuildSettings.vue";
 import AdminGyms from "./components/admin/Gyms.vue";
 import AdminGym from "./components/admin/Gym.vue";
 import AdminZones from "./components/admin/Zones.vue";
@@ -43,8 +44,10 @@ import AdminEvents from "./components/admin/events/Events.vue";
 import AdminEvent from "./components/admin/events/Event.vue";
 import AdminEventsInvits from "./components/admin/events/Invits.vue";
 
-const routes = [
-    {
+import AdminQuizs from "./components/admin/quizs/Quizs.vue";
+import AdminQuiz from "./components/admin/quizs/Quiz.vue";
+
+const routes = [{
         path: "/",
         name: "map",
         meta: {
@@ -92,8 +95,7 @@ const routes = [
             title: "Administration"
         },
         component: Admin,
-        children: [
-            {
+        children: [{
                 path: ":id/access",
                 name: "admin.access",
                 meta: {
@@ -104,12 +106,12 @@ const routes = [
             },
             {
                 path: ":id/settings",
-                name: "admin.settings",
+                name: "admin.guildsettings",
                 meta: {
-                    title: "Réglages généraux",
+                    title: "Réglages de la communauté",
                     parent: "admin"
                 },
-                component: AdminSettings
+                component: AdminGuildSettings
             },
             {
                 path: ":id/welcome",
@@ -128,8 +130,7 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminEventsHome,
-                children: [
-                    {
+                children: [{
                         path: "events",
                         name: "admin.events",
                         meta: {
@@ -175,8 +176,7 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminRolesHome,
-                children: [
-                    {
+                children: [{
                         path: "categories",
                         name: "admin.roles.categories",
                         meta: {
@@ -240,8 +240,7 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminRaidReportingHome,
-                children: [
-                    {
+                children: [{
                         path: "connectors",
                         name: "admin.raids.annonces",
                         meta: {
@@ -287,8 +286,7 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminQuestReportingHome,
-                children: [
-                    {
+                children: [{
                         path: "connectors",
                         name: "admin.quests.annonces",
                         meta: {
@@ -325,8 +323,7 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminRocketHome,
-                children: [
-                    {
+                children: [{
                         path: "connectors",
                         name: "admin.rocket.annonces",
                         meta: {
@@ -428,6 +425,15 @@ const routes = [
                 component: AdminLogs
             },
             {
+                path: "settings",
+                name: "admin.settings",
+                meta: {
+                    title: "Réglages généraux",
+                    parent: "admin"
+                },
+                component: AdminSettings
+            },
+            {
                 path: "bosses",
                 name: "admin.bosses",
                 meta: {
@@ -471,6 +477,31 @@ const routes = [
                     parent: "admin"
                 },
                 component: AdminRocketBosses
+            },
+            {
+                path: "quiz/questions",
+                name: "admin.quiz.questions",
+                meta: {
+                    title: "Gérer les Questions de Quiz",
+                    parent: "admin"
+                },
+                component: AdminQuizs
+            }, {
+                path: "quiz/questions/add",
+                name: "admin.quiz.questions.add",
+                meta: {
+                    title: "Nouvelle question",
+                    parent: "admin.quiz.questions"
+                },
+                component: AdminQuiz
+            }, {
+                path: "quiz/questions/:question_id",
+                name: "admin.quiz.questions.edit",
+                meta: {
+                    title: "Modifier la question",
+                    parent: "admin.quiz.questions"
+                },
+                component: AdminQuiz
             }
         ]
     }

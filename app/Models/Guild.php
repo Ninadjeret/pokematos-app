@@ -26,6 +26,7 @@ class Guild extends Model
     ];
 
     protected $allowedSettings = [
+        'prefix' => ['default' => '+', 'type' => 'string'],
         'map_access_rule' => ['default' => 'everyone', 'type' => 'string'],
         'map_access_roles' => ['default' => [], 'type' => 'array'],
         'map_access_admin_roles' => ['default' => [], 'type' => 'array'],
@@ -43,10 +44,11 @@ class Guild extends Model
         'raidreporting_images_delete' => ['default' => false, 'type' => 'boolean'],
         'raidreporting_text_active' => ['default' => false, 'type' => 'boolean'],
         'raidreporting_text_delete' => ['default' => false, 'type' => 'boolean'],
-        'raidreporting_text_prefixes' => ['default' => ["+raid","+Raid"], 'type' => 'array'],
+        'raidreporting_text_prefixes' => ['default' => ["+raid", "+Raid"], 'type' => 'array'],
         'raidreporting_channel_type' => ['default' => '', 'type' => 'string'],
         'raidreporting_channel_discord_id' => ['default' => '', 'type' => 'string'],
         'raidreporting_gym_min_proability' => ['default' => 70, 'type' => 'integer'],
+        'raidreporting_allowed_channels' => ['default' => [], 'type' => 'array'],
 
         'welcome_active' => ['default' => false, 'type' => 'boolean'],
         'welcome_message' => ['default' => 'Bienvenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],
@@ -63,22 +65,35 @@ class Guild extends Model
         'comadmin_types' => ['default' => [], 'type' => 'array'],
     ];
 
-    public function getCityAttribute() {
+    public function getCityAttribute()
+    {
         return City::find($this->city_id);
     }
 
-    public function getWatchedChannelsAttribute() {
-        $watched_channels = RoleCategory::where('guild_id', $this->id)->get();
+    public function getWatchedChannelsAttribute()
+    {
         $return = [];
-        foreach( $watched_channels as $watched_channel ) {
-            if( !in_array( $watched_channel->channel_discord_id, $return ) && !empty($watched_channel->channel_discord_id) ) {
+
+        //Salons de roles
+        $watched_channels = RoleCategory::where('guild_id', $this->id)->get();
+        foreach ($watched_channels as $watched_channel) {
+            if (!in_array($watched_channel->channel_discord_id, $return) && !empty($watched_channel->channel_discord_id)) {
+                $return[] = $watched_channel->channel_discord_id;
+            }
+        }
+
+        //salons des raids
+        $watched_channels = Connector::where('guild_id', $this->id)->get();
+        foreach ($watched_channels as $watched_channel) {
+            if (!in_array($watched_channel->channel_discord_id, $return) && !empty($watched_channel->channel_discord_id)) {
                 $return[] = $watched_channel->channel_discord_id;
             }
         }
         return $return;
     }
 
-    public function getEventChannelsAttribute() {
+    public function getEventChannelsAttribute()
+    {
 
         $events = \App\Models\Event::where('guild_id', $this->id)
             //->where('status', 'active')
@@ -87,13 +102,13 @@ class Guild extends Model
         $invits = \App\Models\EventInvit::where('status', 'accepted')->where('guild_id', $this->id)->get();
 
         $return = [];
-        foreach( $events as $event ) {
-            if( !in_array( $event->channel_discord_id, $return ) && !empty($event->channel_discord_id) ) {
+        foreach ($events as $event) {
+            if (!in_array($event->channel_discord_id, $return) && !empty($event->channel_discord_id)) {
                 $return[] = $event->channel_discord_id;
             }
         }
-        foreach( $invits as $invit ) {
-            if( !in_array( $invit->channel_discord_id, $return ) && !empty($invit->channel_discord_id) ) {
+        foreach ($invits as $invit) {
+            if (!in_array($invit->channel_discord_id, $return) && !empty($invit->channel_discord_id)) {
                 $return[] = $invit->channel_discord_id;
             }
         }
@@ -101,24 +116,25 @@ class Guild extends Model
         return $return;
     }
 
-    public function getSettingsAttribute() {
+    public function getSettingsAttribute()
+    {
         $return = [];
         $settings = GuildSetting::where('guild_id', $this->id)->get();
 
-        foreach( $this->allowedSettings as $settingKey => $setting_data ) {
+        foreach ($this->allowedSettings as $settingKey => $setting_data) {
             $return[$settingKey] = $setting_data['default'];
-            if( $settings ) {
-                foreach( $settings as $setting ) {
-                    if($setting->key == $settingKey) {
-                        switch($setting_data['type']) {
+            if ($settings) {
+                foreach ($settings as $setting) {
+                    if ($setting->key == $settingKey) {
+                        switch ($setting_data['type']) {
                             case 'string':
                                 $return[$settingKey] = $setting->value;
                                 break;
-                                case 'integer':
-                                    $return[$settingKey] = (int) $setting->value;
-                                    break;
+                            case 'integer':
+                                $return[$settingKey] = (int) $setting->value;
+                                break;
                             case 'boolean':
-                                $return[$settingKey] = (boolean) $setting->value;
+                                $return[$settingKey] = (bool) $setting->value;
                             case 'array':
                                 $return[$settingKey] = json_decode($setting->value);
                         }
@@ -129,15 +145,16 @@ class Guild extends Model
         return (object) $return;
     }
 
-    public function updateSettings( $settings ) {
-        foreach( $settings as $key => $value ) {
+    public function updateSettings($settings)
+    {
+        foreach ($settings as $key => $value) {
 
-            if( is_array($value) ) $value = json_encode($value);
+            if (is_array($value)) $value = json_encode($value);
 
             $setting = GuildSetting::where('guild_id', $this->id)
                 ->where('key', $key)
                 ->first();
-            if( !empty($setting) ) {
+            if (!empty($setting)) {
                 $setting->update(['value' => $value]);
             } else {
                 $setting = GuildSetting::create([
@@ -154,18 +171,19 @@ class Guild extends Model
         return true;
     }
 
-    public function getDiscordRoles() {
+    public function getDiscordRoles()
+    {
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $roles = $discord->guild->getGuildRoles(['guild.id' => (int) $this->discord_id]);
-        foreach( $roles as &$role ) {
+        foreach ($roles as &$role) {
             $role->id = (string) $role->id;
         }
         return $roles;
     }
 
-    public function sendAdminMessage( $type, $args ){
-        if( !$this->settings->comadmin_active || !in_array($type, $this->settings->comadmin_types) ) return;
+    public function sendAdminMessage($type, $args)
+    {
+        if (!$this->settings->comadmin_active || !in_array($type, $this->settings->comadmin_types)) return;
         \App\Core\Conversation::sendToDiscord($this->settings->comadmin_channel_discord_id, $this, 'admin', $type, $args);
     }
-
 }

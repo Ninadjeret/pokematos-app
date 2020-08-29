@@ -6,13 +6,15 @@ use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Zone;
 use App\Models\Guild;
-use App\Models\Pokemon;
 use App\Core\Helpers;
+use App\Models\Pokemon;
 use RestCord\DiscordClient;
+use App\Models\DiscordMessage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
-class Connector extends Model {
+class Connector extends Model
+{
     protected $fillable = [
         'guild_id',
         'name',
@@ -21,6 +23,7 @@ class Connector extends Model {
         'filter_pokemon_type',
         'filter_gym_zone',
         'filter_gym_gym',
+        'filter_ex_type',
         'filter_pokemon_level',
         'filter_pokemon_pokemon',
         'filter_source_type',
@@ -29,6 +32,10 @@ class Connector extends Model {
         'custom_message_after',
         'auto_settings',
         'delete_after_end',
+        'add_channel',
+        'channel_category_discord_id',
+        'channel_duration',
+        'add_participants'
     ];
     protected $casts = [
         'filter_gym_zone' => 'array',
@@ -37,72 +44,78 @@ class Connector extends Model {
         'filter_pokemon_pokemon' => 'array',
         'filter_source_type' => 'array',
         'auto_settings' => 'array',
+        'add_channel' => 'boolean',
+        'add_participants' => 'boolean',
     ];
 
     protected $appends = ['filtered_levels', 'filtered_pokemons', 'filtered_zones', 'filtered_gyms'];
 
     public $roles, $emojis, $channels;
 
-    public function getFilteredLevelsAttribute() {
-        if( empty($this->filter_pokemon_level) ) {
+    public function getFilteredLevelsAttribute()
+    {
+        if (empty($this->filter_pokemon_level)) {
             return [];
         }
         $levels = [];
-        foreach( $this->filter_pokemon_level as $level_id ) {
+        foreach ($this->filter_pokemon_level as $level_id) {
             $level = Helpers::getLevelObject($level_id);
-            if( $level ) {
+            if ($level) {
                 $levels[] = $level;
             }
         }
         return $levels;
     }
 
-    public function getFilteredPokemonsAttribute() {
-        if( empty($this->filter_pokemon_pokemon) ) {
+    public function getFilteredPokemonsAttribute()
+    {
+        if (empty($this->filter_pokemon_pokemon)) {
             return [];
         }
         $pokemons = [];
-        foreach( $this->filter_pokemon_pokemon as $pokemon_id ) {
+        foreach ($this->filter_pokemon_pokemon as $pokemon_id) {
             $pokemon = Pokemon::find($pokemon_id);
-            if( $pokemon ) {
+            if ($pokemon) {
                 $pokemons[] = $pokemon;
             }
         }
         return $pokemons;
     }
 
-    public function getFilteredZonesAttribute() {
-        if( empty($this->filter_gym_zone) ) {
+    public function getFilteredZonesAttribute()
+    {
+        if (empty($this->filter_gym_zone)) {
             return [];
         }
         $zones = [];
-        foreach( $this->filter_gym_zone as $zone_id ) {
+        foreach ($this->filter_gym_zone as $zone_id) {
             $zone = Zone::find($zone_id);
-            if( $zone ) {
+            if ($zone) {
                 $zones[] = $zone;
             }
         }
         return $zones;
     }
 
-    public function getFilteredGymsAttribute() {
-        if( empty($this->filter_gym_gym) ) {
+    public function getFilteredGymsAttribute()
+    {
+        if (empty($this->filter_gym_gym)) {
             return [];
         }
         $stops = [];
-        foreach( $this->filter_gym_gym as $stop_id ) {
+        foreach ($this->filter_gym_gym as $stop_id) {
             $stop = Stop::find($stop_id);
-            if( $stop ) {
+            if ($stop) {
                 $stops[] = $stop;
             }
         }
         return $stops;
     }
 
-    public function postMessage( $raid, $announce ) {
-        if( empty( $this->channel_discord_id ) ) return false;
-        $guild = Guild::find( $this->guild_id );
-
+    public function prepareMessage($raid)
+    {
+        if (empty($this->channel_discord_id)) return false;
+        $guild = Guild::find($this->guild_id);
         //On initialise les infos discord
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $this->roles = $discord->guild->getGuildRoles(array(
@@ -116,178 +129,236 @@ class Connector extends Model {
         ));
 
         //Récupération du message selon le format choisi
-        if( $this->format == 'auto' ) {
+        if ($this->format == 'auto') {
             $content = '';
-            $embed = $this->getEmbedMessage($raid, $announce);
-        } elseif( $this->format == 'custom' ) {
-            $content = $this->getCustomMessage( $raid, $announce );
+            $embed = $this->getEmbedMessage($raid, $guild);
+        } elseif ($this->format == 'custom') {
+            $content = $this->getCustomMessage($raid, $guild);
             $embed = [];
-        } elseif( $this->format == 'both' ) {
-            $content = $this->getCustomMessage( $raid, $announce );
-            $embed = $this->getEmbedMessage($raid, $announce);
+        } elseif ($this->format == 'both') {
+            $content = $this->getCustomMessage($raid, $guild);
+            $embed = $this->getEmbedMessage($raid, $guild);
         }
-
-        //On poste le message sur Discord et on log
-        try {
-            $message = $discord->channel->createMessage(array(
-                'channel.id' => intval($this->channel_discord_id),
-                'content' => $content,
-                'embed' => $embed,
-            ));
-            RaidMessage::create([
-                'raid_id' => $raid->id,
-                'guild_id' => $this->guild_id,
-                'message_discord_id' => $message['id'],
-                'channel_discord_id' => $message['channel_id'],
-                'delete_after_end' => $this->delete_after_end,
-            ]);
-        } catch (Exception $e) {
-            return false;
-        }
-
+        return [
+            'content' => $content,
+            'embed' => $embed,
+        ];
     }
 
-    public function getCustomMessage( $raid, $announce ) {
-        if( $raid->isFuture() ) {
+    public function editMessage($raid, $message)
+    {
+        $data = $this->prepareMessage($raid);
+        //On poste le message sur Discord et on log
+        try {
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            $message = $discord->channel->editMessage(array(
+                'message.id' => intval($message->discord_id),
+                'channel.id' => intval($message->channel_discord_id),
+                'content' => $data['content'],
+                'embed' => $data['embed'],
+            ));
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function postMessage($raid, $announce)
+    {
+        $data = $this->prepareMessage($raid);
+
+        try {
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            $message = $discord->channel->createMessage(array(
+                'channel.id' => intval($this->channel_discord_id),
+                'content' => $data['content'],
+                'embed' => $data['embed'],
+            ));
+
+            DiscordMessage::create([
+                'relation_type' => 'raid',
+                'relation_id' => $raid->id,
+                'guild_id' => $this->guild_id,
+                'connector_id' => $this->id,
+                'discord_id' => $message['id'],
+                'channel_discord_id' => $message['channel_id'],
+                'to_delete_at' => ($this->delete_after_end) ? $raid->end_time : null,
+            ]);
+
+            if ($this->add_participants) {
+                foreach (['👤', '🚁', '1️⃣', '2️⃣', '3️⃣', '✖️'] as $emoji) {
+                    usleep(200000);
+                    $result = $discord->channel->createReaction([
+                        'channel.id' => intval($this->channel_discord_id),
+                        'message.id' => intval($message['id']),
+                        'emoji' => $emoji,
+                    ]);
+                }
+            } elseif ($this->add_channel) {
+                foreach (['#️⃣'] as $emoji) {
+                    usleep(200000);
+                    $result = $discord->channel->createReaction([
+                        'channel.id' => intval($this->channel_discord_id),
+                        'message.id' => intval($message['id']),
+                        'emoji' => $emoji,
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function getCustomMessage($raid, $guild)
+    {
+        if ($raid->isFuture()) {
             $message = $this->custom_message_before;
         } else {
             $message = $this->custom_message_after;
         }
-        return $this->translate($message, $raid);
+        return $this->translate($message, $raid, $guild);
     }
 
-    private function translate( $message, $raid ) {
+    public function translate($message, $raid, $guild)
+    {
 
-        $username = ( $raid->getLastUserAction()->getUser() ) ? $raid->getLastUserAction()->getUser()->name : false ;
+        $username = ($raid->getLastUserAction()->getUser()) ? $raid->getLastUserAction()->getUser()->getNickname($guild->id) : false;
 
         $role_poi_lie = Role::where('gym_id', $raid->gym_id)->first();
-        $role_zone_liee = ( $raid->gym->zone ) ? Role::where('zone_id', $raid->gym->zone->id)->first() : false ;
+        $role_zone_liee = ($raid->gym->zone) ? Role::where('zone_id', $raid->gym->zone->id)->first() : false;
         $role_pokemon_lie = Role::where('pokemon_id', $raid->pokemon_id)->first();
+
+        $group = $raid->getGuildGroup($this->guild_id);
 
         //Gestion des tags
         $patterns = array(
-            'raid_pokemon' => ( !$raid->pokemon ) ? false : html_entity_decode( $raid->pokemon->name_fr ),
-            'raid_pokemon_nettoye' => ( !$raid->pokemon ) ? false : Helpers::sanitize(html_entity_decode( $raid->pokemon->name_fr )),
-            'raid_niveau' => $raid->egg_level,
-            'raid_debut' => ( $raid->egg_level < 6 ) ? $raid->getStartTime()->format('H\hi') : $raid->getStartTime()->format('d/m/y à H\hi'),
-            'raid_fin' => ( $raid->egg_level < 6 ) ? $raid->getEndTime()->format('H\hi') : $raid->getEndTime()->format('d/m/y à H\hi'),
+            'raid_pokemon' => (!$raid->pokemon) ? false : html_entity_decode($raid->pokemon->name_fr),
+            'raid_pokemon_nettoye' => (!$raid->pokemon) ? false : Helpers::sanitize(html_entity_decode($raid->pokemon->name_fr)),
+            'raid_niveau' => ($raid->egg_level == 7) ? 'Méga' : $raid->egg_level,
+            'raid_debut' => ($raid->egg_level != 6) ? $raid->getStartTime()->format('H\hi') : $raid->getStartTime()->format('d/m/y à H\hi'),
+            'raid_fin' => ($raid->egg_level != 6) ? $raid->getEndTime()->format('H\hi') : $raid->getEndTime()->format('d/m/y à H\hi'),
 
             'arene_nom' => $raid->getGym()->niantic_name,
             'arene_nom_nettoye' => Helpers::sanitize($raid->getGym()->niantic_name),
             'arene_nom_custom' => $raid->getGym()->name,
             'arene_nom_custom_nettoye' => Helpers::sanitize($raid->getGym()->name),
             'arene_description' => $raid->getGym()->description,
-            'arene_zone' => ( !empty(  $raid->getGym()->zone ) ) ?  $raid->getGym()->zone->name : false,
-            'arene_zone_nettoye' => ( !empty(  $raid->getGym()->zone ) ) ?  Helpers::sanitize($raid->getGym()->zone->name) : false,
-            'arene_gmaps' => ( !empty(  $raid->getGym()->google_maps_url ) ) ?  $raid->getGym()->google_maps_url : false,
+            'arene_zone' => (!empty($raid->getGym()->zone)) ?  $raid->getGym()->zone->name : false,
+            'arene_ex' => ($raid->getGym()->ex) ? '[EX]' : false,
+            'arene_zone_nettoye' => (!empty($raid->getGym()->zone)) ?  Helpers::sanitize($raid->getGym()->zone->name) : false,
+            'arene_gmaps' => (!empty($raid->getGym()->google_maps_url)) ?  $raid->getGym()->google_maps_url : false,
 
-            'role_poi_lie' => ( !empty($role_poi_lie) ) ? "@{$role_poi_lie->name}" : '',
-            'role_zone_liee' => ( !empty($role_zone_liee) ) ? "@{$role_zone_liee->name}" : '',
-            'role_pokemon_lie' => ( !empty($role_pokemon_lie) ) ? "@{$role_pokemon_lie->name}" : '',
+            'role_poi_lie' => (!empty($role_poi_lie)) ? "@{$role_poi_lie->name}" : '',
+            'role_zone_liee' => (!empty($role_zone_liee)) ? "@{$role_zone_liee->name}" : '',
+            'role_pokemon_lie' => (!empty($role_pokemon_lie)) ? "@{$role_pokemon_lie->name}" : '',
 
             'utilisateur' => $username,
+
+            'nb_participants' => (!empty($group)) ? $group->getNbParticipants() : '0',
+            'nb_participants_present' => (!empty($group)) ? $group->getNbParticipants('present') : '0',
+            'nb_participants_remote' => (!empty($group)) ? $group->getNbParticipants('remote') : '0',
+            'liste_participants' => (!empty($group)) ? $group->getListeParticipants() : '',
         );
-        foreach( $patterns as $pattern => $valeur ) {
-            $message = str_replace( '{'.$pattern.'}', $valeur, $message );
+
+
+        foreach ($patterns as $pattern => $valeur) {
+            $message = str_replace('{' . $pattern . '}', $valeur, $message);
         }
 
         //Gestion des mentions
-        if( strstr( $message, '@' ) ) {
-            foreach( $this->roles as $role ) {
-                if( strstr( $message, '@'.$role->name ) ) {
-                    $message = str_replace('@'.$role->name, '<@&'.$role->id.'>', $message);
+        if (strstr($message, '@')) {
+            foreach ($this->roles as $role) {
+                if (strstr($message, '@' . $role->name)) {
+                    $message = str_replace('@' . $role->name, '<@&' . $role->id . '>', $message);
                 }
             }
         }
 
-        if( $username && strstr( $message, '@'.$username ) ) {
+        if ($username && strstr($message, '@' . $username)) {
             $user = $raid->getLastUserAction()->getUser();
-            $message = str_replace('@'.$username, '<@!'.$user->discord_id.'>', $message);
+            $message = str_replace('@' . $username, '<@!' . $user->discord_id . '>', $message);
         }
 
         //Gestion des salons #
-        if( strstr( $message, '#' ) ) {
-            foreach( $this->channels as $channel ) {
-                if( strstr( $message, '#'.$channel->name ) ) {
-                    $message = str_replace('#'.$channel->name, '<#'.$channel->id.'>', $message);
+        if (strstr($message, '#')) {
+            foreach ($this->channels as $channel) {
+                if (strstr($message, '#' . $channel->name)) {
+                    $message = str_replace('#' . $channel->name, '<#' . $channel->id . '>', $message);
                 }
             }
         }
 
         //Gestion des emojis
-        if( strstr( $message, ':' ) ) {
-            if( !empty($this->emojis) ) {
-                foreach( $this->emojis as $emoji ) {
-                    if( strstr( $message, ':'.$emoji->name.':' ) ) {
-                        $message = str_replace(':'.$emoji->name.':', '<:'.$emoji->name.':'.$emoji->id.'>', $message);
+        if (strstr($message, ':')) {
+            if (!empty($this->emojis)) {
+                foreach ($this->emojis as $emoji) {
+                    if (strstr($message, ':' . $emoji->name . ':')) {
+                        $message = str_replace(':' . $emoji->name . ':', '<:' . $emoji->name . ':' . $emoji->id . '>', $message);
                     }
                 }
             }
         }
 
         //On nettoye les arobases inutles (sans fare de regex parce que c'est chiant ^^)
-        Log::debug($message);
         $message = str_replace('<@', '##<##', $message);
         $message = str_replace('@', '', $message);
         $message = str_replace('##<##', '<@', $message);
-        Log::debug($message);
         return $message;
     }
 
-    public function getEmbedMessage( $raid, $announce ) {
+    public function getEmbedMessage($raid, $guild)
+    {
 
         //Gestion des infos du raid
         $description = [];
-        $title = 'Raid '.$raid->egg_level.' têtes';
-        $img_url = "https://assets.profchen.fr/img/eggs/egg_".$raid->egg_level.".png";
+        $title = ($raid->egg_level == 7) ? 'Méga-raid' : 'Raid ' . $raid->egg_level . ' têtes';
+        $img_url = "https://assets.profchen.fr/img/eggs/egg_" . $raid->egg_level . ".png";
 
         $startTime = new \DateTime($raid->start_time);
         $endTime = new \DateTime($raid->end_time);
 
-        if( $raid->start_time) {
-            $title .= ' à '.$startTime->format('H\hi');
-            $description[] = "Pop : de ".$startTime->format('H\hi')." à ".$endTime->format('H\hi');
+        if ($raid->start_time) {
+            $title .= ' à ' . $startTime->format('H\hi');
+            $description[] = "Pop : de " . $startTime->format('H\hi') . " à " . $endTime->format('H\hi');
         }
 
-        if( $raid->pokemon ) {
-            $title = html_entity_decode('Raid '.$raid->pokemon->name_fr.' jusqu\'à '.$endTime->format('H\hi'));
+        if ($raid->pokemon) {
+            $title = html_entity_decode('Raid ' . $raid->pokemon->name_fr . ' jusqu\'à ' . $endTime->format('H\hi'));
             $img_url = $raid->pokemon->thumbnail_url;
         }
 
-        $gymName = html_entity_decode( $raid->getGym()->name );
-        if( $raid->getGym()->zone_id ) {
-            $gymName = $raid->getGym()->zone->name.' - '.$gymName;
+        $gymName = html_entity_decode($raid->getGym()->name);
+        if ($raid->getGym()->zone_id) {
+            $gymName = $raid->getGym()->zone->name . ' - ' . $gymName;
         }
 
-        if( is_array( $this->auto_settings ) ) {
-            if( in_array('cp', $this->auto_settings ) && $raid->pokemon ) {
-                $description[] = "Normal : CP entre ".$raid->pokemon->cp['lvl20']['min']." et ".$raid->pokemon->cp['lvl20']['max']."\r\n".
-                "Bost Météo : CP entre ".$raid->pokemon->cp['lvl25']['min']." et ".$raid->pokemon->cp['lvl25']['max'];
+        if (is_array($this->auto_settings)) {
+            if (in_array('cp', $this->auto_settings) && $raid->pokemon) {
+                $description[] = "Normal : CP entre " . $raid->pokemon->cp['lvl20']['min'] . " et " . $raid->pokemon->cp['lvl20']['max'] . "\r\n" .
+                    "Bost Météo : CP entre " . $raid->pokemon->cp['lvl25']['min'] . " et " . $raid->pokemon->cp['lvl25']['max'];
             }
-            if( in_array('arene_desc', $this->auto_settings ) && !empty($raid->getGym()->description) ) {
-                $description[] = $this->translate($raid->getGym()->description, $raid);
+            if (in_array('arene_desc', $this->auto_settings) && !empty($raid->getGym()->description)) {
+                $description[] = $this->translate($raid->getGym()->description, $raid, $guild);
             }
         }
 
         //Gestion EX
-        if( $raid->egg_level == 6 ) {
-            $title = 'Raid EX le '.$startTime->format('d/m').' à '.$startTime->format('H\hi');
-            if( $raid->channels ) {
-                foreach( $raid->channels as $channel ) {
-                    if( $channel->guild_id == $this->guild_id ) {
-                        $description[] = 'Vous pouvez vous organiser dans le salon <#'.$channel->channel_discord_id.'>';
+        if ($raid->egg_level == 6) {
+            $title = 'Raid EX le ' . $startTime->format('d/m') . ' à ' . $startTime->format('H\hi');
+            if ($raid->channels) {
+                foreach ($raid->channels as $channel) {
+                    if ($channel->guild_id == $this->guild_id) {
+                        $description[] = 'Vous pouvez vous organiser dans le salon <#' . $channel->channel_discord_id . '>';
                     }
                 }
             }
-
         }
 
         //On formatte le embed
-        $icon_url = ( $raid->getGym()->ex ) ? 'https://assets.profchen.fr/img/app/connector_gym_ex.png' : 'https://assets.profchen.fr/img/app/connector_gym.png' ;
+        $icon_url = ($raid->getGym()->ex) ? 'https://assets.profchen.fr/img/app/connector_gym_ex.png' : 'https://assets.profchen.fr/img/app/connector_gym.png';
         $data = array(
             'title' => $title,
-            'description' => ( !empty($description) ) ? implode("\r\n\r\n", $description) : '',
-            'color' => $this->getEggColor( $raid->egg_level ),
+            'description' => (!empty($description)) ? implode("\r\n\r\n", $description) : '',
+            'color' => $this->getEggColor($raid->egg_level),
             'thumbnail' => array(
                 'url' => $img_url
             ),
@@ -297,23 +368,24 @@ class Connector extends Model {
                 'icon_url' => $icon_url
             ),
         );
-
         return $data;
     }
 
-    public function getEggColor( $eggLevel ) {
+    public function getEggColor($eggLevel)
+    {
         $colors = array(
             1 => 'de6591',
             2 => 'de6591',
             3 => 'efad02',
             4 => 'efad02',
             5 => '222',
+            6 => '222',
+            7 => 'efad02',
         );
 
-        if(array_key_exists($eggLevel, $colors) ) {
-            return hexdec( $colors[$eggLevel] );
+        if (array_key_exists($eggLevel, $colors)) {
+            return hexdec($colors[$eggLevel]);
         }
         return false;
     }
-
 }

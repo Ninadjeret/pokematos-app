@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
-use RestCord\DiscordClient;
+use App\Models\Guild;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use App\Core\RaidAnalyzer\EggClassifier;
+use App\Core\RaidAnalyzer\ImageAnalyzer;
 
 class Test extends Command
 {
@@ -39,25 +41,12 @@ class Test extends Command
      */
     public function handle()
     {
-        $result = \DateTime::createFromFormat('Y-m-d H:i:s', '2018-05-05');
-        $this->line(print_r($result, true));
-        //$this->line(\App\Core\Helpers::sanitize('Héhé ça marche du tonnnèr, t\'es trop top'));
-        //$quiz = \App\Models\EventQuiz::find(5)->close();
-        //$question = \App\Models\EventQuizQuestion::find(186)->start();
-        /*$discord = new DiscordClient([
-            'token' => config('discord.token'),
-        ]);
-
-        try {
-            $guild = $discord->guild->getGuild(['guild.id' => 48065406879879]);;
+        $path = 'tests/analyzer/raid/eggv2';
+        $images = array_diff(scandir(storage_path($path)), array('..', '.'));
+        foreach ($images as $image) {
+            $complete_path = storage_path($path) . '/' . $image;
+            $analyzer = new ImageAnalyzer($complete_path, Guild::find(1));
+            $this->line($analyzer->getEggLevelv2());
         }
-        catch (GuzzleHttp\Exception\ClientException $e) {
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-        }
-        //Log::debug( print_r($discord, true) );
-        //$this->line( print_r($guild, true) );
-        $this->info('OK');*/
     }
-
 }

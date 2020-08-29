@@ -28,7 +28,8 @@ class EventQuiz extends Model
      * [getQuestionsAttribute description]
      * @return [type] [description]
      */
-    public function getQuestionsAttribute() {
+    public function getQuestionsAttribute()
+    {
         return EventQuizQuestion::where('quiz_id', $this->id)->orderBy('order', 'ASC')->get();
     }
 
@@ -37,17 +38,20 @@ class EventQuiz extends Model
      * [getEventAttribute description]
      * @return [type] [description]
      */
-    public function getEventAttribute() {
+    public function getEventAttribute()
+    {
         return Event::find($this->event_id);
     }
 
-    public function getThemesAttribute($value) {
-        if( empty($value) ) return [];
+    public function getThemesAttribute($value)
+    {
+        if (empty($value)) return [];
         return json_decode($value);
     }
 
-    public function getDifficultiesAttribute($value) {
-        if( empty($value) ) return [];
+    public function getDifficultiesAttribute($value)
+    {
+        if (empty($value)) return [];
         return json_decode($value);
     }
 
@@ -56,23 +60,24 @@ class EventQuiz extends Model
      * [shuffleQuestions description]
      * @return [type] [description]
      */
-    public function shuffleQuestions() {
+    public function shuffleQuestions()
+    {
 
         EventQuizQuestion::where('quiz_id', $this->id)->delete();
 
-        $difficulties = ( empty($this->difficulties) ) ? [1, 2, 3, 5] : $this->difficulties ;
-        $themes = ( empty($this->themes) ) ? \DB::table('quiz_themes')->pluck('id')->toArray() : $this->themes ;
+        $difficulties = (empty($this->difficulties)) ? [1, 2, 3, 5] : $this->difficulties;
+        $themes = (empty($this->themes)) ? \DB::table('quiz_themes')->pluck('id')->toArray() : $this->themes;
 
         $query = QuizQuestion::whereIn('difficulty', $difficulties)
             ->whereIn('theme_id', $themes)
             ->inRandomOrder()
             ->take($this->nb_questions);
-        if( $this->only_pogo ) $query->where('about_pogo', 1);
+        if ($this->only_pogo) $query->where('about_pogo', 1);
         $questions = $query->get();
 
-        if( !empty($questions) ) {
+        if (!empty($questions)) {
             $order = 0;
-            foreach( $questions as $question ) {
+            foreach ($questions as $question) {
                 $order++;
                 EventQuizQuestion::create([
                     'quiz_id' => $this->id,
@@ -88,7 +93,8 @@ class EventQuiz extends Model
      * [getNbQuestions description]
      * @return [type] [description]
      */
-    public function getNbQuestions() {
+    public function getNbQuestions()
+    {
         return count($this->questions);
     }
 
@@ -97,20 +103,17 @@ class EventQuiz extends Model
      * [process description]
      * @return [type] [description]
      */
-    public function process() {
-        if( $this->isClosed() ) {
-            Log::debug('isClosed');
+    public function process()
+    {
+        if ($this->isClosed()) {
             return;
-        } elseif( $this->isEnded() ) {
-            Log::debug('isEnded');
+        } elseif ($this->isEnded()) {
             $this->close();
-        } elseif( $this->hasToStart() ) {
-            Log::debug('hasToStart');
+        } elseif ($this->hasToStart()) {
             $this->start();
         } else {
-            Log::debug('else');
             $question = $this->getLastQuestion();
-            if( $question && $question->isEnded() ) {
+            if ($question && $question->isEnded()) {
                 $question->close();
             }
         }
@@ -121,7 +124,8 @@ class EventQuiz extends Model
      * [start description]
      * @return [type] [description]
      */
-    public function start() {
+    public function start()
+    {
 
         $this->update(['status' => 'active']);
 
@@ -132,7 +136,7 @@ class EventQuiz extends Model
             '%quiz_name' => $this->event->name,
         ]);
         sleep(3);
-        $this->sendToDiscord( 'start_description', [
+        $this->sendToDiscord('start_description', [
             '%quiz_name' => $this->event->name,
             '%quiz_nb_questions' => $this->nb_questions,
             '%quiz_delay' => $this->delay
@@ -143,7 +147,7 @@ class EventQuiz extends Model
         $question = EventQuizQuestion::where('quiz_id', $this->id)
             ->orderBy('order', 'ASC')
             ->first();
-        if($question) $question->start();
+        if ($question) $question->start();
     }
 
 
@@ -151,7 +155,8 @@ class EventQuiz extends Model
      * [close description]
      * @return [type] [description]
      */
-    public function close() {
+    public function close()
+    {
 
         $this->update(['status' => 'closed']);
 
@@ -160,7 +165,7 @@ class EventQuiz extends Model
 
         $this->sendToDiscord('quiz_ended');
         sleep(5);
-        if( $this->event->multi_guilds ) {
+        if ($this->event->multi_guilds) {
             $ranking = new Ranking($this->questions);
             $this->sendToDiscord('quiz_final_score_guilds', [
                 '%ranking' => $ranking->formatMultiRanking(),
@@ -186,10 +191,11 @@ class EventQuiz extends Model
      * [hasToStart description]
      * @return boolean [description]
      */
-    public function hasToStart() {
+    public function hasToStart()
+    {
         $now = new \DateTime();
         $start_time = new \DateTime($this->event->start_time);
-        if( $this->status == 'future' && $now > $start_time ) {
+        if ($this->status == 'future' && $now > $start_time) {
             return true;
         }
         return false;
@@ -200,7 +206,8 @@ class EventQuiz extends Model
      * [isStarted description]
      * @return boolean [description]
      */
-    public function isStarted() {
+    public function isStarted()
+    {
         return $this->status == 'active';
     }
 
@@ -209,19 +216,20 @@ class EventQuiz extends Model
      * [isEnded description]
      * @return boolean [description]
      */
-    public function isEnded() {
+    public function isEnded()
+    {
         $question = EventQuizQuestion::where('quiz_id', $this->id)
             ->orderBy('order', 'DESC')
             ->first();
-        if( empty($question->end_time) ) {
+        if (empty($question->end_time)) {
             return false;
         }
-        if( !empty($question->correctAnswer) ) {
+        if (!empty($question->correctAnswer)) {
             return true;
         }
         $now = new \DateTime();
         $end_time = new \DateTime($question->end_time);
-        return ( $now > $end_time );
+        return ($now > $end_time);
     }
 
 
@@ -229,7 +237,8 @@ class EventQuiz extends Model
      * [isClosed description]
      * @return boolean [description]
      */
-    public function isClosed() {
+    public function isClosed()
+    {
         return $this->status == 'closed';
     }
 
@@ -238,7 +247,8 @@ class EventQuiz extends Model
      * [getLastQuestion description]
      * @return [type] [description]
      */
-    public function getLastQuestion() {
+    public function getLastQuestion()
+    {
         $question = EventQuizQuestion::where('quiz_id', $this->id)
             ->whereNotNull('start_time')
             ->orderBy('order', 'DESC')
@@ -251,12 +261,13 @@ class EventQuiz extends Model
      * [nextQuestion description]
      * @return [type] [description]
      */
-    public function nextQuestion() {
+    public function nextQuestion()
+    {
         $question = EventQuizQuestion::where('quiz_id', $this->id)
             ->whereNull('start_time')
             ->orderBy('order', 'ASC')
             ->first();
-        if($question) {
+        if ($question) {
             $question->start();
         } else {
             $this->close();
@@ -268,11 +279,12 @@ class EventQuiz extends Model
      * [addAnswer description]
      * @param [type] $args [description]
      */
-    public function addAnswer($args) {
-        if( !$this->isStarted() || $this->isEnded() ) return false;
+    public function addAnswer($args)
+    {
+        if (!$this->isStarted() || $this->isEnded()) return false;
 
         $question = $this->getLastQuestion();
-        if( $question->isEnded() ) return false;
+        if ($question->isEnded()) return false;
         $question->addAnswer($args);
     }
 
@@ -285,35 +297,39 @@ class EventQuiz extends Model
      * @param  [type] $embed [description]
      * @return [type]        [description]
      */
-    public function sendToDiscord( $type, $args = null, $guild = null, $embed = null) {
+    public function sendToDiscord($type, $args = null, $guild = null, $embed = null)
+    {
         $to_send = [];
 
-        if( !empty($this->event->channel_discord_id) ) {
-            if( empty($guild) || $guild->id == $this->event->guild_id ) {
+        if (!empty($this->event->channel_discord_id)) {
+            if (empty($guild) || $guild->id == $this->event->guild_id) {
                 $to_send[$this->event->channel_discord_id] = $this->event->guild;
             }
         }
 
-        if( $this->event->multi_guilds ) {
-            foreach( $this->event->guests as $guest ) {
-                if( $guest->status != 'accepted' ) continue;
-                if( !empty($guild) && $guild->id != $guest->guild_id ) continue;
-                if( !empty($guest->channel_discord_id) ) $to_send[$guest->channel_discord_id] = $guest->guild;
+        if ($this->event->multi_guilds) {
+            foreach ($this->event->guests as $guest) {
+                if ($guest->status != 'accepted') continue;
+                if (!empty($guild) && $guild->id != $guest->guild_id) continue;
+                if (!empty($guest->channel_discord_id)) $to_send[$guest->channel_discord_id] = $guest->guild;
             }
         }
 
-        if( empty($to_send) ) return;
+        if (empty($to_send)) return;
 
-        foreach( $to_send as $channel_id => $guild ) {
-            $message = \App\Core\Conversation::sendToDiscord($channel_id, $guild, 'quiz', $type, $args, $embed);
+        $user = (is_array($args) && array_key_exists('%user', $args)) ? $args['%user'] : false;
+
+        foreach ($to_send as $channel_id => $guild) {
+            $message = \App\Core\Conversation::sendToDiscord($channel_id, $guild, 'quiz', $type, $args, $embed, $user);
         }
     }
 
 
-    public static function getEmbedThumbnails() {
+    public static function getEmbedThumbnails()
+    {
         return (object) [
-                'question' => 'https://assets.profchen.fr/img/app/event_quiz_question.png',
-                'ranking' => 'https://assets.profchen.fr/img/app/event_quiz_ranking.png'
+            'question' => 'https://assets.profchen.fr/img/app/event_quiz_question.png',
+            'ranking' => 'https://assets.profchen.fr/img/app/event_quiz_ranking.png'
         ];
     }
 }

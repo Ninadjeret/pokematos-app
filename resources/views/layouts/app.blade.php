@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,19 +20,21 @@
 
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}?version={{config('app.version.current')}}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}?version={{config('app.version')}}" rel="stylesheet">
 </head>
+
 <body>
 
-@yield('content')
+    @yield('content')
 
     <!-- Scripts -->
     <!--<script src="{{ asset('js/manifest.js') }}"></script>
     <script src="{{ asset('js/vendor.js') }}"></script>-->
     <script type="text/javascript">
-        window.pokematos = <?php echo json_encode( \App\Core\App::config() ); ?>;
+        window.pokematos = <?php echo json_encode(\App\Core\App::config()) ?> ;
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{config('app.maps_api_key')}}&libraries=places"></script>
-    <script src="{{ asset('js/app.js') }}?version={{config('app.version.current')}}" defer></script>
+    <script src="{{ asset('js/app.js') }}?version={{config('app.version')}}" defer></script>
 </body>
+
 </html>
