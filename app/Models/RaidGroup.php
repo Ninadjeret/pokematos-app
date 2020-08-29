@@ -21,7 +21,7 @@ class RaidGroup extends Model
         parent::boot();
         static::created(function (RaidGroup $group) {
             $connector = Connector::find(request()->connector_id);
-            if ($connector->add_channel) $this->addChannel($connector->id);
+            if ($connector->add_channel) $group->addChannel($connector->id);
         });
     }
 
@@ -32,7 +32,7 @@ class RaidGroup extends Model
             'guild.id' => (int) $this->guild->discord_id,
             'name' => $this->raid->egg_level . 't-' . Helpers::sanitize($this->raid->getGym()->name),
             'type' => 0,
-            'parent_id' => (int) $connector->channei_category_discord_id,
+            'parent_id' => (int) $connector->channel_category_discord_id,
             /*'permission_overwrites' => [
                 [
                     'id' => Role::where('guild_id', $group->guild_id)->where('name', '@everyone')->first()->discord_id,
@@ -97,21 +97,32 @@ class RaidGroup extends Model
 
     public function getNbParticipants($type = false)
     {
-        $participants = $this->participants();
-        if ($type) $participants->where('type', $type);
-        return $participants->count();
+        $query = $this->participants();
+        if ($type) $query->where('type', $type);
+        $participants = $query->get();
+        $num = 0;
+        if (!empty($participants)) {
+            foreach ($participants as $participant) {
+                $num += $participant->accounts;
+            }
+        }
+        return $num;
     }
 
     public function getListeParticipants($type = false)
     {
         $participants = $this->participants;
         if (empty($participants)) return '';
+        $count = count($participants);
+        $num = 0;
         $return = "";
         foreach ($participants as $participant) {
+            $num++;
             $type = ($participant->type == 'remote') ? '(à distance)' : '';
             $accounts = ($participant->accounts > 1) ? "x{$participant->accounts}" : '';
-            $line = "{$participant->user->getNickname($this->guild_id)} {$accounts} {$type}\r\n";
+            $line = "{$participant->user->getNickname($this->guild_id)} {$accounts} {$type}";
             $return .= str_replace('  ', ' ', $line);
+            if ($num < $count) $return .= "\r\n";
         }
         return $return;
     }

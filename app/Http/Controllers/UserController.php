@@ -380,49 +380,6 @@ class UserController extends Controller
      * ==================================================================
      */
 
-    public function getPOIs(City $city, Request $request)
-    {
-
-        $query = Stop::where('city_id', '=', $city->id)
-            ->orderBy('name', 'asc');
-
-        $lastUpdate = $request->last_update;
-        if ($lastUpdate != 'initial' && !empty($lastUpdate) && \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) == false) {
-            Log::error("Date dans un formation incorrect : {$lastUpdate}");
-        }
-        if ($lastUpdate != 'initial' && !empty($lastUpdate) && \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate) !== false) {
-            $date = new \DateTime($lastUpdate);
-            $date->modify('-10 minutes');
-            $pois = $query->where('updated_at', '>=', $date->format('Y-m-d H:i:s'))->get();
-        } else {
-            $pois = $query->get()->each->setAppends(['zone', 'city', 'google_maps_url', 'aliases']);
-        }
-
-        return response()->json($pois, 200);
-    }
-
-    public function getActivePOIs(City $city, Request $request)
-    {
-        $gyms = Stop::whereHas('raids', function (Builder $query) {
-            $start = new \DateTime();
-            $start->modify('- 45 minutes');
-            $end = new \DateTime();
-            $end->modify('+ 60 minutes');
-            $query->whereBetween('start_time', [$start->format('Y-m-d H:i:s'), $end->format('Y-m-d H:i:s')]);
-        })
-            ->where('gym', 1)
-            ->get()
-            ->toArray();
-        $stops = Stop::whereHas('quests', function (Builder $query) {
-            $query->where('date', date('Y-m-d 00:00:00'));
-        })
-            ->where('gym', 0)
-            ->get()
-            ->toArray();
-        $return = array_merge($gyms, $stops);
-        return response()->json($return, 200);
-    }
-
     public function getGuildLogs(Guild $guild, Request $request)
     {
         $user = Auth::user();

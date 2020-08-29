@@ -30,7 +30,7 @@ class PurgeDiscordRaidData
     public function handle($event)
     {
 
-        if ($event instanceof \App\Events\RaidDeleted) {
+        if ($event instanceof \App\Events\RaidDeleted || $event instanceof \App\Events\RaidEnded) {
             $event->raid->channels()->get()->each(function ($channel) {
                 $channel->suppr();
             });

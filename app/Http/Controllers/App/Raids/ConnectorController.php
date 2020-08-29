@@ -19,10 +19,11 @@ class ConnectorController extends Controller
     public function store(Request $request, Guild $guild)
     {
         $args = $request->all();
+        $args['guild_id'] = $guild->id;
         $args['filter_gym_zone'] = Helpers::extractIds($request->filter_gym_zone);
         $args['filter_gym_gym'] = Helpers::extractIds($request->filter_gym_gym);
-        $args['filter_pokemon_level'] = Helpers::extractIds($request->filter_gym_zone);
-        $args['filter_pokemon_pokemon'] = Helpers::extractIds($request->filter_gym_zone);
+        $args['filter_pokemon_level'] = Helpers::extractIds($request->filter_pokemon_level);
+        $args['filter_pokemon_pokemon'] = Helpers::extractIds($request->filter_pokemon_pokemon);
         $connector = Connector::create($args);
         return response()->json($connector, 200);
     }
@@ -30,10 +31,11 @@ class ConnectorController extends Controller
     public function update(Request $request, Guild $guild, Connector $connector)
     {
         $args = $request->all();
+        $args['guild_id'] = $guild->id;
         $args['filter_gym_zone'] = Helpers::extractIds($request->filter_gym_zone);
         $args['filter_gym_gym'] = Helpers::extractIds($request->filter_gym_gym);
-        $args['filter_pokemon_level'] = Helpers::extractIds($request->filter_gym_zone);
-        $args['filter_pokemon_pokemon'] = Helpers::extractIds($request->filter_gym_zone);
+        $args['filter_pokemon_level'] = Helpers::extractIds($request->filter_pokemon_level);
+        $args['filter_pokemon_pokemon'] = Helpers::extractIds($request->filter_pokemon_pokemon);
         $connector->update($args);
         return response()->json($connector, 200);
     }

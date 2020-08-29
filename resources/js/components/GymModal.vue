@@ -438,7 +438,8 @@
             <div class="step__wrapper">
               <ul>
                 <li v-for="raidLevel in raidLevels" v-on:click="updateRaidLevel(raidLevel)">
-                  <button data-level="raidLevel">{{raidLevel}}T</button>
+                  <button v-if="raidLevel === 7" data-level="raidLevel">Mega</button>
+                  <button v-else data-level="raidLevel">{{raidLevel}}T</button>
                 </li>
               </ul>
             </div>
@@ -497,7 +498,7 @@ export default {
       },
       createRaidDelai: 0,
       createRaidHoraires: "",
-      raidLevels: [1, 2, 3, 4, 5],
+      raidLevels: [1, 3, 5, 7],
       startTime: false,
       endTime: false,
       exAllowedHours: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],

@@ -72,8 +72,18 @@ class Guild extends Model
 
     public function getWatchedChannelsAttribute()
     {
-        $watched_channels = RoleCategory::where('guild_id', $this->id)->get();
         $return = [];
+
+        //Salons de roles
+        $watched_channels = RoleCategory::where('guild_id', $this->id)->get();
+        foreach ($watched_channels as $watched_channel) {
+            if (!in_array($watched_channel->channel_discord_id, $return) && !empty($watched_channel->channel_discord_id)) {
+                $return[] = $watched_channel->channel_discord_id;
+            }
+        }
+
+        //salons des raids
+        $watched_channels = Connector::where('guild_id', $this->id)->get();
         foreach ($watched_channels as $watched_channel) {
             if (!in_array($watched_channel->channel_discord_id, $return) && !empty($watched_channel->channel_discord_id)) {
                 $return[] = $watched_channel->channel_discord_id;

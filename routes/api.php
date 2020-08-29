@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,10 +26,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/cities/{city}', 'CityController@getOne');
     Route::get('user/guilds', 'GuildController@getAll');
     Route::get('user/guilds/{guild}', 'GuildController@getOne');
-    Route::get('user/cities/{city}/gyms', 'UserController@getPOIs');
-    Route::post('user/upload', 'UserController@uploadImage');
 
-    Route::get('user/cities/{city}/active-gyms', 'UserController@getActivePOIs');
+    Route::post('user/upload', 'UserController@uploadImage');
 
     //City
     Route::put('user/cities/{city}', 'UserController@updateCity');
@@ -146,7 +145,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 Route::group(['prefix' => 'user', 'middleware' => ['auth:api']], function () {
     Route::group(['middleware' => ['can:city_access']], function () {
-        Route::get('cities/{city}/raids', 'App\Raids\RaidController@index');
+        Route::get('cities/{city}/gyms', 'App\PoisController@index');
         Route::post('cities/{city}/raids', 'App\Raids\RaidController@store');
         Route::put('cities/{city}/raids/{raid}', 'App\Raids\RaidController@store');
         Route::delete('cities/{city}/raids/{raid}', 'App\Raids\RaidController@destroy');
@@ -174,15 +173,14 @@ Route::group(['prefix' => 'bot', 'middleware' => ['auth.bot']], function () {
 
     Route::post('raids/imagedecode', 'RaidController@imageDecode');
 
-    //User actions
-    Route::group(['middleware' => ['can:guild_access']], function () {
-        Route::post('raids', 'RaidController@addRaid');
-        Route::post('raids/channel', 'Bot\Raids\ChannelController@store');
-        Route::post('raids/participant', 'Bot\Raids\ParticipantController@store');
-        Route::delete('raids/participant', 'Bot\Raids\ParticipantController@destroy');
-        Route::post('conversations', 'Bot\ConversationController@store');
-        Route::post('events/quiz/answer', 'Bot\Event\Quiz\AnswerController@store');
-    });
+
+    Route::post('raids', 'Bot\Raids\RaidController@store');
+    Route::post('raids/channel', 'Bot\Raids\ChannelController@store');
+    Route::post('raids/participant', 'Bot\Raids\ParticipantController@store');
+    Route::delete('raids/participant', 'Bot\Raids\ParticipantController@destroy');
+    Route::post('conversations', 'Bot\ConversationController@store');
+    Route::post('events/quiz/answer', 'Bot\Event\Quiz\AnswerController@store');
+
 
     //Events
     Route::group(['middleware' => ['can:events_train_check']], function () {

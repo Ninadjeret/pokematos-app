@@ -33,7 +33,7 @@ class Connector extends Model
         'auto_settings',
         'delete_after_end',
         'add_channel',
-        'channei_category_discord_id',
+        'channel_category_discord_id',
         'channel_duration',
         'add_participants'
     ];
@@ -116,7 +116,6 @@ class Connector extends Model
     {
         if (empty($this->channel_discord_id)) return false;
         $guild = Guild::find($this->guild_id);
-
         //On initialise les infos discord
         $discord = new DiscordClient(['token' => config('discord.token')]);
         $this->roles = $discord->guild->getGuildRoles(array(
@@ -156,7 +155,7 @@ class Connector extends Model
                 'message.id' => intval($message->discord_id),
                 'channel.id' => intval($message->channel_discord_id),
                 'content' => $data['content'],
-                'embed ' => $data['embed'],
+                'embed' => $data['embed'],
             ));
         } catch (\Exception $e) {
             return false;
@@ -165,15 +164,14 @@ class Connector extends Model
 
     public function postMessage($raid, $announce)
     {
+        $data = $this->prepareMessage($raid);
 
         try {
-            $data = $this->prepareMessage($raid);
             $discord = new DiscordClient(['token' => config('discord.token')]);
-            Log::debug(print_r($data['embed'], true));
             $message = $discord->channel->createMessage(array(
                 'channel.id' => intval($this->channel_discord_id),
                 'content' => $data['content'],
-                'embed ' => $data['embed'],
+                'embed' => $data['embed'],
             ));
 
             DiscordMessage::create([
@@ -235,9 +233,9 @@ class Connector extends Model
         $patterns = array(
             'raid_pokemon' => (!$raid->pokemon) ? false : html_entity_decode($raid->pokemon->name_fr),
             'raid_pokemon_nettoye' => (!$raid->pokemon) ? false : Helpers::sanitize(html_entity_decode($raid->pokemon->name_fr)),
-            'raid_niveau' => $raid->egg_level,
-            'raid_debut' => ($raid->egg_level < 6) ? $raid->getStartTime()->format('H\hi') : $raid->getStartTime()->format('d/m/y à H\hi'),
-            'raid_fin' => ($raid->egg_level < 6) ? $raid->getEndTime()->format('H\hi') : $raid->getEndTime()->format('d/m/y à H\hi'),
+            'raid_niveau' => ($raid->egg_level == 7) ? 'Méga' : $raid->egg_level,
+            'raid_debut' => ($raid->egg_level != 6) ? $raid->getStartTime()->format('H\hi') : $raid->getStartTime()->format('d/m/y à H\hi'),
+            'raid_fin' => ($raid->egg_level != 6) ? $raid->getEndTime()->format('H\hi') : $raid->getEndTime()->format('d/m/y à H\hi'),
 
             'arene_nom' => $raid->getGym()->niantic_name,
             'arene_nom_nettoye' => Helpers::sanitize($raid->getGym()->niantic_name),
@@ -312,7 +310,7 @@ class Connector extends Model
 
         //Gestion des infos du raid
         $description = [];
-        $title = 'Raid ' . $raid->egg_level . ' têtes';
+        $title = ($raid->egg_level == 7) ? 'Méga-raid' : 'Raid ' . $raid->egg_level . ' têtes';
         $img_url = "https://assets.profchen.fr/img/eggs/egg_" . $raid->egg_level . ".png";
 
         $startTime = new \DateTime($raid->start_time);
@@ -370,7 +368,6 @@ class Connector extends Model
                 'icon_url' => $icon_url
             ),
         );
-
         return $data;
     }
 
@@ -382,6 +379,8 @@ class Connector extends Model
             3 => 'efad02',
             4 => 'efad02',
             5 => '222',
+            6 => '222',
+            7 => 'efad02',
         );
 
         if (array_key_exists($eggLevel, $colors)) {

@@ -217,7 +217,7 @@ const store = new Vuex.Store({
         getRaidBosses: state => {
             if (!state.pokemons || state.pokemons.length === 0) return [];
             return state.pokemons.filter((pokemon) => {
-                return pokemon.boss == true && pokemon.boss_level >= 0 && pokemon.boss_level <= 5;
+                return pokemon.boss == true && pokemon.boss_level >= 0 && (pokemon.boss_level <= 5 || pokemon.boss_level >= 7);
             });
         },
         getSetting: state => (setting) => {
@@ -272,6 +272,7 @@ const store = new Vuex.Store({
                 state.user = user.data;
                 localStorage.setItem('pokematos_user', JSON.stringify(state.user));
             } catch (error) {
+                console.log('tutututut')
                 console.log(error)
                 if (error.response.status == '401') {
                     document.location.reload(true);
@@ -282,6 +283,7 @@ const store = new Vuex.Store({
             commit('setCities', cities.data);
             commit('fetchZones');
             commit('fetchQuests');
+            commit('fetchPokemon');
 
             var lastUpdate = getters.getSetting('lastUpdate');
             var result = await axios.get('/api/user/cities/' + state.currentCity.id + '/gyms?last_update=' + lastUpdate);

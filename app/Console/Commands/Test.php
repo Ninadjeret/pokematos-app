@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Core\Discord;
-use App\Models\Raid;
-use App\Models\RaidGroup;
-use RestCord\DiscordClient;
+use App\Models\Guild;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use App\Core\RaidAnalyzer\EggClassifier;
+use App\Core\RaidAnalyzer\ImageAnalyzer;
 
 class Test extends Command
 {
@@ -42,14 +41,12 @@ class Test extends Command
      */
     public function handle()
     {
-        request()->merge(['connector_id' => 1]);
-        $raid_group = RaidGroup::firstOrCreate(['guild_id' => 1, 'raid_id' => 57]);
-        $raid_group->add(\App\User::find(3), 'present');
-        /*$discord = new DiscordClient(['token' => config('discord.token')]);
-        $result = $discord->channel->getChannel([
-            'channel.id' => (int) 742732146384437260
-        ]);*/
-        /*$result = Discord::getGuildRoles(['guild.id' => (int) 377559922214305792], '@everyone');
-        $this->line(print_r($result, true));*/
+        $path = 'tests/analyzer/raid/eggv2';
+        $images = array_diff(scandir(storage_path($path)), array('..', '.'));
+        foreach ($images as $image) {
+            $complete_path = storage_path($path) . '/' . $image;
+            $analyzer = new ImageAnalyzer($complete_path, Guild::find(1));
+            $egg_level = $analyzer->getEggLevelv2();
+        }
     }
 }

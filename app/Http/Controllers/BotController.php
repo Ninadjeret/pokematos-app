@@ -12,8 +12,8 @@ use App\Models\UserAction;
 use RestCord\DiscordClient;
 use App\Models\RoleCategory;
 use Illuminate\Http\Request;
-use App\RaidAnalyzer\TextAnalyzer;
-use App\RaidAnalyzer\ImageAnalyzer;
+use App\Core\RaidAnalyzer\TextAnalyzer;
+use App\Core\RaidAnalyzer\ImageAnalyzer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 

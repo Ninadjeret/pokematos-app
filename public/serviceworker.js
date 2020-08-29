@@ -1,4 +1,4 @@
-const version ='1.0.458';
+const version ='1.0.464';
 var staticCacheName = "pwa-v" + version;
 var filesToCache = [
     '/offline',

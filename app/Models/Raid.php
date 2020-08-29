@@ -23,7 +23,7 @@ class Raid extends Model
 
     protected $fillable = ['status', 'pokemon_id', 'egg_level'];
     protected $hidden = ['gym_id', 'city_id', 'pokemon_id'];
-    protected $appends = ['end_time', 'pokemon', 'source', 'channels', 'messages', 'thumbnail_url'];
+    protected $appends = ['end_time', 'pokemon', 'source', 'thumbnail_url', 'participable_guilds'];
 
     public function getGymAttribute()
     {
@@ -59,46 +59,6 @@ class Raid extends Model
             'user' => User::find($annonce->user_id),
         ];
         return $return;
-    }
-
-    public function getChannelsAttribute()
-    {
-        $channels = raidChannel::where('raid_id', $this->id)->get();
-        if ($channels) {
-            return $channels;
-        }
-        return [];
-    }
-
-    public function getMessagesAttribute()
-    {
-        $messages = RaidMessage::where('raid_id', $this->id)->get();
-        if ($messages) {
-            return $messages;
-        }
-        return [];
-    }
-
-    public function channels()
-    {
-        return $this->morphMany('App\Models\DiscordChannel', 'relation');
-    }
-
-    public function messages()
-    {
-        return $this->morphMany('App\Models\DiscordMessage', 'relation');
-    }
-
-    public function groups()
-    {
-        return $this->hasMany('App\Models\RaidGroup');
-    }
-
-    public function getGuildGroup($guild_id)
-    {
-        $group = RaidGroup::where('raid_id', $this->id)->where('guild_id', $guild_id)->first();
-        if (empty($group)) return false;
-        return $group;
     }
 
     public function getLastUserAction($include_auto = false)

@@ -59,8 +59,8 @@ class CreateTempDiscordChannels extends Migration
 
         Schema::table('connectors', function (Blueprint $table) {
             $table->boolean('add_channel')->default(0)->after('delete_after_end');
-            $table->string('channei_category_discord_id')->nullable()->after('add_channel');
-            $table->string('channel_duration')->nullable()->after('channei_category_discord_id');
+            $table->string('channel_category_discord_id')->nullable()->after('add_channel');
+            $table->string('channel_duration')->nullable()->after('channel_category_discord_id');
             $table->boolean('add_participants')->default(0)->after('channel_duration');
         });
     }
@@ -79,9 +79,9 @@ class CreateTempDiscordChannels extends Migration
 
         Schema::table('connectors', function (Blueprint $table) {
             $table->dropColumn('add_channel');
-            $table->dropColumn('channei_category_discord_id');
+            $table->dropColumn('channel_category_discord_id');
             $table->dropColumn('channel_duration');
-            //$table->dropColumn('add_participants');
+            $table->dropColumn('add_participants');
         });
     }
 }

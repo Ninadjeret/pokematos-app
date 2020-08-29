@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Raid;
 use App\Models\UserAction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,17 +17,8 @@ class RaidController extends Controller
     public static $feature = 'features.raid_reporting';
     public static $feature_message = 'La fonctionnalité n\'est pas active';
 
-    public function index(City $city, Request $request)
-    {
-        $raids = Raid::where('city_id', $city->id)
-            ->where('start_time', '>', date('Y-m-d H:i:s'))
-            ->get();
-        return response()->json($raids, 200);
-    }
-
     public function store(City $city, Request $request)
     {
-
         if (!config(self::$feature)) return response()->json(self::$feature_message, 403);
         $args['city_id'] = $city->id;
         $args['user_id'] = Auth::id();

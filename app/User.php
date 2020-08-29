@@ -36,7 +36,8 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'discord_access_token',
-        'discord_refresh_token'
+        'discord_refresh_token',
+        'email'
     ];
     protected $appends = [
         'permissions',

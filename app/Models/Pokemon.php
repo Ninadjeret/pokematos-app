@@ -50,6 +50,7 @@ class Pokemon extends Model
             4 => 9000,
             5 => 15000,
             6 => 9000,
+            7 => 9000,
         ];
         $rStamina = $levels[$this->boss_level];
         $cp = (($this->base_att + 15) * sqrt($this->base_def + 15) * sqrt($rStamina)) / 10;
