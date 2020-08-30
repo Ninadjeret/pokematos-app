@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\User;
 use App\Models\Guild;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use App\Core\Discord\MessageTranslator;
 use App\Core\RaidAnalyzer\EggClassifier;
 use App\Core\RaidAnalyzer\ImageAnalyzer;
 
@@ -41,12 +43,7 @@ class Test extends Command
      */
     public function handle()
     {
-        $path = 'tests/analyzer/raid/eggv2';
-        $images = array_diff(scandir(storage_path($path)), array('..', '.'));
-        foreach ($images as $image) {
-            $complete_path = storage_path($path) . '/' . $image;
-            $analyzer = new ImageAnalyzer($complete_path, Guild::find(1));
-            $this->line($analyzer->getEggLevelv2());
-        }
+        $translator = MessageTranslator::to(Guild::find(1))->addUser(User::find(1))->translate('Coucou {utilisateur}');
+        $this->line(print_r($translator, true));
     }
 }

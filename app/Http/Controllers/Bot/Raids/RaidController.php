@@ -51,9 +51,13 @@ class RaidController extends Controller
 
         if ($url) {
             $imageAnalyzer = new ImageAnalyzer($url, $guild, $user, $channel_discord_id);
-            $imageAnalyzer->run();
-            $result = $imageAnalyzer->result;
-            $source_type = 'image';
+            if (empty($imageAnalyzer->result->error)) {
+                $imageAnalyzer->run();
+                $result = $imageAnalyzer->result;
+                $source_type = 'image';
+            } else {
+                return false;
+            }
         } else {
             $textAnalyzer = new TextAnalyzer($text, $guild, $user, $channel_discord_id);
             $result = $textAnalyzer->result;

@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Role;
 use App\Models\Stop;
 use App\Models\Zone;
-use App\Models\Guild;
 use App\Core\Helpers;
+use App\Models\Guild;
 use App\Models\Pokemon;
 use RestCord\DiscordClient;
 use App\Models\DiscordMessage;
-use Illuminate\Database\Eloquent\Model;
+use App\Core\Discord\MessageTranslator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 
 class Connector extends Model
 {
@@ -117,16 +117,10 @@ class Connector extends Model
         if (empty($this->channel_discord_id)) return false;
         $guild = Guild::find($this->guild_id);
         //On initialise les infos discord
-        $discord = new DiscordClient(['token' => config('discord.token')]);
-        $this->roles = $discord->guild->getGuildRoles(array(
-            'guild.id' => intval($guild->discord_id)
-        ));
-        $this->channels = $discord->guild->getGuildChannels(array(
-            'guild.id' => intval($guild->discord_id)
-        ));
-        $this->emojis = $discord->emoji->listGuildEmojis(array(
-            'guild.id' => intval($guild->discord_id)
-        ));
+        $translator = MessageTranslator::to($guild)
+            ->addGym($raid->getGym())
+            ->addRaid($raid)
+            ->addUser($raid->getLastUserAction()->getUser());
 
         //Récupération du message selon le format choisi
         if ($this->format == 'auto') {
@@ -140,7 +134,7 @@ class Connector extends Model
             $embed = $this->getEmbedMessage($raid, $guild);
         }
         return [
-            'content' => $content,
+            'content' => $translator->translate($content),
             'embed' => $embed,
         ];
     }
@@ -211,98 +205,10 @@ class Connector extends Model
     public function getCustomMessage($raid, $guild)
     {
         if ($raid->isFuture()) {
-            $message = $this->custom_message_before;
+            return $this->custom_message_before;
         } else {
-            $message = $this->custom_message_after;
+            return $this->custom_message_after;
         }
-        return $this->translate($message, $raid, $guild);
-    }
-
-    public function translate($message, $raid, $guild)
-    {
-
-        $username = ($raid->getLastUserAction()->getUser()) ? $raid->getLastUserAction()->getUser()->getNickname($guild->id) : false;
-
-        $role_poi_lie = Role::where('gym_id', $raid->gym_id)->first();
-        $role_zone_liee = ($raid->gym->zone) ? Role::where('zone_id', $raid->gym->zone->id)->first() : false;
-        $role_pokemon_lie = Role::where('pokemon_id', $raid->pokemon_id)->first();
-
-        $group = $raid->getGuildGroup($this->guild_id);
-
-        //Gestion des tags
-        $patterns = array(
-            'raid_pokemon' => (!$raid->pokemon) ? false : html_entity_decode($raid->pokemon->name_fr),
-            'raid_pokemon_nettoye' => (!$raid->pokemon) ? false : Helpers::sanitize(html_entity_decode($raid->pokemon->name_fr)),
-            'raid_niveau' => ($raid->egg_level == 7) ? 'Méga' : $raid->egg_level,
-            'raid_debut' => ($raid->egg_level != 6) ? $raid->getStartTime()->format('H\hi') : $raid->getStartTime()->format('d/m/y à H\hi'),
-            'raid_fin' => ($raid->egg_level != 6) ? $raid->getEndTime()->format('H\hi') : $raid->getEndTime()->format('d/m/y à H\hi'),
-
-            'arene_nom' => $raid->getGym()->niantic_name,
-            'arene_nom_nettoye' => Helpers::sanitize($raid->getGym()->niantic_name),
-            'arene_nom_custom' => $raid->getGym()->name,
-            'arene_nom_custom_nettoye' => Helpers::sanitize($raid->getGym()->name),
-            'arene_description' => $raid->getGym()->description,
-            'arene_zone' => (!empty($raid->getGym()->zone)) ?  $raid->getGym()->zone->name : false,
-            'arene_ex' => ($raid->getGym()->ex) ? '[EX]' : false,
-            'arene_zone_nettoye' => (!empty($raid->getGym()->zone)) ?  Helpers::sanitize($raid->getGym()->zone->name) : false,
-            'arene_gmaps' => (!empty($raid->getGym()->google_maps_url)) ?  $raid->getGym()->google_maps_url : false,
-
-            'role_poi_lie' => (!empty($role_poi_lie)) ? "@{$role_poi_lie->name}" : '',
-            'role_zone_liee' => (!empty($role_zone_liee)) ? "@{$role_zone_liee->name}" : '',
-            'role_pokemon_lie' => (!empty($role_pokemon_lie)) ? "@{$role_pokemon_lie->name}" : '',
-
-            'utilisateur' => $username,
-
-            'nb_participants' => (!empty($group)) ? $group->getNbParticipants() : '0',
-            'nb_participants_present' => (!empty($group)) ? $group->getNbParticipants('present') : '0',
-            'nb_participants_remote' => (!empty($group)) ? $group->getNbParticipants('remote') : '0',
-            'liste_participants' => (!empty($group)) ? $group->getListeParticipants() : '',
-        );
-
-
-        foreach ($patterns as $pattern => $valeur) {
-            $message = str_replace('{' . $pattern . '}', $valeur, $message);
-        }
-
-        //Gestion des mentions
-        if (strstr($message, '@')) {
-            foreach ($this->roles as $role) {
-                if (strstr($message, '@' . $role->name)) {
-                    $message = str_replace('@' . $role->name, '<@&' . $role->id . '>', $message);
-                }
-            }
-        }
-
-        if ($username && strstr($message, '@' . $username)) {
-            $user = $raid->getLastUserAction()->getUser();
-            $message = str_replace('@' . $username, '<@!' . $user->discord_id . '>', $message);
-        }
-
-        //Gestion des salons #
-        if (strstr($message, '#')) {
-            foreach ($this->channels as $channel) {
-                if (strstr($message, '#' . $channel->name)) {
-                    $message = str_replace('#' . $channel->name, '<#' . $channel->id . '>', $message);
-                }
-            }
-        }
-
-        //Gestion des emojis
-        if (strstr($message, ':')) {
-            if (!empty($this->emojis)) {
-                foreach ($this->emojis as $emoji) {
-                    if (strstr($message, ':' . $emoji->name . ':')) {
-                        $message = str_replace(':' . $emoji->name . ':', '<:' . $emoji->name . ':' . $emoji->id . '>', $message);
-                    }
-                }
-            }
-        }
-
-        //On nettoye les arobases inutles (sans fare de regex parce que c'est chiant ^^)
-        $message = str_replace('<@', '##<##', $message);
-        $message = str_replace('@', '', $message);
-        $message = str_replace('##<##', '<@', $message);
-        return $message;
     }
 
     public function getEmbedMessage($raid, $guild)

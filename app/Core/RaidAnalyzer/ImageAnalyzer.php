@@ -45,8 +45,10 @@ class ImageAnalyzer
         $this->colorPicker = new ColorPicker();
         $this->MicrosoftOCR = new MicrosoftOCR();
         $this->imageData = $this->saveImage($source);
-        $this->coordinates = new Coordinates($this->imageData->width, $this->imageData->height);
-        $this->imageData->type = $this->getImageType();
+        if (empty($this->result->error)) {
+            $this->coordinates = new Coordinates($this->imageData->width, $this->imageData->height);
+            $this->imageData->type = $this->getImageType();
+        }
     }
 
     private function _log($text, $extra = '')
@@ -130,14 +132,14 @@ class ImageAnalyzer
         if ($this->debug) $this->_log('Last pixel : ' . $lastPixel);
         if ($firtPixel > 1 || $lastPixel < (imagesy($image) - 1)) {
             if ($this->debug) $this->_log('Image has android bar. Crop to get needed size');
-            $image = $this->cropImage($image, $firtPixel, $lastPixel);
+            $image = $this->cropImage($image, $firtPixel + 1, $lastPixel - 1, $source);
         }
 
         imagejpeg($image, $path);
 
         $image_ocr = imagecreatefromjpeg($path);
         $lastPixel = $this->getLastPixel($image_ocr);
-        $image_ocr = $this->cropImage($image_ocr, $lastPixel * 0.04, $lastPixel);
+        $image_ocr = $this->cropImage($image_ocr, $lastPixel * 0.04, $lastPixel, $source);
         imagejpeg($image_ocr, $path_ocr);
 
         //Return data
@@ -225,8 +227,11 @@ class ImageAnalyzer
      * @param type $lastPixel
      * @return type
      */
-    private function cropImage($image, $firstPixel, $lastPixel)
+    private function cropImage($image, $firstPixel, $lastPixel, $source)
     {
+        Log::debug($source);
+        Log::debug($firstPixel);
+        Log::debug($lastPixel);
         $image2 = imagecrop($image, ['x' => 0, 'y' => $firstPixel, 'width' => imagesx($image), 'height' => $lastPixel - $firstPixel]);
         if ($image2 !== FALSE) {
             imagedestroy($image);

@@ -3,9 +3,10 @@
 namespace App\Core\RaidAnalyzer;
 
 use App\Core\Discord;
-use App\Core\RaidAnalyzer\GymSearch;
-use App\Core\RaidAnalyzer\PokemonSearch;
 use Illuminate\Support\Facades\Log;
+use App\Core\RaidAnalyzer\GymSearch;
+use App\Core\Discord\MessageTranslator;
+use App\Core\RaidAnalyzer\PokemonSearch;
 
 class TextAnalyzer
 {
@@ -31,7 +32,7 @@ class TextAnalyzer
 
         $this->guild = $guild;
         $this->user = $user;
-        $this->text = Discord::translateFrom($source, $this->guild, $this->user);
+        $this->text = MessageTranslator::from($this->guild)->translate($source);
         $this->channel_discord_id = $channel_discord_id;
         $this->gymSearch = new GymSearch($guild);
         $this->pokemonSearch = new PokemonSearch();

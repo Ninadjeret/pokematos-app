@@ -65,9 +65,12 @@ class RaidController extends Controller
 
         if ($url) {
             $imageAnalyzer = new ImageAnalyzer($url, $guild);
-            $imageAnalyzer->run();
-            $result = $imageAnalyzer->result;
-            return response()->json($result, 200);
+            if (empty($imageAnalyzer->result->error)) {
+                $imageAnalyzer->run();
+                $result = $imageAnalyzer->result;
+                return response()->json($result, 200);
+            }
+            return response()->json('image_failed', 400);
         } else {
             return response()->json('URL de l\'image obligatoire', 400);
         }

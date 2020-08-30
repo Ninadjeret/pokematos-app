@@ -6,10 +6,11 @@ use App\Models\Stop;
 use App\Models\Event;
 use App\Models\EventTrain;
 use App\Events\Events\TrainUpdated;
-use Illuminate\Database\Eloquent\Model;
-use App\Events\Events\TrainStepChecked;
-use App\Events\Events\TrainStepUnchecked;
 use Illuminate\Support\Facades\Log;
+use App\Core\Discord\MessageTranslator;
+use App\Events\Events\TrainStepChecked;
+use Illuminate\Database\Eloquent\Model;
+use App\Events\Events\TrainStepUnchecked;
 
 class EventTrainStep extends Model
 {
@@ -127,22 +128,17 @@ class EventTrainStep extends Model
         $next_step = $this->getNextStep();
         $next_start_time = ($next_step->milestone) ? new \DateTime($next_step->start_time) : false;
 
-        $content = str_replace([
-            '{etape_nom}',
-            '{etape_heure}',
-            '{etape_description}',
-            '{next_etape_nom}',
-            '{next_etape_heure}',
-            '{next_etape_description}'
-        ], [
-            $this->name,
-            ($start_time) ? $start_time->format('H\hi') : '',
-            $this->description,
-            $next_step->name,
-            ($next_start_time) ? $next_start_time->format('H\hi') : '',
-            $next_step->description
-        ], $event->guild->settings->events_trains_message_check);
+        $translatable = [
+            'etape_nom' => $this->name,
+            'etape_heure' => ($start_time) ? $start_time->format('H\hi') : '',
+            'etape_description' => $this->description,
+            'next_etape_nom' => $next_step->name,
+            'next_etape_heure' => ($next_start_time) ? $next_start_time->format('H\hi') : '',
+            'next_etape_description' => $next_step->description
+        ];
 
-        return \App\Core\Discord::encode($content, $event->guild, false);
+        return MessageTranslator::to($event->guild)
+            ->addCustomTranslatable($translatable)
+            ->translate($event->guild->settings->events_trains_message_check);
     }
 }
