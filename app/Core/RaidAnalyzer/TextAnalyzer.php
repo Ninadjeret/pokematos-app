@@ -100,6 +100,12 @@ class TextAnalyzer
             return (int) preg_replace('`[^0-9]`', '', $matches[0]);
         }
 
+        //Recherche de la version simplifiée inversée
+        preg_match('/t\d/i', $this->text, $matches);
+        if (!empty($matches)) {
+            return (int) preg_replace('`[^0-9]`', '', $matches[0]);
+        }
+
         if (stristr($this->text, 'mega') || stristr($this->text, 'méga')) {
             return 7;
         }
