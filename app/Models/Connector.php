@@ -9,8 +9,9 @@ use App\Models\Guild;
 use App\Models\Pokemon;
 use RestCord\DiscordClient;
 use App\Models\DiscordMessage;
-use App\Core\Discord\MessageTranslator;
+use App\Core\Raids\RaidHelpers;
 use Illuminate\Support\Facades\Log;
+use App\Core\Discord\MessageTranslator;
 use Illuminate\Database\Eloquent\Model;
 
 class Connector extends Model
@@ -239,8 +240,9 @@ class Connector extends Model
 
         if (is_array($this->auto_settings)) {
             if (in_array('cp', $this->auto_settings) && $raid->pokemon) {
-                $description[] = "Normal : CP entre " . $raid->pokemon->cp['lvl20']['min'] . " et " . $raid->pokemon->cp['lvl20']['max'] . "\r\n" .
-                    "Bost Météo : CP entre " . $raid->pokemon->cp['lvl25']['min'] . " et " . $raid->pokemon->cp['lvl25']['max'];
+                $pokemon = RaidHelpers::getPokemonForCp($raid);
+                $description[] = "Normal : CP entre " . $pokemon->cp['lvl20']['min'] . " et " . $pokemon->cp['lvl20']['max'] . "\r\n" .
+                    "Bost Météo : CP entre " . $pokemon->cp['lvl25']['min'] . " et " . $pokemon->cp['lvl25']['max'];
             }
             if (in_array('arene_desc', $this->auto_settings) && !empty($raid->getGym()->description)) {
                 $description[] = $this->translate($raid->getGym()->description, $raid, $guild);
