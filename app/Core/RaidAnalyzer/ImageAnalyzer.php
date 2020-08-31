@@ -211,6 +211,9 @@ class ImageAnalyzer
             if ($rgb['red'] == 36 && $rgb['green'] == 132 & $rgb['blue'] == 232) {
                 continue;
             }
+            if ($rgb['red'] > 230 && $rgb['red'] == $rgb['blue'] && $rgb['red'] == $rgb['green']) {
+                continue;
+            }
             if ($rgb['red'] ==  $rgb['blue'] && $rgb['red'] == $rgb['green']) {
                 continue;
             }
