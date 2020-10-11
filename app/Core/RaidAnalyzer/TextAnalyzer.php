@@ -2,7 +2,7 @@
 
 namespace App\Core\RaidAnalyzer;
 
-use App\Core\Discord;
+use App\Core\Discord\Discord;
 use Illuminate\Support\Facades\Log;
 use App\Core\RaidAnalyzer\GymSearch;
 use App\Core\Discord\MessageTranslator;

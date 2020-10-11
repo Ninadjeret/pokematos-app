@@ -132,14 +132,14 @@ class ImageAnalyzer
         if ($this->debug) $this->_log('Last pixel : ' . $lastPixel);
         if ($firtPixel > 1 || $lastPixel < (imagesy($image) - 1)) {
             if ($this->debug) $this->_log('Image has android bar. Crop to get needed size');
-            $image = $this->cropImage($image, $firtPixel + 1, $lastPixel - 1, $source);
+            $image = $this->cropImage($image, $firtPixel + 1, $lastPixel - 1, 0, $source);
         }
 
         imagejpeg($image, $path);
 
         $image_ocr = imagecreatefromjpeg($path);
         $lastPixel = $this->getLastPixel($image_ocr);
-        $image_ocr = $this->cropImage($image_ocr, $lastPixel * 0.04, $lastPixel, $source);
+        $image_ocr = $this->cropImage($image_ocr, $lastPixel * 0.04, $lastPixel, imagesx($image) * 0.2, $source);
         imagejpeg($image_ocr, $path_ocr);
 
         //Return data
@@ -217,10 +217,10 @@ class ImageAnalyzer
             if ($rgb['red'] ==  $rgb['blue'] && $rgb['red'] == $rgb['green']) {
                 continue;
             }
-            return $y;
+            return ($y > 0) ? $y : 1;
         }
 
-        return 0;
+        return 1;
     }
 
     /**
@@ -230,12 +230,12 @@ class ImageAnalyzer
      * @param type $lastPixel
      * @return type
      */
-    private function cropImage($image, $firstPixel, $lastPixel, $source)
+    private function cropImage($image, $firstPixel, $lastPixel, $left = 0, $source)
     {
         Log::debug($source);
         Log::debug($firstPixel);
         Log::debug($lastPixel);
-        $image2 = imagecrop($image, ['x' => 0, 'y' => $firstPixel, 'width' => imagesx($image), 'height' => $lastPixel - $firstPixel]);
+        $image2 = imagecrop($image, ['x' => $left, 'y' => $firstPixel, 'width' => imagesx($image) - $left, 'height' => $lastPixel - $firstPixel]);
         if ($image2 !== FALSE) {
             imagedestroy($image);
             return $image2;
@@ -298,41 +298,6 @@ class ImageAnalyzer
         $result = EggClassifier::getLevel($image);
         imagedestroy($image);
         return $result;
-        $this->result->error = "Le niveau du raid n'a pas été trouvé";
-        return false;
-    }
-
-    public function getEggLevel()
-    {
-        $egg_level = 0;
-        $image = imagecreatefromjpeg($this->imageData->path);
-
-        if ($this->debug) $this->_log('---------- Egg level Extraction ----------');
-        foreach (array(5, 4, 3, 2, 1) as $egglevel) {
-            $count_egg_level = 0;
-            foreach ($this->coordinates->forEggLevel() as $coor) {
-                if (!in_array($egglevel, $coor->lvl)) {
-                    continue;
-                }
-                $rgb = $this->colorPicker->pickColor($image, $coor->x, $coor->y);
-                if ($this->colorPicker->isEgglevelColor($rgb)) {
-                    $count_egg_level += 1;
-                    if ($this->debug) $this->_log('Pixel matches');
-                } else {
-                    if ($this->debug) $this->_log('Pixel does not match');
-                }
-            }
-
-            if ($this->debug) $this->_log($count_egg_level . ' matching pixels, ' . $egglevel . ' expected');
-
-            if ($egglevel === $count_egg_level) {
-                imagedestroy($image);
-                $egglevel = $egglevel;
-                return $egglevel;
-            }
-        }
-
-        imagedestroy($image);
         $this->result->error = "Le niveau du raid n'a pas été trouvé";
         return false;
     }

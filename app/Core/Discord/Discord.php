@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core;
+namespace App\Core\Discord;
 
 use App\Models\Role;
 use GuzzleHttp\Client;

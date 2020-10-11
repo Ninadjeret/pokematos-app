@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Core\Discord;
+use App\Core\Discord\Discord;
 use App\Models\Guild;
 use Illuminate\Database\Eloquent\Model;
 

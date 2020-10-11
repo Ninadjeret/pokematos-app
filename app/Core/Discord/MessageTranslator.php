@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Discord;
+namespace App\Core\Discord;;
 
 use App\Models\Role;
 use App\Core\Helpers;
@@ -197,10 +197,10 @@ class MessageTranslator
         }
       }
     }
-
-    if ($this->translatable['utilisateur'] && strstr($this->translated, '@' . $this->translatable['utilisateur'])) {
-      $user = $this->user;
-      $message = str_replace('@' . $this->translatable['utilisateur'], '<@!' . $user->discord_id . '>', $this->translated);
+    if (!empty($this->user)) {
+      if ($this->translatable['utilisateur'] && strstr($this->translated, '@' . $this->translatable['utilisateur'])) {
+        $message = str_replace('@' . $this->translatable['utilisateur'], '<@!' . $this->user->discord_id . '>', $this->translated);
+      }
     }
 
     //Gestion des salons #

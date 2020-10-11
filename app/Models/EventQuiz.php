@@ -130,7 +130,7 @@ class EventQuiz extends Model
         $this->update(['status' => 'active']);
 
         //On avertit le bot de la MAJ
-        \App\Core\Discord::SyncBot();
+        \App\Core\Discord\Discord::SyncBot();
 
         $this->sendToDiscord('start_intro', [
             '%quiz_name' => $this->event->name,
@@ -161,7 +161,7 @@ class EventQuiz extends Model
         $this->update(['status' => 'closed']);
 
         //On avertit le bot de la MAJ
-        \App\Core\Discord::SyncBot();
+        \App\Core\Discord\Discord::SyncBot();
 
         $this->sendToDiscord('quiz_ended');
         sleep(5);

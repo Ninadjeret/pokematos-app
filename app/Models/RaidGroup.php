@@ -5,7 +5,7 @@ namespace App\Models;
 use App\User;
 use App\Models\Raid;
 use App\Core\Helpers;
-use App\Core\Discord;
+use App\Core\Discord\Discord;
 use App\Models\Guild;
 use App\Models\Connector;
 use App\Models\RaidParticipant;

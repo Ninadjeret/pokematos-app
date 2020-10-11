@@ -77,7 +77,7 @@ class PurgeDiscordInvasionData
                     $message = RocketMessage::where('message_discord_id', $message_ids[0])->first();
                     RocketMessage::destroy($message->id);
                 } else {
-                    \App\Core\Discord::bulkDeleteMessages([
+                    \App\Core\Discord\Discord::bulkDeleteMessages([
                         'channel_id' => $channel_id,
                         'messages_ids' => $message_ids,
                     ]);

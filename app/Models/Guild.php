@@ -166,7 +166,7 @@ class Guild extends Model
         }
 
         //On avertit le bot de la MAJ
-        \App\Core\Discord::SyncBot();
+        \App\Core\Discord\Discord::SyncBot();
 
         return true;
     }

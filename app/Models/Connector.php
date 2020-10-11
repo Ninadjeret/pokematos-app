@@ -126,13 +126,13 @@ class Connector extends Model
         //Récupération du message selon le format choisi
         if ($this->format == 'auto') {
             $content = '';
-            $embed = $this->getEmbedMessage($raid, $guild);
+            $embed = $this->getEmbedMessage($raid, $guild, $translator);
         } elseif ($this->format == 'custom') {
             $content = $this->getCustomMessage($raid, $guild);
             $embed = [];
         } elseif ($this->format == 'both') {
             $content = $this->getCustomMessage($raid, $guild);
-            $embed = $this->getEmbedMessage($raid, $guild);
+            $embed = $this->getEmbedMessage($raid, $guild, $translator);
         }
         return [
             'content' => $translator->translate($content),
@@ -212,7 +212,7 @@ class Connector extends Model
         }
     }
 
-    public function getEmbedMessage($raid, $guild)
+    public function getEmbedMessage($raid, $guild, $translator)
     {
 
         //Gestion des infos du raid
@@ -242,10 +242,10 @@ class Connector extends Model
             if (in_array('cp', $this->auto_settings) && $raid->pokemon) {
                 $pokemon = RaidHelpers::getPokemonForCp($raid);
                 $description[] = "Normal : CP entre " . $pokemon->cp['lvl20']['min'] . " et " . $pokemon->cp['lvl20']['max'] . "\r\n" .
-                    "Bost Météo : CP entre " . $pokemon->cp['lvl25']['min'] . " et " . $pokemon->cp['lvl25']['max'];
+                    "Boost Météo : CP entre " . $pokemon->cp['lvl25']['min'] . " et " . $pokemon->cp['lvl25']['max'];
             }
             if (in_array('arene_desc', $this->auto_settings) && !empty($raid->getGym()->description)) {
-                $description[] = $this->translate($raid->getGym()->description, $raid, $guild);
+                $description[] = $translator->translate($raid->getGym()->description, $raid, $guild);
             }
         }
 

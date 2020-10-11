@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\User;
-use App\Core\Discord;
+use App\Core\Discord\Discord;
 use App\Models\Guild;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
