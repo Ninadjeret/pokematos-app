@@ -6,7 +6,7 @@ use Tests\TestCase;
 use App\Models\Guild;
 use App\Models\Stop;
 use Illuminate\Support\Facades\Log;
-use App\Core\RaidAnalyzer\GymSearch;
+use App\Core\Analyzer\GymSearch;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

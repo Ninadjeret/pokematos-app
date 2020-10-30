@@ -7,8 +7,9 @@ use App\Models\Guild;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use App\Core\Discord\MessageTranslator;
-use App\Core\RaidAnalyzer\EggClassifier;
-use App\Core\RaidAnalyzer\ImageAnalyzer;
+use App\Core\Analyzer\EggClassifier;
+use App\Core\Analyzer\ImageAnalyzer;
+use App\Core\Analyzer\RewardSearch;
 
 class Test extends Command
 {
@@ -43,7 +44,17 @@ class Test extends Command
      */
     public function handle()
     {
-        $translator = MessageTranslator::to(Guild::find(1))->addUser(User::find(1))->translate('Coucou {utilisateur}');
-        $this->line(print_r($translator, true));
+        $instance = new \App\Core\Analyzer\Image\Quest([
+            'source_url' => 'https://cdn.discordapp.com/attachments/602385822339039243/765171155644448768/Screenshot_20201012_131432_com.nianticlabs.pokemongo.jpg',
+            'source_text' => 'Salamèche',
+            'guild' => Guild::find(1),
+            'user' => User::find(1),
+            'channel_discord_id' => null,
+        ]);
+
+        print_r($instance->getReward());
+
+        //$instance->perform();
+        //print_r($instance->result);
     }
 }

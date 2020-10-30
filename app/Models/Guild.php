@@ -50,6 +50,10 @@ class Guild extends Model
         'raidreporting_gym_min_proability' => ['default' => 70, 'type' => 'integer'],
         'raidreporting_allowed_channels' => ['default' => [], 'type' => 'array'],
 
+        'questreporting_images_active' => ['default' => false, 'type' => 'boolean'],
+        'questreporting_images_delete' => ['default' => false, 'type' => 'boolean'],
+        'questreporting_allowed_channels' => ['default' => [], 'type' => 'array'],
+
         'welcome_active' => ['default' => false, 'type' => 'boolean'],
         'welcome_message' => ['default' => 'Bienvenue {utilisateur}, nous sommes ravis de te voir ici !', 'type' => 'string'],
         'welcome_channel_discord_id' => ['default' => false, 'type' => 'string'],
