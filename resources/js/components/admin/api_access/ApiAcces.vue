@@ -14,7 +14,7 @@
         <input disabled v-model="key" type="text" />
         <div class="text-xs-center">
           <v-btn
-            v-if="token_message.length == 0"
+            v-if="token_message.length == 0 && this.$route.params.api_access_id"
             @click="updateToken"
             flat
             center
@@ -31,7 +31,7 @@
       <v-subheader>Autorisations</v-subheader>
       <div class="setting checkbox">
         <div>
-          <label>Authorisations accordées</label>
+          <label>Autorisations accordées</label>
           <p class="description">
             Cochez les droits que vous souhaitez donner pour l'utilisation de
             cet accès à l'API

@@ -21,7 +21,7 @@ class ExtAuthenticate
     {
 
         $guild = Guild::find($request->guild);
-        if (!$guild || empty($guild)) return response()->json('Guild does not exists', 400);
+        if (!$guild || empty($guild)) return response()->json('Guild does not exists', 404);
 
         $token = $request->bearerToken();
         if (empty($token)) return response()->json('You must specify a bearer token', 403);
