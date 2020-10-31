@@ -11,4 +11,6 @@ Route::group(['middleware' => ['can:city_access']], function () {
 });
 Route::group(['middleware' => ['can:guild_manage']], function () {
   Route::resource('guilds/{guild}/connectors', 'App\Raids\ConnectorController');
+  Route::resource('guilds/{guild}/api_access', 'App\Guilds\ApiAccessController');
+  Route::put('guilds/{guild}/api_access/{api_access}/token', 'App\Guilds\ApiAccessController@updateToken');
 });

@@ -3,25 +3,31 @@
     <div class="parent_view" v-if="$route.name == 'admin'">
       <div
         class="settings-section"
-        v-if="user.permissions[guild.id].find(val => val === 'guild_manage' || val === 'events_manage')"
+        v-if="
+          user.permissions[guild.id].find(
+            (val) => val === 'guild_manage' || val === 'events_manage'
+          )
+        "
         v-for="guild in currentCity.guilds"
       >
-        <v-subheader>Discord {{guild.name}}</v-subheader>
+        <v-subheader>Discord {{ guild.name }}</v-subheader>
         <v-list>
           <template
-            v-if="user.permissions[guild.id].find(val => val === item.permission)"
+            v-if="
+              user.permissions[guild.id].find((val) => val === item.permission)
+            "
             v-for="(item, index) in discordItems"
           >
             <v-list-tile
               avatar
               :key="item.route"
-              :to="{ name: item.route, params: { id: guild.id }}"
+              :to="{ name: item.route, params: { id: guild.id } }"
             >
               <v-list-tile-avatar>
-                <v-icon>{{item.icon}}</v-icon>
+                <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                <v-list-tile-title>{{ item.label }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </template>
@@ -32,20 +38,20 @@
         class="settings-section"
         v-if="canAccessCityParam('zone_edit') || canAccessCityParam('poi_edit')"
       >
-        <v-subheader v-if="currentCity">{{currentCity.name}}</v-subheader>
+        <v-subheader v-if="currentCity">{{ currentCity.name }}</v-subheader>
         <v-list>
           <template v-for="(item, index) in generalItems">
             <v-list-tile
               avatar
               v-if="canAccessCityParam(item.permission)"
               :key="item.route"
-              :to="{ name: item.route}"
+              :to="{ name: item.route }"
             >
               <v-list-tile-avatar>
-                <v-icon>{{item.icon}}</v-icon>
+                <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                <v-list-tile-title>{{ item.label }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </template>
@@ -54,7 +60,9 @@
 
       <div
         class="settings-section"
-        v-if="canAccessCityParam('boss_edit') || canAccessCityParam('quest_edit')"
+        v-if="
+          canAccessCityParam('boss_edit') || canAccessCityParam('quest_edit')
+        "
       >
         <v-subheader>Global</v-subheader>
         <v-list>
@@ -63,13 +71,13 @@
               avatar
               v-if="canAccessCityParam(item.permission)"
               :key="item.route"
-              :to="{ name: item.route}"
+              :to="{ name: item.route }"
             >
               <v-list-tile-avatar>
-                <v-icon>{{item.icon}}</v-icon>
+                <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                <v-list-tile-title>{{ item.label }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </template>
@@ -161,6 +169,12 @@ export default {
           label: "Droits d'accès",
           route: "admin.access",
           icon: "lock_open",
+          permission: "guild_manage",
+        },
+        {
+          label: "Accès API",
+          route: "admin.api_access",
+          icon: "sync_alt",
           permission: "guild_manage",
         },
         {

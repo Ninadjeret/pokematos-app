@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Models\Guild;
 use App\Models\GuildApiAccess;
+use App\Models\GuildApiLog;
 use Illuminate\Support\Facades\Log;
 
 class ExtAuthenticate
@@ -28,7 +29,14 @@ class ExtAuthenticate
         $guild_api_access = GuildApiAccess::where('key', $token)->first();
         if (!$guild_api_access || empty($guild_api_access)) return response()->json('Credentials are not valid', 403);
 
-        if ($guild_api_access->guild_id != $guild->id) return response()->json('You can not access to this guild with those credentials', 403);
+        if ($guild_api_access->guild_id != $guild->id) {
+            GuildApiLog::create([
+                'api_access_id' => $guild_api_access->id,
+                'endpoint' => $request->path(),
+                'status' => 403,
+            ]);
+            return response()->json('You can not access to this guild with those credentials', 403);
+        }
 
         return $next($request);
     }

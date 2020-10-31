@@ -47,6 +47,9 @@ import AdminEventsInvits from "./components/admin/events/Invits.vue";
 import AdminQuizs from "./components/admin/quizs/Quizs.vue";
 import AdminQuiz from "./components/admin/quizs/Quiz.vue";
 
+import AdminApiAccess from "./components/admin/api_access/ApiAccess.vue";
+import AdminApiAcces from "./components/admin/api_access/ApiAcces.vue";
+
 const routes = [{
         path: "/",
         name: "map",
@@ -314,6 +317,33 @@ const routes = [{
                         component: AdminQuestsConnector
                     }
                 ]
+            },
+            {
+                path: ":id/api_access",
+                name: "admin.api_access",
+                meta: {
+                    title: "Accès API",
+                    parent: "admin"
+                },
+                component: AdminApiAccess
+            },
+            {
+                path: ":id/api_access/add",
+                name: "admin.api_access.add",
+                meta: {
+                    title: "Nouvel accès API",
+                    parent: "admin.api_access"
+                },
+                component: AdminApiAcces
+            },
+            {
+                path: ":id/api_access/:api_access_id",
+                name: "admin.api_access.edit",
+                meta: {
+                    title: "Modifier l'accès API",
+                    parent: "admin.api_access"
+                },
+                component: AdminApiAcces
             },
             {
                 path: ":id/rocket",
