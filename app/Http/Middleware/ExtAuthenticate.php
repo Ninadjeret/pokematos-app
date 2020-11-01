@@ -20,22 +20,20 @@ class ExtAuthenticate
     public function handle($request, Closure $next)
     {
 
-        $guild = Guild::find($request->guild);
-        if (!$guild || empty($guild)) return response()->json('Guild does not exists', 404);
-
         $token = $request->bearerToken();
         if (empty($token)) return response()->json('You must specify a bearer token', 403);
 
         $guild_api_access = GuildApiAccess::where('key', $token)->first();
         if (!$guild_api_access || empty($guild_api_access)) return response()->json('Credentials are not valid', 403);
 
-        if ($guild_api_access->guild_id != $guild->id) {
+        $guild = Guild::find($guild_api_access->guild_id);
+        if (empty($guild)) {
             GuildApiLog::create([
                 'api_access_id' => $guild_api_access->id,
                 'endpoint' => $request->path(),
-                'status' => 403,
+                'status' => 404,
             ]);
-            return response()->json('You can not access to this guild with those credentials', 403);
+            return response()->json('Guild does not exist', 404);
         }
 
         return $next($request);

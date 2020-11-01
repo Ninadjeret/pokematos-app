@@ -50,6 +50,9 @@ import AdminQuiz from "./components/admin/quizs/Quiz.vue";
 import AdminApiAccess from "./components/admin/api_access/ApiAccess.vue";
 import AdminApiAcces from "./components/admin/api_access/ApiAcces.vue";
 
+import AdminPokemons from "./components/admin/pokemon/Pokemons.vue";
+import AdminPokemon from "./components/admin/pokemon/Pokemon.vue";
+
 const routes = [{
         path: "/",
         name: "map",
@@ -524,7 +527,8 @@ const routes = [{
                     parent: "admin.quiz.questions"
                 },
                 component: AdminQuiz
-            }, {
+            }, 
+            {
                 path: "quiz/questions/:question_id",
                 name: "admin.quiz.questions.edit",
                 meta: {
@@ -532,6 +536,24 @@ const routes = [{
                     parent: "admin.quiz.questions"
                 },
                 component: AdminQuiz
+            },
+            {
+                path: "pokemon",
+                name: "admin.pokemon",
+                meta: {
+                    title: "Gérer les Pokémon",
+                    parent: "admin"
+                },
+                component: AdminPokemons
+            }, 
+            {
+                path: "pokemon/:pokemon_id",
+                name: "admin.pokemon.edit",
+                meta: {
+                    title: "Modifier le Pokémon",
+                    parent: "admin.pokemon"
+                },
+                component: AdminPokemon
             }
         ]
     }

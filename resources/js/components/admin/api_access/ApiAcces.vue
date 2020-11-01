@@ -100,9 +100,7 @@ export default {
   },
   computed: {
     ApiUrl() {
-      return (
-        "https://app.pokematos.fr/api/ext/v1/guilds/" + this.$route.params.id
-      );
+      return "https://app.pokematos.fr/api/ext/v1/";
     },
   },
   created() {

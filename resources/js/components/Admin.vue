@@ -215,6 +215,12 @@ export default {
           icon: "device_unknown",
           permission: "quiz_manage",
         },
+        {
+          label: "Gérer les Pokémon",
+          route: "admin.pokemon",
+          icon: "device_unknown",
+          permission: "pokemon_manage",
+        },
       ],
     };
   },

@@ -15,10 +15,10 @@ use App\Http\Controllers\Controller;
 class RaidController extends Controller
 {
 
-  public function store(Request $request, $guild)
+  public function store(Request $request)
   {
     $guild_api_access = GuildApiAccess::where('key', $request->bearerToken())->first();
-    $guild = Guild::find($guild);
+    $guild = Guild::find($guild_api_access->guild_id);
 
     $args = [];
     $args['source_type'] = 'ext';

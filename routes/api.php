@@ -86,7 +86,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
 
     //commun
-    Route::get('pokemons', 'PokemonController@getAll');
     Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
     Route::put('pokemons/raidbosses', 'PokemonController@updateRaidBosses');
 
@@ -170,7 +169,7 @@ Route::group([
  * EXTERNAL ROUTES
  */
 Route::group([
-    'prefix' => 'ext/v1/guilds/{guild}',
+    'prefix' => 'ext/v1',
     'middleware' => ['auth.ext'],
 ], function ($router) {
     require base_path('routes/api/ext.v1.php');

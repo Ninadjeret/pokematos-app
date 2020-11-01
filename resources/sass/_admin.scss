@@ -419,3 +419,20 @@
 input[disabled] {
     background: #fafafa;
 }
+
+.gamemaster {
+    background: $primary;
+    color: #fff;
+    padding: 20px;
+
+    h2 {
+        font-family: 'Teko';
+        font-size: 20px;
+        text-align: center;
+    }
+
+    p {
+        text-align: center;
+        margin-bottom: 0;
+    }
+}

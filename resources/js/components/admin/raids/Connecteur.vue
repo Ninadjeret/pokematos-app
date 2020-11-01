@@ -21,14 +21,18 @@
                 v-for="channel in channels"
                 :value="channel.id"
                 :key="channel.id"
-              >{{channel.name}}</option>
+              >
+                {{ channel.name }}
+              </option>
             </select>
           </div>
         </div>
         <div class="settings-section">
           <div v-if="this.$route.params.connector_id">
             <v-subheader>Autres actions</v-subheader>
-            <v-list-tile color="pink" @click="dialog = true">Supprimer le connecteur</v-list-tile>
+            <v-list-tile color="pink" @click="dialog = true"
+              >Supprimer le connecteur</v-list-tile
+            >
           </div>
         </div>
       </v-tab-item>
@@ -114,7 +118,7 @@
           <div class="setting checkbox">
             <label>Filtrer la source</label>
             <v-checkbox
-              v-for="(source) in sources"
+              v-for="source in sources"
               v-model="filter_source_type"
               :key="source.value"
               :label="source.label"
@@ -133,7 +137,7 @@
           <div class="setting checkbox" v-if="format != 'custom'">
             <label>Options de l'annonce auto</label>
             <v-checkbox
-              v-for="(choice) in autoSettingsChoices"
+              v-for="choice in autoSettingsChoices"
               v-model="auto_settings"
               :key="choice.value"
               :label="choice.label"
@@ -207,9 +211,10 @@
           <div class="setting d-flex switch">
             <div>
               <label>Supprimer les messages à la fin du raid</label>
-              <p
-                class="description"
-              >Tous les messages d'annonces seront supprimés à la fin des raids concernés</p>
+              <p class="description">
+                Tous les messages d'annonces seront supprimés à la fin des raids
+                concernés
+              </p>
             </div>
             <v-switch v-model="delete_after_end"></v-switch>
           </div>
@@ -221,27 +226,37 @@
           <div class="setting d-flex switch">
             <div>
               <label>Créer des salons temporaires</label>
-              <p class="description">Une réaction permettra de créer un salon temporaire</p>
+              <p class="description">
+                Une réaction permettra de créer un salon temporaire
+              </p>
             </div>
             <v-switch v-model="add_channel"></v-switch>
           </div>
 
           <div v-if="add_channel" class="setting">
             <label>Catégorie de salon</label>
-            <p class="description">Le salon temporaire sera créé dans la catégorie choisie.</p>
-            <select v-if="channels_categories" v-model="channel_category_discord_id">
+            <p class="description">
+              Le salon temporaire sera créé dans la catégorie choisie.
+            </p>
+            <select
+              v-if="channels_categories"
+              v-model="channel_category_discord_id"
+            >
               <option
                 v-for="channel in channels_categories"
                 :value="channel.id.toString()"
                 :key="channel.id"
-              >{{channel.name}}</option>
+              >
+                {{ channel.name }}
+              </option>
             </select>
           </div>
           <div v-if="add_channel" class="setting">
             <label>Quand supprimer le salon ?</label>
-            <p
-              class="description"
-            >Définissez quand le salon du raid doit être supprimé. Par défaut, réservéz "En fin de journée" aux annonces de Raid EX</p>
+            <p class="description">
+              Définissez quand le salon du raid doit être supprimé. Par défaut,
+              réservéz "En fin de journée" aux annonces de Raid EX
+            </p>
             <select v-model="channel_duration">
               <option value="raidend">A la fin du raid</option>
               <option value="15min">15 min après la fin du raid</option>
@@ -256,9 +271,11 @@
           <div class="setting d-flex switch">
             <div>
               <label>Activer le suivi des participants</label>
-              <p
-                class="description"
-              >Des réactions sous les annonces de raids permettront aux joueurs de définir leur présence, leur mode (sur place ou à distance) et le nombre de comptes</p>
+              <p class="description">
+                Des réactions sous les annonces de raids permettront aux joueurs
+                de définir leur présence, leur mode (sur place ou à distance) et
+                le nombre de comptes
+              </p>
             </div>
             <v-switch v-model="add_participants"></v-switch>
           </div>
@@ -267,13 +284,17 @@
     </v-tabs-items>
 
     <v-btn dark fixed bottom right fab @click="submit()">
-      <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+      <v-progress-circular
+        v-if="loading"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
       <v-icon v-else>save</v-icon>
     </v-btn>
 
     <v-dialog v-model="dialog" persistent max-width="290">
       <v-card>
-        <v-card-title class="headline">Supprimer {{name}} ?</v-card-title>
+        <v-card-title class="headline">Supprimer {{ name }} ?</v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click="dialog = false">Annuler</v-btn>
@@ -428,7 +449,7 @@ export default {
         });
     },
     fetchPokemons() {
-      axios.get("/api/pokemons").then((res) => {
+      axios.get("/api/user/pokemon").then((res) => {
         this.pokemons = res.data;
       });
     },

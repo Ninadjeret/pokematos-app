@@ -12149,6 +12149,23 @@ input[disabled] {
   background: #fafafa;
 }
 
+.gamemaster {
+  background: #5a6cae;
+  color: #fff;
+  padding: 20px;
+}
+
+.gamemaster h2 {
+  font-family: "Teko";
+  font-size: 20px;
+  text-align: center;
+}
+
+.gamemaster p {
+  text-align: center;
+  margin-bottom: 0;
+}
+
 .user__card {
   background: url("https://assets.profchen.fr/img/app/user_bg.png") top right #5a6cae;
   background-size: cover;

@@ -29,9 +29,9 @@ class CheckExtPermission
       GuildApiLog::create([
         'api_access_id' => $guild_api_access->id,
         'endpoint' => $request->path(),
-        'status' => 403.1,
+        'status' => 403,
       ]);
-      return response()->json('You can not access to this endpoind', 403);
+      return response()->json('You can not access to this endpoint', 403);
     }
 
     //If user has permissions
