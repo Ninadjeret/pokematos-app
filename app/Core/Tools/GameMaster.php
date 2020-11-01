@@ -25,6 +25,9 @@ class GameMaster
       if (strstr($node->templateId, '_SHADOW')) continue;
       if (strstr($node->templateId, '_FALL_2019')) continue;
       if (strstr($node->templateId, '_COSTUME_')) continue;
+      if (strstr($node->templateId, '_2019')) continue;
+      if (strstr($node->templateId, '_2020')) continue;
+      if (strstr($node->templateId, '_2021')) continue;
 
       $pokedex_id = substr($node->templateId, 2, 3);
       $name_ocr = (isset($names_fr[(int)$pokedex_id])) ? $names_fr[(int)$pokedex_id - 1] : null;

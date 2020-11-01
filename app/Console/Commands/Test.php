@@ -4,12 +4,14 @@ namespace App\Console\Commands;
 
 use App\User;
 use App\Models\Guild;
+use App\Models\Pokemon;
 use Illuminate\Console\Command;
+use App\Core\Tools\PokemonImagify;
+use App\Core\Analyzer\RewardSearch;
 use Illuminate\Support\Facades\Log;
-use App\Core\Discord\MessageTranslator;
 use App\Core\Analyzer\EggClassifier;
 use App\Core\Analyzer\ImageAnalyzer;
-use App\Core\Analyzer\RewardSearch;
+use App\Core\Discord\MessageTranslator;
 
 class Test extends Command
 {
@@ -44,7 +46,7 @@ class Test extends Command
      */
     public function handle()
     {
-        print_r(json_encode(['raids.post']));
+
         /*$instance = new \App\Core\Analyzer\Image\Quest([
             'source_url' => 'https://cdn.discordapp.com/attachments/602385822339039243/765171155644448768/Screenshot_20201012_131432_com.nianticlabs.pokemongo.jpg',
             'source_text' => 'Salamèche',

@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Models\Pokemon;
+use Illuminate\Console\Command;
+use App\Core\Tools\PokemonImagify;
+
+class GeneratePokemonThumbnails extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'generate:thumbnails';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        $pokemons = Pokemon::all();
+
+        foreach ($pokemons as $pokemon) {
+            $this->line("Génération pour {$pokemon->name_fr}");
+
+            $default_path = storage_path() . "/app/pokemon/default/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
+            $cropped_path = storage_path() . "/app/pokemon/cropped/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
+            $raid_path = storage_path() . "/app/pokemon/raid/map_marker_pokemon_{$pokemon->pokedex_id}.png";
+            if ($pokemon->form_id != '00') {
+                $raid_path = storage_path() . "/app/pokemon/raid/map_marker_pokemon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
+            }
+            $quest_path = storage_path() . "/app/pokemon/quest/map_marker_quest_pokemon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
+
+
+            /*$data = file_get_contents("https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Pokemon/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png");
+            if ($data == '404: Not Found') {
+                $this->alert("Image non trouvée pour {$pokemon->name_fr}");
+                continue;
+            }
+            $image = imagecreatefromstring($data);
+            imagepng($image, $default_path);
+            imagedestroy($image);*/
+
+
+            if (!file_exists($default_path)) {
+                $this->alert("Image non générée pour {$pokemon->name_fr}");
+                continue;
+            }
+
+            $image = new PokemonImagify($default_path);
+            $image->cropTransparentBg();
+            $image->save($cropped_path);
+            $image->createRaidThumbnail($cropped_path, $raid_path);
+            $image->createQuestThumbnail($cropped_path, $quest_path);
+        }
+    }
+}
