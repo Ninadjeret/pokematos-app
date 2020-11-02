@@ -23,7 +23,6 @@ trait Imageable
 
   private function saveImage($source)
   {
-
     $filename = 'capture-' . time() . '-' . Str::random(20);
     $path = storage_path('app/public/captures/' . $filename . '.jpg');
     $path_ocr = storage_path('app/public/captures/' . $filename . '-ocr.jpg');
@@ -150,9 +149,6 @@ trait Imageable
    */
   private function cropImage($image, $firstPixel, $lastPixel, $left = 0, $source)
   {
-    Log::debug($source);
-    Log::debug($firstPixel);
-    Log::debug($lastPixel);
     $image2 = imagecrop($image, ['x' => $left, 'y' => $firstPixel, 'width' => imagesx($image) - $left, 'height' => $lastPixel - $firstPixel]);
     if ($image2 !== FALSE) {
       imagedestroy($image);

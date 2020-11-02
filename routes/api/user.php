@@ -20,10 +20,10 @@ Route::group(['middleware' => ['can:guild_manage']], function () {
  * POKEMON ROUTES
  */
 Route::get('pokemon', 'App\Pokemon\PokemonController@index');
-Route::group(['middleware' => ['can:pokemon_manage']], function () {
-  Route::put('pokemon/raidbosses', 'PokemonController@updateRaidBosses');
-});
 Route::group(['middleware' => ['can:boss_edit']], function () {
+  Route::put('pokemon/raidbosses', 'App\Pokemon\RaidBossController@update');
+});
+Route::group(['middleware' => ['can:pokemon_manage']], function () {
   Route::get('pokemon/gamemaster', 'App\Pokemon\GameMasterController@get');
   Route::put('pokemon/gamemaster', 'App\Pokemon\GameMasterController@update');
   Route::get('pokemon/{pokemon}', 'App\Pokemon\PokemonController@show');

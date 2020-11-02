@@ -2,11 +2,13 @@
 
 namespace App\Core\Analyzer\Image;
 
-use App\Core\Analyzer\ImageAnalyzer;
+use App\Core\Analyzer\Analyzer;
+use App\Core\Analyzer\GymSearch;
+use App\Core\Analyzer\PokemonSearch;
 use App\Core\Analyzer\Traits\Textable;
 use App\Core\Analyzer\Traits\Imageable;
 
-class Quest extends ImageAnalyzer
+class Quest extends Analyzer
 {
 
   use Imageable, Textable;
@@ -15,6 +17,7 @@ class Quest extends ImageAnalyzer
   {
     $this->args = $args;
     $this->type = 'quest';
+    $this->source_type = 'img';
     $this->crop_width_ratio = 0;
     $this->result =
       (object) array(
@@ -47,8 +50,10 @@ class Quest extends ImageAnalyzer
 
   function getGym()
   {
-    $result = $this->gymSearch->findGym($this->ocr);
-    //$result = PoiSearch::addStops()->find($this->ocr);
+    $result = GymSearch::init($this->guild)
+      ->addStops()
+      ->setAccuracy($this->guild->settings->raidreporting_gym_min_proability)
+      ->find($this->source_text);
     if ($result) {
       if ($this->debug) $this->_log('Gym finded in database : ' . $result->gym->name);
       return $result->gym;
@@ -60,8 +65,7 @@ class Quest extends ImageAnalyzer
 
   public function getReward()
   {
-    $result = $this->pokemonSearch->findPokemonFromstring($this->source_text, 90);
-    //$result = PokemonSearch::init()->addQuestPokemons()->findFromstring($this->source_text, 90);
+    $result = PokemonSearch::init()->addQuestPokemon()->setAccuracy(90)->find($this->source_text);
     if ($result) {
       return (object) [
         'type' => 'pokemon',

@@ -37,7 +37,7 @@
           </div>
           <v-switch v-model="questreporting_images_delete"></v-switch>
         </div>
-        <div class="setting">
+        <div v-if="questreporting_images_active" class="setting">
           <label>Salons à analyser</label>
           <p class="description">
             Spécifiez les salons dans lesquels Pokématos doit analyser les
@@ -100,6 +100,7 @@ export default {
   computed: mapState(["currentCity"]),
   created() {
     this.fetch();
+    this.fetchChannels();
   },
   methods: {
     fetch() {

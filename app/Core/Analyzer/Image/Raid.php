@@ -2,15 +2,23 @@
 
 namespace App\Core\Analyzer\Image;
 
+use App\Core\Analyzer\Analyzer;
+use App\Core\Analyzer\GymSearch;
+use Illuminate\Support\Facades\Log;
 use App\Core\Analyzer\EggClassifier;
-use App\Core\Analyzer\ImageAnalyzer;
+use App\Core\Analyzer\PokemonSearch;
+use App\Core\Analyzer\Traits\Imageable;
 
-class Quest extends ImageAnalyzer
+class Raid extends Analyzer
 {
+
+  use Imageable;
+
   public function __construct($args)
   {
     $this->args = $args;
     $this->type = 'raid';
+    $this->source_type = 'img';
     $this->crop_width_ratio = 0.2;
     $this->result
       = (object) array(
@@ -55,6 +63,21 @@ class Quest extends ImageAnalyzer
       $this->result->date = $this->getExTime();
       $this->result->eggLevel = 6;
     }
+  }
+
+  public function getLogResult()
+  {
+    return [
+      'type' => $this->result->type,
+      'gym' => $this->result->gym,
+      'gym_probability' => $this->result->gym_probability,
+      'date' => $this->result->date,
+      'pokemon' => $this->result->pokemon,
+      'pokemon_probability' => $this->result->pokemon_probability,
+      'egg_level' => $this->result->eggLevel,
+      'url' => $this->source_url,
+      'ocr' => (property_exists($this, 'ocr')) ? implode(' ', $this->ocr) : '',
+    ];
   }
 
   private function getImageType()
@@ -107,7 +130,10 @@ class Quest extends ImageAnalyzer
 
   function getGym()
   {
-    $result = $this->gymSearch->findGym($this->ocr, $this->guild->settings->raidreporting_gym_min_proability);
+    $result = GymSearch::init($this->guild)
+      ->addGyms()
+      ->setAccuracy($this->guild->settings->raidreporting_gym_min_proability)
+      ->find($this->ocr[0]);
     if ($result) {
       if ($this->debug) $this->_log('Gym finded in database : ' . $result->gym->name . '(' . $result->probability . '%)');
       $this->result->gym_probability = $result->probability;
@@ -121,7 +147,10 @@ class Quest extends ImageAnalyzer
   function getExGym()
   {
     $value = implode(' ', $this->ocr);
-    $result = $this->gymSearch->findGymFromString($value, $this->guild->settings->raidreporting_gym_min_proability);
+    $result = GymSearch::init($this->guild)
+      ->addGyms()
+      ->setAccuracy($this->guild->settings->raidreporting_gym_min_proability)
+      ->find($value);
     if ($result) {
       if ($this->debug) $this->_log('Gym finded in database : ' . $result->gym->name . '(' . $result->probability . '%)');
       $this->result->gym_probability = $result->probability;
@@ -135,12 +164,8 @@ class Quest extends ImageAnalyzer
   function getPokemon()
   {
     $cp = $this->MicrosoftOCR->cp_line;
-    $result = $this->pokemonSearch->findPokemon($this->ocr, $cp, 90);
+    $result = PokemonSearch::init()->addQuestPokemon()->setAccuracy(90)->find($this->ocr, $cp);
     if ($result) {
-      if ($this->pokemonSearch->num_line) {
-        unset($this->ocr[$this->pokemonSearch->num_line]);
-        $this->ocr = array_values($this->ocr);
-      }
       if ($this->debug) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr . '(' . $result->probability . '%)');
       $this->result->pokemon_probability = $result->probability;
       return $result->pokemon;

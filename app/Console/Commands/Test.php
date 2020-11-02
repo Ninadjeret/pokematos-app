@@ -4,13 +4,17 @@ namespace App\Console\Commands;
 
 use App\User;
 use App\Models\Guild;
+use App\Models\Quest;
 use App\Models\Pokemon;
 use Illuminate\Console\Command;
+use App\Core\Analyzer\GymSearch;
 use App\Core\Tools\PokemonImagify;
+use Illuminate\Support\Collection;
 use App\Core\Analyzer\RewardSearch;
 use Illuminate\Support\Facades\Log;
 use App\Core\Analyzer\EggClassifier;
 use App\Core\Analyzer\ImageAnalyzer;
+use App\Core\Analyzer\PokemonSearch;
 use App\Core\Discord\MessageTranslator;
 
 class Test extends Command
@@ -47,6 +51,24 @@ class Test extends Command
     public function handle()
     {
 
+        /*$instance = new \App\Core\Analyzer\Image\Raid([
+            'source_url' => 'https://cdn.discordapp.com/attachments/446373100926271499/681247410789679138/Screenshot_20200223-210054.jpg',
+            'guild' => Guild::find(1),
+            'user' => User::find(1),
+            'channel_discord_id' => null,
+        ]);
+        $instance->perform();
+        $this->line(print_r($instance->result));*/
+
+        /*$instance = new \App\Core\Analyzer\Text\Raid([
+            'source_text' => '+raid Raid salamèche à chartres de biorez. Reste 20 min',
+            'guild' => Guild::find(1),
+            'user' => User::find(1),
+            'channel_discord_id' => null,
+        ]);
+        $instance->perform();
+        $this->line(print_r($instance->result));*/
+
         /*$instance = new \App\Core\Analyzer\Image\Quest([
             'source_url' => 'https://cdn.discordapp.com/attachments/602385822339039243/765171155644448768/Screenshot_20201012_131432_com.nianticlabs.pokemongo.jpg',
             'source_text' => 'Salamèche',
@@ -55,9 +77,11 @@ class Test extends Command
             'channel_discord_id' => null,
         ]);
 
-        print_r($instance->getReward());*/
+        $this->line(print_r($instance->getReward()));
+        Log::debug(print_r($instance->getReward(), true));*/
 
         //$instance->perform();
-        //print_r($instance->result);
+        //$this->line(print_r($instance->result));
+
     }
 }
