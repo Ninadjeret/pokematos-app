@@ -1,4 +1,3 @@
-
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
@@ -26,13 +25,15 @@
 @import 'rocket';
 @import 'status';
 @import 'events';
+@import 'rankings';
 
 html {
     font-size: 10px !important;
 }
+
 .navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 html,
@@ -45,28 +46,43 @@ v-app,
 }
 
 html {
-  font-size: 10px;
+    font-size: 10px;
 }
 
 body {
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
-  font-size: 1.4rem;
-  background: #fff;
-  line-height: 1.3;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 1.4rem;
+    background: #fff;
+    line-height: 1.3;
 }
-audio, canvas, iframe, img, svg, video {
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
     vertical-align: middle;
 }
+
 img {
     max-width: 100%;
     height: auto;
 }
-h3, h4 {
-    font-family: "Roboto","Helvetica","Arial",sans-serif;
+
+h3,
+h4 {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: 400;
 }
-h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
-    font-family: "Roboto","Helvetica","Arial",sans-serif;
+
+h1 small,
+h2 small,
+h3 small,
+h4 small,
+h5 small,
+h6 small {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: 400;
     line-height: 1.35;
     letter-spacing: -.02em;
@@ -77,11 +93,13 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
 .mb-60 {
     margin-bottom: 60px;
 }
+
 .v-content__wrap .container {
-    padding : 0;
+    padding: 0;
     width: 100%;
     max-width: 100%;
 }
+
 .bt {
     display: inline-block;
     background: $primary;
@@ -89,11 +107,12 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 10px;
     border-radius: 100px;
-    box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12), 0 1px 1px 0 rgba(0,0,0,.24);
+    box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, .12), 0 1px 1px 0 rgba(0, 0, 0, .24);
     padding: 10px 40px;
     line-height: 30px;
     position: relative;
 }
+
 .bt:before {
     content: "";
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -103,8 +122,9 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     border-radius: 100px;
     top: 5px;
     left: 5px;
-    width: calc( 100% - 10px );
+    width: calc(100% - 10px);
 }
+
 .bt.cancel {
     color: #fff !important;
 }
@@ -115,6 +135,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     justify-content: center;
     height: -webkit-fill-available;
 }
+
 .container {
     width: 100%;
     padding-right: 15px;
@@ -127,8 +148,10 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     .v-content {
         height: 100%;
     }
+
     .v-content__wrap {
         height: 100%;
+
         .container {
             height: 100%;
             max-width: 100% !important;
@@ -147,6 +170,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     font-family: 'Teko';
     font-size: 20px;
 }
+
 .raid__wrapper {
     display: flex;
     flex-direction: row;
@@ -154,20 +178,24 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     margin: 10px 0;
     background: $bg_light_grey;
 }
+
 .raid__img {
     min-width: 80px;
     padding-right: 10px;
 }
+
 .raid__img img {
     max-width: 70px;
     max-height: auto;
 }
+
 .raid__content h3 {
     font-family: 'Teko';
     font-size: 22px;
     margin: 5px 0 7px 0;
     line-height: 24px;
 }
+
 .raid__timer {
     display: inline-block;
     margin-left: 5px;
@@ -180,10 +208,12 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     padding: 5px 10px;
     vertical-align: top;
 }
+
 .raid__gym img {
     max-width: 20px;
     max-height: auto;
 }
+
 .raid__gym {
     font-size: 1.5rem;
 }
@@ -196,6 +226,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     display: inline-block;
     padding: 5px 40px;
 }
+
 .modal__screen .dialog__counter {
     background: orange;
 }
@@ -206,50 +237,60 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     display: flex;
     align-items: center;
 }
+
 .setting__wrapper .user__img {
     max-width: 50px;
     max-height: 50px;
     margin-right: 10px;
 }
+
 .setting__wrapper .user__img img {
     border-radius: 500px;
 }
+
 .setting__wrapper .user__info h3 {
     font-size: 18px;
     line-height: 30px;
     margin-bottom: 0;
     margin-top: 0;
 }
+
 .setting__wrapper .user__info a {
     color: #ca3366;
 }
+
 .setting__titre {
     margin: 0;
     font-size: 18px;
 }
+
 .setting__desc {
     color: #bbb;
     font-size: 1rem;
     margin: 0;
     line-height: 1.3rem;
 }
-.setting__wrapper > a,
-.setting__wrapper > span.setting-link {
+
+.setting__wrapper>a,
+.setting__wrapper>span.setting-link {
     padding: 10px 0;
     font-size: 16px;
     color: inherit;
     width: 100%;
 }
+
 .settings-section .credit {
     padding: 10px 15px;
     font-size: 14px;
     letter-spacing: 0;
     margin: 0 0 16px;
 }
+
 .settings-section .credit i.material-icons {
     font-size: 14px;
     vertical-align: middle;
 }
+
 .raid__timer.active {
     background: orange;
 }
@@ -264,89 +305,103 @@ input[type=range] {
     margin: 18px 0;
     width: 100%;
 }
+
 input[type=range]:focus {
-  outline: none;
+    outline: none;
 }
+
 input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 6px;
-  cursor: pointer;
-  animate: 0.2s;
-  /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
-  border-radius: 100px;
-  /*border: 0.2px solid #010101;*/
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    animate: 0.2s;
+    /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
+    background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
+    border-radius: 100px;
+    /*border: 0.2px solid #010101;*/
 }
+
 input[type=range]::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px $secondary, 0px 0px 1px $secondary;
-  /*border: 1px solid #000000;*/
-  height: 24px;
-  width: 24px;
-  border-radius: 100px;
-  background: $primary;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -9px;
+    box-shadow: 1px 1px 1px $secondary, 0px 0px 1px $secondary;
+    /*border: 1px solid #000000;*/
+    height: 24px;
+    width: 24px;
+    border-radius: 100px;
+    background: $primary;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -9px;
 }
+
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
+    background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
 }
+
 input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  animate: 0.2s;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);;
-  border-radius: 1.3px;
-  border: 0.2px solid #010101;
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
+    ;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
 }
+
 input[type=range]::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
-  cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
 }
+
 input[type=range]::-ms-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: transparent;
-  border-color: transparent;
-  border-width: 16px 0;
-  color: transparent;
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    border-width: 16px 0;
+    color: transparent;
 }
+
 input[type=range]::-ms-fill-lower {
-  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
-  border: 0.2px solid #010101;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
 }
+
 input[type=range]::-ms-fill-upper {
-  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
-  border: 0.2px solid #010101;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
 }
+
 input[type=range]::-ms-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 16px;
-  width: 16px;
-  border-radius: 100px;
-  background: #ffffff;
-  cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 16px;
+    width: 16px;
+    border-radius: 100px;
+    background: #ffffff;
+    cursor: pointer;
 }
+
 input[type=range]:focus::-ms-fill-lower {
-  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
+    background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
 }
+
 input[type=range]:focus::-ms-fill-upper {
-  background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
+    background-image: linear-gradient(90deg, rgba(119, 186, 191, 0.3) 57.14%, $secondary 57.17%);
 }
+
 .range_button {
     background: none;
     border: none;
@@ -355,18 +410,22 @@ input[type=range]:focus::-ms-fill-upper {
     cursor: pointer;
     display: inline-block;
 }
+
 .range_button i {
     border: 1px solid rgba(119, 186, 191, 0.3);
     border-radius: 50%;
     padding: 5px;
 }
+
 range_button:active {
     color: #ca3366;
 }
+
 .range_button#range__minus {
     margin-left: -10px;
     float: left;
 }
+
 .range_button#range__plus {
     float: right;
 }
@@ -376,9 +435,11 @@ range_button:active {
     margin: auto;
     max-height: 120px;
 }
-.dialog__egg.future .dialog__counter{
+
+.dialog__egg.future .dialog__counter {
     background: pink;
 }
+
 .update-raid__wrapper ul {
     padding-left: 0;
     list-style-type: none;
@@ -386,34 +447,38 @@ range_button:active {
     flex-direction: row;
     flex-wrap: wrap;
 }
+
 .update-raid__wrapper ul li {
     width: 33.33333%;
     border-bottom: 1px solid #fafafa;
 }
 
 .snackbar {
-    position:fixed;
+    position: fixed;
     bottom: 80px;
     width: 200px;
-    right:50%;
-    margin-right:-100px;
+    right: 50%;
+    margin-right: -100px;
     border-radius: 100px;
-    background: rgba( 0, 0, 0, 0.5 );
+    background: rgba(0, 0, 0, 0.5);
     color: #fff;
     text-align: center;
     padding: 8px;
     z-index: 99999;
 }
+
 .theme--light.v-subheader {
     color: #212529;
 }
+
 .v-subheader {
     background: #fafafa;
     /*padding: 10px 15px !important;*/
     font-family: "Teko";
     font-size: 20px !important;
-    color:#212529 !important;
+    color: #212529 !important;
 }
+
 .theme--light.v-label.v-label--active {
     color: $primary;
 }
@@ -421,6 +486,7 @@ range_button:active {
 .raids__empty {
     position: fixed;
     bottom: 50px;
+
     h3 {
         font-family: 'Teko';
         font-size: 46px;
@@ -429,13 +495,16 @@ range_button:active {
         color: $primary;
         margin: 0px 00px;
     }
+
     div.wrapper {
         text-align: center;
         margin: 20px 40px 10px 40px;
+
         p {
             color: #aaa;
             margin-top: 20px;
         }
+
         .v-btn {
             margin-bottom: 40px;
         }
@@ -451,6 +520,7 @@ range_button:active {
 
 .donation {
     padding: 10px 15px;
+
     .v-progress-linear__background,
     .v-progress-linear__bar__determinate {
         border-radius: 50px;

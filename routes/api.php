@@ -24,8 +24,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user', 'UserController@getUSer');
     Route::get('user/cities', 'UserController@getCities');
     Route::get('user/cities/{city}', 'CityController@getOne');
-    Route::get('user/guilds', 'GuildController@getAll');
-    Route::get('user/guilds/{guild}', 'GuildController@getOne');
+    Route::get('user/guilds', 'App\Guilds\GuildController@index');
+    Route::get('user/guilds/{guild}', 'App\Guilds\GuildController@show');
 
     Route::post('user/upload', 'UserController@uploadImage');
 

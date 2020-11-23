@@ -40,12 +40,6 @@ class PurgeDiscordRaidData
             });
         }
 
-        if ($event instanceof \App\Events\RaidEnded) {
-            $event->raid->messages()->get()->each(function ($message) {
-                if (!empty($message->to_delete_at)) $message->suppr();
-            });
-        }
-
         if ($event instanceof \App\Events\RaidUpdated) {
             $event->raid->messages()->get()->each(function ($message) {
                 $message->suppr();

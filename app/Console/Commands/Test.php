@@ -3,13 +3,19 @@
 namespace App\Console\Commands;
 
 use App\User;
+use App\Models\Raid;
 use App\Models\Guild;
 use App\Models\Quest;
 use App\Models\Pokemon;
+use App\Models\UserAction;
+use App\Models\QuestInstance;
+use App\Models\RocketInvasion;
 use Illuminate\Console\Command;
 use App\Core\Analyzer\GymSearch;
+use App\Core\Rankings\UserRanking;
 use App\Core\Tools\PokemonImagify;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use App\Core\Analyzer\RewardSearch;
 use Illuminate\Support\Facades\Log;
 use App\Core\Analyzer\EggClassifier;
@@ -50,6 +56,14 @@ class Test extends Command
      */
     public function handle()
     {
+
+        $user = User::find(1);
+        $ranking = UserRanking::forRaids()
+            ->forUser($user)
+            ->forPeriod('2010-01-01', '2020-11-23')
+            ->forCity(1)
+            ->getShort();
+        $this->line(print_r($ranking, true));
 
         /*$instance = new \App\Core\Analyzer\Image\Raid([
             'source_url' => 'https://cdn.discordapp.com/attachments/446373100926271499/681247410789679138/Screenshot_20200223-210054.jpg',

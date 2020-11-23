@@ -53,14 +53,13 @@ class GeneratePokemonThumbnails extends Command
             $quest_path = storage_path() . "/app/pokemon/quest/map_marker_quest_pokemon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
 
 
-            /*$data = file_get_contents("https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Pokemon/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png");
-            if ($data == '404: Not Found') {
-                $this->alert("Image non trouvée pour {$pokemon->name_fr}");
+            try {
+                $file = "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Pokemon/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
+                $copied = copy($file, $default_path);
+            } catch (\Exception $e) {
+                $this->alert($e->getMessage());
                 continue;
             }
-            $image = imagecreatefromstring($data);
-            imagepng($image, $default_path);
-            imagedestroy($image);*/
 
 
             if (!file_exists($default_path)) {

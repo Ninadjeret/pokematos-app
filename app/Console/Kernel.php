@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Core\Discord\ChannelPurge;
+use App\Core\Discord\MessagePurge;
 use App\Models\Raid;
 use App\Models\Event;
 use Illuminate\Support\Facades\Log;
@@ -30,14 +32,16 @@ class Kernel extends ConsoleKernel
         //Mise à jour des status de Raid
         $schedule->call(function () {
             Raid::updateStatuses();
+            ChannelPurge::purge();
+            MessagePurge::purge();
         })->everyMinute();
 
         //On agit sur les quiz.
         $schedule->call(function () {
             $events = Event::getActiveEvents('quiz');
-            if( !empty( $events ) ) {
-                foreach( $events as $event ) {
-                    if( !$event->quiz ) continue;
+            if (!empty($events)) {
+                foreach ($events as $event) {
+                    if (!$event->quiz) continue;
                     $event->quiz->process();
                 }
             }
@@ -45,7 +49,7 @@ class Kernel extends ConsoleKernel
 
         //On avertit le système quand on change de jour
         $schedule->call(function () {
-            event( new \App\Events\DayChanged() );
+            event(new \App\Events\DayChanged());
         })->dailyAt('00:01');
     }
 
@@ -56,7 +60,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

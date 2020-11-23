@@ -25,6 +25,7 @@ class UserAction extends Model
         'channel_discord_id',
         'user_id',
         'guild_id',
+        'city_id'
     ];
 
     var $messages = [

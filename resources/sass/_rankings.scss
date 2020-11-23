@@ -1,0 +1,97 @@
+#user__ranking {
+    h2 {
+        color: rgb(90, 108, 174);
+        font-family: "Teko";
+        font-size: 32px;
+        margin-top: 30px;
+
+        a {
+            position: absolute;
+            font-size: 20px;
+            right: 0;
+            top: 10px;
+        }
+    }
+
+    .ranking__card {
+        background: url(https://assets.profchen.fr/img/test/test5.png) center center #5a6cae;
+        background-size: cover;
+        position: relative;
+        padding: 10px 20px;
+
+        h4 {
+            overflow: hidden;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 10px;
+            top: 20px;
+
+            &:before,
+            &:after {
+                background-color: rgba(255, 255, 255, 0.4);
+                content: "";
+                display: inline-block;
+                height: 1px;
+                position: relative;
+                vertical-align: middle;
+                width: 50%;
+            }
+
+            &:before {
+                right: 0.5em;
+                margin-left: -50%;
+            }
+
+            &:after {
+                left: 0.5em;
+                margin-right: -50%;
+            }
+        }
+
+        .ranking__more {
+            text-transform: uppercase;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 50px;
+            display: block;
+            font-size: 15px;
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .ranking__position {
+            color: #fff;
+            display: flex;
+
+            .position__table {
+                width: 100%;
+
+                td {
+                    padding: 5px;
+                }
+            }
+
+            .position_pos {
+                width: 15%;
+                text-align: center;
+            }
+
+            .position_name {
+                width: 70%;
+                text-align: left;
+            }
+
+            .position_score {
+                width: 15%;
+                text-align: center;
+            }
+
+            img {
+                width: 50px;
+            }
+
+        }
+
+    }
+}
