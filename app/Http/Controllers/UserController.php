@@ -139,6 +139,7 @@ class UserController extends Controller
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => Auth::id(),
                 'quest_instance_id' => $questInstance->id,
+                'city_id' => $questInstance->city_id,
             ]);
             event(new \App\Events\QuestInstanceUpdated($questInstance, $announce));
         }

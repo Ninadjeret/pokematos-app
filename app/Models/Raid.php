@@ -206,6 +206,7 @@ class Raid extends Model
                 'message_discord_id' => (isset($args['message_discord_id'])) ? $args['message_discord_id'] : null,
                 'channel_discord_id' => (isset($args['channel_discord_id'])) ? $args['channel_discord_id'] : null,
                 'guild_id' => (isset($args['guild_id'])) ? $args['guild_id'] : null,
+                'city_id' => $raid->city_id,
             ]);
 
             if ($announceType == 'raid-create') {
