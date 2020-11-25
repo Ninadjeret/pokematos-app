@@ -67,6 +67,7 @@ Vue.component('v-select', vSelect)
  Vue.component( 'navigation', require('./components/Navigation.vue').default );
  Vue.component( 'rocket-map', require('./components/parts/RocketMap.vue').default );
  Vue.component( 'event-train', require('./components/parts/Train.vue').default );
+ Vue.component( 'user-ranking', require('./components/parts/UserRanking.vue').default );
 
 import routes from './routes';
 import Container from './components/Container.vue';

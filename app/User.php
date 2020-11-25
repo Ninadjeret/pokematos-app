@@ -2,20 +2,21 @@
 
 namespace App;
 
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Models\Guild;
 use App\Models\City;
+use App\Models\Guild;
 use GuzzleHttp\Client;
-use App\Models\UserAction;
 use App\Models\UserGuild;
-use App\Traits\Permissionable;
+use App\Models\UserAction;
 use RestCord\DiscordClient;
+use App\Traits\Permissionable;
+use App\Core\Rankings\UserRanking;
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use NotificationChannels\WebPush\HasPushSubscriptions;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -30,7 +31,8 @@ class User extends Authenticatable
         'discord_id',
         'discord_access_token',
         'discord_refresh_token',
-        'superadmin'
+        'superadmin',
+        'ext'
     ];
     protected $hidden = [
         'password',
@@ -41,7 +43,7 @@ class User extends Authenticatable
     ];
     protected $appends = [
         'permissions',
-        'stats'
+        'stats',
     ];
     protected $casts = [
         'superadmin' => 'boolean'

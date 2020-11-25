@@ -8,6 +8,9 @@ Route::group(['middleware' => ['can:city_access']], function () {
   Route::put('cities/{city}/raids/{raid}', 'App\Raids\RaidController@store');
   Route::delete('cities/{city}/raids/{raid}', 'App\Raids\RaidController@destroy');
   Route::get('cities/{city}/last-changes', 'CityController@getLastChanges');
+
+  Route::get('cities/{city}/ranking', 'App\Rankings\RankingController@show');
+  Route::get('cities/{city}/ranking/short', 'App\Rankings\ShortRankingController@show');
 });
 
 Route::group(['middleware' => ['can:guild_manage']], function () {

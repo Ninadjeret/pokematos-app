@@ -42,30 +42,26 @@
         <h4>Raids annoncés</h4>
         <div class="ranking__position">
           <div><img src="https://assets.profchen.fr/img/test/test4.png" /></div>
-          <table class="position__table">
+          <table v-if="ranking" class="position__table">
             <thead>
               <td class="position_pos">Pos.</td>
               <td>Nom</td>
               <td class="position_score">Score</td>
             </thead>
-            <tr>
-              <td class="position_pos">18.</td>
-              <td class="position_name">Ninadjeret</td>
-              <td class="position_score">58</td>
-            </tr>
-            <tr>
-              <td class="position_pos">18.</td>
-              <td class="position_name">Ninadjeret</td>
-              <td class="position_score">58</td>
-            </tr>
-            <tr>
-              <td class="position_pos">18.</td>
-              <td class="position_name">Ninadjeret</td>
-              <td class="position_score">58</td>
+            <tr
+              v-for="item in ranking"
+              :key="item.rank"
+              :class="item.user.id == user.id ? 'current' : ''"
+            >
+              <td class="position_pos">{{ item.rank }}.</td>
+              <td class="position_name">{{ item.user.name }}</td>
+              <td class="position_score">{{ item.total }}</td>
             </tr>
           </table>
         </div>
-        <a class="ranking__more">Voir tous les classements</a>
+        <v-btn class="ranking__more" round large to="/profile/ranking"
+          >Voir tous les classements</v-btn
+        >
       </div>
     </div>
 
@@ -149,6 +145,7 @@ export default {
   data() {
     return {
       dialogUpdate: false,
+      ranking: false,
     };
   },
   computed: {
@@ -175,6 +172,7 @@ export default {
   },
   created() {
     this.$store.commit("fetchUser");
+    this.fetchRanking();
   },
   methods: {
     async updateData() {
@@ -184,6 +182,13 @@ export default {
       } finally {
         this.dialogUpdate = false;
       }
+    },
+    fetchRanking() {
+      axios
+        .get("/api/user/cities/" + this.currentCity.id + "/ranking/short")
+        .then((res) => {
+          this.ranking = res.data;
+        });
     },
   },
 };

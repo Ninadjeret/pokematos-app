@@ -53,6 +53,8 @@ import AdminApiAcces from "./components/admin/api_access/ApiAcces.vue";
 import AdminPokemons from "./components/admin/pokemon/Pokemons.vue";
 import AdminPokemon from "./components/admin/pokemon/Pokemon.vue";
 
+import Ranking from "./components/Ranking.vue";
+
 const routes = [{
         path: "/",
         name: "map",
@@ -76,6 +78,15 @@ const routes = [{
             title: "Profil"
         },
         component: Profile
+    },
+    {
+        path: "/profile/ranking",
+        name: "ranking",
+        meta: {
+            title: "Classements",
+            parent: "profile"
+        },
+        component: Ranking
     },
     {
         path: "/events",

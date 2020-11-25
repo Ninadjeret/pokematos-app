@@ -14100,6 +14100,7 @@ body.logged-out .denied a {
   text-align: center;
   padding: 10px;
   margin-top: 10px;
+  background: transparent !important;
 }
 
 #user__ranking .ranking__card .ranking__position {
@@ -14111,7 +14112,13 @@ body.logged-out .denied a {
   width: 100%;
 }
 
+#user__ranking .ranking__card .ranking__position .position__table tr.current td {
+  font-size: 17px;
+  color: #fff;
+}
+
 #user__ranking .ranking__card .ranking__position .position__table td {
+  color: rgba(255, 255, 255, 0.7);
   padding: 5px;
 }
 
@@ -14132,6 +14139,249 @@ body.logged-out .denied a {
 
 #user__ranking .ranking__card .ranking__position img {
   width: 50px;
+}
+
+.template-ranking .v-picker__title.primary {
+  background: #28304d;
+  border-radius: 0px !important;
+}
+
+.template-ranking .v-picker__body .v-btn--active {
+  background-color: #5a6cae !important;
+}
+
+.template-ranking .settings-section .v-item-group {
+  width: 100%;
+  align-items: stretch;
+}
+
+.template-ranking .settings-section .v-item-group button {
+  flex: 1;
+}
+
+.template-ranking .settings-section .v-item-group button.v-btn--active {
+  color: #fff;
+}
+
+.template-ranking .settings-section .layout {
+  margin-left: 0;
+  margin-right: 0;
+  background: #5a6cae;
+  margin-top: 15px;
+  padding-top: 5px;
+  color: #fff;
+}
+
+.template-ranking .settings-section .layout:after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #5a6cae;
+  position: absolute;
+  margin-top: -15px;
+  right: 40px;
+}
+
+.template-ranking .settings-section .layout .v-text-field__details {
+  display: none;
+}
+
+.template-ranking .settings-section .layout .v-input__prepend-outer .v-icon {
+  color: #fff;
+}
+
+.template-ranking .settings-section .layout .theme--light.v-input:not(.v-input--is-disabled) input {
+  color: #fff;
+}
+
+.template-ranking .settings-section .layout .theme--light.v-label.v-label--active {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.template-ranking .ranking__top {
+  background: url(https://assets.profchen.fr/img/test/test8.jpg) center center #5a6cae;
+  background-size: cover;
+  position: relative;
+  padding: 10px 20px;
+}
+
+.template-ranking .ranking__top h4 {
+  overflow: hidden;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  top: 20px;
+  font-size: 30px;
+  font-family: "Teko";
+}
+
+.template-ranking .ranking__top h4:before,
+.template-ranking .ranking__top h4:after {
+  background-color: rgba(255, 255, 255, 0.4);
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 50%;
+}
+
+.template-ranking .ranking__top h4:before {
+  right: 0.5em;
+  margin-left: -50%;
+}
+
+.template-ranking .ranking__top h4:after {
+  left: 0.5em;
+  margin-right: -50%;
+}
+
+.template-ranking .ranking__top .top3 {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  color: #fff;
+}
+
+.template-ranking .ranking__top .top3 .top {
+  text-align: center;
+  flex: 1;
+}
+
+.template-ranking .ranking__top .top3 .top.top-1 .thumbnail img {
+  border-color: #FFD700;
+}
+
+.template-ranking .ranking__top .top3 .top.top-1 .thumbnail .position {
+  background: #FFD700;
+}
+
+.template-ranking .ranking__top .top3 .top.top-2 .thumbnail img {
+  width: 85px;
+  margin-top: 15px;
+  border-color: #C0C0C0;
+}
+
+.template-ranking .ranking__top .top3 .top.top-2 .thumbnail .position {
+  background: #C0C0C0;
+}
+
+.template-ranking .ranking__top .top3 .top.top-3 .thumbnail img {
+  width: 70px;
+  margin-top: 30px;
+  border-color: #614e1a;
+}
+
+.template-ranking .ranking__top .top3 .top.top-3 .thumbnail .position {
+  background: #614e1a;
+}
+
+.template-ranking .ranking__top .top3 .top .thumbnail {
+  position: relative;
+}
+
+.template-ranking .ranking__top .top3 .top .thumbnail img {
+  border-radius: 150px;
+  border: 3px solid red;
+  width: 100px;
+}
+
+.template-ranking .ranking__top .top3 .top .thumbnail .position {
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+  color: #fff;
+  text-align: center;
+  align-items: center;
+  margin-top: 10px;
+  background: red;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  margin-left: -10px;
+  padding: 2px;
+}
+
+.template-ranking .ranking__top .top3 .top .name {
+  font-family: "Teko";
+  font-size: 20px;
+  margin: 12px 0 -5px 0;
+}
+
+.template-ranking .ranking__top .top3 .top .score {
+  font-family: "Teko";
+  font-size: 30px;
+}
+
+.template-ranking .ranking__top .top3 .top .city {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.template-ranking .ranking__item {
+  background: #fafafa;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin: 10px 0;
+  padding: 5px;
+}
+
+.template-ranking .ranking__item.current {
+  background: #5a6cae;
+  color: #fff;
+}
+
+.template-ranking .ranking__item.current .position_pos {
+  color: #fff;
+}
+
+.template-ranking .ranking__item.current .position_name .namecity span.city {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.template-ranking .ranking__item .position_pos {
+  width: 15%;
+  text-align: center;
+  font-size: 26px;
+  font-family: "Teko";
+  color: #5a6cae;
+}
+
+.template-ranking .ranking__item .position_name {
+  flex-basis: 70%;
+  display: flex;
+  align-items: center;
+}
+
+.template-ranking .ranking__item .position_name .namecity {
+  text-align: left;
+}
+
+.template-ranking .ranking__item .position_name .namecity span.name {
+  font-size: 20px;
+  font-family: "Teko";
+}
+
+.template-ranking .ranking__item .position_name .namecity span.city {
+  display: block;
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 13px;
+  margin-top: -3px;
+}
+
+.template-ranking .ranking__item .position_name img {
+  border-radius: 100px;
+  width: 40px;
+  margin-right: 10px;
+}
+
+.template-ranking .ranking__item .position_score {
+  width: 15%;
+  text-align: center;
+  font-size: 26px;
+  font-family: "Teko";
 }
 
 html {
