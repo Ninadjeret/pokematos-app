@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
 /*!
- * Bootstrap v4.5.2 (https://getbootstrap.com/)
+ * Bootstrap v4.5.3 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
  * Copyright 2011-2020 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
@@ -233,6 +233,7 @@ caption {
 
 th {
   text-align: inherit;
+  text-align: -webkit-match-parent;
 }
 
 label {
@@ -2164,11 +2165,6 @@ pre code {
   opacity: 1;
 }
 
-.form-control::-ms-input-placeholder {
-  color: #6c757d;
-  opacity: 1;
-}
-
 .form-control::placeholder {
   color: #6c757d;
   opacity: 1;
@@ -3944,6 +3940,8 @@ input[type=button].btn-block {
   display: block;
   min-height: 1.44rem;
   padding-left: 1.5rem;
+  -webkit-print-color-adjust: exact;
+          color-adjust: exact;
 }
 
 .custom-control-inline {
@@ -5523,6 +5521,7 @@ a.badge-dark.focus {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 2;
   padding: 0.75rem 1.25rem;
   color: inherit;
 }
@@ -10791,7 +10790,7 @@ a.text-dark:focus {
 
 .text-break {
   word-break: break-word !important;
-  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
 }
 
 .text-reset {
@@ -11276,8 +11275,7 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .modal__screen .create-rocket-boss__wrapper ul.selected-boss .unselected img {
-  -webkit-filter: grayscale(100);
-          filter: grayscale(100);
+  filter: grayscale(100);
 }
 
 .modal__screen .create-rocket-boss__wrapper ul.selected-boss .selected {
@@ -11285,8 +11283,7 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .modal__screen .create-rocket-boss__wrapper ul.selected-boss .selected img {
-  -webkit-filter: grayscale(0);
-          filter: grayscale(0);
+  filter: grayscale(0);
 }
 
 .modal__screen .create-rocket-boss__wrapper ul li {
@@ -13236,13 +13233,11 @@ body.logged-out .denied a {
   height: 80px;
   width: auto;
   margin-bottom: 10px;
-  -webkit-filter: grayscale(100%);
-          filter: grayscale(100%);
+  filter: grayscale(100%);
 }
 
 #app__container.template-admin-rocket-bosses .v-tabs__item--active img {
-  -webkit-filter: grayscale(0%);
-          filter: grayscale(0%);
+  filter: grayscale(0%);
 }
 
 #app__container.template-admin-rocket-bosses .v-tabs__item:not(.v-tabs__item--active) {
@@ -13301,8 +13296,7 @@ body.logged-out .denied a {
 }
 
 #app__container.mode-rocket.template-map .v-toolbar__title img {
-  -webkit-filter: grayscale(100%);
-          filter: grayscale(100%);
+  filter: grayscale(100%);
 }
 
 #app__container.mode-rocket.template-map .theme--dark.v-toolbar {
@@ -14055,7 +14049,7 @@ body.logged-out .denied a {
 }
 
 #user__ranking .ranking__card {
-  background: url(https://assets.profchen.fr/img/test/test5.png) center center #5a6cae;
+  background: url(https://assets.profchen.fr/img/app/ranking/ranking_bg.jpg) center center #5a6cae;
   background-size: cover;
   position: relative;
   padding: 10px 20px;
@@ -14201,7 +14195,7 @@ body.logged-out .denied a {
 }
 
 .template-ranking .ranking__top {
-  background: url(https://assets.profchen.fr/img/test/test8.jpg) center center #5a6cae;
+  background: url(https://assets.profchen.fr/img/app/ranking/ranking_bg.jpg) center center #5a6cae;
   background-size: cover;
   position: relative;
   padding: 10px 20px;

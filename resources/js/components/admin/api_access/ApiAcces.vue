@@ -90,6 +90,16 @@ export default {
       authorizations: [],
       autorisations: [
         {
+          value: "stops.get",
+          type: "GET",
+          label: "/stops",
+        },
+        {
+          value: "raids.get",
+          type: "GET",
+          label: "/raids",
+        },
+        {
           value: "raids.post",
           type: "POST",
           label: "/raids",

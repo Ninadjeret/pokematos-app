@@ -2,18 +2,44 @@
 
 namespace App\Http\Controllers\Ext;
 
-use App\Core\Helpers;
 use App\Models\Raid;
 use App\Models\Stop;
+use App\Core\Helpers;
 use App\Models\Guild;
 use App\Models\Pokemon;
 use App\Models\GuildApiLog;
 use Illuminate\Http\Request;
 use App\Models\GuildApiAccess;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
 class RaidController extends Controller
 {
+
+  public function index(Request $request)
+  {
+    $guild_api_access = GuildApiAccess::where('key', $request->bearerToken())->first();
+    $guild = Guild::find($guild_api_access->guild_id);
+
+    $start = new \DateTime();
+    $start->modify('- 45 minutes');
+    $end = new \DateTime();
+    $end->modify('+ 60 minutes');
+    $raids = Raid::where('city_id', $guild->city_id)
+      ->where('start_time', '>', $start->format('Y-m-d H:i:s'))
+      ->where('start_time', '<', $end->format('Y-m-d H:i:s'))
+      ->limit(1)
+      ->get()->each->setAppends(['end_time', 'pokemon', 'thumbnail_url', 'gym'])->toArray();
+
+    Log::debug(print_r($raids, true));
+
+    GuildApiLog::create([
+      'api_access_id' => $guild_api_access->id,
+      'endpoint' => $request->path(),
+      'status' => 200,
+    ]);
+    return response()->json($raids, 200);
+  }
 
   public function store(Request $request)
   {

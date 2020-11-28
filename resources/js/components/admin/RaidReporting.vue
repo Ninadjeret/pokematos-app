@@ -5,12 +5,12 @@
         <v-subheader>Général</v-subheader>
         <v-list>
           <template v-for="(item, index) in items">
-            <v-list-tile :key="item.route" :to="{ name: item.route}">
+            <v-list-tile :key="item.route" :to="{ name: item.route }">
               <v-list-tile-action>
-                <v-icon>{{item.icon}}</v-icon>
+                <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                <v-list-tile-title>{{ item.label }}</v-list-tile-title>
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-btn icon ripple>
@@ -51,29 +51,40 @@
         </div>
         <div v-if="raidreporting_text_active" class="setting">
           <label>Préfixes des messages texte</label>
-          <p
-            class="description"
-          >Indiquer par quoi doivent commencer les messages texte pour être analysés ?</p>
+          <p class="description">
+            Indiquer par quoi doivent commencer les messages texte pour être
+            analysés ?
+          </p>
           <input v-model="raidreporting_text_prefixes" type="text" />
         </div>
         <div class="setting">
           <label>Salons à analyser</label>
-          <p
-            class="description"
-          >Vous pouvez spécifier certains salons dans lesquels Pokématos doit analyser les messages de raid. Sinon, par défaut, il cherchera sur tous les canaux auxquels il a accès</p>
-          <select multiple="true" v-if="channels" v-model="raidreporting_allowed_channels">
+          <p class="description">
+            Vous pouvez spécifier certains salons dans lesquels Pokématos doit
+            analyser les messages de raid. Sinon, par défaut, il cherchera sur
+            tous les canaux auxquels il a accès
+          </p>
+          <select
+            multiple="true"
+            v-if="channels"
+            v-model="raidreporting_allowed_channels"
+          >
             <option
               :key="channel.id"
               v-for="channel in channels"
               :value="channel.id"
-            >{{channel.name}}</option>
+            >
+              {{ channel.name }}
+            </option>
           </select>
         </div>
         <div class="setting">
           <label>Probabilité minimale de correspondance des arènes</label>
-          <p
-            class="description"
-          >Compris entre 1 et 100, cela définir le niveau de proabilité minimale que le bot accepte pour considérer qu'il a trouvé une arène. (100 est le max)</p>
+          <p class="description">
+            Compris entre 1 et 100, cela définir le niveau de probabilité
+            minimale que le bot accepte pour considérer qu'il a trouvé une
+            arène. (100 est le max)
+          </p>
           <input
             v-model="raidreporting_gym_min_proability"
             type="number"
@@ -83,7 +94,11 @@
           />
         </div>
         <v-btn dark fixed bottom right fab @click="submit()">
-          <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+          <v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
           <v-icon v-else>save</v-icon>
         </v-btn>
       </div>
@@ -107,8 +122,8 @@ export default {
         {
           label: "Gérer les annonces",
           route: "admin.raids.annonces",
-          icon: "settings_input_component"
-        }
+          icon: "settings_input_component",
+        },
       ],
       raidreporting_images_active: false,
       raidreporting_images_delete: false,
@@ -117,7 +132,7 @@ export default {
       raidreporting_text_prefixes: "+raid, +Raid",
       raidreporting_gym_min_proability: 70,
       raidreporting_allowed_channels: [],
-      channels: []
+      channels: [],
     };
   },
   computed: mapState(["currentCity"]),
@@ -135,7 +150,7 @@ export default {
             this.$route.params.id +
             "/settings"
         )
-        .then(res => {
+        .then((res) => {
           this.raidreporting_images_active = parseInt(
             res.data.raidreporting_images_active
           );
@@ -156,7 +171,7 @@ export default {
           this.raidreporting_allowed_channels =
             res.data.raidreporting_allowed_channels;
         })
-        .catch(err => {
+        .catch((err) => {
           //No error
         });
     },
@@ -169,7 +184,7 @@ export default {
             this.$route.params.id +
             "/channels"
         )
-        .then(res => {
+        .then((res) => {
           this.channels = res.data;
         });
     },
@@ -185,8 +200,8 @@ export default {
             ", "
           ),
           raidreporting_gym_min_proability: this
-            .raidreporting_gym_min_proability
-        }
+            .raidreporting_gym_min_proability,
+        },
       };
       this.save(args);
     },
@@ -202,21 +217,21 @@ export default {
             "/settings",
           args
         )
-        .then(res => {
+        .then((res) => {
           this.$store.commit("setSnackbar", {
             message: "Enregistrement effectué",
-            timeout: 1500
+            timeout: 1500,
           });
           this.loading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.$store.commit("setSnackbar", {
             message: "Problème lors de l'enregistrement",
-            timeout: 1500
+            timeout: 1500,
           });
           this.loading = false;
         });
-    }
-  }
+    },
+  },
 };
 </script>

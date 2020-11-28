@@ -27,7 +27,7 @@ class Raid extends Model
 
     public function getGymAttribute()
     {
-        return Stop::find($this->gym_id);
+        return Stop::find($this->gym_id)->setAppends([]);
     }
 
     public function getEndTImeAttribute()

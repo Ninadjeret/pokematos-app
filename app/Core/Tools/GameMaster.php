@@ -71,9 +71,9 @@ class GameMaster
         'name_fr'   => $name_fr,
         'name_ocr'   => $name_ocr,
         'form_id'  => $form_id,
-        'base_att'  => $node->data->pokemonSettings->stats->baseAttack,
-        'base_def'  => $node->data->pokemonSettings->stats->baseDefense,
-        'base_sta'  => $node->data->pokemonSettings->stats->baseStamina,
+        'base_att'  => isset($node->data->pokemonSettings->stats->baseAttack) ? $node->data->pokemonSettings->stats->baseAttack : null,
+        'base_def'  => isset($node->data->pokemonSettings->stats->baseDefense) ? $node->data->pokemonSettings->stats->baseDefense : null,
+        'base_sta'  => isset($node->data->pokemonSettings->stats->baseStamina) ? $node->data->pokemonSettings->stats->baseStamina : null,
         'parent_id' => null,
       ];
 

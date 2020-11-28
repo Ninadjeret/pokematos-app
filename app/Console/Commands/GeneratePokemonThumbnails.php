@@ -13,7 +13,7 @@ class GeneratePokemonThumbnails extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:thumbnails';
+    protected $signature = 'generate:thumbnails {pkmn_id?}';
 
     /**
      * The console command description.
@@ -40,6 +40,7 @@ class GeneratePokemonThumbnails extends Command
     public function handle()
     {
         $pokemons = Pokemon::all();
+        if (!empty($this->argument('pkmn_id'))) $pokemons = Pokemon::where('pokedex_id', $this->argument('pkmn_id'))->get();
 
         foreach ($pokemons as $pokemon) {
             $this->line("Génération pour {$pokemon->name_fr}");
