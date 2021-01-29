@@ -104,6 +104,11 @@ export default {
           type: "POST",
           label: "/raids",
         },
+        {
+          value: "rankings.get",
+          type: "GET",
+          label: "/rankings",
+        },
       ],
       token_message: "",
     };

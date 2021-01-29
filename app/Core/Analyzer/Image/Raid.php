@@ -164,7 +164,7 @@ class Raid extends Analyzer
   function getPokemon()
   {
     $cp = $this->MicrosoftOCR->cp_line;
-    $result = PokemonSearch::init()->addQuestPokemon()->setAccuracy(90)->find($this->ocr, $cp);
+    $result = PokemonSearch::init()->addRaidPokemon()->setAccuracy(90)->find($this->ocr, $cp);
     if ($result) {
       if ($this->debug) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr . '(' . $result->probability . '%)');
       $this->result->pokemon_probability = $result->probability;

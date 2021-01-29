@@ -13,7 +13,7 @@ class StopController extends Controller
 {
     public function index(Request $request)
     {
-        $guild_api_access = GuildApiAccess::where('key', $request->bearerToken())->first();
+        $guild_api_access = \App\Core\Ext\Auth::access();
         $guild = Guild::find($guild_api_access->guild_id);
 
         $stops = Stop::where('city_id', $guild->city_id)->get()->each->setAppends(['zone', 'city', 'google_maps_url', 'aliases']);

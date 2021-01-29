@@ -88,22 +88,26 @@ class GameMaster
       }
 
       //Gestion des Méga
-      if (isset($node->data->pokemonSettings->obTemporaryEvolutions)) {
-        foreach ($node->data->pokemonSettings->obTemporaryEvolutions as $mega) {
+      if (isset($node->data->pokemonSettings->evolutionBranch)) {
+        foreach ($node->data->pokemonSettings->evolutionBranch as $mega) {
+
+          if (!isset($mega->temporaryEvolution)) continue; // do not perform if evolution is not mega
+
           $name = 'Méga-' . $name_fr;
-          $suffix_id = str_replace('TEMP_EVOLUTION', '', $mega->obTemporaryEvolution);
-          $suffixe = str_replace('TEMP_EVOLUTION_MEGA', '', $mega->obTemporaryEvolution);
+          $suffix_id = str_replace('TEMP_EVOLUTION', '', $mega->temporaryEvolution);
+          $suffixe = str_replace('TEMP_EVOLUTION_MEGA', '', $mega->temporaryEvolution);
           if (!empty($suffixe)) $name .= ' ' . str_replace('_', '', $suffixe);
           $form_id = ($suffixe == '_Y') ? 52 : 51;
+          $stats = self::findMegaStats($mega->temporaryEvolution, $node);
           $data = [
             'pokedex_id' => $pokedex_id,
             'niantic_id'  => $node->templateId . $suffix_id,
             'name_fr'   => $name,
             'name_ocr'   => $name,
             'form_id'  => $form_id,
-            'base_att'  => $mega->stats->baseAttack,
-            'base_def'  => $mega->stats->baseDefense,
-            'base_sta'  => $mega->stats->baseStamina,
+            'base_att'  => $stats->baseAttack,
+            'base_def'  => $stats->baseDefense,
+            'base_sta'  => $stats->baseStamina,
             'parent_id' => null,
           ];
 
@@ -124,6 +128,15 @@ class GameMaster
       'to_add' => $to_add,
       'to_update' => $to_update
     ];
+  }
+
+  private static function findMegaStats($mega_id, $node)
+  {
+    foreach ($node->data->pokemonSettings->tempEvoOverrides as $data) {
+      if ($data->tempEvoId == $mega_id) {
+        return $data->stats;
+      }
+    }
   }
 
   public static function find($niantic_id)

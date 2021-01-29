@@ -117,13 +117,17 @@ class UserRanking
     $pos = 0;
     $user_position = 0;
     foreach ($ranking as &$line) {
-      if ($line['user_id'] == $this->user->id) $user_position = $pos;
+      if ($this->user && $line['user_id'] == $this->user->id) $user_position = $pos;
 
       $user = User::find($line['user_id']);
+      $city = City::find($line['city_id']);
+      $guild_ids = $city->getGuildsIds();
+
       $line['user'] = $user->setAppends([])->toArray();
+      $line['user_nickname'] = count($guild_ids) === 1 ? $user->getNickname($guild_ids[0]) : $user->name;
       unset($line['user_id']);
 
-      $line['city'] = City::find($line['city_id'])->name;
+      $line['city'] = $city->name;
       unset($line['city_id']);
 
       $pos++;

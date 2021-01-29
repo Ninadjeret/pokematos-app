@@ -21,7 +21,10 @@ class ExtAuthenticate
     {
 
         $token = $request->bearerToken();
-        if (empty($token)) return response()->json('You must specify a bearer token', 403);
+        if (empty($token)) {
+            $token = $request->token;
+            if (empty($token)) return response()->json('You must specify a token', 403);
+        }
 
         $guild_api_access = GuildApiAccess::where('key', $token)->first();
         if (!$guild_api_access || empty($guild_api_access)) return response()->json('Credentials are not valid', 403);

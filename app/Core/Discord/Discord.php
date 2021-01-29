@@ -30,6 +30,7 @@ class Discord
         try {
             $discord = new DiscordClient(['token' => config('discord.token')]);
             $discord->channel->deleteMessage($args);
+            return true;
         } catch (\GuzzleHttp\Command\Exception\CommandException $e) {
             $statusCode = $e->getResponse()->getStatusCode();
             $message = $e->getMessage();

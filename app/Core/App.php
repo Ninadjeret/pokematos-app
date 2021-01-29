@@ -24,8 +24,8 @@ class App
                 ]
             ],
             'donation' => [
-                'goal' => 415,
-                'current' => 237,
+                'goal' => env('DONATION_GOAL', '0'),
+                'current' => env('DONATION_AMOUNT', '0'),
             ],
             'features' => config('features'),
         ];

@@ -185,7 +185,7 @@ class Raid extends Analyzer
   function getPokemon()
   {
     $query = $this->source_text;
-    $result = PokemonSearch::init()->addQuestPokemon()->setAccuracy(70)->find($query);
+    $result = PokemonSearch::init()->addRaidPokemon()->setAccuracy(70)->find($query);
     if ($result) {
       if ($this->debug) $this->_log('Pokemon finded in database : ' . $result->pokemon->name_fr);
       $this->result->pokemon_probability = $result->probability;

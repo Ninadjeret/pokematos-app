@@ -21,7 +21,6 @@ class RaidController extends Controller
 
     public function store(Request $request)
     {
-
         if (!config(self::$feature)) return response()->json(self::$feature_message, 403);
 
         $url = (isset($request->url) && !empty($request->url)) ? $request->url : false;
@@ -50,17 +49,30 @@ class RaidController extends Controller
         }
 
         if ($url) {
-            $imageAnalyzer = new ImageAnalyzer($url, $guild, $user, $channel_discord_id);
-            if (empty($imageAnalyzer->result->error)) {
-                $imageAnalyzer->run();
-                $result = $imageAnalyzer->result;
+            //$imageAnalyzer = new ImageAnalyzer($url, $guild, $user, $channel_discord_id);
+            $instance = new \App\Core\Analyzer\Image\Raid([
+                'source_url' => $url,
+                'guild' => $guild,
+                'user' => $user,
+                'channel_discord_id' => $channel_discord_id,
+            ]);
+            $instance->perform();
+            if (empty($instance->result->error)) {
+                $result = $instance->result;
                 $source_type = 'image';
             } else {
                 return false;
             }
         } else {
-            $textAnalyzer = new TextAnalyzer($text, $guild, $user, $channel_discord_id);
-            $result = $textAnalyzer->result;
+            //$textAnalyzer = new TextAnalyzer($text, $guild, $user, $channel_discord_id);
+            $instance = new \App\Core\Analyzer\Text\Raid([
+                'source_text' => $text,
+                'guild' => $guild,
+                'user' => $user,
+                'channel_discord_id' => $channel_discord_id,
+            ]);
+            $instance->perform();
+            $result = $instance->result;
             $source_type = 'text';
         }
 

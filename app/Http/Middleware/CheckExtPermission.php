@@ -21,9 +21,7 @@ class CheckExtPermission
    */
   public function handle($request, Closure $next, $permission)
   {
-
-    $token = $request->bearerToken();
-    $guild_api_access = GuildApiAccess::where('key', $token)->first();
+    $guild_api_access = \App\Core\Ext\Auth::access();
 
     if (empty($guild_api_access->authorizations) || !in_array($permission, $guild_api_access->authorizations)) {
       GuildApiLog::create([

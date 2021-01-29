@@ -147,7 +147,7 @@ export default {
       bosses4t: [],
       bosses5t: [],
       bosses6t: [],
-      bosse7t: [],
+      bosses7t: [],
     };
   },
   created() {

@@ -18,7 +18,7 @@ class RaidController extends Controller
 
   public function index(Request $request)
   {
-    $guild_api_access = GuildApiAccess::where('key', $request->bearerToken())->first();
+    $guild_api_access = \App\Core\Ext\Auth::access();
     $guild = Guild::find($guild_api_access->guild_id);
 
     $start = new \DateTime();
@@ -31,8 +31,6 @@ class RaidController extends Controller
       ->limit(1)
       ->get()->each->setAppends(['end_time', 'pokemon', 'thumbnail_url', 'gym'])->toArray();
 
-    Log::debug(print_r($raids, true));
-
     GuildApiLog::create([
       'api_access_id' => $guild_api_access->id,
       'endpoint' => $request->path(),
@@ -43,7 +41,7 @@ class RaidController extends Controller
 
   public function store(Request $request)
   {
-    $guild_api_access = GuildApiAccess::where('key', $request->bearerToken())->first();
+    $guild_api_access = \App\Core\Ext\Auth::access();
     $guild = Guild::find($guild_api_access->guild_id);
 
     $args = [];

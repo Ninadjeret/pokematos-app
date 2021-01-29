@@ -3,7 +3,7 @@
     <v-tabs v-model="tabs" color="transparent" slider-color="#8e56d9" class>
       <v-tab href="#general" class="primary--text">Général</v-tab>
       <v-tab href="#annonces" class="primary--text">Annonces</v-tab>
-      <v-tab href="#canaux" class="primary--text">Organisation</v-tab>
+      <!--<v-tab href="#canaux" class="primary--text">Organisation</v-tab>-->
     </v-tabs>
 
     <v-tabs-items v-model="tabs">

@@ -97,7 +97,7 @@
               />
               <div class="position">{{ position }}</div>
             </div>
-            <div class="name">{{ ranking[position - 1].user.name }}</div>
+            <div class="name">{{ ranking[position - 1].user_nickname }}</div>
             <div v-if="type == 'top100'" class="city">
               {{ ranking[position - 1].city }}
             </div>
@@ -111,7 +111,7 @@
         :key="item.rank"
         v-if="item.rank > 3"
         :class="
-          item.user.id == user.id
+          item.user_id == user.id
             ? 'current rank-' + item.rank
             : 'rank-' + item.rank
         "
@@ -136,7 +136,7 @@
               />
             </div>
             <div class="namecity">
-              <span class="name">{{ item.user.name }}</span>
+              <span class="name">{{ item.user_nickname }}</span>
               <span class="city" v-if="type == 'top100'">{{ item.city }}</span>
             </div>
           </div>
