@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Core\RaidAnalyzer;
+namespace App\Core\Analyzer;
 
-use App\Models\Pokemon;
 use App\Core\Helpers;
+use App\Models\Quest;
+use App\Models\Pokemon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class PokemonSearch
@@ -16,17 +18,44 @@ class PokemonSearch
     {
         $this->debug = false;
         $this->query = false;
-        $this->pokemons = Pokemon::where('boss', 1)->get();
-        $this->sanitizedNames = $this->getSanitizedNames();
+        $this->pokemons = new Collection();
+        $this->sanitizedNames = [];
+        $this->accuracy = 50;
         $this->num_line = false;
     }
 
+    public static function init()
+    {
+        return new PokemonSearch();
+    }
+
+    public function addQuestPokemon()
+    {
+        $quest_pokemon = Quest::all();
+        $collection = new Collection();
+        foreach ($quest_pokemon as $quest) {
+            if ($quest->pokemons) {
+                foreach ($quest->pokemons as $pokemon) {
+                    if (!$collection->has($pokemon->id)) $collection->put($pokemon->id, $pokemon);
+                }
+            }
+        }
+        $this->pokemons = $this->pokemons->merge($collection);
+        return $this;
+    }
+
+    public function addRaidPokemon()
+    {
+        $pokemon = Pokemon::where('boss', 1)->get();
+        $this->pokemons = $this->pokemons->merge($pokemon);
+        return $this;
+    }
 
     /**
      *
      * @return type
      */
-    function getSanitizedNames()
+    private function getSanitizedNames()
     {
         $names = array();
         foreach ($this->pokemons as $pokemon) {
@@ -40,6 +69,12 @@ class PokemonSearch
         return $names;
     }
 
+    public function setAccuracy($acc)
+    {
+        $this->accuracy = $acc;
+        return $this;
+    }
+
 
     /**
      *
@@ -47,13 +82,14 @@ class PokemonSearch
      * @param type $min
      * @return boolean|\POGO_gym
      */
-    function findPokemon($query = null, $cp = null, $min = 50)
+    function find($query = null, $cp = null)
     {
+        $this->sanitizedNames = $this->getSanitizedNames();
         $result = false;
         if (is_array($query)) {
-            $result = $this->findPokemonFromName($query, $min);
+            $result = $this->findPokemonFromName($query, $this->accuracy);
         } else {
-            $result = $this->findPokemonFromstring($query, $min);
+            $result = $this->findPokemonFromstring($query, $this->accuracy);
         }
 
         if (!$result && !empty($cp)) {
@@ -98,6 +134,7 @@ class PokemonSearch
         $best_result = false;
         $num_line = false;
         $i = 0;
+
         foreach ($query as $line) {
             $sanitizedQuery = Helpers::sanitize($line);
             foreach ($this->sanitizedNames as $name => $pokemon_id) {

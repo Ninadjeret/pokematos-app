@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\RaidAnalyzer;
+namespace App\Core\Analyzer;
 
 use Rubix\ML\PersistentModel;
 use Rubix\ML\Datasets\Unlabeled;

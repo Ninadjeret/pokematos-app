@@ -5,6 +5,7 @@ namespace App\Core;
 use App\Models\Role;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
+use App\Core\Discord\MessageTranslator;
 
 class Conversation
 {
@@ -48,16 +49,18 @@ class Conversation
         $message = self::getMessage($type, $soustype, $args);
         if (empty($message)) return false;
 
+        $translator = MessageTranslator::to($guild)->addUser($user);
+
         if (is_array($embed)) {
             $embed2 = [
-                'description' => \App\Core\Discord::encode($message['text'], $guild, false),
+                'description' => $translator->translate($message['text']),
                 'color' => hexdec('5a6cae'),
             ];
             if (isset($embed['thumbnail'])) {
                 $embed2['thumbnail'] = ['url' => $embed['thumbnail']];
             }
             if (isset($embed['title'])) {
-                $embed2['title'] =  $embed['title'];
+                $embed2['title'] =  $translator->translate($embed['title']);
             }
             if (isset($embed['footer'])) {
                 $embed2['footer'] =  $embed['footer'];
@@ -69,7 +72,7 @@ class Conversation
         } else {
             $to_send = [
                 'channel.id' => intval($channel_id),
-                'content' => \App\Core\Discord::encode($message['text'], $guild, $user),
+                'content' => $translator->translate($message['text']),
             ];
         }
 
@@ -78,7 +81,7 @@ class Conversation
 
         if (array_key_exists('next', $message) && !empty($message['next'])) {
             foreach ($message['next'] as $content) {
-                $content = \App\Core\Discord::encode($content, $guild, $user);
+                $content = $translator->translate($content);
                 usleep(strlen($content) * 75000);
                 $discord->channel->createMessage(array(
                     'channel.id' => intval($channel_id),

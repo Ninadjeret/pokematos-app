@@ -24,8 +24,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user', 'UserController@getUSer');
     Route::get('user/cities', 'UserController@getCities');
     Route::get('user/cities/{city}', 'CityController@getOne');
-    Route::get('user/guilds', 'GuildController@getAll');
-    Route::get('user/guilds/{guild}', 'GuildController@getOne');
+    Route::get('user/guilds', 'App\Guilds\GuildController@index');
+    Route::get('user/guilds/{guild}', 'App\Guilds\GuildController@show');
 
     Route::post('user/upload', 'UserController@uploadImage');
 
@@ -86,7 +86,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/cities/{city}/guilds/{guild}/settings', 'UserController@updateGuildOptions');
 
     //commun
-    Route::get('pokemons', 'PokemonController@getAll');
     Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
     Route::put('pokemons/raidbosses', 'PokemonController@updateRaidBosses');
 
@@ -143,52 +142,43 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 });
 
-Route::group(['prefix' => 'user', 'middleware' => ['auth:api']], function () {
-    Route::group(['middleware' => ['can:city_access']], function () {
-        Route::get('cities/{city}/gyms', 'App\PoisController@index');
-        Route::post('cities/{city}/raids', 'App\Raids\RaidController@store');
-        Route::put('cities/{city}/raids/{raid}', 'App\Raids\RaidController@store');
-        Route::delete('cities/{city}/raids/{raid}', 'App\Raids\RaidController@destroy');
-        Route::get('cities/{city}/last-changes', 'CityController@getLastChanges');
-    });
-    Route::group(['middleware' => ['can:guild_manage']], function () {
-        Route::resource('guilds/{guild}/connectors', 'App\Raids\ConnectorController');
-    });
+
+/**
+ * USER ROUTES
+ */
+Route::group([
+    'prefix' => 'user',
+    'middleware' => ['auth:api'],
+], function ($router) {
+    require base_path('routes/api/user.php');
 });
 
-Route::group(['prefix' => 'bot', 'middleware' => ['auth.bot']], function () {
 
-    Route::get('guilds', 'BotController@getGuilds');
-    Route::post('guilds', 'BotController@addGuild');
-
-    Route::get('guilds/{guild_id}/roles', 'BotController@getRoles');
-    Route::post('guilds/{guild_id}/roles', 'BotController@createRole');
-    Route::delete('guilds/{guild_id}/roles/{role}', 'BotController@deleteRole');
-    Route::get('guilds/{guild_id}/roles/{role}', 'BotController@getRole');
-    Route::put('guilds/{guild_id}/roles/{role}', 'BotController@updateRole');
-
-    Route::get('guilds/{guild_id}/role-categories', 'BotController@getRoleCategories');
-    Route::get('guilds/{guild_id}/role-categories/{categorie}', 'BotController@getRoleCategory');
-    Route::delete('guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
-
-    Route::post('raids/imagedecode', 'RaidController@imageDecode');
-
-
-    Route::post('raids', 'Bot\Raids\RaidController@store');
-    Route::post('raids/channel', 'Bot\Raids\ChannelController@store');
-    Route::post('raids/participant', 'Bot\Raids\ParticipantController@store');
-    Route::delete('raids/participant', 'Bot\Raids\ParticipantController@destroy');
-    Route::post('conversations', 'Bot\ConversationController@store');
-    Route::post('events/quiz/answer', 'Bot\Event\Quiz\AnswerController@store');
-
-
-    //Events
-    Route::group(['middleware' => ['can:events_train_check']], function () {
-        Route::post('events/train/step/check', 'Bot\Event\Train\StepController@check');
-        Route::post('events/train/step/uncheck', 'Bot\Event\Train\StepController@uncheck');
-    });
+/**
+ * BOT ROUTES
+ */
+Route::group([
+    'prefix' => 'bot',
+    'middleware' => ['auth.bot'],
+], function ($router) {
+    require base_path('routes/api/bot.php');
 });
 
+
+/**
+ * EXTERNAL ROUTES
+ */
+Route::group([
+    'prefix' => 'ext/v1',
+    'middleware' => ['auth.ext'],
+], function ($router) {
+    require base_path('routes/api/ext.v1.php');
+});
+
+
+/**
+ * OTHER ROUTES
+ */
 Route::get('test', 'Controller@test');
 Route::post('debug', 'DebugController@log');
 

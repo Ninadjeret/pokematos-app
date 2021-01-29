@@ -29,20 +29,20 @@ class DeleteMessage
     {
         $discord = new DiscordClient(['token' => config('discord.token')]);
 
-        switch( get_class($event) ) {
+        switch (get_class($event)) {
 
-            case 'App\Events\Events\TrainStepUnchecked' :
-                if( !empty($event->train_step->message_discord_id) && !empty($event->event->channel_discord_id) ) {
-                    \App\Core\Discord::deleteMessage([
+            case 'App\Events\Events\TrainStepUnchecked':
+                if (!empty($event->train_step->message_discord_id) && !empty($event->event->channel_discord_id)) {
+                    \App\Core\Discord\Discord::deleteMessage([
                         'channel.id' => intval($event->event->channel_discord_id),
                         'message.id' => intval($event->train_step->message_discord_id),
                     ]);
                 }
                 break;
 
-            case 'App\Events\Events\TrainStepUnchecked' :
-                if( !empty($event->train_step->message_discord_id) && !empty($event->event->channel_discord_id) ) {
-                    \App\Core\Discord::deleteMessage([
+            case 'App\Events\Events\TrainStepUnchecked':
+                if (!empty($event->train_step->message_discord_id) && !empty($event->event->channel_discord_id)) {
+                    \App\Core\Discord\Discord::deleteMessage([
                         'channel.id' => intval($event->event->channel_discord_id),
                         'message.id' => intval($event->train_step->message_discord_id),
                     ]);

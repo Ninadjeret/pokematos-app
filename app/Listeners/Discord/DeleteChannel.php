@@ -36,7 +36,7 @@ class DeleteChannel
 
             case 'App\Events\Events\InvitCanceled':
                 if (!empty($event->event->channel_discord_id)) {
-                    \App\Core\Discord::deleteChannel([
+                    \App\Core\Discord\Discord::deleteChannel([
                         'channel.id' => (int) $event->event->channel_discord_id
                     ]);
                 }
@@ -44,7 +44,7 @@ class DeleteChannel
 
             case 'App\Events\Events\InvitRefused':
                 if (!empty($event->event->channel_discord_id)) {
-                    \App\Core\Discord::deleteChannel([
+                    \App\Core\Discord\Discord::deleteChannel([
                         'channel.id' => (int) $event->event->channel_discord_id
                     ]);
                 }
@@ -52,7 +52,7 @@ class DeleteChannel
 
             case 'App\Events\Events\EventEnded':
                 if (!empty($event->event->channel_discord_id) && $event->event->channel_discord_type == 'temp') {
-                    \App\Core\Discord::deleteChannel([
+                    \App\Core\Discord\Discord::deleteChannel([
                         'channel.id' => (int) $event->event->channel_discord_id
                     ]);
                 }
@@ -60,7 +60,7 @@ class DeleteChannel
 
             case 'App\Events\Events\EventDeleted':
                 if (!empty($event->event->channel_discord_id) && $event->event->channel_discord_type == 'temp') {
-                    \App\Core\Discord::deleteChannel([
+                    \App\Core\Discord\Discord::deleteChannel([
                         'channel.id' => (int) $event->event->channel_discord_id
                     ]);
                 }

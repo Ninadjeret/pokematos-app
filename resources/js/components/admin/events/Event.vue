@@ -11,7 +11,9 @@
       <v-tabs v-model="tabs" color="transparent" slider-color="#8e56d9" class>
         <v-tab href="#description" class="primary--text">Présentation</v-tab>
         <v-tab href="#settings" class="primary--text">Réglages</v-tab>
-        <v-tab v-if="features.events_multi" href="#guests" class="primary--text">Guilds</v-tab>
+        <v-tab v-if="features.events_multi" href="#guests" class="primary--text"
+          >Guilds</v-tab
+        >
       </v-tabs>
 
       <v-tabs-items v-model="tabs">
@@ -29,19 +31,29 @@
                 v-model="start_time"
                 date-format="dd/MM/yyyy"
                 time-format="HH:mm"
-                :datePickerProps="{locale: 'fr'}"
-                :timePickerProps="{format: '24hr'}"
+                :datePickerProps="{ locale: 'fr' }"
+                :timePickerProps="{ format: '24hr' }"
               ></v-datetime-picker>
             </div>
             <div class="setting image">
               <label>Image</label>
               <span v-if="image !== null" class="preview">
-                <v-btn fab dark small color="rgba(0,0,0,0.5)" @click="image = null">
+                <v-btn
+                  fab
+                  dark
+                  small
+                  color="rgba(0,0,0,0.5)"
+                  @click="image = null"
+                >
                   <v-icon>close</v-icon>
                 </v-btn>
                 <img :src="image" />
               </span>
-              <input type="file" class="form-control" v-on:change="onImageChange" />
+              <input
+                type="file"
+                class="form-control"
+                v-on:change="onImageChange"
+              />
             </div>
             <div class="setting">
               <label>Type d'évent</label>
@@ -50,9 +62,11 @@
                   v-for="typesingle in types"
                   :value="typesingle.id"
                   :key="typesingle.id"
-                >{{typesingle.name}}</option>
+                >
+                  {{ typesingle.name }}
+                </option>
               </select>
-              <p class="commentaire">{{types[type].description}}</p>
+              <p class="commentaire">{{ types[type].description }}</p>
             </div>
           </div>
 
@@ -61,32 +75,52 @@
             <div class="setting">
               <label>Lier l'évent avec Discord ?</label>
               <v-btn-toggle v-model="channel_discord_type" mandatory>
-                <v-btn :disabled="disabled" v-if="type == 'train'" value="none">Aucun lien</v-btn>
-                <v-btn :disabled="disabled" value="existing">Salon exstant</v-btn>
-                <v-btn :disabled="disabled" value="temp">Salon temporaire</v-btn>
+                <v-btn :disabled="disabled" v-if="type == 'train'" value="none"
+                  >Aucun lien</v-btn
+                >
+                <v-btn :disabled="disabled" value="existing"
+                  >Salon existant</v-btn
+                >
+                <v-btn :disabled="disabled" value="temp"
+                  >Salon temporaire</v-btn
+                >
               </v-btn-toggle>
             </div>
             <div v-if="channel_discord_type == 'temp'" class="setting">
               <label>Catégorie de salon</label>
-              <p
-                class="description"
-              >Le salon temporaire sera créé dans la catégorie choisie. (les droits appliqués au salon seront les mêmes que ceux de la catégorie)</p>
-              <select v-if="channels_categories" v-model="category_discord_id" :disabled="disabled">
+              <p class="description">
+                Le salon temporaire sera créé dans la catégorie choisie. (les
+                droits appliqués au salon seront les mêmes que ceux de la
+                catégorie)
+              </p>
+              <select
+                v-if="channels_categories"
+                v-model="category_discord_id"
+                :disabled="disabled"
+              >
                 <option
                   v-for="channel in channels_categories"
                   :value="channel.id.toString()"
                   :key="channel.id"
-                >{{channel.name}}</option>
+                >
+                  {{ channel.name }}
+                </option>
               </select>
             </div>
             <div v-if="channel_discord_type == 'existing'" class="setting">
               <label>Salon</label>
-              <select v-if="channels" v-model="channel_discord_id" :disabled="disabled">
+              <select
+                v-if="channels"
+                v-model="channel_discord_id"
+                :disabled="disabled"
+              >
                 <option
                   v-for="channel in channels"
                   :value="channel.id"
                   :key="channel.id"
-                >{{channel.name}}</option>
+                >
+                  {{ channel.name }}
+                </option>
               </select>
             </div>
           </div>
@@ -95,7 +129,9 @@
             <v-divider></v-divider>
             <div v-if="getId">
               <v-subheader>Autres actions</v-subheader>
-              <v-list-tile color="pink" @click="dialog = true">Supprimer l'évent</v-list-tile>
+              <v-list-tile color="pink" @click="dialog = true"
+                >Supprimer l'évent</v-list-tile
+              >
             </div>
           </div>
         </v-tab-item>
@@ -104,10 +140,10 @@
           <div class="settings-section">
             <v-subheader v-if="type == 'quiz'">PokéQuiz</v-subheader>
             <div v-if="type == 'quiz'">
-              <v-alert
-                :value="isQuizStarted"
-                type="warning"
-              >Le quiz a commencé. Les questions et délais ne peuvent plus être modifiés</v-alert>
+              <v-alert :value="isQuizStarted" type="warning"
+                >Le quiz a commencé. Les questions et délais ne peuvent plus
+                être modifiés</v-alert
+              >
               <div class="setting">
                 <label>Nombre de questions</label>
                 <select :disabled="isQuizStarted" v-model="quiz.nb_questions">
@@ -115,20 +151,25 @@
                     v-for="choicesNbQuestion in choicesNbQuestions"
                     :value="choicesNbQuestion"
                     :key="choicesNbQuestion"
-                  >{{choicesNbQuestion}}</option>
+                  >
+                    {{ choicesNbQuestion }}
+                  </option>
                 </select>
               </div>
               <div class="setting">
                 <label>Délai max pour fournir une bonne réponse</label>
-                <p
-                  class="description"
-                >En minutes. Au dela de ce délai, si personne n'a la bonne réponse, Pokématos passera à la question suivante.</p>
+                <p class="description">
+                  En minutes. Au dela de ce délai, si personne n'a la bonne
+                  réponse, Pokématos passera à la question suivante.
+                </p>
                 <select :disabled="isQuizStarted" v-model="quiz.delay">
                   <option
                     v-for="choicesDelay in choicesDelays"
                     :value="choicesDelay"
                     :key="choicesDelay"
-                  >{{choicesDelay}}min</option>
+                  >
+                    {{ choicesDelay }}min
+                  </option>
                 </select>
               </div>
               <div class="setting checkbox">
@@ -154,7 +195,10 @@
               </div>-->
               <div class="setting d-flex switch">
                 <div>
-                  <label>Proposer des questions en lien uniquement avec PokémonGO ?</label>
+                  <label
+                    >Proposer des questions en lien uniquement avec PokémonGO
+                    ?</label
+                  >
                 </div>
                 <v-switch
                   @change="fetchQuizAvailableQuestions()"
@@ -162,10 +206,10 @@
                   v-model="quiz.only_pogo"
                 ></v-switch>
               </div>
-              <v-alert
-                :value="true"
-                type="info"
-              >{{availableQuestions}} questions répondent aux critères</v-alert>
+              <v-alert :value="true" type="info"
+                >{{ availableQuestions }} questions répondent aux
+                critères</v-alert
+              >
             </div>
 
             <v-subheader v-if="type == 'train'">Pokétrain</v-subheader>
@@ -181,9 +225,10 @@
             <div class="setting d-flex switch">
               <div>
                 <label>Événement multi-guilds</label>
-                <p
-                  class="description"
-                >Inviter d'autres guilds à vous défier et participer à votre événement</p>
+                <p class="description">
+                  Inviter d'autres guilds à vous défier et participer à votre
+                  événement
+                </p>
               </div>
               <v-switch v-model="multi_guilds"></v-switch>
             </div>
@@ -200,16 +245,21 @@
               ></multiselect>
               <div
                 v-for="(guest, index) in guests"
-                :class="'guest guest-'+getGuestStatusIcon(guest)"
+                :class="'guest guest-' + getGuestStatusIcon(guest)"
                 :key="guest.guild_id"
               >
                 <v-list-tile avatar :key="guest.guild_id">
                   <v-list-tile-avatar>
-                    <v-icon>{{getGuestStatusIcon(guest)}}</v-icon>
+                    <v-icon>{{ getGuestStatusIcon(guest) }}</v-icon>
                   </v-list-tile-avatar>
                   <v-list-tile-content>
-                    <v-list-tile-title>{{guest.guild.name}}</v-list-tile-title>
-                    <v-list-tile-sub-title>{{getGuestStatusLabel(guest)}} {{getGuestStatusDate(guest)}}</v-list-tile-sub-title>
+                    <v-list-tile-title>{{
+                      guest.guild.name
+                    }}</v-list-tile-title>
+                    <v-list-tile-sub-title
+                      >{{ getGuestStatusLabel(guest) }}
+                      {{ getGuestStatusDate(guest) }}</v-list-tile-sub-title
+                    >
                   </v-list-tile-content>
                   <v-btn
                     v-if="guest.status == 'pending'"
@@ -231,13 +281,17 @@
       </v-tabs-items>
 
       <v-btn dark fixed bottom right fab @click="submit()">
-        <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+        <v-progress-circular
+          v-if="loading"
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
         <v-icon v-else>save</v-icon>
       </v-btn>
 
       <v-dialog v-model="dialog" persistent max-width="290">
         <v-card>
-          <v-card-title class="headline">Supprimer {{name}} ?</v-card-title>
+          <v-card-title class="headline">Supprimer {{ name }} ?</v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn flat @click="dialog = false">Annuler</v-btn>

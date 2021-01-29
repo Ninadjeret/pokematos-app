@@ -5,7 +5,7 @@ namespace Tests\Feature\Analyzer;
 use Tests\TestCase;
 use App\Models\Pokemon;
 use Illuminate\Support\Facades\Log;
-use App\Core\RaidAnalyzer\PokemonSearch;
+use App\Core\Analyzer\PokemonSearch;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

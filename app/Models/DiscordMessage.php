@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Core\Discord;
+use App\Core\Discord\Discord;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 

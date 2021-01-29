@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\RaidAnalyzer;
+namespace App\Core\Analyzer;
 
 use Illuminate\Support\Facades\Log;
 

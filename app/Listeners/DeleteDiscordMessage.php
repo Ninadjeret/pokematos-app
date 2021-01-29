@@ -31,25 +31,22 @@ class DeleteDiscordMessage
      */
     public function handle($event)
     {
-        if( empty($event->announce->message_discord_id) ) {
-            return ;
-        }
-
-        $guild = Guild::find( $event->announce->guild_id );
-        if( !$guild ) {
+        if (empty($event->announce->message_discord_id)) {
             return;
         }
 
-        if( $event->announce->source == 'text' && $guild->settings->raidreporting_text_delete == false ) return;
-        if( $event->announce->source == 'image' && $guild->settings->raidreporting_images_delete == false ) return;
+        $guild = Guild::find($event->announce->guild_id);
+        if (!$guild) {
+            return;
+        }
+
+        if ($event->announce->source == 'text' && $guild->settings->raidreporting_text_delete == false) return;
+        if ($event->announce->source == 'image' && $guild->settings->raidreporting_images_delete == false) return;
 
         $discord = new DiscordClient(['token' => config('discord.token')]);
-        \App\Core\Discord::deleteMessage([
+        \App\Core\Discord\Discord::deleteMessage([
             'channel.id' => (int) $event->announce->channel_discord_id,
             'message.id' => (int) $event->announce->message_discord_id,
         ]);
     }
-
-
-
 }

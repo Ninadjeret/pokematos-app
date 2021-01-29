@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Event;
 use App\Models\EventTrainStep;
+use App\Core\Discord\MessageTranslator;
 use Illuminate\Database\Eloquent\Model;
 
 class EventTrain extends Model
@@ -50,7 +51,7 @@ class EventTrain extends Model
             $content .= $this->getStepMessage($step, $num);
             if ($num < $this->nb_steps) $content .= "\t|\r\n";
         }
-        return \App\Core\Discord::encode($content, $this->event->guild, false);
+        return MessageTranslator::to($this->event->guild)->translate($content);
     }
 
     private function getPartialTrainMessage()
@@ -76,7 +77,7 @@ class EventTrain extends Model
             }
         }
         $content .= ($hidden_after > 0) ? "**{$hidden_after} étapes après...**" : "";
-        return \App\Core\Discord::encode($content, $this->event->guild, false);
+        return MessageTranslator::to($this->event->guild)->translate($content);
     }
 
     private function getIntroMessage()

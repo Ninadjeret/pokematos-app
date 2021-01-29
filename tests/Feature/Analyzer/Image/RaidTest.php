@@ -5,7 +5,7 @@ namespace Tests\Feature\Analyzer\Image;
 use Tests\TestCase;
 use App\Models\Guild;
 use Illuminate\Support\Facades\Log;
-use App\Core\RaidAnalyzer\ImageAnalyzer;
+use App\Core\Analyzer\ImageAnalyzer;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

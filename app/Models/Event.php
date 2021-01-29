@@ -184,7 +184,7 @@ class Event extends Model
 
         if ($args['channel_discord_type'] == 'temp') {
             //if (!empty($this->channel_discord_id)) $to_delete = $this->channel_discord_id;
-            $result = \App\Core\Discord::createChannel([
+            $result = \App\Core\Discord\Discord::createChannel([
                 'guild.id' => (int) $this->guild->discord_id,
                 'name' => $this->name,
                 'type' => 0,
@@ -196,7 +196,7 @@ class Event extends Model
         }
 
         /*if ($to_delete) {
-            \App\Core\Discord::deleteChannel([
+            \App\Core\Discord\Discord::deleteChannel([
                 'channel.id' => (int) $to_delete
             ]);
         }*/

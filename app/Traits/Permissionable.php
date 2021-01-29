@@ -67,6 +67,10 @@ trait Permissionable
     'settings_manage' => [
       'label' => 'Gérer les réglages généraux',
       'context' => 'global'
+    ],
+    'pokemon_manage' => [
+      'label' => 'Gérer les Pokémon',
+      'context' => 'global'
     ]
   ];
 

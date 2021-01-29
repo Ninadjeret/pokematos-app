@@ -12,8 +12,8 @@ use App\Models\UserAction;
 use RestCord\DiscordClient;
 use App\Models\RoleCategory;
 use Illuminate\Http\Request;
-use App\Core\RaidAnalyzer\TextAnalyzer;
-use App\Core\RaidAnalyzer\ImageAnalyzer;
+use App\Core\Analyzer\TextAnalyzer;
+use App\Core\Analyzer\ImageAnalyzer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -65,7 +65,7 @@ class BotController extends Controller
             }
 
             //On avertit le bot de la MAJ
-            \App\Core\Discord::SyncBot();
+            \App\Core\Discord\Discord::SyncBot();
 
             return response()->json($guild, 200);
         }

@@ -32,7 +32,7 @@ const store = new Vuex.Store({
             });
         },
         fetchPokemon(state) {
-            axios.get('/api/pokemons').then(res => {
+            axios.get('/api/user/pokemon').then(res => {
                 state.pokemons = res.data;
                 //console.log(res.data);
                 localStorage.setItem('pokematos_pokemons', JSON.stringify(state.pokemons));

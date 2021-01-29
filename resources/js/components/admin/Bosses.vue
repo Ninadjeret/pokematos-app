@@ -17,7 +17,7 @@
       </multiselect>
       <div v-for="(boss, index) in bosses1t" class="setting pokemon">
         <img :src="boss.thumbnail_url" />
-        <p>{{boss.name_fr}}</p>
+        <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove1t(index)">
           <v-icon>close</v-icon>
         </v-btn>
@@ -41,7 +41,7 @@
       </multiselect>
       <div v-for="(boss, index) in bosses3t" class="setting pokemon">
         <img :src="boss.thumbnail_url" />
-        <p>{{boss.name_fr}}</p>
+        <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove3t(index)">
           <v-icon>close</v-icon>
         </v-btn>
@@ -65,7 +65,7 @@
       </multiselect>
       <div v-for="(boss, index) in bosses5t" class="setting pokemon">
         <img :src="boss.thumbnail_url" />
-        <p>{{boss.name_fr}}</p>
+        <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove5t(index)">
           <v-icon>close</v-icon>
         </v-btn>
@@ -89,7 +89,7 @@
       </multiselect>
       <div v-for="(boss, index) in bosses7t" class="setting pokemon">
         <img :src="boss.thumbnail_url" />
-        <p>{{boss.name_fr}}</p>
+        <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove7t(index)">
           <v-icon>close</v-icon>
         </v-btn>
@@ -113,7 +113,7 @@
       </multiselect>
       <div v-for="(boss, index) in bosses6t" class="setting pokemon">
         <img :src="boss.thumbnail_url" />
-        <p>{{boss.name_fr}}</p>
+        <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove6t(index)">
           <v-icon>close</v-icon>
         </v-btn>
@@ -121,7 +121,11 @@
     </div>
 
     <v-btn dark fixed bottom right fab @click="submit()">
-      <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+      <v-progress-circular
+        v-if="loading"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
       <v-icon v-else>save</v-icon>
     </v-btn>
   </div>
@@ -143,7 +147,7 @@ export default {
       bosses4t: [],
       bosses5t: [],
       bosses6t: [],
-      bosse7t: [],
+      bosses7t: [],
     };
   },
   created() {
@@ -265,7 +269,7 @@ export default {
       this.$store.commit("setSnackbar", { message: "Enregistrement en cours" });
       this.loading = true;
       axios
-        .put("/api/pokemons/raidbosses", args)
+        .put("/api/user/pokemon/raidbosses", args)
         .then((res) => {
           this.$store.commit("fetchPokemon");
           this.$store.commit("setSnackbar", {

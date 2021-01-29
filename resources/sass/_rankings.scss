@@ -1,0 +1,361 @@
+#user__ranking {
+    h2 {
+        color: rgb(90, 108, 174);
+        font-family: "Teko";
+        font-size: 32px;
+        margin-top: 30px;
+
+        a {
+            position: absolute;
+            font-size: 20px;
+            right: 0;
+            top: 10px;
+        }
+    }
+
+    .ranking__card {
+        background: url(https://assets.profchen.fr/img/app/ranking/ranking_bg.jpg) center center #5a6cae;
+        background-size: cover;
+        position: relative;
+        padding: 10px 20px;
+
+        h4 {
+            overflow: hidden;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 10px;
+            top: 20px;
+
+            &:before,
+            &:after {
+                background-color: rgba(255, 255, 255, 0.4);
+                content: "";
+                display: inline-block;
+                height: 1px;
+                position: relative;
+                vertical-align: middle;
+                width: 50%;
+            }
+
+            &:before {
+                right: 0.5em;
+                margin-left: -50%;
+            }
+
+            &:after {
+                left: 0.5em;
+                margin-right: -50%;
+            }
+        }
+
+        .ranking__more {
+            text-transform: uppercase;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 50px;
+            display: block;
+            font-size: 15px;
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            background: transparent !important;
+        }
+
+        .ranking__position {
+            color: #fff;
+            display: flex;
+
+            .position__table {
+                width: 100%;
+
+                tr.current td {
+                    font-size: 17px;
+                    color: #fff;
+                }
+
+                td {
+                    color: rgba(255, 255, 255, 0.7);
+                    padding: 5px;
+                }
+            }
+
+
+
+            .position_pos {
+                width: 15%;
+                text-align: center;
+            }
+
+            .position_name {
+                width: 70%;
+                text-align: left;
+            }
+
+            .position_score {
+                width: 15%;
+                text-align: center;
+            }
+
+            img {
+                width: 50px;
+            }
+
+        }
+
+    }
+}
+
+.template-ranking {
+    .v-picker__title.primary {
+        background: $primary_dark;
+        border-radius: 0px !important;
+    }
+
+    .v-picker__body {
+        .v-btn--active {
+            background-color: $primary !important;
+        }
+    }
+
+    .settings-section {
+        .v-item-group {
+            width: 100%;
+            align-items: stretch;
+
+            button {
+                flex: 1;
+
+                &.v-btn--active {
+                    color: #fff;
+                }
+            }
+        }
+
+        .layout {
+            margin-left: 0;
+            margin-right: 0;
+            background: $primary;
+            margin-top: 15px;
+            padding-top: 5px;
+            color: #fff;
+
+            &:after {
+                content: "";
+                width: 0;
+                height: 0;
+                border-left: 15px solid transparent;
+                border-right: 15px solid transparent;
+                border-bottom: 15px solid $primary;
+                position: absolute;
+                margin-top: -15px;
+                right: 40px;
+            }
+
+            .v-text-field__details {
+                display: none;
+            }
+
+            .v-input__prepend-outer .v-icon {
+                color: #fff;
+            }
+
+            .theme--light.v-input:not(.v-input--is-disabled) input {
+                color: #fff;
+            }
+
+            .theme--light.v-label.v-label--active {
+                color: rgba(255, 255, 255, 0.5)
+            }
+        }
+    }
+
+    .ranking__top {
+        background: url(https://assets.profchen.fr/img/app/ranking/ranking_bg.jpg) center center #5a6cae;
+        background-size: cover;
+        position: relative;
+        padding: 10px 20px;
+
+        h4 {
+            overflow: hidden;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            top: 20px;
+            font-size: 30px;
+            font-family: "Teko";
+
+            &:before,
+            &:after {
+                background-color: rgba(255, 255, 255, 0.4);
+                content: "";
+                display: inline-block;
+                height: 1px;
+                position: relative;
+                vertical-align: middle;
+                width: 50%;
+            }
+
+            &:before {
+                right: 0.5em;
+                margin-left: -50%;
+            }
+
+            &:after {
+                left: 0.5em;
+                margin-right: -50%;
+            }
+        }
+
+        .top3 {
+            display: flex;
+            align-items: stretch;
+            width: 100%;
+            color: #fff;
+
+            .top {
+                text-align: center;
+                flex: 1;
+
+                &.top-1 .thumbnail {
+                    img {
+                        border-color: #FFD700;
+                    }
+
+                    .position {
+                        background: #FFD700;
+                    }
+                }
+
+                &.top-2 .thumbnail {
+                    img {
+                        width: 85px;
+                        margin-top: 15px;
+                        border-color: #C0C0C0;
+                    }
+
+                    .position {
+                        background: #C0C0C0;
+                    }
+                }
+
+                &.top-3 .thumbnail {
+                    img {
+                        width: 70px;
+                        margin-top: 30px;
+                        border-color: #614e1a;
+                    }
+
+                    .position {
+                        background: #614e1a;
+                    }
+                }
+
+                .thumbnail {
+                    position: relative;
+
+                    img {
+                        border-radius: 150px;
+                        border: 3px solid red;
+                        width: 100px;
+                    }
+
+                    .position {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50px;
+                        color: #fff;
+                        text-align: center;
+                        align-items: center;
+                        margin-top: 10px;
+                        background: red;
+                        position: absolute;
+                        bottom: -10px;
+                        left: 50%;
+                        margin-left: -10px;
+                        padding: 2px;
+                    }
+                }
+
+                .name {
+                    font-family: "Teko";
+                    font-size: 18px;
+                    margin: 12px 0 -5px 0;
+                }
+
+                .score {
+                    font-family: "Teko";
+                    font-size: 30px;
+                }
+
+                .city {
+                    color: rgba(255, 255, 255, 0.6);
+                }
+            }
+        }
+    }
+
+    .ranking__item {
+        background: $bg_light_grey;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        margin: 10px 0;
+        padding: 5px;
+
+        &.current {
+            background: $primary;
+            color: #fff;
+
+            .position_pos {
+                color: #fff;
+            }
+
+            .position_name .namecity span.city {
+                color: rgba(255, 255, 255, 0.6);
+            }
+        }
+
+        .position_pos {
+            width: 15%;
+            text-align: center;
+            font-size: 26px;
+            font-family: "Teko";
+            color: $primary;
+        }
+
+        .position_name {
+            flex-basis: 70%;
+            display: flex;
+            align-items: center;
+
+            .namecity {
+                text-align: left;
+
+                span.name {
+                    font-size: 18px;
+                    font-family: "Teko";
+                }
+
+                span.city {
+                    display: block;
+                    color: rgba(0, 0, 0, 0.8);
+                    font-size: 13px;
+                    margin-top: -3px;
+                }
+            }
+
+            img {
+                border-radius: 100px;
+                width: 40px;
+                margin-right: 10px;
+            }
+        }
+
+        .position_score {
+            width: 15%;
+            text-align: center;
+            font-size: 26px;
+            font-family: "Teko";
+        }
+    }
+}

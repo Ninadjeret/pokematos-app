@@ -14,24 +14,28 @@ class QuestInstance extends Model
     protected $appends = ['messages', 'reward', 'quest'];
     protected $hidden = ['reward_id'];
 
-    public function getQuestAttribute() {
+    public function getQuestAttribute()
+    {
         $quest = Quest::find($this->quest_id);
-        if( !empty( $quest ) ) return $quest;
+        if (!empty($quest)) return $quest;
         return false;
     }
 
-    public function getRewardAttribute() {
-        if( $this->reward_type == 'pokemon' ) {
+    public function getRewardAttribute()
+    {
+        if ($this->reward_type == 'pokemon') {
             return Pokemon::find($this->reward_id);
         }
         return QuestReward::find($this->reward_id);
     }
 
-    public function getStop() {
-        return Stop::find( $this->gym_id );
+    public function getStop()
+    {
+        return Stop::find($this->gym_id);
     }
 
-    public function getLastUserAction() {
+    public function getLastUserAction()
+    {
         $annonce = UserAction::where('type', 'like', 'quest-%')
             ->where('relation_id', $this->id)
             ->orderBy('created_at', 'desc')
@@ -39,7 +43,8 @@ class QuestInstance extends Model
         return $annonce;
     }
 
-    public function getUserActions() {
+    public function getUserActions()
+    {
         $annonces = UserAction::where('type', 'like', 'quest-%')
             ->where('relation_id', $this->id)
             ->orderBy('created_at', 'asc')
@@ -47,15 +52,17 @@ class QuestInstance extends Model
         return $annonces;
     }
 
-    public function getMessagesAttribute() {
+    public function getMessagesAttribute()
+    {
         $messages = QuestMessage::where('quest_instance_id', $this->id)->get();
-        if( $messages ) {
+        if ($messages) {
             return $messages;
         }
         return [];
     }
 
-    public static function add( $params ) {
+    public static function add($params)
+    {
 
         $args = [
             'city_id' => $params['city_id'],
@@ -63,16 +70,16 @@ class QuestInstance extends Model
             'date'    => date('Y-m-d 00:00:00'),
         ];
 
-        if( isset($params['quest_id']) && $params['quest_id'] ) {
+        if (isset($params['quest_id']) && $params['quest_id']) {
             $quest = Quest::find($params['quest_id']);
-            if( $quest ) {
+            if ($quest) {
                 $args['quest_id'] = $params['quest_id'];
                 $args['name'] = $quest->name;
-                if( !empty($quest->rewards) && count($quest->rewards) === 1 ) {
-                    if( !empty( $quest->pokemon_ids ) ) {
+                if (!empty($quest->rewards) && count($quest->rewards) === 1) {
+                    if (!empty($quest->pokemon_ids)) {
                         $args['reward_type'] = 'pokemon';
                         $args['reward_id'] = $quest->pokemon_ids[0];
-                    } elseif( !empty( $quest->reward_ids ) ) {
+                    } elseif (!empty($quest->reward_ids)) {
                         $args['reward_type'] = 'reward';
                         $args['reward_id'] = $quest->reward_ids[0];
                     }
@@ -80,28 +87,28 @@ class QuestInstance extends Model
             }
         }
 
-        if( isset($params['reward_type']) && $params['reward_type'] && isset($params['reward_id']) && $params['reward_id'] ) {
-                $args['reward_type'] = $params['reward_type'];
-                $args['reward_id'] = $params['reward_id'];
+        if (isset($params['reward_type']) && $params['reward_type'] && isset($params['reward_id']) && $params['reward_id']) {
+            $args['reward_type'] = $params['reward_type'];
+            $args['reward_id'] = $params['reward_id'];
         }
 
         $instance = QuestInstance::create($args);
 
-        if( $instance ) {
+        if ($instance) {
             $announce = UserAction::create([
                 'type' => 'quest-create',
-                'source' => ( !empty($request->params['type']) ) ? $request->params['type'] : 'map',
+                'source' => (!empty($request->params['type'])) ? $request->params['type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => Auth::id(),
                 'relation_id' => $instance->id,
+                'city_id' => $instance->city_id,
             ]);
             $stop = Stop::find($args['gym_id']);
             $stop->touch();
-            event( new \App\Events\QuestInstanceCreated( $instance, $announce ) );
+            event(new \App\Events\QuestInstanceCreated($instance, $announce));
             return $instance;
         }
 
         return false;
-
     }
 }

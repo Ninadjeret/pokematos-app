@@ -2,20 +2,21 @@
 
 namespace App;
 
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Models\Guild;
 use App\Models\City;
+use App\Models\Guild;
 use GuzzleHttp\Client;
-use App\Models\UserAction;
 use App\Models\UserGuild;
-use App\Traits\Permissionable;
+use App\Models\UserAction;
 use RestCord\DiscordClient;
+use App\Traits\Permissionable;
+use App\Core\Rankings\UserRanking;
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use NotificationChannels\WebPush\HasPushSubscriptions;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -28,9 +29,11 @@ class User extends Authenticatable
         'password',
         'guilds',
         'discord_id',
+        'discord_name',
         'discord_access_token',
         'discord_refresh_token',
-        'superadmin'
+        'superadmin',
+        'ext'
     ];
     protected $hidden = [
         'password',
@@ -41,7 +44,7 @@ class User extends Authenticatable
     ];
     protected $appends = [
         'permissions',
-        'stats'
+        'stats',
     ];
     protected $casts = [
         'superadmin' => 'boolean'
@@ -315,6 +318,14 @@ class User extends Authenticatable
         }
 
         sleep(1);
+        $res = $user->getDiscordMe();
+        $user_data = json_decode($res->getBody());
+        $user->update([
+            'name' => $user_data->username,
+            'discord_name' => $user_data->username,
+            'discord_avatar_id' => $user_data->avatar,
+        ]);
+
         $user_guilds = $user->getDiscordMeGuilds();
 
         if (!$user_guilds) {
@@ -369,6 +380,18 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    public function getDiscordMe()
+    {
+        $client = new Client();
+        $res = $client->get('https://discord.com/api/users/@me', [
+            'http_errors' => false,
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->discord_access_token,
+            ]
+        ]);
+        return $res;
     }
 
     public function getDiscordMeGuilds()
