@@ -36,6 +36,7 @@ class PostQuestInstanceToDiscord
         $zone_id = ( $gym->zone_id ) ? $gym->zone_id : false ;
         $gym_id = $gym->id ;
         $pokemon_id = ( $event->quest->reward_type == 'pokemon' ) ? $event->quest->reward_id : false;
+        $quest = !empty($event->quest->quest) ? $event->quest->quest : false;
 
         $connectors = QuestConnector::whereIn( 'guild_id', $city->getGuildsIds() )
             ->get();
@@ -60,6 +61,21 @@ class PostQuestInstanceToDiscord
             if( $connector->filter_reward_type == 'pokemon' ) {
                 if( !$pokemon_id ) continue;
                 if( !in_array( $pokemon_id, $connector->filter_reward_pokemon ) ) continue;
+            }
+
+            if( $connector->filter_reward_type == 'pokemon' ) {
+                if( !$pokemon_id ) continue;
+                if( !in_array( $pokemon_id, $connector->filter_reward_pokemon ) ) continue;
+            }
+
+            if( $connector->filter_event == 'inc' && !empty($quest) ) {
+                if( !$quest ) continue;
+                if( !$quest->event ) continue;
+            }
+
+            if( $connector->filter_event == 'exc' && !empty($quest) ) {
+                if( !$quest ) continue;
+                if( $quest->event ) continue;
             }
 
             $connector->postMessage( $event->quest, $event->announce );

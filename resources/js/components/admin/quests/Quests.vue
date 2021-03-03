@@ -52,7 +52,7 @@
         },
         methods: {
             fetchQuests() {
-                axios.get('/api/quests').then( res => {
+                axios.get('/api/user/quests').then( res => {
                     this.quests = res.data;
                 }).catch( err => {
                     //No error

@@ -453,7 +453,7 @@ export default {
   },
   methods: {
     fetchRewards() {
-      axios.get("/api/quests/rewards").then((res) => {
+      axios.get("/api/user/quests/rewards").then((res) => {
         this.objects = res.data;
       });
     },

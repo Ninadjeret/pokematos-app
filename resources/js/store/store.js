@@ -41,7 +41,7 @@ const store = new Vuex.Store({
             });
         },
         fetchQuests(state) {
-            axios.get('/api/quests').then(res => {
+            axios.get('/api/user/quests').then(res => {
                 state.quests = res.data;
                 localStorage.setItem('pokematos_quests', JSON.stringify(state.quests));
             }).catch(err => {
