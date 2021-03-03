@@ -44,7 +44,7 @@ class Raid extends Analyzer
       $this->result->type = 'egg';
       $this->result->gym = $this->getGym();
       $this->result->date = $this->getTime();
-      $this->result->eggLevel = $this->getEggLevelV2();
+      $this->result->eggLevel = $this->getEggLevel();
     } elseif ($this->imageData->type == 'pokemon') {
       $this->ocr = $this->MicrosoftOCR->read($this->imageData->url_ocr);
       $this->_log($this->ocr);
@@ -243,4 +243,39 @@ class Raid extends Analyzer
     $this->result->error = "Aucun timing trouvé dans la capture";
     return false;
   }
+
+    private function getEggLevel() {
+        $egg_level = 0;
+        $image = imagecreatefromjpeg($this->imageData->path);
+
+        if( $this->debug ) $this->_log('---------- Egg level Extraction ----------');
+        foreach( array(5,4,3,2,1) as $egglevel ) {
+            $count_egg_level = 0;
+            foreach( $this->coordinates->forEggLevel() as $coor ) {
+                if( !in_array($egglevel, $coor->lvl) ) {
+                    continue;
+                }
+                $rgb = $this->colorPicker->pickColor($image, $coor->x, $coor->y );
+                if( $this->colorPicker->isEgglevelColor($rgb) ) {
+                    $count_egg_level += 1;
+                    if( $this->debug ) $this->_log('Pixel matches');
+                } else {
+                    if( $this->debug ) $this->_log('Pixel does not match');
+                }
+            }
+
+            if( $this->debug ) $this->_log($count_egg_level . ' matching pixels, '.$egglevel.' expected');
+
+            if( $egglevel === $count_egg_level ) {
+                imagedestroy($image);
+                $egglevel = $egglevel;
+                return $egglevel;
+            }
+        }
+
+        imagedestroy($image);
+        $this->result->error = "Le niveau du raid n'a pas été trouvé";
+        return false;
+    }
+
 }

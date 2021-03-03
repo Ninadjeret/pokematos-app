@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Core\Conversation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class AnswerController extends Controller
 {
@@ -14,7 +15,18 @@ class AnswerController extends Controller
     {
         $guild = Guild::where('discord_id', $request->guild_discord_id)->first();
         $event = Event::findFromChannelId($request->channel_discord_id);
-        $user = \App\User::where('discord_id', $request->user_discord_id)->first();
+
+        $username = $request->user_discord_name;
+        $userDiscordId = $request->user_discord_id;
+        $user = \App\User::where('discord_id', $userDiscordId)->first();
+        if (!$user) {
+            $user = \App\User::create([
+                'name' => $username,
+                'password' => Hash::make(str_random(20)),
+                'discord_name' => $username,
+                'discord_id' => $userDiscordId,
+            ]);
+        }
 
         if (empty($event)) {
             Conversation::sendToDiscord($request->channel_discord_id, $guild, 'bot', 'cmd_no_current_event');

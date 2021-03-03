@@ -25,7 +25,7 @@ class RaidController extends Controller
 
         $url = (isset($request->url) && !empty($request->url)) ? $request->url : false;
         $text = (isset($request->text) && !empty($request->text)) ? $request->text : false;
-        $username = $request->user_name;
+        $username = $request->user_discord_name;
         $userDiscordId = $request->user_discord_id;
         $guild_discord_id = $request->guild_discord_id;
         $message_discord_id = $request->message_discord_id;
