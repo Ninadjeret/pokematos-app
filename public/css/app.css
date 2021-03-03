@@ -12407,6 +12407,31 @@ body.logged-out .denied a {
   flex: 0 0 48px;
 }
 
+.v-list.quests [role=listitem] {
+  padding: 5px;
+}
+
+.v-list.quests [role=listitem].event {
+  position: relative;
+  border: 2px solid #5bb0c4;
+}
+
+.v-list.quests [role=listitem].event:before {
+  content: "Event";
+  background: #5bb0c4;
+  color: #fff;
+  position: absolute;
+  right: -2px;
+  z-index: 100;
+  padding: 0 10px;
+  border-radius: 0 10px 0 10px;
+  top: -2px;
+}
+
+.v-list.quests [role=listitem] .v-list__tile__content {
+  border-radius: 0 !important;
+}
+
 .template-list .v-dialog > .v-card > .v-card__text {
   margin-top: 10px;
 }

@@ -8,4 +8,25 @@
     .v-avatar {
         flex: 0 0 48px;
     }
+    [role="listitem"] {
+        padding: 5px;
+        &.event {
+            position: relative;
+            border: 2px solid $primary_stop;
+            &:before {
+                content: "Event";
+                background: $primary_stop;
+                color: #fff;
+                position: absolute;
+                right: -2px;
+                z-index: 100;
+                padding: 0 10px;
+                border-radius: 0 10px 0 10px;
+                top: -2px;
+            }
+        }
+        .v-list__tile__content {
+            border-radius: 0 !important;
+        }
+    }
 }

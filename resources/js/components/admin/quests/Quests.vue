@@ -6,7 +6,7 @@
             </div>
             <v-list class="quests">
             <template v-for="(quest, index) in filteredQuests">
-              <v-list-tile :key="quest.id" :to="{ name: 'admin.quests.edit', params: { id: quest.id } }">
+              <v-list-tile :key="quest.id" :to="{ name: 'admin.quests.edit', params: { id: quest.id } }" :class="quest.event ? 'event' : ''">
                 <v-list-tile-content>
                   <v-list-tile-title>
                       {{quest.name}}
