@@ -85,6 +85,9 @@
             >Retélécharger les données</span
           >
         </div>
+        <div class="setting__wrapper">
+          <span class="setting-link add-to-home-screen">Ajouter à l'écran d'accueil</span>
+        </div>
       </div>
     </div>
     <div class="settings-section">
