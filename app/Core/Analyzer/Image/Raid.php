@@ -44,7 +44,7 @@ class Raid extends Analyzer
       $this->result->type = 'egg';
       $this->result->gym = $this->getGym();
       $this->result->date = $this->getTime();
-      $this->result->eggLevel = $this->getEggLevel();
+      $this->result->eggLevel = $this->getEggLevelV2();
     } elseif ($this->imageData->type == 'pokemon') {
       $this->ocr = $this->MicrosoftOCR->read($this->imageData->url_ocr);
       $this->_log($this->ocr);

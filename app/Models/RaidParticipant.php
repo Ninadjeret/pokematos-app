@@ -13,4 +13,11 @@ class RaidParticipant extends Model
     {
         return User::find($this->user_id);
     }
+
+    public function getTypeLabelAttribute()
+    {
+        if( $this->type == 'present' ) return 'sur place';
+        if( $this->type == 'remote' ) return 'à distance';
+        if( $this->type == 'invit' ) return 'avec invitation';
+    }
 }

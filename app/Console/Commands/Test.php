@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Console\Commands;
-
 use App\User;
 use App\Models\Raid;
 use App\Models\Guild;
@@ -10,6 +9,7 @@ use App\Models\Pokemon;
 use App\Models\UserAction;
 use App\Models\QuestInstance;
 use App\Models\RocketInvasion;
+use App\Models\DiscordMessage;
 use Illuminate\Console\Command;
 use App\Core\Analyzer\GymSearch;
 use App\Core\Rankings\UserRanking;
@@ -22,6 +22,7 @@ use App\Core\Analyzer\EggClassifier;
 use App\Core\Analyzer\ImageAnalyzer;
 use App\Core\Analyzer\PokemonSearch;
 use App\Core\Discord\MessageTranslator;
+use App\Models\RaidGroup;
 
 class Test extends Command
 {
@@ -56,14 +57,14 @@ class Test extends Command
      */
     public function handle()
     {
-
-        $user = User::find(1);
-        $ranking = UserRanking::forRaids()
-            ->forUser($user)
-            ->forPeriod('2010-01-01', '2020-11-23')
-            ->forCity(1)
-            ->getShort();
-        $this->line(print_r($ranking, true));
+        $message = DiscordMessage::where('discord_id', '818163210402136096')
+        ->where('relation_type', 'raid')
+        ->first();
+        $raid = Raid::find($message->relation_id);
+        request()->merge(['connector_id' => $message->connector_id]); // On récupère le connecteur pour savoir ou créer le canal de raid
+        $raid_group = RaidGroup::firstOrCreate(['guild_id' => $message->guild_id, 'raid_id' => $raid->id]);
+        //$raid_group->add( User::find(1), 'remote', 2 );
+        $raid_group->remove( User::find(2));
 
         /*$instance = new \App\Core\Analyzer\Image\Raid([
             'source_url' => 'https://cdn.discordapp.com/attachments/446373100926271499/681247410789679138/Screenshot_20200223-210054.jpg',

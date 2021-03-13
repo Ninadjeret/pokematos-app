@@ -160,6 +160,7 @@ class Connector extends Model
     public function postMessage($raid, $announce)
     {
         $data = $this->prepareMessage($raid);
+        $guild = Guild::find($this->guild_id);
 
         try {
             $discord = new DiscordClient(['token' => config('discord.token')]);
@@ -179,8 +180,12 @@ class Connector extends Model
                 'to_delete_at' => ($this->delete_after_end) ? $raid->end_time : null,
             ]);
 
+
+
             if ($this->add_participants) {
-                foreach (['👤', '🚁', '1️⃣', '2️⃣', '3️⃣', '✖️'] as $emoji) {
+                $icons = ['👤', '🚁', '🎟️', '✖️'];
+                if( $guild->settings->raidorga_nb_players ) $icons = ['👤', '🚁', '🎟️', '1️⃣', '2️⃣', '3️⃣', '✖️'];
+                foreach ($icons as $emoji) {
                     usleep(200000);
                     $result = $discord->channel->createReaction([
                         'channel.id' => intval($this->channel_discord_id),
@@ -219,6 +224,7 @@ class Connector extends Model
         $description = [];
         $title = ($raid->egg_level == 7) ? 'Méga-raid' : 'Raid ' . $raid->egg_level . ' têtes';
         $img_url = "https://assets.profchen.fr/img/eggs/egg_" . $raid->egg_level . ".png";
+        $raid_group = RaidGroup::where('guild_id', $guild->id)->where('raid_id', $raid->id)->first();
 
         $startTime = new \DateTime($raid->start_time);
         $endTime = new \DateTime($raid->end_time);
@@ -247,18 +253,31 @@ class Connector extends Model
             if (in_array('arene_desc', $this->auto_settings) && !empty($raid->getGym()->description)) {
                 $description[] = $translator->translate($raid->getGym()->description, $raid, $guild);
             }
+            if (in_array('participants_nb', $this->auto_settings) && $raid_group ) {
+                $total_present = $raid_group->getNbParticipants('present');
+                $total_remote = $raid_group->getNbParticipants('remote');
+                $total_invit = $raid_group->getNbParticipants('invit');
+                $total = $total_present + $total_remote + $total_invit;
+                $description[] = "{$total} Participants ({$total_present} sur place, {$total_remote} à distance, {$total_invit} sur invitation)";
+            }
+            if (in_array('participants_list', $this->auto_settings) && $raid_group && $raid_group->getNbParticipants() > 0 ) {
+                $list = $raid_group->getListeParticipants();
+                $description[] = $raid_group->getNbParticipants()." participants :\r\n{$list}";
+            }
         }
+
+        //Gestion des salons
+        /*if ($raid->channels) {
+            foreach ($raid->channels as $channel) {
+                if ($channel->guild_id == $this->guild_id) {
+                    $description[] = 'Vous pouvez vous organiser dans le salon <#' . $channel->channel_discord_id . '>';
+                }
+            }
+        }*/
 
         //Gestion EX
         if ($raid->egg_level == 6) {
             $title = 'Raid EX le ' . $startTime->format('d/m') . ' à ' . $startTime->format('H\hi');
-            if ($raid->channels) {
-                foreach ($raid->channels as $channel) {
-                    if ($channel->guild_id == $this->guild_id) {
-                        $description[] = 'Vous pouvez vous organiser dans le salon <#' . $channel->channel_discord_id . '>';
-                    }
-                }
-            }
         }
 
         //On formatte le embed

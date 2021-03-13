@@ -35,12 +35,12 @@ class RaidGroup extends Model
             'parent_id' => (int) $connector->channel_category_discord_id,
             /*'permission_overwrites' => [
                 [
-                    'id' => Role::where('guild_id', $group->guild_id)->where('name', '@everyone')->first()->discord_id,
-                    'type' => 'role',
+                    'id' => Role::where('guild_id', $this->guild_id)->where('name', '@everyone')->first()->discord_id,
+                    'type' => 0,
                     'allow' => 0,
-                    'deny' => 805829713,
+                    'deny' => 0,
                     'allow_new' => 0,
-                    'deny_new' => 805829713,
+                    'deny_new' => 0,
                 ]
             ]*/
         ]);
@@ -71,11 +71,57 @@ class RaidGroup extends Model
         return $this->hasMany('App\Models\RaidParticipant');
     }
 
+    public function getChannelAttribute() {
+        $channel = DiscordChannel::where('relation_type', 'raid')
+            ->where('relation_id', $this->raid_id)
+            ->where('guild_id', $this->guild_id)
+            ->first();
+        if( empty($channel) ) return false;
+        return $channel;
+    }
+
+    public function updateChannelParticipants()
+    {
+        if( !$this->channel ) return;
+
+        $permissions = [];
+        foreach($this->participants as $participant) {
+            $permissions[] = [
+                'id' => $participant->user->discord_id,
+                'type' => 1,
+                'allow' => "379968",
+                'allow_new' => "379968",
+            ];
+        }
+
+        $channel =Discord::modifyChannel([
+            'channel.id' => (int) $this->channel->discord_id,
+            'permission_overwrites' => $permissions
+        ]);
+    }
+
+    public function removeFromChannel( $participant )
+    {
+        if( !$this->channel ) return;
+        $channel =Discord::modifyChannel([
+            'channel.id' => (int) $this->channel->discord_id,
+            'permission_overwrites' => [
+                [
+                    'id' => $participant->user->discord_id,
+                    'type' => 1,
+                    'deny' => "379968",
+                    'deny_new' => "379968",
+                ]
+            ]
+        ]);
+    }
+
     public function add(User $user, $type = null, $accounts = null)
     {
         $participant = RaidParticipant::firstOrCreate(['raid_group_id' => $this->id, 'user_id' => $user->id]);
         if (!empty($type)) $participant->update(['type' => $type]);
         if (!empty($accounts)) $participant->update(['accounts' => $accounts]);
+        $this->updateChannelParticipants();
         $this->updateDiscordMessages();
         return $participant;
     }
@@ -84,6 +130,7 @@ class RaidGroup extends Model
     {
         $participant = RaidParticipant::where('raid_group_id', $this->id)->where('user_id', $user->id)->first();;
         if (!empty($participant)) $participant->delete();
+        $this->updateChannelParticipants();
         $this->updateDiscordMessages();
         return null;
     }
@@ -118,9 +165,8 @@ class RaidGroup extends Model
         $return = "";
         foreach ($participants as $participant) {
             $num++;
-            $type = ($participant->type == 'remote') ? '(à distance)' : '';
-            $accounts = ($participant->accounts > 1) ? "x{$participant->accounts}" : '';
-            $line = "{$participant->user->getNickname($this->guild_id)} {$accounts} {$type}";
+            $accounts = ($participant->accounts > 1) ? " x{$participant->accounts}" : '';
+            $line = "  - {$participant->user->getNickname($this->guild_id)} ({$participant->type_label}){$accounts}";
             $return .= str_replace('  ', ' ', $line);
             if ($num < $count) $return .= "\r\n";
         }

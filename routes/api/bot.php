@@ -18,6 +18,7 @@ Route::delete('guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCatego
 
 Route::post('raids/imagedecode', 'RaidController@imageDecode');
 
+Route::post('quests', 'Bot\Quests\QuestInstanceController@store');
 
 Route::post('raids', 'Bot\Raids\RaidController@store');
 Route::post('raids/channel', 'Bot\Raids\ChannelController@store');

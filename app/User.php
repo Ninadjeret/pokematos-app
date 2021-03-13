@@ -13,6 +13,7 @@ use App\Core\Rankings\UserRanking;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use NotificationChannels\WebPush\HasPushSubscriptions;
@@ -49,6 +50,26 @@ class User extends Authenticatable
     protected $casts = [
         'superadmin' => 'boolean'
     ];
+
+
+    public static function initFromBotRequest($request)
+    {
+        $user_discord_id = $request->user_discord_id;
+        $user_name = $request->user_discord_name;
+
+        $user = User::where('discord_id', $user_discord_id)->first();
+
+        if (!$user) {
+            $user = User::create([
+                'name' => $user_name,
+                'password' => Hash::make(str_random(20)),
+                'discord_name' => $user_name,
+                'discord_id' => $user_discord_id,
+            ]);
+        }
+
+        return $user;
+    }
 
     public function getGuilds()
     {

@@ -28,6 +28,7 @@ class App
                 'current' => env('DONATION_AMOUNT', '0'),
             ],
             'features' => config('features'),
+            'beta' => explode(',', env('BETA_GUILDS', '')),
         ];
         return $config;
     }

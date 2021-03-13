@@ -25,8 +25,6 @@ class RaidController extends Controller
 
         $url = (isset($request->url) && !empty($request->url)) ? $request->url : false;
         $text = (isset($request->text) && !empty($request->text)) ? $request->text : false;
-        $username = $request->user_discord_name;
-        $userDiscordId = $request->user_discord_id;
         $guild_discord_id = $request->guild_discord_id;
         $message_discord_id = $request->message_discord_id;
         $channel_discord_id = $request->channel_discord_id;
@@ -37,16 +35,8 @@ class RaidController extends Controller
 
         $guild = Guild::where('discord_id', $guild_discord_id)->first();
         $city = City::find($guild->city->id);
+        $user = User::initFromBotRequest($request);
 
-        $user = User::where('discord_id', $userDiscordId)->first();
-        if (!$user) {
-            $user = User::create([
-                'name' => $username,
-                'password' => Hash::make(str_random(20)),
-                'discord_name' => $username,
-                'discord_id' => $userDiscordId,
-            ]);
-        }
 
         if ($url) {
             //$imageAnalyzer = new ImageAnalyzer($url, $guild, $user, $channel_discord_id);
@@ -61,7 +51,7 @@ class RaidController extends Controller
                 $result = $instance->result;
                 $source_type = 'image';
             } else {
-                return false;
+                return response()->json('', 400);
             }
         } else {
             //$textAnalyzer = new TextAnalyzer($text, $guild, $user, $channel_discord_id);

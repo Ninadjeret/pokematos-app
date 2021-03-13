@@ -97,7 +97,7 @@ class QuestInstance extends Model
         if ($instance) {
             $announce = UserAction::create([
                 'type' => 'quest-create',
-                'source' => (!empty($request->params['type'])) ? $request->params['type'] : 'map',
+                'source' => (!empty($params['type'])) ? $params['type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => Auth::id(),
                 'relation_id' => $instance->id,

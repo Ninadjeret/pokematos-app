@@ -26,7 +26,7 @@ class ParticipantController extends Controller
             return response()->json('cmd_no_raid', 400);
         }
 
-        $user = User::where('discord_id', $request->user_discord_id)->first();
+        $user = User::initFromBotRequest($request);
 
         //On récupère le groupe, et on créé le canal si ce n'est pas déja fait
         $request->merge(['connector_id' => $message->connector_id]); // On récupère le connecteur pour savoir ou créer le canal de raid
@@ -38,7 +38,11 @@ class ParticipantController extends Controller
         $raid_group->add($user, $join_type, $accounts);
 
         //Si tout s'est bien passé, on supprime la réaction du joeur
-        if ($request->join_type) $emoji = ($request->join_type == 'present') ? '👤' : '🚁';
+        if ($request->join_type) {
+            if($request->join_type == 'present') $emoji = '👤';
+            if($request->join_type == 'remote') $emoji = '🚁';
+            if($request->join_type == 'invit') $emoji = '🎟️';
+        }
         if ($request->accounts) {
             if ($request->accounts === 1) $emoji = '1️⃣';
             if ($request->accounts === 2) $emoji = '2️⃣';
@@ -46,12 +50,15 @@ class ParticipantController extends Controller
         }
         $discord = new DiscordClient(['token' => config('discord.token')]);
         usleep(100000);
-        $discord->channel->deleteUserReaction([
+        $result = $discord->channel->deleteUserReaction([
             'channel.id' => (int) $request->channel_discord_id,
             'message.id' => (int) $request->message_discord_id,
             'user.id' => (int) $request->user_discord_id,
             'emoji' => $emoji
         ]);
+        Log::debug( print_r('aaaaaaaaaaaaaaaaa', true) );
+        Log::debug( print_r($result, true) );
+        Log::debug( print_r($request->user_discord_id, true) );
     }
 
     public function destroy(Request $request)
@@ -67,7 +74,7 @@ class ParticipantController extends Controller
             return response()->json('cmd_no_raid', 400);
         }
 
-        $user = User::where('discord_id', $request->user_discord_id)->first();
+        $user = User::initFromBotRequest($request);
 
         //On récupère le groupe, et on créé le canal si ce n'est pas déja fait
         $raid_group = RaidGroup::firstOrCreate(['guild_id' => $message->guild_id, 'raid_id' => $raid->id]);

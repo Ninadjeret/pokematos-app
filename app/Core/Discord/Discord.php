@@ -90,6 +90,23 @@ class Discord
         }
     }
 
+    public static function modifyChannel($args)
+    {
+        try {
+            $discord = new DiscordClient(['token' => config('discord.token')]);
+            $channel = $discord->channel->modifyChannel($args);
+            return $channel;
+        } catch (\GuzzleHttp\Command\Exception\CommandException $e) {
+            $statusCode = 'ee';
+            $message = $e->getMessage();
+            Log::debug($message);
+            Log::channel('discord')->info("--------------------------------------------------");
+            Log::channel('discord')->info("{$statusCode} - channel->modifyChannel --- {$message}");
+            Log::channel('discord')->info(print_r($args, true));
+            return false;
+        }
+    }
+
     public static function SyncBot()
     {
         $client = new Client();

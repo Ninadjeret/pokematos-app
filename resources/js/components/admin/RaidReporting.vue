@@ -24,7 +24,7 @@
       </div>
 
       <div class="settings-section">
-        <v-subheader>Réglages</v-subheader>
+        <v-subheader>Signalement des raids</v-subheader>
         <div class="setting d-flex switch">
           <div>
             <label>Analyser les captures d'écran publiées</label>
@@ -102,6 +102,19 @@
           <v-icon v-else>save</v-icon>
         </v-btn>
       </div>
+        <div class="settings-section">
+            <v-subheader>Organisation des raids</v-subheader>
+            <div class="setting d-flex switch">
+                <div>
+                    <label>Gérer le multi-comptes</label>
+                    <p class="description">
+            Si l'option est activée, les joueurs pourront préciser, pour chaque raid, le nombre de comptes présents.
+          </p>
+                </div>
+                <v-switch v-model="raidorga_nb_players"></v-switch>
+            </div>
+        </div>
+
     </div>
 
     <transition name="fade">
@@ -132,6 +145,7 @@ export default {
       raidreporting_text_prefixes: "+raid, +Raid",
       raidreporting_gym_min_proability: 70,
       raidreporting_allowed_channels: [],
+      raidorga_nb_players: false,
       channels: [],
     };
   },
@@ -170,6 +184,9 @@ export default {
             res.data.raidreporting_gym_min_proability;
           this.raidreporting_allowed_channels =
             res.data.raidreporting_allowed_channels;
+          this.raidorga_nb_players = parseInt(
+            res.data.raidorga_nb_players
+          );
         })
         .catch((err) => {
           //No error
@@ -199,8 +216,8 @@ export default {
           raidreporting_text_prefixes: this.raidreporting_text_prefixes.split(
             ", "
           ),
-          raidreporting_gym_min_proability: this
-            .raidreporting_gym_min_proability,
+          raidreporting_gym_min_proability: this.raidreporting_gym_min_proability,
+          raidorga_nb_players: this.raidorga_nb_players,
         },
       };
       this.save(args);
