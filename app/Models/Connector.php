@@ -183,8 +183,8 @@ class Connector extends Model
 
 
             if ($this->add_participants) {
-                $icons = ['👤', '🚁', '🎟️', '✖️'];
-                if( $guild->settings->raidorga_nb_players ) $icons = ['👤', '🚁', '🎟️', '1️⃣', '2️⃣', '3️⃣', '✖️'];
+                $icons = ['👤', '🚁', '🎟️', '❌'];
+                if( $guild->settings->raidorga_nb_players ) $icons = ['👤', '🚁', '🎟️', '1️⃣', '2️⃣', '3️⃣', '❌'];
                 foreach ($icons as $emoji) {
                     usleep(200000);
                     $result = $discord->channel->createReaction([

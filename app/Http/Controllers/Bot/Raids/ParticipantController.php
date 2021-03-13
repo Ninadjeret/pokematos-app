@@ -56,9 +56,6 @@ class ParticipantController extends Controller
             'user.id' => (int) $request->user_discord_id,
             'emoji' => $emoji
         ]);
-        Log::debug( print_r('aaaaaaaaaaaaaaaaa', true) );
-        Log::debug( print_r($result, true) );
-        Log::debug( print_r($request->user_discord_id, true) );
     }
 
     public function destroy(Request $request)
@@ -87,7 +84,7 @@ class ParticipantController extends Controller
             'channel.id' => (int) $request->channel_discord_id,
             'message.id' => (int) $request->message_discord_id,
             'user.id' => (int) $request->user_discord_id,
-            'emoji' => '✖️'
+            'emoji' => '❌'
         ]);
     }
 }
