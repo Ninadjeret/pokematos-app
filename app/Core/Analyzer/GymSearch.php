@@ -29,11 +29,13 @@ class GymSearch
         return new GymSearch($guild);
     }
 
-    public function addGyms()
+    public function addGyms( $ex = null )
     {
-        $gyms = Stop::where('gym', 1)
-            ->where('city_id', $this->guild->city->id)
-            ->get();
+        $query = Stop::where('gym', 1)->where('city_id', $this->guild->city->id);
+        if( $ex !== null ) {
+            $ex ? $query->where('ex', 1) : $query->where('ex', 0) ;
+        }
+        $gyms = $query->get();
         $this->pois = $this->pois->merge($gyms);
         return $this;
     }
@@ -52,7 +54,6 @@ class GymSearch
         $this->accuracy = $acc;
         return $this;
     }
-
 
     /**
      *
@@ -116,11 +117,6 @@ class GymSearch
         $sanitizedQuery = Helpers::sanitize($query);
         $array_probabilities = [];
 
-        /**
-         * ==================================================================
-         * PREMIER TOUR
-         * ==================================================================
-         */
         foreach ($this->sanitizedNames as $name => $gym_id) {
             if ($name == $sanitizedQuery) {
                 return (object) [

@@ -12,6 +12,9 @@ class MicrosoftOCR
         $this->apiKey = config('app.microsoft_api_key');
         $this->baseUrl = 'https://westeurope.api.cognitive.microsoft.com/vision/v2.0/recognizeText?mode=Printed';
         $this->cp_line = false;
+        $this->is_ex = false;
+        $this->result = [];
+        $this->sanitized_result = [];
     }
 
     public function read($image_url)
@@ -83,13 +86,13 @@ class MicrosoftOCR
             $iteration++;
         }
 
-
         $lines = array();
         $num_ligne = 0;
         $num_ligne_invitation = 0;
         foreach ($result->recognitionResult->lines as $line) {
 
             $num_ligne++;
+            $this->result[] = $line->text;
 
             //exceptions de base
             if (
@@ -101,9 +104,9 @@ class MicrosoftOCR
                 || $line->text == 'GROUPE PRIVE'
                 || $line->text == 'Walk closer to interact with this Gym.'
                 || $line->text == '+'
-                || $line->text == 'ARENE DE RAID EX'
                 || $line->text == 'BATTLE'
                 || $line->text == 'PRIVATE GROUP'
+                || $line->text == 'Cartographie RA'
                 || $line->text == 'PC'
                 || $line->text == 'P'
                 || $line->text == 'A'
@@ -117,6 +120,13 @@ class MicrosoftOCR
             ) {
                 continue;
             }
+
+            //Gestion des arènes de Raid EX
+            if( strstr($line->text, 'ARENE DE RAID EX') ) {
+                $this->is_ex = true;
+                continue;
+            }
+
 
             //Exceptions raidex zone géographique
             if ($line->text == 'INVITATION') $num_ligne_invitation = $num_ligne;
@@ -170,6 +180,7 @@ class MicrosoftOCR
             $lines[] = $line->text;
         }
 
+        $this->sanitized_result = $lines;
         return $lines;
     }
 }

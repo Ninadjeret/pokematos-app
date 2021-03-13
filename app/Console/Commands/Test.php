@@ -57,17 +57,21 @@ class Test extends Command
      */
     public function handle()
     {
-        $message = DiscordMessage::where('discord_id', '818163210402136096')
+        /*$message = DiscordMessage::where('discord_id', '818163210402136096')
         ->where('relation_type', 'raid')
         ->first();
         $raid = Raid::find($message->relation_id);
         request()->merge(['connector_id' => $message->connector_id]); // On récupère le connecteur pour savoir ou créer le canal de raid
         $raid_group = RaidGroup::firstOrCreate(['guild_id' => $message->guild_id, 'raid_id' => $raid->id]);
         //$raid_group->add( User::find(1), 'remote', 2 );
-        $raid_group->remove( User::find(2));
+        $raid_group->remove( User::find(2));*/
+
+        $microsoftOCR = new \App\Core\Analyzer\MicrosoftOCR();
+        $microsoftOCR->read('https://cdn.discordapp.com/attachments/475918919241170944/820242129158668309/Screenshot_20210313-111947.jpg');
+        $this->line(print_r($microsoftOCR));
 
         /*$instance = new \App\Core\Analyzer\Image\Raid([
-            'source_url' => 'https://cdn.discordapp.com/attachments/446373100926271499/681247410789679138/Screenshot_20200223-210054.jpg',
+            'source_url' => 'https://cdn.discordapp.com/attachments/475918919241170944/820242129158668309/Screenshot_20210313-111947.jpg',
             'guild' => Guild::find(1),
             'user' => User::find(1),
             'channel_discord_id' => null,

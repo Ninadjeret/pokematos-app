@@ -131,7 +131,7 @@ class Raid extends Analyzer
   function getGym()
   {
     $result = GymSearch::init($this->guild)
-      ->addGyms()
+      ->addGyms($this->MicrosoftOCR->is_ex)
       ->setAccuracy($this->guild->settings->raidreporting_gym_min_proability)
       ->find($this->ocr[0]);
     if ($result) {
