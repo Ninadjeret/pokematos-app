@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Bot\Raids;
 use App\User;
 use App\Models\Raid;
 use App\Models\RaidGroup;
-use App\Models\DiscordMessage;
 use RestCord\DiscordClient;
 use Illuminate\Http\Request;
+use App\Models\DiscordChannel;
+use App\Models\DiscordMessage;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
@@ -15,22 +16,42 @@ class ParticipantController extends Controller
 {
     public function store(Request $request)
     {
-        $message = DiscordMessage::where('discord_id', $request->message_discord_id)
-            ->where('relation_type', 'raid')
-            ->first();
-        if (empty($message)) {
-            return response()->json('cmd_no_raid_message', 400);
-        }
-        $raid = Raid::find($message->relation_id);
-        if (empty($raid)) {
-            return response()->json('cmd_no_raid', 400);
-        }
 
         $user = User::initFromBotRequest($request);
+        $message = false;
+        $channel = false;
 
-        //On récupère le groupe, et on créé le canal si ce n'est pas déja fait
-        $request->merge(['connector_id' => $message->connector_id]); // On récupère le connecteur pour savoir ou créer le canal de raid
-        $raid_group = RaidGroup::firstOrCreate(['guild_id' => $message->guild_id, 'raid_id' => $raid->id]);
+        //From message = reaction
+        if( !empty($request->message_discord_id) ) {
+            $message = DiscordMessage::where('discord_id', $request->message_discord_id)
+                ->where('relation_type', 'raid')
+                ->first();
+            if (empty($message)) return response()->json('cmd_no_raid_message', 400);
+
+            $raid = Raid::find($message->relation_id);
+            if (empty($raid)) return response()->json('cmd_no_raid', 400);
+
+            $request->merge(['connector_id' => $message->connector_id]); // On récupère le connecteur pour savoir ou créer le canal de raid
+            $raid_group = RaidGroup::firstOrCreate(['guild_id' => $message->guild_id, 'raid_id' => $raid->id]);
+        }
+
+        //From channel = command
+        elseif( !empty($request->channel_discord_id) ) {
+            $channel = DiscordChannel::where('discord_id', $request->channel_discord_id)
+                ->where('relation_type', 'raid')
+                ->first();
+            if (empty($channel)) return response()->json('cmd_no_raid_message', 400);
+
+            $raid = Raid::find($channel->relation_id);
+            if (empty($raid)) return response()->json('cmd_no_raid', 400);
+
+            $raid_group = RaidGroup::where('guild_id', $channel->guild_id)->where('raid_id', $raid->id)->first();
+        }
+
+        //Else exit
+        else {
+            return response()->json('cmd_no_raid_message', 400);
+        }
 
         //On ajout le participant ou on le met à jour
         $join_type = $request->join_type ? $request->join_type : null;
@@ -60,20 +81,35 @@ class ParticipantController extends Controller
 
     public function destroy(Request $request)
     {
-        $message = DiscordMessage::where('discord_id', $request->message_discord_id)
-            ->where('relation_type', 'raid')
-            ->first();
-        if (empty($message)) {
-            return response()->json('cmd_no_raid_message', 400);
-        }
-        $raid = Raid::find($message->relation_id);
-        if (empty($raid)) {
-            return response()->json('cmd_no_raid', 400);
-        }
-
         $user = User::initFromBotRequest($request);
 
-        //On récupère le groupe, et on créé le canal si ce n'est pas déja fait
+        //From message = reaction
+        if( !empty($request->message_discord_id) ) {
+            $message = DiscordMessage::where('discord_id', $request->message_discord_id)
+                ->where('relation_type', 'raid')
+                ->first();
+            if (empty($message)) return response()->json('cmd_no_raid_message', 400);
+
+            $raid = Raid::find($message->relation_id);
+            if (empty($raid)) return response()->json('cmd_no_raid', 400);
+        }
+
+        //From channel = command
+        elseif( !empty($request->channel_discord_id) ) {
+            $channel = DiscordChannel::where('discord_id', $request->channel_discord_id)
+                ->where('relation_type', 'raid')
+                ->first();
+            if (empty($channel)) return response()->json('cmd_no_raid_message', 400);
+
+            $raid = Raid::find($channel->relation_id);
+            if (empty($raid)) return response()->json('cmd_no_raid', 400);
+        }
+
+        //Else exit
+        else {
+            return response()->json('cmd_no_raid_message', 400);
+        }
+
         $raid_group = RaidGroup::firstOrCreate(['guild_id' => $message->guild_id, 'raid_id' => $raid->id]);
         $raid_group->remove($user);
 
