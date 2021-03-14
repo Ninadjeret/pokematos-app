@@ -93,6 +93,7 @@ class Discord
     public static function modifyChannel($args)
     {
         try {
+            usleep(500000);
             $discord = new DiscordClient(['token' => config('discord.token')]);
             $channel = $discord->channel->modifyChannel($args);
             return $channel;

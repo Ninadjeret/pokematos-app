@@ -23,6 +23,7 @@ use App\Core\Analyzer\ImageAnalyzer;
 use App\Core\Analyzer\PokemonSearch;
 use App\Core\Discord\MessageTranslator;
 use App\Models\RaidGroup;
+use App\Core\Discord\Messages\RaidChannelTopic;
 
 class Test extends Command
 {
@@ -57,18 +58,21 @@ class Test extends Command
      */
     public function handle()
     {
-        /*$message = DiscordMessage::where('discord_id', '818163210402136096')
+
+        $message = DiscordMessage::where('discord_id', '820557203894304788')
         ->where('relation_type', 'raid')
         ->first();
         $raid = Raid::find($message->relation_id);
         request()->merge(['connector_id' => $message->connector_id]); // On récupère le connecteur pour savoir ou créer le canal de raid
         $raid_group = RaidGroup::firstOrCreate(['guild_id' => $message->guild_id, 'raid_id' => $raid->id]);
-        //$raid_group->add( User::find(1), 'remote', 2 );
-        $raid_group->remove( User::find(2));*/
+        //$raid_group->add( User::find(1), 'present', 2 );
+        $raid_group->add( User::find(2), 'present', 1 );
+        //$raid_group->add( User::find(3), 'present', 1 );
+        //$raid_group->remove( User::find(1));
 
-        $microsoftOCR = new \App\Core\Analyzer\MicrosoftOCR();
+        /*$microsoftOCR = new \App\Core\Analyzer\MicrosoftOCR();
         $microsoftOCR->read('https://cdn.discordapp.com/attachments/475918919241170944/820242129158668309/Screenshot_20210313-111947.jpg');
-        $this->line(print_r($microsoftOCR));
+        $this->line(print_r($microsoftOCR));*/
 
         /*$instance = new \App\Core\Analyzer\Image\Raid([
             'source_url' => 'https://cdn.discordapp.com/attachments/475918919241170944/820242129158668309/Screenshot_20210313-111947.jpg',

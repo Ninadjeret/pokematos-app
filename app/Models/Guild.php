@@ -51,6 +51,7 @@ class Guild extends Model
         'raidreporting_allowed_channels' => ['default' => [], 'type' => 'array'],
 
         'raidorga_nb_players' => ['default' => false, 'type' => 'boolean'],
+        'raidorga_send_messages_participants' => ['default' => false, 'type' => 'boolean'],
 
         'questreporting_images_active' => ['default' => false, 'type' => 'boolean'],
         'questreporting_images_delete' => ['default' => false, 'type' => 'boolean'],
