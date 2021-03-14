@@ -58,6 +58,9 @@ class ParticipantController extends Controller
         $accounts = $request->accounts ? $request->accounts : null;
         $raid_group->add($user, $join_type, $accounts);
 
+        //On s'arrète là si ça venait d'une commande plutot que d'une réaction
+        if(!$message) return;
+
         //Si tout s'est bien passé, on supprime la réaction du joeur
         if ($request->join_type) {
             if($request->join_type == 'present') $emoji = '👤';
@@ -112,6 +115,9 @@ class ParticipantController extends Controller
 
         $raid_group = RaidGroup::firstOrCreate(['guild_id' => $message->guild_id, 'raid_id' => $raid->id]);
         $raid_group->remove($user);
+
+        //On s'arrète là si ça venait d'une commande plutot que d'une réaction
+        if(!$message) return;
 
         //Si tout s'est bien passé, on supprime la réaction du joeur
         $discord = new DiscordClient(['token' => config('discord.token')]);

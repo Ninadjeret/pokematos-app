@@ -136,7 +136,7 @@
             <v-switch v-model="delete_after_end"></v-switch>
           </div>
         </div>
-        <div v-if="config.beta.includes(this.$route.params.id)" class="settings-section">
+        <div class="settings-section">
           <v-subheader>Canaux temporaires</v-subheader>
           <div class="setting d-flex switch">
             <div>
@@ -181,7 +181,7 @@
             </select>
           </div>
         </div>
-        <div v-if="config.beta.includes(this.$route.params.id)" class="settings-section">
+        <div class="settings-section">
           <v-subheader>Suivi des participants</v-subheader>
           <div class="setting d-flex switch">
             <div>
@@ -374,10 +374,6 @@ export default {
     },
     gyms() {
       return this.$store.state.gyms.filter((element) => element.gym);
-    },
-    config() {
-        console.log(window.pokematos.config);
-      return window.pokematos;
     },
     autoSettingsChoices() {
         let choices = [

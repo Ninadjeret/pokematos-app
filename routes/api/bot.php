@@ -14,7 +14,7 @@ Route::put('guilds/{guild_id}/roles/{role}', 'BotController@updateRole');
 
 Route::get('guilds/{guild_id}/role-categories', 'BotController@getRoleCategories');
 Route::get('guilds/{guild_id}/role-categories/{categorie}', 'BotController@getRoleCategory');
-Route::delete('guilds/{guild_id}/role-categories/{categorie}', 'deleteRoleCategory@getRoleCategory');
+Route::delete('guilds/{guild_id}/role-categories/{categorie}', 'BotController@deleteRoleCategory');
 
 Route::post('raids/imagedecode', 'RaidController@imageDecode');
 
