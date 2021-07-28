@@ -257,6 +257,10 @@
             margin: 0;
         }
     }
+
+    .vue2leaflet-map.leaflet-container {
+        border-radius: 0 !important;
+    }
 }
 
 .multiselect {

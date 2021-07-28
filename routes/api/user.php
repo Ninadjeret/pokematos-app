@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+/**
+ * CITY ROUTES
+ */
 Route::group(['middleware' => ['can:city_access']], function () {
   Route::get('cities/{city}/gyms', 'App\PoisController@index');
   Route::post('cities/{city}/raids', 'App\Raids\RaidController@store');
@@ -13,8 +16,12 @@ Route::group(['middleware' => ['can:city_access']], function () {
   Route::get('cities/{city}/ranking/short', 'App\Rankings\ShortRankingController@show');
 });
 
+/**
+ * GUILD ROUTES
+ */
 Route::group(['middleware' => ['can:guild_manage']], function () {
   Route::resource('guilds/{guild}/connectors', 'App\Raids\ConnectorController');
+  Route::resource('guilds/{guild}/questconnectors', 'App\Quests\QuestConnectorController');
   Route::resource('guilds/{guild}/api_access', 'App\Guilds\ApiAccessController');
   Route::put('guilds/{guild}/api_access/{api_access}/token', 'App\Guilds\ApiAccessController@updateToken');
 });
@@ -31,4 +38,13 @@ Route::group(['middleware' => ['can:pokemon_manage']], function () {
   Route::put('pokemon/gamemaster', 'App\Pokemon\GameMasterController@update');
   Route::get('pokemon/{pokemon}', 'App\Pokemon\PokemonController@show');
   Route::put('pokemon/{pokemon}', 'App\Pokemon\PokemonController@update');
+});
+
+/**
+ * QUESTS ROUTES
+ */
+Route::get('quests/rewards', 'App\Quests\QuestRewardController@index');
+Route::get('quests', 'App\Quests\QuestController@index');
+Route::group(['middleware' => ['can:quest_edit']], function () {
+    Route::resource('quests', 'App\Quests\QuestController', ['except' => ['index']]);
 });

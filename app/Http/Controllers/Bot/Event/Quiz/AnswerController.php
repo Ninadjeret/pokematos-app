@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Bot\Event\Quiz;
 
+use App\User;
 use App\Models\Guild;
 use App\Models\Event;
 use App\Core\Conversation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class AnswerController extends Controller
 {
@@ -14,7 +16,8 @@ class AnswerController extends Controller
     {
         $guild = Guild::where('discord_id', $request->guild_discord_id)->first();
         $event = Event::findFromChannelId($request->channel_discord_id);
-        $user = \App\User::where('discord_id', $request->user_discord_id)->first();
+
+        $user = User::initFromBotRequest($request);
 
         if (empty($event)) {
             Conversation::sendToDiscord($request->channel_discord_id, $guild, 'bot', 'cmd_no_current_event');

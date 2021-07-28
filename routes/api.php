@@ -71,12 +71,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@updateRoleCategory');
     Route::delete('user/guilds/{guild}/rolecategories/{categorie}', 'UserController@deleteRoleCategory');
 
-    Route::get('user/guilds/{guild}/questconnectors', 'UserController@getQuestConnectors');
-    Route::post('user/guilds/{guild}/questconnectors', 'UserController@createQuestConnector');
-    Route::get('user/guilds/{guild}/questconnectors/{connector}', 'UserController@getQuestConnector');
-    Route::put('user/guilds/{guild}/questconnectors/{connector}', 'UserController@updateQuestConnector');
-    Route::delete('user/guilds/{guild}/questconnectors/{connector}', 'UserController@deleteQuestConnector');
-
     Route::group(['middleware' => ['can:logs_manage']], function () {
         Route::get('user/guilds/{guild}/logs', 'UserController@getGuildLogs');
         Route::get('user/cities/{city}/logs', 'UserController@getCityLogs');
@@ -88,13 +82,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     //commun
     Route::get('pokemons/raidbosses', 'PokemonController@getRaidBosses');
     Route::put('pokemons/raidbosses', 'PokemonController@updateRaidBosses');
-
-    Route::get('quests/rewards', 'PokemonController@getQuestRewards');
-    Route::get('quests', 'PokemonController@getQuests');
-    Route::post('quests', 'PokemonController@createQuest');
-    Route::get('quests/{quest}', 'PokemonController@getQuest');
-    Route::put('quests/{quest}', 'PokemonController@updateQuest');
-    Route::delete('quests/{quest}', 'PokemonController@deleteQuest');
 
     //Rocket
     Route::get('rocket/bosses', 'RocketController@getBosses');
@@ -188,7 +175,7 @@ Route::get('stats/c/{city_slug}/ia', 'StatsController@getCityIAReport');
 
 //Public
 Route::get('public/pokemons', 'PokemonController@getAll');
-Route::get('public/tools/pokemon/get-pokedex-from-name/{name}', 'PokemonController@getPokedexIdFromNameFr');
+Route::get('public/tools/pokemon/get-pokedex-from-name/{name}', 'Tools\PokemonController@getPokedexIdFromNameFr');
 
 //Subscriptions
 Route::post('subscription', 'SubscriptionController@store');

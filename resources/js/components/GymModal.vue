@@ -341,7 +341,7 @@
           <p v-if="questToSubmit" class="step__title">Quelle est la quête ?</p>
           <v-list class="quests">
             <template v-for="(quest, index) in filteredQuests">
-              <v-list-tile :key="quest.id" @click="clickQuest(quest)">
+              <v-list-tile :key="quest.id" @click="clickQuest(quest)" :class="quest.event ? 'event' : ''">
                 <v-list-tile-content>
                   <v-list-tile-title>{{quest.name}}</v-list-tile-title>
                 </v-list-tile-content>

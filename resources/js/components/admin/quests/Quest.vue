@@ -6,6 +6,13 @@
                 <label>Nom</label>
                 <input v-model="name" type="text">
             </div>
+            <div class="setting d-flex switch">
+                <div>
+                    <label>Quête d'évent</label>
+                    <p class="description">Cette quête est liée à un événement ?</p>
+                </div>
+                <v-switch v-model="event"></v-switch>
+            </div>
             <div class="settings-section">
                 <v-subheader>Récompenses</v-subheader>
                 <multiselect
@@ -30,7 +37,7 @@
             </div>
             <v-divider></v-divider>
             <div v-if="$route.params.id && Number.isInteger($route.params.id)">
-                <v-subheader v-if="">Autres actions</v-subheader>
+                <v-subheader>Autres actions</v-subheader>
                 <v-list-tile color="pink" @click="dialog = true">Supprimer la quête</v-list-tile>
             </div>
 
@@ -63,6 +70,7 @@
                 dialog: false,
                 value: null,
                 name: '',
+                event: false,
                 objects: [],
                 rewards_selected: [],
             }
@@ -83,9 +91,10 @@
         },
         methods: {
             fetch() {
-                axios.get('/api/quests/'+this.$route.params.id).then( res => {
+                axios.get('/api/user/quests/'+this.$route.params.id).then( res => {
                     console.log(res.data)
                     this.name = res.data.name;
+                    this.event = res.data.event;
                     this.rewards_selected = res.data.rewards;
                 }).catch( err => {
                     let message = 'Problème lors de la récupération';
@@ -99,7 +108,7 @@
                 });
             },
             fetchRewards() {
-                axios.get('/api/quests/rewards').then( res => {
+                axios.get('/api/user/quests/rewards').then( res => {
                     this.objects = res.data;
                 });
             },
@@ -122,6 +131,7 @@
                 })
                 const args = {
                     name: this.name,
+                    event: this.event,
                     reward_ids: reward_ids,
                     pokemon_ids: pokemon_ids
                 };
@@ -135,7 +145,7 @@
             save( args ) {
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
-                axios.put('/api/quests/'+this.$route.params.id, args).then( res => {
+                axios.put('/api/user/quests/'+this.$route.params.id, args).then( res => {
                     this.$store.commit('setSnackbar', {
                         message: 'Enregistrement effectué',
                         timeout: 1500
@@ -156,7 +166,7 @@
             create( args ) {
                 this.$store.commit('setSnackbar', {message: 'Enregistrement en cours'})
                 this.loading = true;
-                axios.post('/api/quests', args).then( res => {
+                axios.post('/api/user/quests', args).then( res => {
                     this.$store.commit('setSnackbar', {
                         message: 'Enregistrement effectué',
                         timeout: 1500
@@ -178,7 +188,7 @@
             destroy() {
                 this.dialog = false;
                     this.$store.commit('setSnackbar', {message: 'Suppression en cours'})
-                    axios.delete('/api/quests/'+this.$route.params.id).then( res => {
+                    axios.delete('/api/user/quests/'+this.$route.params.id).then( res => {
                         this.$store.commit('setSnackbar', {
                             message: 'suppression effectuée',
                             timeout: 1500

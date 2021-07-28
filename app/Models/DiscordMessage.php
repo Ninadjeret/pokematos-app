@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DiscordMessage extends Model
 {
-    protected $fillable = ['relation_type', 'relation_id', 'guild_id', 'discord_id', 'channel_discord_id', 'connector_id', 'to_delete_at'];
+    protected $fillable = ['relation_type', 'relation_id', 'guild_id', 'discord_id', 'channel_discord_id', 'type', 'connector_id', 'to_delete_at'];
 
     public function relation()
     {

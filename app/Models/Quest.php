@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quest extends Model
 {
-    protected $fillable = ['name', 'reward_ids', 'pokemon_ids'];
+    protected $fillable = ['name', 'reward_ids', 'pokemon_ids', 'event'];
     protected $appends = ['rewards'];
     protected $casts = [
         'reward_ids' => 'array',
         'pokemon_ids' => 'array',
+        'event' => 'boolean',
     ];
 
     public function getPokemonsAttribute() {

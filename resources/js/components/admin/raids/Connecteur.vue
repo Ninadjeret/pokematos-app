@@ -2,8 +2,8 @@
   <div>
     <v-tabs v-model="tabs" color="transparent" slider-color="#8e56d9" class>
       <v-tab href="#general" class="primary--text">Général</v-tab>
-      <v-tab href="#annonces" class="primary--text">Annonces</v-tab>
-      <!--<v-tab href="#canaux" class="primary--text">Organisation</v-tab>-->
+      <v-tab href="#annonces" class="primary--text">Paramètres</v-tab>
+      <v-tab href="#canaux" class="primary--text">Affichage</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tabs">
@@ -125,7 +125,80 @@
               :value="source.value"
             ></v-checkbox>
           </div>
-          <v-subheader>Format de l'annonce</v-subheader>
+          <div class="setting d-flex switch">
+            <div>
+              <label>Supprimer les messages à la fin du raid</label>
+              <p class="description">
+                Tous les messages d'annonces seront supprimés à la fin des raids
+                concernés
+              </p>
+            </div>
+            <v-switch v-model="delete_after_end"></v-switch>
+          </div>
+        </div>
+        <div class="settings-section">
+          <v-subheader>Canaux temporaires</v-subheader>
+          <div class="setting d-flex switch">
+            <div>
+              <label>Créer des salons temporaires</label>
+              <p class="description">
+                Une réaction permettra de créer un salon temporaire
+              </p>
+            </div>
+            <v-switch v-model="add_channel"></v-switch>
+          </div>
+
+          <div v-if="add_channel" class="setting">
+            <label>Catégorie de salon</label>
+            <p class="description">
+              Le salon temporaire sera créé dans la catégorie choisie.
+            </p>
+            <select
+              v-if="channels_categories"
+              v-model="channel_category_discord_id"
+            >
+              <option
+                v-for="channel in channels_categories"
+                :value="channel.id.toString()"
+                :key="channel.id"
+              >
+                {{ channel.name }}
+              </option>
+            </select>
+          </div>
+          <div v-if="add_channel" class="setting">
+            <label>Quand supprimer le salon ?</label>
+            <p class="description">
+              Définissez quand le salon du raid doit être supprimé. Par défaut,
+              réservéz "En fin de journée" aux annonces de Raid EX
+            </p>
+            <select v-model="channel_duration">
+              <option value="raidend">A la fin du raid</option>
+              <option value="15min">15 min après la fin du raid</option>
+              <option value="1h">1h après la fin du raid</option>
+              <option value="2h">2h après la fin du raid</option>
+              <option value="dayend">A la fin de journée</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings-section">
+          <v-subheader>Suivi des participants</v-subheader>
+          <div class="setting d-flex switch">
+            <div>
+              <label>Activer le suivi des participants</label>
+              <p class="description">
+                Des réactions sous les annonces de raids permettront aux joueurs
+                de définir leur présence, leur mode (sur place ou à distance) et
+                le nombre de comptes
+              </p>
+            </div>
+            <v-switch v-model="add_participants"></v-switch>
+          </div>
+        </div>
+      </v-tab-item>
+      <v-tab-item value="canaux">
+        <div class="settings-section">
+            <v-subheader>Format de l'annonce</v-subheader>
           <div class="setting">
             <label>Format</label>
             <v-btn-toggle v-model="format" mandatory>
@@ -208,77 +281,6 @@
             </p>
             <textarea v-model="custom_message_after"></textarea>
           </div>
-          <div class="setting d-flex switch">
-            <div>
-              <label>Supprimer les messages à la fin du raid</label>
-              <p class="description">
-                Tous les messages d'annonces seront supprimés à la fin des raids
-                concernés
-              </p>
-            </div>
-            <v-switch v-model="delete_after_end"></v-switch>
-          </div>
-        </div>
-      </v-tab-item>
-      <v-tab-item value="canaux">
-        <div class="settings-section">
-          <v-subheader>Canaux temporaires</v-subheader>
-          <div class="setting d-flex switch">
-            <div>
-              <label>Créer des salons temporaires</label>
-              <p class="description">
-                Une réaction permettra de créer un salon temporaire
-              </p>
-            </div>
-            <v-switch v-model="add_channel"></v-switch>
-          </div>
-
-          <div v-if="add_channel" class="setting">
-            <label>Catégorie de salon</label>
-            <p class="description">
-              Le salon temporaire sera créé dans la catégorie choisie.
-            </p>
-            <select
-              v-if="channels_categories"
-              v-model="channel_category_discord_id"
-            >
-              <option
-                v-for="channel in channels_categories"
-                :value="channel.id.toString()"
-                :key="channel.id"
-              >
-                {{ channel.name }}
-              </option>
-            </select>
-          </div>
-          <div v-if="add_channel" class="setting">
-            <label>Quand supprimer le salon ?</label>
-            <p class="description">
-              Définissez quand le salon du raid doit être supprimé. Par défaut,
-              réservéz "En fin de journée" aux annonces de Raid EX
-            </p>
-            <select v-model="channel_duration">
-              <option value="raidend">A la fin du raid</option>
-              <option value="15min">15 min après la fin du raid</option>
-              <option value="1h">1h après la fin du raid</option>
-              <option value="2h">2h après la fin du raid</option>
-              <option value="dayend">A la fin de journée</option>
-            </select>
-          </div>
-        </div>
-        <div class="settings-section">
-          <v-subheader>Suivi des participants</v-subheader>
-          <div class="setting d-flex switch">
-            <div>
-              <label>Activer le suivi des participants</label>
-              <p class="description">
-                Des réactions sous les annonces de raids permettront aux joueurs
-                de définir leur présence, leur mode (sur place ou à distance) et
-                le nombre de comptes
-              </p>
-            </div>
-            <v-switch v-model="add_participants"></v-switch>
-          </div>
         </div>
       </v-tab-item>
     </v-tabs-items>
@@ -348,10 +350,6 @@ export default {
       custom_message_before: "",
       custom_message_after: "",
       auto_settings: [],
-      autoSettingsChoices: [
-        { value: "cp", label: "Afficher les CP min et max" },
-        { value: "arene_desc", label: "Affiche la description de l'arene" },
-      ],
       delete_after_end: true,
       add_channel: false,
       channel_category_discord_id: "",
@@ -377,6 +375,17 @@ export default {
     gyms() {
       return this.$store.state.gyms.filter((element) => element.gym);
     },
+    autoSettingsChoices() {
+        let choices = [
+        { value: "cp", label: "Afficher les CP min et max" },
+        { value: "arene_desc", label: "Afficher la description de l'arene" },
+      ];
+      if( this.add_participants ) {
+        choices.push({ value: "participants_nb", label: "Afficher le nombre de participants" });
+        choices.push({ value: "participants_list", label: "Afficher la liste des participants" });
+      }
+      return choices;
+    }
   },
   methods: {
     fetch() {
@@ -388,6 +397,7 @@ export default {
             this.$route.params.connector_id
         )
         .then((res) => {
+        console.log(res.data);
           this.name = res.data.name;
           this.channel_discord_id = res.data.channel_discord_id;
           this.filter_gym_type = res.data.filter_gym_type;
@@ -404,9 +414,10 @@ export default {
           this.auto_settings = res.data.auto_settings;
           this.delete_after_end = res.data.delete_after_end;
           this.add_channel = res.data.add_channel;
-          this.channel_category_discord_id = res.data.channel_category_discord_id.toString();
+          this.channel_category_discord_id = res.data.channel_category_discord_id ? res.data.channel_category_discord_id.toString() : false;
           this.channel_duration = res.data.channel_duration;
           this.add_participants = res.data.add_participants;
+
         })
         .catch((err) => {
           let message = "Problème lors de la récupération";

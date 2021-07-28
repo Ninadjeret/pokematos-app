@@ -1,0 +1,92 @@
+[
+    {
+        "text": "Toc toc toc, qui est là ? Et oui, c'est **{utilisateur}** !",
+        "type": "add_participant",
+        "next": []
+    },
+    {
+        "text": "Vous l'aviez rêvé, cela devient réalité : {utilisateur} est avec nous",
+        "type": "add_participant",
+        "next": []
+    },
+    {
+        "text": "{utilisateur} est des nôtres, cool !",
+        "type": "add_participant",
+        "next": []
+    },
+    {
+        "text": "{utilisateur} vient de nous rejoindre",
+        "type": "add_participant",
+        "next": []
+    },
+    {
+        "text": "Et hop, un de plus ! Merci {utilisateur}",
+        "type": "add_participant",
+        "next": []
+    },
+    {
+        "text": "Un {utilisateur} sauvage vient d'apparaitre ! Pokéball, GO !",
+        "type": "add_participant",
+        "next": []
+    },
+    {
+        "text": "**{utilisateur}** est dans la place, une force vive de plus !",
+        "type": "add_participant",
+        "next": []
+    },
+    {
+        "text": "Attention, {utilisateur} vient d'arriver !",
+        "type": "add_participant",
+        "next": []
+    },
+    {
+        "text": "https://media.giphy.com/media/WJjLyXCVvro2I/giphy-downsized.gif",
+        "type": "add_participant",
+        "next": ["ça me rassure que tu sois là {utilisateur}. On compte sur toi pour nous aider :muscle:"]
+    },
+    {
+        "text": "https://media.giphy.com/media/Q8IYWnnogTYM5T6Yo0/giphy-downsized.gif",
+        "type": "add_participant",
+        "next": ["{utilisateur} est avec nous, et ça, c'est carrément cool !"]
+    },
+    {
+        "text": "https://media.giphy.com/media/RLWwOuPbqObupogOLB/giphy-downsized.gif",
+        "type": "add_participant",
+        "next": ["Oh ben ça pour une surprise :open_mouth:, je ne pensais pas te voir ici {utilisateur}. Mais c'est une super bonne nouvelle :)"]
+    },
+    {
+        "text": "1 de moins ({utilisateur} nous quitte), mais c'est la qualité qui compte, pas la quantié :wink:",
+        "type": "remove_participant",
+        "next": []
+    },
+    {
+        "text": "Au revoir {utilisateur} :wave:",
+        "type": "remove_participant",
+        "next": []
+    },
+    {
+        "text": "{utilisateur} s'en va ! Mais on va réussir ce raid quand-même pas vrai ?",
+        "type": "remove_participant",
+        "next": []
+    },
+    {
+        "text": "A priori ça sent la sapin ici, {utilisateur} s'en va vers d'autres horizons",
+        "type": "remove_participant",
+        "next": []
+    },
+    {
+        "text": "Oh non, le seum :(, **{utilisateur}** nous abandonne",
+        "type": "remove_participant",
+        "next": []
+    },
+    {
+        "text": "https://media.giphy.com/media/vxNCVEe0PI9A3YVJEX/giphy.gif",
+        "type": "remove_participant",
+        "next": ["Au revoir {utilisateur}..."]
+    },
+    {
+        "text": "https://media.giphy.com/media/TU76e2JHkPchG/giphy.gif",
+        "type": "remove_participant",
+        "next": ["Ben alors {utilisateur}, pourquoi tu ten vas ? on était pas sympas ?"]
+    }
+]

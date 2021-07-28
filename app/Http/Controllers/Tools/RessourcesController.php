@@ -9,6 +9,7 @@ class RessourcesController extends Controller
 {
     public function florkedPokemon($name)
     {
+        $name = str_replace('-', ' ', $name);
         $pokemon = \App\Models\Pokemon::where('name_fr', $name)->first();
         if ($pokemon) {
             $id = $pokemon->pokedex_id;
@@ -26,6 +27,7 @@ class RessourcesController extends Controller
 
     public function nianticPokemon($name)
     {
+        $name = str_replace('-', ' ', $name);
         $pokemon = \App\Models\Pokemon::where('name_fr', $name)->first();
         if ($pokemon) {
             $id = $pokemon->pokedex_id;
@@ -46,6 +48,7 @@ class RessourcesController extends Controller
 
     public function shufflePokemon($name)
     {
+        $name = str_replace('-', ' ', $name);
         $pokemon = \App\Models\Pokemon::where('name_fr', $name)->first();
         if ($pokemon) {
             $id = $pokemon->pokedex_id;

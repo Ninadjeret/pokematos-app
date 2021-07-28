@@ -24,7 +24,7 @@
         </div>
         <div class="settings-section">
           <div v-if="this.$route.params.quest_connector_id">
-            <v-subheader v-if="">Autres actions</v-subheader>
+            <v-subheader>Autres actions</v-subheader>
             <v-list-tile color="pink" @click="dialog = true"
               >Supprimer le connecteur</v-list-tile
             >
@@ -55,7 +55,7 @@
             </multiselect>
           </div>
           <div v-if="filter_stop_type == 'stop'" class="setting">
-            <label>Arêne(s)</label>
+            <label>Stop(s)</label>
             <multiselect
               v-model="filter_stop_stop"
               :options="gyms"
@@ -66,13 +66,21 @@
             >
             </multiselect>
           </div>
-          <v-subheader>Boss</v-subheader>
+          <v-subheader>Récompenses</v-subheader>
           <div class="setting">
             <label>Filtrer les récompenses</label>
             <v-btn-toggle v-model="filter_reward_type" mandatory>
               <v-btn value="none">Aucun filtre</v-btn>
               <v-btn value="reward">Par objets(x)</v-btn>
               <v-btn value="pokemon">Par Pokémon(s)</v-btn>
+            </v-btn-toggle>
+          </div>
+          <div class="setting">
+            <label>Quêtes d'événements</label>
+            <v-btn-toggle v-model="filter_event" mandatory>
+              <v-btn value="none">Peu importe</v-btn>
+              <v-btn value="inc">Inclure</v-btn>
+              <v-btn value="exc">Exclure</v-btn>
             </v-btn-toggle>
           </div>
           <div v-if="filter_reward_type == 'reward'" class="setting">
@@ -183,6 +191,7 @@ export default {
       filter_reward_type: "none",
       filter_reward_reward: [],
       filter_reward_pokemon: [],
+      filter_event: 'none',
       filter_stop_type: "none",
       filter_stop_zone: [],
       filter_stop_stop: [],
@@ -228,6 +237,7 @@ export default {
           this.filter_reward_type = res.data.filter_reward_type;
           this.filter_reward_reward = res.data.filtered_rewards;
           this.filter_reward_pokemon = res.data.filtered_pokemons;
+          this.filter_event = res.data.filter_event;
           this.format = res.data.format;
           this.custom_message = res.data.custom_message;
           this.delete_after_end = res.data.delete_after_end;
@@ -269,7 +279,7 @@ export default {
         });
     },
     fetchRewards() {
-      axios.get("/api/quests/rewards").then((res) => {
+      axios.get("/api/user/quests/rewards").then((res) => {
         this.rewards = res.data;
       });
     },
@@ -283,6 +293,7 @@ export default {
         filter_reward_type: this.filter_reward_type,
         filter_reward_reward: this.filter_reward_reward,
         filter_reward_pokemon: this.filter_reward_pokemon,
+        filter_event: this.filter_event,
         format: this.format,
         custom_message: this.custom_message,
         delete_after_end: this.delete_after_end,

@@ -147,6 +147,7 @@ class MessageTranslator
     $this->translatable['nb_participants'] = (!empty($group)) ? $group->getNbParticipants() : '0';
     $this->translatable['nb_participants_present'] = (!empty($group)) ? $group->getNbParticipants('present') : '0';
     $this->translatable['nb_participants_remote'] = (!empty($group)) ? $group->getNbParticipants('remote') : '0';
+    $this->translatable['nb_participants_invit'] = (!empty($group)) ? $group->getNbParticipants('invit') : '0';
     $this->translatable['liste_participants'] = (!empty($group)) ? $group->getListeParticipants() : '';
   }
 

@@ -23,6 +23,7 @@ class QuestConnector extends Model
         'filter_reward_type',
         'filter_reward_reward',
         'filter_reward_pokemon',
+        'filter_event',
         'filter_stop_type',
         'filter_stop_zone',
         'filter_stop_stop',
@@ -144,7 +145,7 @@ class QuestConnector extends Model
                 'channel_discord_id' => $message['channel_id'],
                 'delete_after_end' => $this->delete_after_end,
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }

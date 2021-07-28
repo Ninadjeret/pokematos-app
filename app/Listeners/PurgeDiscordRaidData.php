@@ -36,13 +36,13 @@ class PurgeDiscordRaidData
             });
 
             $event->raid->messages()->get()->each(function ($message) {
-                $message->suppr();
+                if( $message->type == 'announce' ) $message->suppr();
             });
         }
 
         if ($event instanceof \App\Events\RaidUpdated) {
             $event->raid->messages()->get()->each(function ($message) {
-                $message->suppr();
+                if( $message->type == 'announce' ) $message->suppr();
             });
         }
     }

@@ -37,6 +37,16 @@ class Quest extends Analyzer
     if ($this->imageData->type == 'quest') {
       $this->ocr = $this->MicrosoftOCR->read($this->imageData->url_ocr);
       $this->_log($this->ocr);
+
+      $line_num = 0;
+      $ocr = [];
+      foreach( $this->ocr as $line ) {
+        $line_num++;
+        if( strlen($line) < 4 && $line_num === 1  ) continue;
+        if( $line == 'Ce PokeStop est trop loin.' ) continue;
+        $ocr[] = $line;
+      }
+      $this->ocr = $ocr;
       $this->result->gym = $this->getGym();
       $this->result->date = date('Y-m-d');
       $this->result->reward = $this->getReward();
@@ -53,7 +63,7 @@ class Quest extends Analyzer
     $result = GymSearch::init($this->guild)
       ->addStops()
       ->setAccuracy($this->guild->settings->raidreporting_gym_min_proability)
-      ->find($this->source_text);
+      ->find(implode(' ',$this->ocr));
     if ($result) {
       if ($this->debug) $this->_log('Gym finded in database : ' . $result->gym->name);
       return $result->gym;
@@ -83,4 +93,16 @@ class Quest extends Analyzer
 
     return false;
   }
+
+  public function getLogResult()
+  {
+    return [
+      'type' => $this->result->type,
+      'gym' => $this->result->gym,
+      'gym_probability' => $this->result->gym_probability,
+      'url' => $this->source_url,
+      'ocr' => (property_exists($this, 'ocr')) ? implode(' ', $this->ocr) : '',
+    ];
+  }
+
 }

@@ -80,6 +80,7 @@ class UserController extends Controller
         $params = [
             'city_id' => $city->id,
             'gym_id'  => $request->params['gym_id'],
+            'user_id' => Auth::id(),
         ];
         if ($request->params['quest_id']) $params['quest_id'] = $request->params['quest_id'];
         if ($request->params['reward_type']) $params['reward_type'] = $request->params['reward_type'];
@@ -161,80 +162,6 @@ class UserController extends Controller
      * GESTION DES CONNECTEURS DE QUETES
      * ==================================================================
      */
-
-    public function getQuestConnectors(Request $request, Guild $guild)
-    {
-        $user = Auth::user();
-        if (!$user->can('guild_manage', ['guild_id' => $guild->id])) {
-            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
-        }
-        $connecteurs = QuestConnector::where('guild_id', $guild->id)->get();
-        return response()->json($connecteurs, 200);
-    }
-
-    public function createQuestConnector(Request $request, Guild $guild)
-    {
-        $user = Auth::user();
-        if (!$user->can('guild_manage', ['guild_id' => $guild->id])) {
-            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
-        }
-        $connector = QuestConnector::create([
-            'name' => (isset($request->name)) ? $request->name : '',
-            'guild_id' => $guild->id,
-            'channel_discord_id' => (isset($request->channel_discord_id)) ? $request->channel_discord_id : '',
-            'filter_reward_type' => (isset($request->filter_reward_type)) ? $request->filter_reward_type : '',
-            'filter_reward_reward' => (isset($request->filter_reward_reward)) ? Helpers::extractIds($request->filter_reward_reward) : '',
-            'filter_reward_pokemon' => (isset($request->filter_reward_pokemon)) ? Helpers::extractIds($request->filter_reward_pokemon) : '',
-            'filter_stop_type' => (isset($request->filter_stop_type)) ? $request->filter_stop_type : '',
-            'filter_stop_zone' => (isset($request->filter_stop_zone)) ? Helpers::extractIds($request->filter_stop_zone) : '',
-            'filter_stop_stop' => (isset($request->filter_stop_stop)) ? Helpers::extractIds($request->filter_stop_stop) : '',
-            'format' => (isset($request->format)) ? $request->format : 'auto',
-            'custom_message' => (isset($request->custom_message)) ? $request->custom_message : '',
-            'delete_after_end' => (isset($request->delete_after_end)) ? $request->delete_after_end : '',
-        ]);
-        return response()->json($connector, 200);
-    }
-
-    public function updateQuestConnector(Request $request, Guild $guild, QuestConnector $connector)
-    {
-        $user = Auth::user();
-        if (!$user->can('guild_manage', ['guild_id' => $guild->id])) {
-            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
-        }
-        $connector->update([
-            'name' => (isset($request->name)) ? $request->name : $connector->name,
-            'channel_discord_id' => (isset($request->channel_discord_id)) ? $request->channel_discord_id : $connector->channel_discord_id,
-            'filter_reward_type' => (isset($request->filter_reward_type)) ? $request->filter_reward_type : $connector->filter_reward_type,
-            'filter_reward_reward' => (isset($request->filter_reward_reward)) ? Helpers::extractIds($request->filter_reward_reward) : $connector->filter_reward_reward,
-            'filter_reward_pokemon' => (isset($request->filter_reward_pokemon)) ? Helpers::extractIds($request->filter_reward_pokemon) : $connector->filter_reward_pokemon,
-            'filter_stop_type' => (isset($request->filter_stop_type)) ? $request->filter_stop_type : $connector->filter_stop_type,
-            'filter_stop_zone' => (isset($request->filter_stop_zone)) ? Helpers::extractIds($request->filter_stop_zone) : $connector->filter_stop_zone,
-            'filter_stop_stop' => (isset($request->filter_stop_stop)) ? Helpers::extractIds($request->filter_stop_stop) : $connector->filter_stop_stop,
-            'format' => (isset($request->format)) ? $request->format : $connector->format,
-            'custom_message' => (isset($request->custom_message)) ? $request->custom_message : $connector->custom_message,
-            'delete_after_end' => (isset($request->delete_after_end)) ? $request->delete_after_end : $connector->delete_after_end,
-        ]);
-        return response()->json($connector, 200);
-    }
-
-    public function getQuestConnector(Request $request, Guild $guild, QuestConnector $connector)
-    {
-        $user = Auth::user();
-        if (!$user->can('guild_manage', ['guild_id' => $guild->id])) {
-            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
-        }
-        return response()->json($connector, 200);
-    }
-
-    public function deleteQuestConnector(Request $request, City $city, Guild $guild, QuestConnector $connector)
-    {
-        $user = Auth::user();
-        if (!$user->can('guild_manage', ['guild_id' => $guild->id])) {
-            return response()->json('Vous n\'avez pas les permissions nécessaires', 403);
-        }
-        QuestConnector::destroy($connector->id);
-        return response()->json(null, 204);
-    }
 
     /**
      * ==================================================================
