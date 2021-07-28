@@ -7,12 +7,14 @@ use App\Models\City;
 use App\Models\Guild;
 use App\Models\QuestInstance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
 class QuestInstanceController extends Controller
 {
     public function store(Request $request)
     {
+
         $url = (isset($request->url) && !empty($request->url)) ? $request->url : false;
         $text = (isset($request->text) && !empty($request->text)) ? $request->text : false;
         $guild_discord_id = $request->guild_discord_id;
@@ -44,6 +46,7 @@ class QuestInstanceController extends Controller
             'reward_type' => $result->reward->type,
             'reward_id' => $result->reward->id,
             'type' => 'img',
+            'user_id' => $user->id,
         ];
 
         $raid = QuestInstance::add($args);

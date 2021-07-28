@@ -99,7 +99,7 @@ class QuestInstance extends Model
                 'type' => 'quest-create',
                 'source' => (!empty($params['type'])) ? $params['type'] : 'map',
                 'date' => date('Y-m-d H:i:s'),
-                'user_id' => Auth::id(),
+                'user_id' => $params['user_id'],
                 'relation_id' => $instance->id,
                 'city_id' => $instance->city_id,
             ]);

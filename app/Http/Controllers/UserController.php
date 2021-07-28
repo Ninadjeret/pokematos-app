@@ -80,6 +80,7 @@ class UserController extends Controller
         $params = [
             'city_id' => $city->id,
             'gym_id'  => $request->params['gym_id'],
+            'user_id' => Auth::id(),
         ];
         if ($request->params['quest_id']) $params['quest_id'] = $request->params['quest_id'];
         if ($request->params['reward_type']) $params['reward_type'] = $request->params['reward_type'];
