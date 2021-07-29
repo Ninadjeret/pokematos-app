@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Input;
         <div>
           <a class="login" href="/login">Connexion avec Discord</a>
           <?php
-          $code = Input::get('code');
+          $code = Request::input('code');
           if( !empty($code) ) {
               echo '<p class="denied"><i class="material-icons">warning</i><span>';
               switch ($code) {

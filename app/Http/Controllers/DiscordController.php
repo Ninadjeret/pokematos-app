@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
+//use Illuminate\Support\Facades\Input;
 
 class DiscordController extends Controller
 {
@@ -20,7 +20,7 @@ class DiscordController extends Controller
     public function auth(Request $request)
     {
 
-        $code = Input::get('code');
+        $code = \Illuminate\Support\Facades\Request::input('code');
         if (!$code) {
             return redirect('/?access=cancel');
             die();
