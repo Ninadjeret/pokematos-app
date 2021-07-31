@@ -54,9 +54,9 @@
                   <div class="raid__gym">
                     <img
                       v-if="gym.ex"
-                      src="https://assets.profchen.fr/img/app/connector_gym_ex.png"
+                      :src="baseUrl+'/storage/img/static/connector_gym_ex.png'"
                     />
-                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png" />
+                    <img v-if="!gym.ex" :src="baseUrl+'/storage/img/static/connector_gym.png'" />
                     <template v-if="gym.zone">{{gym.zone.name}} -</template>
                     {{gym.name}}
                   </div>
@@ -95,9 +95,9 @@
                   <div class="raid__gym">
                     <img
                       v-if="gym.ex"
-                      src="https://assets.profchen.fr/img/app/connector_gym_ex.png"
+                      :src="baseUrl+'/storage/img/static/connector_gym_ex.png'"
                     />
-                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png" />
+                    <img v-if="!gym.ex" :src="baseUrl+'/storage/img/static/connector_gym.png'" />
                     <template v-if="gym.zone">{{gym.zone.name}} -</template>
                     {{gym.name}}
                   </div>
@@ -126,7 +126,7 @@
                   <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnail_url" />
                   <img
                     v-if="!gym.quest.reward"
-                    src="https://assets.profchen.fr/img/app/unknown.png"
+                    :src="baseUrl+'/storage/img/static/unknown.png'"
                   />
                 </div>
                 <div class="raid__content">
@@ -134,7 +134,7 @@
                     <span>{{gym.quest.quest.name}}</span>
                   </h3>
                   <div class="raid__gym">
-                    <img src="https://assets.profchen.fr/img/app/connector_pokestop.png" />
+                    <img :src="baseUrl+'/storage/img/static/connector_pokestop.png'" />
                     <template v-if="gym.zone">{{gym.zone.name}} -</template>
                     {{gym.name}}
                   </div>
@@ -173,7 +173,7 @@
                     <span>{{gym.invasion.boss.name}}</span>
                   </h3>
                   <div class="raid__gym">
-                    <img src="https://assets.profchen.fr/img/app/connector_pokestop.png" />
+                    <img :src="baseUrl+'/storage/img/static/connector_pokestop.png'" />
                     <template v-if="gym.zone">{{gym.zone.name}} -</template>
                     {{gym.name}}
                   </div>
@@ -295,6 +295,9 @@ export default {
     },
     zones() {
       return this.$store.state.zones;
+    },
+    baseUrl() {
+      return window.pokematos.baseUrl;
     },
     rewards() {
       return this.objects.concat(this.pokemons);
@@ -475,7 +478,7 @@ export default {
       }
       if (raidStatus == "future" || !raid.pokemon) {
         return (
-          "https://assets.profchen.fr/img/eggs/egg_" + raid.egg_level + ".png"
+          this.baseUrl+"/storage/img/static/raid/egg_" + raid.egg_level + ".png"
         );
       } else {
         return raid.pokemon.thumbnail_url;

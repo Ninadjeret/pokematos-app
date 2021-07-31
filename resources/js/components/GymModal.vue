@@ -15,11 +15,11 @@
                 <strong>{{gym.quest.name}}</strong> en cours
               </span>
             </p>
-            <img v-if="!gym.quest" src="https://assets.profchen.fr/img/app/egg_0.png" />
+            <img v-if="!gym.quest" :src="baseUrl+'/storage/img/static/raid/egg_0.png'" />
             <img v-if="gym.quest && gym.quest.reward" :src="gym.quest.reward.thumbnail_url" />
             <img
               v-if="gym.quest && !gym.quest.reward"
-              src="https://assets.profchen.fr/img/app/unknown.png"
+              :src="baseUrl+'/storage/img/static/unknown.png'"
             />
             <div
               v-if="!gym.gym && gym.invasion && features && features.rocket"
@@ -571,6 +571,9 @@ export default {
     currentCity() {
       return this.$store.state.currentCity;
     },
+    baseUrl() {
+      return window.pokematos.baseUrl;
+    },
     filteredQuests() {
       return this.$store.state.quests.filter((quest) => {
         if (quest.rewards.length == 0) return false;
@@ -751,7 +754,8 @@ export default {
           if (this.gym.raid.ex) {
             this.raidAnnonce = "Un raid EX va avoir lieu ici prochainement";
             this.raidUrl =
-              "https://assets.profchen.fr/img/eggs/egg_" +
+              this.baseUrl + 
+              "/storage/img/static/raid/egg_" +
               this.gym.raid.egg_level +
               ".png";
           } else {
@@ -760,7 +764,8 @@ export default {
               this.gym.raid.egg_level +
               " têtes va bientot éclore...";
             this.raidUrl =
-              "https://assets.profchen.fr/img/eggs/egg_" +
+              this.baseUrl + 
+              "/storage/img/static/raid/egg_" +
               this.gym.raid.egg_level +
               ".png";
           }
@@ -774,7 +779,8 @@ export default {
           this.raidAnnonce =
             "Un raid " + this.gym.raid.egg_level + " têtes est en cours...";
           this.raidUrl =
-            "https://assets.profchen.fr/img/eggs/egg_" +
+            this.baseUrl + 
+            "/storage/img/static/raid/egg_" +
             this.gym.raid.egg_level +
             ".png";
           if (this.gym.raid.ex) this.raidAnnonce = "Un raid EX est en cours...";
@@ -790,12 +796,12 @@ export default {
         } else {
           this.timeLeft = false;
           this.raidAnnonce = "Rien pour le moment...";
-          this.raidUrl = "https://assets.profchen.fr/img/app/egg_0.png";
+          this.raidUrl = this.baseUrl+"/storage/img/static/raid/egg_0.png";
         }
       } else {
         this.timeLeft = false;
         this.raidAnnonce = "Rien pour le moment...";
-        this.raidUrl = "https://assets.profchen.fr/img/app/egg_0.png";
+        this.raidUrl = this.baseUrl+"/storage/img/static/raid/egg_0.png";
       }
     },
     getInvasionData() {

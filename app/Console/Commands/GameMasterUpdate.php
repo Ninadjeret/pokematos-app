@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Pokemon;
 use App\Core\Tools\GameMaster;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 
 class GameMasterUpdate extends Command
 {
@@ -85,6 +86,7 @@ class GameMasterUpdate extends Command
                     'base_sta'      => $data['base_sta'],
                     'parent_id'     => $data['parent_id'],
                 ]);
+                Artisan::call("generate:thumbnails {$data['pokedex_id']}");
                 $this->line('- ' . $niantic_id . ' Créé');
             }
         }
@@ -100,6 +102,7 @@ class GameMasterUpdate extends Command
                         'base_def'  => $data['base_def'],
                         'base_sta'  => $data['base_sta'],
                     ]);
+                    Artisan::call("generate:thumbnails {$data['pokedex_id']}");
                     $this->line('- ' . $niantic_id . ' mis à jour');
                 }
             }

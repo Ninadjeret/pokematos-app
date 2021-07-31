@@ -52,8 +52,8 @@
                     {{step.hour}}h{{step.minutes}}
                 </div>
                 <div class="stop__marker">
-                    <img v-if="step.type == 'stop' && step.stop && step.stop.ex" src="https://assets.profchen.fr/img/app/connector_gym_ex.png">
-                    <img v-if="step.type == 'stop' && step.stop && !step.stop.ex" src="https://assets.profchen.fr/img/app/connector_gym.png">
+                    <img v-if="step.type == 'stop' && step.stop && step.stop.ex" :src="baseUrl+'/storage/img/static/connector_gym_ex.png'">
+                    <img v-if="step.type == 'stop' && step.stop && !step.stop.ex" :src="baseUrl+'/storage/img/static/connector_gym.png'">
                     <v-icon v-if="step.type != 'stop'">directions_car</v-icon>
                 </div>
                 <div>
@@ -109,6 +109,9 @@
         computed: {
             gyms() {
                 return this.$store.state.gyms.filter( gym => gym.gym);
+            },
+            baseUrl() {
+                return window.pokematos.baseUrl;
             },
         },
         methods: {

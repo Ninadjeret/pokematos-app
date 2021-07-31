@@ -13,7 +13,7 @@
               '.png'
             "
           />
-          <img v-else src="https://assets.profchen.fr/img/avatar_default.png" />
+          <img v-else :src="baseUrl+'/storage/img/static/user/avatar_default.png'" />
         </div>
         <div class="user__info">
           <h3>{{ user.name }} <small>//via Discord</small></h3>
@@ -41,7 +41,7 @@
       <div v-if="user" class="ranking__card">
         <h4>Raids annoncés</h4>
         <div class="ranking__position">
-          <div><img src="https://assets.profchen.fr/img/test/test4.png" /></div>
+          <div><img :src="baseUrl+'/storage/img/static/ranking/baseicon.png'" /></div>
           <table v-if="ranking" class="position__table">
             <thead>
               <td class="position_pos">Pos.</td>
@@ -168,6 +168,9 @@ export default {
     },
     appVersion() {
       return window.pokematos.version;
+    },
+    baseUrl() {
+      return window.pokematos.baseUrl;
     },
     currentCity() {
       return this.$store.state.currentCity;

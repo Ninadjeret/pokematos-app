@@ -20,7 +20,7 @@
         ></v-text-field>
       </div>
       <v-list>
-        <template v-for="item in filteredItems">
+        <template v-for="item in paginateItems">
           <v-list-tile
             :key="item.id"
             :to="{
@@ -40,6 +40,14 @@
           <v-divider :key="`d${item.id}`"></v-divider>
         </template>
       </v-list>
+      <div class="text-xs-center">
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          circle
+          total-visible="7"
+        ></v-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -53,9 +61,14 @@ export default {
       gamemaster_message: "<p>Analyse de dernier GameMaster en cours...</p>",
       gamemaster_needs_update: false,
       items: [],
+      page: 1,
+      perPage:20,
     };
   },
   computed: {
+    totalPages() {
+      return Math.ceil( this.filteredItems.length / this.perPage );
+    },
     filteredItems() {
       return this.items.filter((item) => {
         let matchingTitle = 1;
@@ -65,6 +78,13 @@ export default {
         }
         return matchingTitle;
       });
+    },
+    paginateItems() {
+      let items = this.filteredItems;
+      if( this.search != '' && this.page > ( items.length / this.perPage ) ) this.page = 1;
+      let start = (this.page === 1) ? 0 : (this.page - 1) * this.perPage;
+      let end = start + this.perPage;
+      return this.filteredItems.slice(start, end);
     },
   },
   created() {

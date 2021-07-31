@@ -11109,7 +11109,7 @@ input[disabled] {
 }
 
 .user__card {
-  background: url("https://assets.profchen.fr/img/app/user_bg.png") top right #5a6cae;
+  background: url("/storage/img/static/user/user_bg.png") top right #5a6cae;
   background-size: cover;
   position: relative;
   padding: 10px 20px;
@@ -11191,7 +11191,7 @@ input[disabled] {
 }
 
 body.logged-out {
-  background: url(https://assets.profchen.fr/img/splash_bg.jpg) top right;
+  background: url("/storage/img/static/splash_bg.jpg") top right;
   background-size: cover;
 }
 body.logged-out .branding img {
@@ -11230,7 +11230,7 @@ body.logged-out .branding a.login:before {
   content: "";
   width: 30px;
   height: 30px;
-  background: url("https://assets.profchen.fr/img/discord_logo_white.png") center center no-repeat;
+  background: url("/storage/img/static/discord_logo_white.png") center center no-repeat;
   background-size: contain;
   display: inline-block;
   vertical-align: middle;
@@ -11433,7 +11433,7 @@ body.logged-out .denied a {
     background: #fcfcfc !important;
   }
   body.logged-out {
-    background: url(https://assets.profchen.fr/img/splash_bg.jpg) top right !important;
+    background: url("/storage/img/static/splash_bg.jpg") top right !important;
   }
 
   footer.v-footer {
@@ -11497,7 +11497,7 @@ body.logged-out .denied a {
 .template-list .v-window__container .v-window-item .raids__empty {
   width: 100%;
   position: inherit;
-  background: url("https://assets.profchen.fr/img/empty.png") bottom center no-repeat;
+  background: url("/storage/img/static/empty.png") bottom center no-repeat;
   background-size: contain;
   margin-bottom: 45px;
 }
@@ -12748,7 +12748,7 @@ body.logged-out .denied a {
   top: 10px;
 }
 #user__ranking .ranking__card {
-  background: url(https://assets.profchen.fr/img/app/ranking/ranking_bg.jpg) center center #5a6cae;
+  background: url("/storage/img/static/ranking/ranking_bg.jpg") center center #5a6cae;
   background-size: cover;
   position: relative;
   padding: 10px 20px;
@@ -12869,7 +12869,7 @@ body.logged-out .denied a {
   color: rgba(255, 255, 255, 0.5);
 }
 .template-ranking .ranking__top {
-  background: url(https://assets.profchen.fr/img/app/ranking/ranking_bg.jpg) center center #5a6cae;
+  background: url("/storage/img/static/ranking/ranking_bg.jpg") center center #5a6cae;
   background-size: cover;
   position: relative;
   padding: 10px 20px;

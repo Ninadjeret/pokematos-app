@@ -119,12 +119,12 @@ class RaidEmbed
 
     private function getThumbnailUrl()
     {
-        return $this->raid->pokemon ? $this->raid->pokemon->thumbnail_url : "https://assets.profchen.fr/img/eggs/egg_" . $this->raid->egg_level . ".png";
+        return $this->raid->pokemon ? $this->raid->pokemon->thumbnail_url : asset('storage/img/static/app/raid/egg_' . $this->raid->egg_level . '.png');
     }
 
     private function getGymUrl()
     {
-        return $this->raid->getGym()->ex ? 'https://assets.profchen.fr/img/app/connector_gym_ex.png' : 'https://assets.profchen.fr/img/app/connector_gym.png';
+        return $this->raid->getGym()->ex ? asset('storage/img/static/app/connector_gym_ex.png') : asset('storage/img/static/app/connector_gym.png');
     }
 
     public static function getEggColor($eggLevel)

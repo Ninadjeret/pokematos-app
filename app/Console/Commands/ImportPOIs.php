@@ -51,7 +51,6 @@ class ImportPOIs extends Command
         $files = array_diff(scandir( public_path().'/import' ), array('..', '.'));
         $file_name = $this->choice('Quel fichier utiliser ?', $files);
         $url = url('/import/'.$file_name);
-        //$url = 'https://app.pokematos.fr/import/'.$file_name;
 
         $json = file_get_contents($url);
         $array = json_decode($json, true);

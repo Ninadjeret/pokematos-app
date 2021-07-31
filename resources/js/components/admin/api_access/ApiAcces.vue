@@ -114,8 +114,11 @@ export default {
     };
   },
   computed: {
+    baseUrl() {
+      return window.pokematos.baseUrl;
+    },
     ApiUrl() {
-      return "https://app.pokematos.fr/api/ext/v1/";
+      return this.baseUrl+"/api/ext/v1/";
     },
   },
   created() {

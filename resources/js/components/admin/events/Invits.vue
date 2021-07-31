@@ -46,7 +46,7 @@
       </div>
 
       <div v-if="!loading && invits.length === 0" class="event__empty">
-          <img src="https://assets.profchen.fr/img/app/empty_2.png">
+          <img :src="baseUrl+'/storage/img/static/empty_2.png'">
           <h3>Aucune invitation pour l'instant :/</h3>
       </div>
 
@@ -65,6 +65,9 @@
             }
         },
         computed: {
+            baseUrl() {
+                return window.pokematos.baseUrl;
+            }
         },
         created() {
             this.fetchInvits();

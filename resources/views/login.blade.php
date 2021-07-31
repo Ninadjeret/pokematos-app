@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Input;
 @section('content')
 <div class="container page-content-full">
   <div class="branding">
-        <img src="https://assets.profchen.fr/img/logo_pokematos.png">
+        <img src="<?php echo asset('storage/img/static/logo_pokematos.png'); ?>">
         <h1>POKEMATOS</h1>
         <br>
         <div>

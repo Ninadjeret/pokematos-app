@@ -3,7 +3,7 @@
         <v-toolbar fixed app color="primary" dark>
             <v-btn v-if="$route.meta.parent" :to="{ name: $route.meta.parent}" icon><v-icon>arrow_back</v-icon></v-btn>
             <v-spacer class="hidden-md-and-up" v-if="$route.name == 'map'"></v-spacer>
-            <img v-if="$route.name == 'map'" src="https://assets.profchen.fr/img/logo_pokematos_256.png">
+            <img v-if="$route.name == 'map'" :src="baseUrl+'/storage/img/static/logo_pokematos_256.png'">
             <v-toolbar-title v-if="$route.name == 'map'">
                 POKEMATOS
             </v-toolbar-title>
@@ -162,6 +162,9 @@
             },
             user() {
                 return this.$store.state.user;
+            },
+            baseUrl() {
+                return window.pokematos.baseUrl;
             },
             lastChanges() {
                 if( this.$store.state.settings === null ) return false;

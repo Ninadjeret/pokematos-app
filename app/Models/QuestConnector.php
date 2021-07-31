@@ -243,7 +243,7 @@ class QuestConnector extends Model
             }
         } else {
             $title = "Quête {$quest->name} en cours";
-            $img_url = 'https://assets.profchen.fr/img/app/unknown.png';
+            $img_url = asset('storage/img/static/app/unknown.png');
             $description = 'On ne connait pas encore la récompense';
         }
 
@@ -258,7 +258,7 @@ class QuestConnector extends Model
             'author' => array(
                 'name' => $quest->getStop()->name,
                 'url' => $quest->getStop()->google_maps_url,
-                'icon_url' => 'https://assets.profchen.fr/img/app/connector_pokestop.png'
+                'icon_url' => asset('storage/img/static/app/connector_pokestop.png')
             ),
         );
 

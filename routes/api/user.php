@@ -38,6 +38,7 @@ Route::group(['middleware' => ['can:pokemon_manage']], function () {
   Route::put('pokemon/gamemaster', 'App\Pokemon\GameMasterController@update');
   Route::get('pokemon/{pokemon}', 'App\Pokemon\PokemonController@show');
   Route::put('pokemon/{pokemon}', 'App\Pokemon\PokemonController@update');
+  Route::put('pokemon/{pokemon}/thumbnails', 'App\Pokemon\PokemonController@updateThumbnails');
 });
 
 /**

@@ -40,7 +40,7 @@
             return {
                 search: '',
                 page: 1,
-                perPage:10,
+                perPage:20,
             }
         },
         computed: {
@@ -68,11 +68,14 @@
                 let gyms = this.filteredGyms;
                 if( this.search != '' && this.page > ( gyms.length / this.perPage ) ) this.page = 1;
                 let start = (this.page === 1) ? 0 : (this.page - 1) * this.perPage;
-                let end = start + 10;
+                let end = start + this.perPage;
                 return this.filteredGyms.slice(start, end);
             },
             gyms() {
                 return this.$store.state.gyms;
+            },
+            baseUrl() {
+                return window.pokematos.baseUrl;
             }
         },
         created() {
@@ -82,7 +85,7 @@
             getPoiIcon( gym ) {
                 let isGym = ( gym.gym ) ? '1' : '0' ;
                 let isEx = ( gym.ex ) ? '1' : '0' ;
-                return 'https://assets.profchen.fr/img/app/icon_poi_'+isGym+'_'+isEx+'_96.png'
+                return this.baseUrl+'/storage/img/static/icon_poi_'+isGym+'_'+isEx+'_96.png'
             }
         }
     }

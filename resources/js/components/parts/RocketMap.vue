@@ -32,7 +32,10 @@ export default {
         },
         currentCity() {
             return this.$store.state.currentCity
-        }
+        },
+        baseUrl() {
+            return window.pokematos.baseUrl;
+        },
     },
     watch: {
         gyms: function () {
@@ -69,7 +72,7 @@ export default {
             });
         },
         addMarker(stop) {
-            let url = 'https://assets.profchen.fr/img/map/map_marker_rocket_'+stop.invasion.boss.name+'.png';
+            let url = baseUrl+'/storage/img/static/map/map_marker_rocket_'+stop.invasion.boss.name+'.png';
             var mapMarker = L.marker([gym.lat, gym.lng], {
                 icon: new L.DivIcon({
                     className: 'map-marker__wrapper',

@@ -40,7 +40,7 @@
         </div>
 
         <div v-if="!loading && events.length === 0" class="event__empty">
-            <img src="https://assets.profchen.fr/img/app/empty_2.png">
+            <img src="/storage/img/static/empty_2.png">
             <h3>Aucun évent n'est actuellement programmé par ta communauté</h3>
         </div>
 
