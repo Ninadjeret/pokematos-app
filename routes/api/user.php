@@ -49,3 +49,11 @@ Route::get('quests', 'App\Quests\QuestController@index');
 Route::group(['middleware' => ['can:quest_edit']], function () {
     Route::resource('quests', 'App\Quests\QuestController', ['except' => ['index']]);
 });
+
+/**
+ * SETTINGS ROUTES
+ */
+Route::group(['middleware' => ['can:settings_manage']], function () {
+  Route::get('settings', 'SettingController@get');
+  Route::put('settings', 'SettingController@update');
+});

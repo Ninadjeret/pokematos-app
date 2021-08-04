@@ -164,7 +164,7 @@ class EventQuiz extends Model
         \App\Core\Discord\Discord::SyncBot();
 
         $this->sendToDiscord('quiz_ended');
-        sleep(5);
+        sleep(15);
         if ($this->event->multi_guilds) {
             $ranking = new Ranking($this->questions);
             $this->sendToDiscord('quiz_final_score_guilds', [

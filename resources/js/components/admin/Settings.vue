@@ -34,7 +34,7 @@ export default {
   methods: {
     fetch() {
       axios
-        .get("/api/settings")
+        .get("/api/user/settings")
         .then((res) => {
           this.timing_before_eclosion = res.data.timing_before_eclosion;
           this.timing_after_eclosion = res.data.timing_after_eclosion;
@@ -64,7 +64,7 @@ export default {
       this.$store.commit("setSnackbar", { message: "Enregistrement en cours" });
       this.loading = true;
       axios
-        .put("/api/settings", args)
+        .put("/api/user/settings", args)
         .then((res) => {
           this.$store.commit("setSnackbar", {
             message: "Enregistrement effectué",

@@ -274,7 +274,8 @@ const store = new Vuex.Store({
             } catch (error) {
                 console.log('tutututut')
                 console.log(error)
-                if (error.response.status == '401') {
+                console.log(error.response)
+                if ( error.response  && error.response.status == '401') {
                     document.location.reload(true);
                 }
             }
