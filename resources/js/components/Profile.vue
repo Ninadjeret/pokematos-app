@@ -85,8 +85,8 @@
             >Retélécharger les données</span
           >
         </div>
-        <div class="setting__wrapper">
-          <span class="setting-link add-to-home-screen">Ajouter à l'écran d'accueil</span>
+        <div class="setting__wrapper" :style="'display: '+installButtonVisibility">
+          <a class="setting-link add-to-home-screen" @click="installApp">Ajouter à l'écran d'accueil</a>
         </div>
       </div>
     </div>
@@ -149,6 +149,7 @@ export default {
     return {
       dialogUpdate: false,
       ranking: false,
+      installButtonVisibility: 'none',
     };
   },
   computed: {
@@ -174,11 +175,16 @@ export default {
     },
     currentCity() {
       return this.$store.state.currentCity;
-    },
+    }
   },
   created() {
     this.$store.commit("fetchUser");
     this.fetchRanking();
+  },
+  mounted() {
+    if( window.deferredPrompt ) {
+      this.installButtonVisibility = 'flex';
+    }  
   },
   methods: {
     async updateData() {
@@ -196,6 +202,18 @@ export default {
           this.ranking = res.data;
         });
     },
+    installApp() {
+      console.log('install')   
+      window.deferredPrompt.prompt();
+      window.deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          this.installButtonVisibility = 'none';
+        } else {
+          this.installButtonVisibility = 'flex';
+        }
+        window.deferredPrompt = null;
+      });
+    }
   },
 };
 </script>
