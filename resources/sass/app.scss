@@ -20,12 +20,14 @@
 @import 'quests';
 @import 'lists';
 @import 'logs';
-@import 'desktop';
 @import 'loader';
 @import 'rocket';
 @import 'status';
 @import 'events';
 @import 'rankings';
+
+@import 'desktop';
+@import 'dark';
 
 html {
     font-size: 10px !important;
@@ -98,6 +100,7 @@ h6 small {
     padding: 0;
     width: 100%;
     max-width: 100%;
+    height: 100%;
 }
 
 .bt {
@@ -232,6 +235,7 @@ h6 small {
 }
 
 .setting__wrapper {
+    border-radius: 0 !important;
     border-bottom: 1px solid #eee;
     padding: 10px 20px;
     display: flex;
@@ -537,6 +541,14 @@ range_button:active {
     top: 0px;
     left: 50%;
     margin-left: 5px;
+}
+
+.container_fullheight {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
 }
 
 /*.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {

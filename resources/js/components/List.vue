@@ -107,7 +107,8 @@
           </div>
         </div>
 
-        <div v-if="futureRaids.length === 0 &  activeRaids.length === 0" class="raids__empty hide">
+        <div v-if="futureRaids.length === 0 &  activeRaids.length === 0" class="event__empty hide">
+          <img src="/storage/img/static/empty_2.png">
           <h3>Aucun raid pour le moment...</h3>
           <div class="wrapper" v-if="raidsListFilters.length < 5">
             <p>Elargissez vos critères pour voir s'il y a d'autres raids dans les environs</p>
@@ -143,7 +144,8 @@
             </div>
           </div>
         </div>
-        <div v-if="activeQuests.length === 0" class="raids__empty hide">
+        <div v-if="activeQuests.length === 0" class="event__empty hide">
+          <img src="/storage/img/static/empty_2.png">
           <h3>Aucune quête pour le moment...</h3>
           <div class="wrapper" v-if="questsListFilters.length >= 1">
             <p>Elargissez vos critères pour voir s'il y a d'autres quêtes dans les environs</p>
@@ -182,7 +184,8 @@
             </div>
           </div>
         </div>
-        <div v-if="activeRocketInvasions.length === 0" class="raids__empty hide">
+        <div v-if="activeRocketInvasions.length === 0" class="event__empty hide">
+          <img src="/storage/img/static/empty_2.png">
           <h3>Aucune invasion Rocket pour le moment...</h3>
         </div>
       </v-tab-item>

@@ -232,7 +232,7 @@ class RocketConnector extends Model
             'author' => array(
                 'name' => $invasion->getStop()->name,
                 'url' => $invasion->getStop()->google_maps_url,
-                'icon_url' => asset('storage/img/static/app/connector_pokestop_rocket.png')
+                'icon_url' => asset('storage/img/static/connector_pokestop_rocket.png')
             ),
         );
 

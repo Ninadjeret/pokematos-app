@@ -28,6 +28,8 @@
           <p>L'API est disponible à {{ ApiUrl }}</p>
         </div>
       </div>
+    </div>
+    <div class="settings-section">        
       <v-subheader>Autorisations</v-subheader>
       <div class="setting checkbox">
         <div>

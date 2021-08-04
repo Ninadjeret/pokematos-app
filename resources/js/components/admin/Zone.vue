@@ -6,7 +6,8 @@
                 <label>Nom</label>
                 <input v-model="name" type="text">
             </div>
-            <v-divider></v-divider>
+        </div>
+        <div class="settings-section">              
             <div v-if="$route.params.id && Number.isInteger($route.params.id)">
                 <v-subheader v-if="">Autres actions</v-subheader>
                 <v-list-tile color="pink" @click="dialog = true">Supprimer la zone</v-list-tile>

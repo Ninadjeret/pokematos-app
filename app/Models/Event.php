@@ -91,7 +91,7 @@ class Event extends Model
     public function getImageAttribute($value)
     {
         if (empty($value)) {
-            return asset('storage/img/static/app/train/event_train_plain.jpg');
+            return asset('storage/img/static/train/event_train_plain.jpg');
         }
         return $value;
     }

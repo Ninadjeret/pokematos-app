@@ -10822,7 +10822,8 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
 }
 
 .setting {
-  border-top: 1px solid #eee;
+  border-radius: 0 !important;
+  border-bottom: 1px solid #eee;
   padding: 16px;
 }
 .setting.colorpicker {
@@ -11299,13 +11300,13 @@ body.logged-out .denied a {
   border-radius: 0 !important;
 }
 
-.template-list .v-dialog > .v-card > .v-card__text {
+#app__container.template-list .v-dialog > .v-card > .v-card__text {
   margin-top: 10px;
 }
-.template-list .list-filters .v-input--checkbox .v-messages {
+#app__container.template-list .list-filters .v-input--checkbox .v-messages {
   display: none;
 }
-.template-list .list-filters label {
+#app__container.template-list .list-filters label {
   margin-bottom: 0.6rem;
   margin-top: 0.6rem;
 }
@@ -11420,89 +11421,6 @@ body.logged-out .denied a {
 }
 .log ul.result li .value {
   flex-basis: auto;
-}
-
-@media screen and (min-width: 960px) {
-  .template-map .v-content__wrap .container.fluid {
-    width: 100% !important;
-    max-width: 100% !important;
-    background: #fcfcfc !important;
-  }
-
-  body {
-    background: #fcfcfc !important;
-  }
-  body.logged-out {
-    background: url("/storage/img/static/splash_bg.jpg") top right !important;
-  }
-
-  footer.v-footer {
-    height: 0 !important;
-  }
-
-  main.v-content {
-    padding: 64px 0px 0px 0px !important;
-  }
-
-  .map__actions {
-    bottom: 15px;
-  }
-
-  .v-toolbar {
-    background: #fcfcfc !important;
-  }
-
-  .v-toolbar__content {
-    max-width: 800px;
-    margin: auto;
-    background: #fcfcfc;
-  }
-
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon), .v-toolbar__items .v-toolbar__items .v-menu, .v-toolbar__items .v-toolbar__items .v-menu__activator {
-    color: #a8a7cf;
-  }
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon).v-btn--active, .v-toolbar__items .v-toolbar__items .v-menu.v-btn--active, .v-toolbar__items .v-toolbar__items .v-menu__activator.v-btn--active {
-    color: #fff;
-  }
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon).v-btn--active .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu.v-btn--active .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu__activator.v-btn--active .v-btn__content i {
-    display: block;
-  }
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon) .v-btn__content, .v-toolbar__items .v-toolbar__items .v-menu .v-btn__content, .v-toolbar__items .v-toolbar__items .v-menu__activator .v-btn__content {
-    flex-direction: row-reverse;
-  }
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon) .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu__activator .v-btn__content i {
-    display: none;
-    padding: 4px;
-    font-size: 20px;
-  }
-
-  .v-dialog__content .v-dialog.gym-modal {
-    max-width: 400px !important;
-    max-height: 600px !important;
-  }
-
-  .v-content__wrap .container.fluid {
-    width: 800px !important;
-    max-width: 800px !important;
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12) !important;
-    background: #fff;
-    padding-top: 5px !important;
-  }
-}
-.template-list .v-window__container .v-window-item {
-  display: flex;
-  flex-wrap: wrap;
-  height: -webkit-fill-available;
-}
-.template-list .v-window__container .v-window-item .raids__empty {
-  width: 100%;
-  position: inherit;
-  background: url("/storage/img/static/empty.png") bottom center no-repeat;
-  background-size: contain;
-  margin-bottom: 45px;
-}
-.template-list .v-window__container .v-window-item .raids__empty h3 {
-  margin-top: calc( 50% - 50px);
 }
 
 .pokeball {
@@ -13022,6 +12940,227 @@ body.logged-out .denied a {
   font-family: "Teko";
 }
 
+@media screen and (min-width: 960px) {
+  .template-map .v-content__wrap .container.fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #fcfcfc !important;
+  }
+
+  body {
+    background: #fcfcfc !important;
+  }
+  body.logged-out {
+    background: url("/storage/img/static/splash_bg.jpg") top right !important;
+  }
+
+  footer.v-footer {
+    height: 0 !important;
+  }
+
+  main.v-content {
+    padding: 64px 0px 0px 0px !important;
+  }
+
+  .map__actions {
+    bottom: 15px;
+  }
+
+  .v-toolbar {
+    background: #fcfcfc !important;
+  }
+
+  .v-toolbar__content {
+    max-width: 800px;
+    margin: auto;
+    background: #fcfcfc;
+  }
+
+  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon), .v-toolbar__items .v-toolbar__items .v-menu, .v-toolbar__items .v-toolbar__items .v-menu__activator {
+    color: #a8a7cf;
+  }
+  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon).v-btn--active, .v-toolbar__items .v-toolbar__items .v-menu.v-btn--active, .v-toolbar__items .v-toolbar__items .v-menu__activator.v-btn--active {
+    color: #fff;
+  }
+  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon).v-btn--active .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu.v-btn--active .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu__activator.v-btn--active .v-btn__content i {
+    display: block;
+  }
+  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon) .v-btn__content, .v-toolbar__items .v-toolbar__items .v-menu .v-btn__content, .v-toolbar__items .v-toolbar__items .v-menu__activator .v-btn__content {
+    flex-direction: row-reverse;
+  }
+  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon) .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu__activator .v-btn__content i {
+    display: none;
+    padding: 4px;
+    font-size: 20px;
+  }
+
+  .v-dialog__content .v-dialog.gym-modal {
+    max-width: 400px !important;
+    max-height: 600px !important;
+  }
+
+  .v-content__wrap .container.fluid {
+    width: 800px !important;
+    max-width: 800px !important;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12) !important;
+    background: #fff;
+    padding-top: 5px !important;
+  }
+}
+.template-list .v-window__container .v-window-item {
+  /*display: flex;*/
+  flex-wrap: wrap;
+  height: -webkit-fill-available;
+}
+.template-list .v-window__container .v-window-item .raids__empty {
+  width: 100%;
+  position: inherit;
+  background: url("/storage/img/static/empty.png") bottom center no-repeat;
+  background-size: contain;
+  margin-bottom: 45px;
+}
+.template-list .v-window__container .v-window-item .raids__empty h3 {
+  margin-top: calc( 50% - 50px);
+}
+
+#app__container {
+  background-color: #333333;
+}
+#app__container .v-toolbar.v-toolbar--fixed.theme--dark.primary {
+  background-color: #333333 !important;
+}
+#app__container main.v-content {
+  background-color: #333333;
+}
+#app__container main #bg1,
+#app__container main .theme--light.v-pagination.v-pagination {
+  background: #333333 !important;
+}
+#app__container main .v-tabs {
+  background: #333333;
+}
+#app__container main .v-tabs .v-tabs__bar .v-tabs__div {
+  color: #a8a7cf;
+}
+#app__container main .v-subheader,
+#app__container main .section__title,
+#app__container main .donation,
+#app__container main .credit,
+#app__container main .settings-section .v-list__tile,
+#app__container main .setting.checkbox .v-input--selection-controls.v-input .v-label {
+  color: #ccc !important;
+}
+#app__container main p.description {
+  color: #666 !important;
+}
+#app__container main .raid__wrapper {
+  background-color: #404040;
+}
+#app__container main .raid__wrapper h3 span {
+  color: #ccc;
+}
+#app__container main .raid__wrapper h3 span.raid__timer span {
+  color: #fff;
+}
+#app__container main .raid__wrapper .raid__gym {
+  color: #ccc;
+}
+#app__container main .event__empty .wrapper p {
+  color: #ccc;
+}
+#app__container main .event__empty img {
+  background-color: #404040;
+}
+#app__container main .setting__wrapper,
+#app__container main .setting {
+  color: #ccc;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+#app__container main .setting input[type=text],
+#app__container main .setting select,
+#app__container main .setting input[type=number] {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: #404040;
+}
+#app__container main .v-item-group .theme--light.v-btn:not(.v-btn--active):not(.v-btn--text):not(.v-btn--outlined) {
+  background: #404040 !important;
+  color: #ccc;
+}
+#app__container main .v-list__tile__title {
+  color: #ccc;
+}
+#app__container main .theme--light.v-list .v-avatar {
+  background: #404040;
+}
+#app__container main .theme--light.v-icon {
+  color: #a8a7cf;
+}
+#app__container main .search__wrapper {
+  background: #333333;
+}
+#app__container main .search__wrapper .v-input__slot {
+  background: #404040 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+#app__container main .search__wrapper .v-input__slot input {
+  color: #ccc !important;
+}
+#app__container main .v-divider.theme--light {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+#app__container main .theme--light.v-pagination .v-pagination__item:not(.v-pagination__item--active) {
+  background-color: #404040;
+  color: #ccc;
+}
+#app__container main .multiselect__tags {
+  background: #404040;
+  color: #ccc;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+#app__container .v-card {
+  background-color: #404040;
+}
+#app__container .v-card .v-card__text p {
+  color: #ccc;
+}
+#app__container .v-dialog.gym-modal .v-card {
+  background-color: #404040;
+}
+#app__container .v-dialog.gym-modal .v-card .dialog__title,
+#app__container .v-dialog.gym-modal .v-card .dialog__city {
+  color: #a8a7cf;
+}
+#app__container .v-dialog.gym-modal .button--close,
+#app__container .v-dialog.gym-modal .bt {
+  background-color: #333333;
+}
+#app__container .v-dialog.gym-modal h3 {
+  color: #a8a7cf;
+}
+#app__container .v-dialog.gym-modal .step__title,
+#app__container .v-dialog.gym-modal .step__timer,
+#app__container .v-dialog.gym-modal select.minutes,
+#app__container .v-dialog.gym-modal select.hour {
+  color: #ccc;
+}
+#app__container .v-dialog.gym-modal [data-step-name=level] .step__wrapper ul li button {
+  background: #333333;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #ccc;
+}
+#app__container .v-dialog.gym-modal .v-picker__body {
+  background-color: #404040;
+}
+#app__container .v-dialog.gym-modal .v-picker__body .accent--text button {
+  color: #ccc !important;
+}
+#app__container footer .theme--light.v-bottom-nav .v-btn {
+  background-color: #333333 !important;
+}
+#app__container footer .theme--light.v-bottom-nav .v-btn:not(.v-btn--active) {
+  /*color: $dark_secondary !important;*/
+}
+
 html {
   font-size: 10px !important;
 }
@@ -13093,6 +13232,7 @@ h6 small {
   padding: 0;
   width: 100%;
   max-width: 100%;
+  height: 100%;
 }
 
 .bt {
@@ -13222,6 +13362,7 @@ h6 small {
 }
 
 .setting__wrapper {
+  border-radius: 0 !important;
   border-bottom: 1px solid #eee;
   padding: 10px 20px;
   display: flex;
@@ -13519,6 +13660,14 @@ range_button:active {
   top: 0px;
   left: 50%;
   margin-left: 5px;
+}
+
+.container_fullheight {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
 }
 
 /*.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {

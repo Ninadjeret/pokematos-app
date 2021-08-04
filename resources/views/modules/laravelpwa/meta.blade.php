@@ -1,7 +1,8 @@
 <!-- Web Application Manifest -->
 <link rel="manifest" href="{{ route('laravelpwa.manifest') }}">
 <!-- Chrome for Android theme color -->
-<meta name="theme-color" content="{{ $config['theme_color'] }}">
+<meta name="theme-color" content="{{ $config['theme_color'] }}" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#333333" media="(prefers-color-scheme: dark)">
 
 <!-- Add to homescreen for Chrome on Android -->
 <meta name="mobile-web-app-capable" content="{{ $config['display'] == 'standalone' ? 'yes' : 'no' }}">

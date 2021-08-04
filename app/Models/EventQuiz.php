@@ -328,8 +328,8 @@ class EventQuiz extends Model
     public static function getEmbedThumbnails()
     {
         return (object) [
-            'question' => asset('storage/img/static/app/quiz/event_quiz_question.png'),
-            'ranking' => asset('storage/img/static/app/quiz/event_quiz_ranking.png')
+            'question' => asset('storage/img/static/quiz/event_quiz_question.png'),
+            'ranking' => asset('storage/img/static/quiz/event_quiz_ranking.png')
         ];
     }
 }

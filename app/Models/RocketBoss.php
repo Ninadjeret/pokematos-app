@@ -42,6 +42,6 @@ class RocketBoss extends Model
     }
 
     public function getThumbnailAttribute() {
-        return asset("storage/img/static/app/rocket/boss_{$this->id}.png");
+        return asset("storage/img/static/rocket/boss_{$this->id}.png");
     }
 }

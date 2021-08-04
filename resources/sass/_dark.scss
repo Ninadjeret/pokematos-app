@@ -1,0 +1,154 @@
+//@media (prefers-color-scheme: dark) {
+    #app__container {
+        background-color: $dark_background;
+        .v-toolbar.v-toolbar--fixed.theme--dark.primary {
+            background-color: $dark_background !important;
+        }
+        main {
+            &.v-content {
+                background-color: $dark_background;
+            }
+            #bg1,
+            .theme--light.v-pagination.v-pagination {
+                background: $dark_background !important;
+            }
+            .v-tabs {
+                background: $dark_background;
+                .v-tabs__bar {
+                    .v-tabs__div {
+                        color: $dark_text;
+                    }
+                }
+            }
+            .v-subheader,
+            .section__title,
+            .donation,
+            .credit,
+            .settings-section .v-list__tile,
+            .setting.checkbox .v-input--selection-controls.v-input .v-label  {
+                color: $dark_text_secondary !important;    
+            }
+            p.description {
+                color: $dark_text_tertiary !important;    
+            }
+            .raid__wrapper {
+                background-color: $dark_background_secondary;
+                h3 {
+                    span {
+                        color: $dark_text_secondary;
+                    }
+                    span.raid__timer span {
+                        color: #fff;
+                    }
+                } 
+                .raid__gym {
+                    color: $dark_text_secondary; 
+                }   
+            }
+            .event__empty 
+            {
+                .wrapper p {
+                    color: $dark_text_secondary;
+                }
+                img {
+                    background-color: $dark_background_secondary;
+                }
+            }
+            .setting__wrapper,
+            .setting {
+                color: $dark_text_secondary;
+                border-bottom: 1px solid $dark_border;
+            }
+            .setting input[type=text], 
+            .setting select, 
+            .setting input[type=number] {
+                border-color: $dark_border;
+                background: $dark_background_secondary;
+            }
+            .v-item-group .theme--light.v-btn:not(.v-btn--active):not(.v-btn--text):not(.v-btn--outlined) {
+                background: $dark_background_secondary !important;
+                color: $dark_text_secondary; 
+            }
+            .v-list__tile__title {
+                color: $dark_text_secondary;
+            }
+            .theme--light.v-list .v-avatar {
+                background: $dark_background_secondary;
+            }
+            .theme--light.v-icon {
+                color: $dark_text;
+            }
+            .search__wrapper {
+                background: $dark_background;
+                .v-input__slot {
+                    background: $dark_background_secondary !important;
+                    border-color: $dark_border !important;
+                    input {
+                        color: $dark_text_secondary !important;                 
+                    }
+                }
+            }
+            .v-divider.theme--light {
+                border-color: $dark_border;
+            }
+            .theme--light.v-pagination .v-pagination__item:not(.v-pagination__item--active) {
+                background-color: $dark_background_secondary; 
+                color: $dark_text_secondary;   
+            }
+            .multiselect__tags {
+                background: $dark_background_secondary;
+                color: $dark_text_secondary;
+                border-color: $dark_border;
+            }
+        }
+        .v-card{
+            background-color: $dark_background_secondary;
+            .v-card__text p {
+                color: $dark_text_secondary;
+            }
+        }
+        .v-dialog.gym-modal {
+            .v-card{
+                background-color: $dark_background_secondary;
+                .dialog__title, 
+                .dialog__city {
+                    color: $dark_text;
+                }
+            }
+            .button--close, 
+            .bt {
+                background-color: $dark_background;
+            }
+            h3 {
+                color: $dark_text;    
+            }
+            .step__title,
+            .step__timer,
+            select.minutes,
+            select.hour {
+                color: $dark_text_secondary;
+            }
+            [data-step-name=level] .step__wrapper ul li button {
+                background: $dark_background;
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                color: $dark_text_secondary; 
+            }
+            .v-picker__body {
+                background-color: $dark_background_secondary;    
+                .accent--text button {
+                    color: $dark_text_secondary !important;     
+                }
+            }
+        }
+        footer {
+            .theme--light.v-bottom-nav {
+                .v-btn {
+                    background-color: $dark_background !important;
+                } 
+                .v-btn:not(.v-btn--active) {
+                    /*color: $dark_secondary !important;*/
+                }
+            }
+        }
+    }
+//}

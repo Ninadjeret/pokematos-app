@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height: 100%;">
 
         <div v-if="loading" class="loading">
             <div class="loading__content">
@@ -39,9 +39,11 @@
             </v-card>
         </div>
 
-        <div v-if="!loading && events.length === 0" class="event__empty">
-            <img src="/storage/img/static/empty_2.png">
-            <h3>Aucun évent n'est actuellement programmé par ta communauté</h3>
+        <div v-if="!loading && events.length === 0" class="container_fullheight">
+            <div class="event__empty">
+                <img src="/storage/img/static/empty_2.png">
+                <h3>Aucun évent n'est actuellement programmé par ta communauté</h3>
+            </div>
         </div>
 
     </div>

@@ -84,6 +84,8 @@
               <v-btn value="nonex">Non-ex</v-btn>
             </v-btn-toggle>
           </div>
+        </div>
+        <div class="settings-section">          
           <v-subheader>Boss</v-subheader>
           <div class="setting">
             <label>Filtrer les Pokémon</label>
