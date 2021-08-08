@@ -1,6 +1,7 @@
 import Map from "./components/Map.vue";
 import List from "./components/List.vue";
 import Profile from "./components/Profile.vue";
+import ProfilePreferences from "./components/ProfilePreferences.vue";
 import Admin from "./components/Admin.vue";
 import AdminSettings from "./components/admin/Settings.vue";
 import AdminGuildSettings from "./components/admin/GuildSettings.vue";
@@ -78,6 +79,15 @@ const routes = [{
             title: "Profil"
         },
         component: Profile
+    },
+    {
+        path: "/profile/preferences",
+        name: "preferences",
+        meta: {
+            title: "Préférences",
+            parent: "profile"
+        },
+        component: ProfilePreferences
     },
     {
         path: "/profile/ranking",

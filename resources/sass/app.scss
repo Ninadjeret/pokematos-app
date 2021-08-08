@@ -27,7 +27,6 @@
 @import 'rankings';
 
 @import 'desktop';
-@import 'dark';
 
 html {
     font-size: 10px !important;
@@ -569,3 +568,11 @@ range_button:active {
         text-decoration: none;
     }
 }*/
+#app__container.mode-dark {
+    @import "dark";
+}
+@media (prefers-color-scheme: dark) {
+    #app__container.mode-system {
+        @import "dark";
+    }
+}    

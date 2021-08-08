@@ -1,9 +1,45 @@
  <template>
-<div id="app__container" :class="'template-'+$route.name.split('.').join('-')" data-app v-if="currentCity && currentCity !== 'undefined'">
-        <v-toolbar fixed app color="primary" dark>
+<div id="app__container" :class="containerClass" data-app v-if="currentCity && currentCity !== 'undefined'">
+
+      <v-navigation-drawer
+        v-model="drawer"
+        permanent
+        fixed
+        v-if="$vuetify.breakpoint.mdAndUp"
+      >
+        <div class="branding">
+            <img :src="baseUrl+'/storage/img/static/logo_pokematos_256.png'">
+            <v-toolbar-title >POKEMATOS</v-toolbar-title>
+        </div>
+        <v-list class="pt-0">
+          <v-divider></v-divider>
+          <v-list-tile to="/">
+            <v-list-tile-action><v-icon>map</v-icon></v-list-tile-action>
+            <v-list-tile-content><v-list-tile-title>Map</v-list-tile-title></v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile to="/list">
+            <v-list-tile-action><v-icon>notifications_active</v-icon></v-list-tile-action>
+            <v-list-tile-content><v-list-tile-title>Listes</v-list-tile-title></v-list-tile-content>
+          </v-list-tile>        
+          <v-list-tile v-if="features.events" to="/events">
+            <v-list-tile-action><v-icon>event</v-icon></v-list-tile-action>
+            <v-list-tile-content><v-list-tile-title>Évents</v-list-tile-title></v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile to="/profile">
+            <v-list-tile-action><v-icon>person</v-icon></v-list-tile-action>
+            <v-list-tile-content><v-list-tile-title>Profil</v-list-tile-title></v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile v-if="currentCity && currentCity !== undefined && isAdmin" to="/admin">
+            <v-list-tile-action><v-icon>build</v-icon></v-list-tile-action>
+            <v-list-tile-content><v-list-tile-title>Admin</v-list-tile-title></v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
+
+        <v-toolbar fixed app color="primary" dark v-if="$vuetify.breakpoint.smAndDown">
             <v-btn v-if="$route.meta.parent" :to="{ name: $route.meta.parent}" icon><v-icon>arrow_back</v-icon></v-btn>
             <v-spacer class="hidden-md-and-up" v-if="$route.name == 'map'"></v-spacer>
-            <img v-if="$route.name == 'map'" :src="baseUrl+'/storage/img/static/logo_pokematos_256.png'">
+            <img v-if="$route.name == 'map'" src="https://assets.profchen.fr/img/logo_pokematos_256.png">
             <v-toolbar-title v-if="$route.name == 'map'">
                 POKEMATOS
             </v-toolbar-title>
@@ -11,41 +47,10 @@
             <div class="current-city" v-if="$route.name == 'map' && this.$store.state.currentCity && cities &&  cities.length === 1">{{ this.$store.state.currentCity.name }}</div>
             <div class="current-city multiple" v-if="$route.name == 'map' && this.$store.state.currentCity && cities &&  cities.length > 1" @click.stop="dialogCities = true">{{ this.$store.state.currentCity.name }}</div>
             <v-spacer></v-spacer>
-            <v-toolbar-items class="hidden-sm-and-down">
-                <v-btn to="/" color="primary" flat value="recent" >
-                  <span>Map</span>
-                  <v-icon>map</v-icon>
-                </v-btn>
-
-                <v-btn to="/list" color="primary" flat value="recent" >
-                  <span>Listes</span>
-                  <v-icon>notifications_active</v-icon>
-                </v-btn>
-
-                <v-btn v-if="features.events" to="/events" color="primary" flat value="recent" >
-                  <span>Évents</span>
-                  <v-icon>event</v-icon>
-                </v-btn>
-
-                <v-btn to="/profile" color="primary" flat value="recent" >
-                  <span>Profil</span>
-                  <v-icon>person</v-icon>
-                </v-btn>
-
-                <v-btn
-                    v-if="currentCity && currentCity !== undefined && isAdmin"
-                    to="/admin"
-                    color="primary"
-                    flat value="recent"
-                >
-                  <span>Admin</span>
-                  <v-icon>build</v-icon>
-                </v-btn>
-            </v-toolbar-items>
         </v-toolbar>
 
-
         <v-content>
+            <div class="v-content-title" v-if="$vuetify.breakpoint.mdAndUp && $route.name != 'map'"><p>{{$route.meta.title}}</p></div>
             <v-container fluid>
                 <div id="bg1"></div>
                 <transition name="fade">
@@ -137,6 +142,7 @@
                 dialogCities: false,
                 dialogUpdate: true,
                 mode: 'base',
+                drawer: true,
             }
         },
         async mounted() {
@@ -145,10 +151,12 @@
                 await this.$store.dispatch('fetchGyms');
                 this.$store.commit('fetchPokemon');
                 this.fetchLastChanges();
+                
             } finally {
                 this.dialogUpdate = false;
                 setInterval( this.fetch, 60000, 'auto' );
             }
+            this.updateMetaColor();
         },
         computed: {
             features() {
@@ -174,6 +182,14 @@
                 let isAdmin = parseInt(this.currentCity.permissions) >= 30;
                 let isModo =  this.canAccessCityParam('poi_edit') || this.canAccessCityParam('zone_edit') || this.canAccessCityParam('events_manage') || this.canAccessCityParam('boss_edit') || this.canAccessCityParam('quest_edit') || this.canAccessCityParam('rocket_bosses_edit')
                 return isAdmin || isModo;
+            },
+            containerClass() {
+                let className = ''
+                let appearanceMod = this.$store.getters.getSetting("appaeranceMod")
+                if( this.$vuetify.breakpoint.mdAndUp ) className += 'desktop'
+                className += ' mode-'+appearanceMod
+                className += ' template-'+this.$route.name.split('.').join('-')
+                return className
             }
         },
         watch: {
@@ -238,6 +254,11 @@
                     }
                 })
                 return auth;
+            },
+            updateMetaColor() {
+                let appearanceMod = this.$store.getters.getSetting("appaeranceMod")
+                let themeColor = appearanceMod == 'dark' ? '#333333' : '"#ffffff"' 
+                document.getElementById('theme-color').setAttribute("content", themeColor);
             }
         }
     }

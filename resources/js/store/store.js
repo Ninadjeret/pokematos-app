@@ -9,7 +9,8 @@ Vue.use(Vuex);
 const defaultSettings = {
     raidsListFilters: ["1", "2", "3", "4", "5", "6"],
     raidsListOrder: 'date',
-    hideGyms: false
+    hideGyms: false,
+    appaeranceMod: 'system'
 }
 
 const store = new Vuex.Store({
@@ -223,6 +224,9 @@ const store = new Vuex.Store({
         getSetting: state => (setting) => {
             if (state.settings && state.settings[setting]) {
                 return state.settings[setting];
+            } else if( defaultSettings[setting] ) {
+                console.log(defaultSettings[setting])
+                return defaultSettings[setting];
             } else {
                 return false;
             }

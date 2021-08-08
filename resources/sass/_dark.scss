@@ -1,5 +1,4 @@
-//@media (prefers-color-scheme: dark) {
-    #app__container {
+    & {
         background-color: $dark_background;
         .v-toolbar.v-toolbar--fixed.theme--dark.primary {
             background-color: $dark_background !important;
@@ -150,5 +149,47 @@
                 }
             }
         }
+        &.desktop {
+            .v-navigation-drawer {
+                background: $dark_background;
+                border-right: 1px solid $dark_border;
+                .v-list {
+                    .v-list__tile {
+                        color: $dark_text;
+                        i {
+                            color: $dark_text;
+                        }
+                        &.v-list__tile--active {
+                            background-color: $dark_background_secondary;
+                            color: $accent;
+                            i {
+                                color: $accent;
+                            }
+                        }
+                        &:hover {
+                            background-color: $dark_background_secondary;    
+                        }
+                    }
+                    
+                }
+            }
+            .v-content {
+                .v-content-title {
+                    background: $dark_background;
+                    border-color: $dark_border;
+                }
+                .admin__container {
+                    .admin__menu {
+                        background: $dark_background_secondary;
+                        &:hover::-webkit-scrollbar-thumb {
+                            background: $dark_border;
+                        }
+                        .v-list__tile--active {
+                            background: $dark_background;
+                            color: $dark_text_secondary;
+                        }
+                    }
+                }
+            }
+        }
     }
-//}

@@ -159,7 +159,7 @@
         <div v-if="modalScreen == 'editPOI'" class="modal__screen edit-poi">
           <h3 class>Modifier le POI</h3>
           <gym-edit v-bind:poi-id="gym.id" v-on:poi-create="setScreenTo('default')"></gym-edit>
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>
@@ -181,7 +181,7 @@
             </ul>
           </div>
           <hr />
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>
@@ -215,7 +215,7 @@
             </v-flex>
           </v-layout>
           <hr />
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="postNewRaidEx()" class="bt modal__action cancel">Confirmer</a>
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
@@ -266,7 +266,7 @@
               <a class="bt" @click="createRocketInvasion()">Valider</a>
             </div>
           </div>
-          <div class="footer-action">
+          <div class="footer--actions">
             <a
               v-if="!gym.invasion"
               v-on:click="setScreenTo('default')"
@@ -376,7 +376,7 @@
             </div>
           </div>
 
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>
@@ -397,7 +397,7 @@
             </div>
           </div>
           <hr />
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>
@@ -468,7 +468,7 @@
             </div>
           </div>
 
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>

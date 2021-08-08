@@ -1,80 +1,162 @@
-@media screen and (min-width: 960px) {
-    .template-map .v-content__wrap .container.fluid {
-        width: 100% !important;
-        max-width:100% !important;
-        background: #fcfcfc !important;
-    }
-    body {
-        background: #fcfcfc !important;
-        &.logged-out {
-            background: url('/storage/img/static/splash_bg.jpg') top right !important;
-        }
-    }
-    footer.v-footer {
-        height:0 !important;
-    }
-    main.v-content {
-        padding: 64px 0px 0px 0px !important;
-    }
-    .map__actions {
-        bottom: 15px;
-    }
-    .v-toolbar {
-        background: #fcfcfc !important;
-    }
-    .v-toolbar__content {
-        max-width: 800px;
-        margin: auto;
-        background: #fcfcfc;
-    }
-    .v-toolbar__items {
-        .v-btn:not(.v-btn--floating):not(.v-btn--icon), .v-toolbar__items .v-menu, .v-toolbar__items .v-menu__activator {
-            color: $secondary;
-            &.v-btn--active {
-                color: #fff;
-                .v-btn__content i {
-                    display: block;
-                }
-            }
-            .v-btn__content {
-                flex-direction: row-reverse;
-                i {
-                    display: none;
-                    padding: 4px;
-                    font-size: 20px;
-                }
-            }
-        }
-    }
-    .v-dialog__content .v-dialog.gym-modal {
-        max-width: 400px !important;
-        max-height: 600px !important;
-    }
-    .v-content__wrap {
-        .container.fluid {
-            width: 800px !important;
-            max-width: 800px !important;
-            box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12)!important;
-            background: #fff;
-            padding-top: 5px !important;
-        }
-    }
-}
+#app__container.desktop {
 
-.template-list .v-window__container {
-    .v-window-item {
-        /*display: flex;*/
-        flex-wrap: wrap;
-        height: -webkit-fill-available;
-        .raids__empty {
-            width: 100%;
-            position: inherit;
-            background: url('/storage/img/static/empty.png') bottom center no-repeat;
-            background-size: contain;
-            margin-bottom: 45px;
-            h3 {
-                margin-top: calc( 50% - 50px);
+    aside {
+        .branding {
+            text-align: center;
+            margin-top: 50px;
+            img {
+                max-width: 100px;
+                display: block;
+                margin: auto;
             }
+            .v-toolbar__title {
+                font-family: "Teko";
+                font-size: 30px;
+                font-weight: 500;
+                display: inline-block;
+                background: linear-gradient(to right, #5a6cae, #8e56d9);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;                
+            }
+        }
+        .v-list {
+            margin: 0 10px;
+            .v-list__tile {
+                color: $secondary;
+                i {
+                    color: $secondary;    
+                }
+                &:hover {
+                    text-decoration: none;
+                }
+                &.v-list__tile--active {
+                    background: rgba(0,0,0,.04);
+                    color: $accent;
+                    i {
+                        color: $accent;    
+                    }
+                }
+            }
+        }
+    }
+    
+    .v-content {
+        flex-direction: column;
+        margin-left: 300px;
+
+        .v-content-title {
+            height: 50px;
+            width: 100%;
+            position: fixed;
+            border-radius: 0;
+            background: #fff;
+            z-index: 5555;
+            border-bottom: 1px solid #eee;
+            p {
+                font-family: "Teko";
+                font-size: 30px;
+                font-weight: 500;
+                line-height: 50px;
+                margin-left: 20px;
+                display: inline-block;
+                background: linear-gradient(to right, #5a6cae, #8e56d9);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .container.fluid {
+            margin-top: 60px;
+        }
+
+        .admin__container {
+            display: flex;
+            .admin__menu {
+                width: 320px;
+                width: 320px;
+                height: calc(100vh - 50px);
+                overflow-x: hidden;
+                overflow-y: auto;
+                position: fixed;
+                background: #fafafa;
+                margin-left: -10px;
+                padding-left: 10px;
+                margin-top: -10px;
+                padding-right: 10px;
+                border-radius: 0;
+                &::-webkit-scrollbar {
+                    width: 5px;
+                    height: 8px;
+                    background-color: transparent;
+                }
+                &::-webkit-scrollbar-thumb {
+                    background: transparent;
+                }
+                &:hover::-webkit-scrollbar-thumb {
+                    background: #eee;
+                }
+            }
+            .admin__screen {
+                flex: 1 1 auto; 
+                margin-left: 320px;   
+            }
+        }   
+        
+        .v-list__tile--active {
+            background: #eee;
+            .v-list__tile__title {
+                background: linear-gradient(to right, #5a6cae, #8e56d9);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+    }
+
+    .v-dialog.gym-modal {
+        max-width: 400px !important;
+        max-height: 700px;
+    }
+
+    &.template-map {
+        .v-content {
+            padding-bottom: 0 !important;
+            .container.fluid {
+                padding: 0;
+                margin-top: 0;
+                border-radius: 0;
+                .vue2leaflet-map {
+                    border-radius: 0;
+                }
+            }
+        }
+    }
+    &.template-list,
+    &.template-events,
+    &.template-ranking,
+    &.template-preferences {
+        .container.fluid {
+            max-width: 650px;
+        }
+    }
+    &.template-profile {
+        .user__card {
+            border-radius: 0;
+            margin: -10px;
+        }
+        .ranking__card {
+            border-radius: 0;
+            margin: 0 -10px;
+        }
+        .user__summary,
+        .user__stats,    
+        .ranking__card h4,
+        .ranking__position,
+        .ranking__more,
+        .settings-section,
+        #user__ranking h2 {
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
         }
     }
 }

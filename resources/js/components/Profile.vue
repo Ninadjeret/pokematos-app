@@ -36,7 +36,7 @@
       </div>
     </div>
 
-    <div class="settings-section" id="user__ranking">
+    <div class="" id="user__ranking">
       <h2>Classements</h2>
       <div v-if="user" class="ranking__card">
         <h4>Raids annoncés</h4>
@@ -68,12 +68,12 @@
     <div class="settings-section help">
       <div class="section__title">Assistance</div>
       <div class="settings-section__wrapper">
-        <div class="setting__wrapper">
-          <a
-            href="https://www.profchen.fr/settings/policy/"
+      <div class="setting__wrapper">
+          <router-link
+            to="/profile/preferences"
             class="setting-link"
-            >Politique de confidentialité</a
-          >
+            >Préférences
+          </router-link>
         </div>
         <div class="setting__wrapper">
           <a href="https://www.pokematos.fr/documentation" class="setting-link"

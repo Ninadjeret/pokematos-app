@@ -10397,7 +10397,9 @@ footer .theme--light.v-bottom-nav a.v-btn--active .v-btn__content {
   bottom: 0;
   padding: 0;
   margin-bottom: 10px;
-  right: calc( 50% - 25px );
+  width: calc(100% - 25px);
+  display: flex;
+  justify-content: center;
 }
 
 .v-dialog__content .button--close {
@@ -12940,225 +12942,146 @@ body.logged-out .denied a {
   font-family: "Teko";
 }
 
-@media screen and (min-width: 960px) {
-  .template-map .v-content__wrap .container.fluid {
-    width: 100% !important;
-    max-width: 100% !important;
-    background: #fcfcfc !important;
-  }
-
-  body {
-    background: #fcfcfc !important;
-  }
-  body.logged-out {
-    background: url("/storage/img/static/splash_bg.jpg") top right !important;
-  }
-
-  footer.v-footer {
-    height: 0 !important;
-  }
-
-  main.v-content {
-    padding: 64px 0px 0px 0px !important;
-  }
-
-  .map__actions {
-    bottom: 15px;
-  }
-
-  .v-toolbar {
-    background: #fcfcfc !important;
-  }
-
-  .v-toolbar__content {
-    max-width: 800px;
-    margin: auto;
-    background: #fcfcfc;
-  }
-
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon), .v-toolbar__items .v-toolbar__items .v-menu, .v-toolbar__items .v-toolbar__items .v-menu__activator {
-    color: #a8a7cf;
-  }
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon).v-btn--active, .v-toolbar__items .v-toolbar__items .v-menu.v-btn--active, .v-toolbar__items .v-toolbar__items .v-menu__activator.v-btn--active {
-    color: #fff;
-  }
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon).v-btn--active .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu.v-btn--active .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu__activator.v-btn--active .v-btn__content i {
-    display: block;
-  }
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon) .v-btn__content, .v-toolbar__items .v-toolbar__items .v-menu .v-btn__content, .v-toolbar__items .v-toolbar__items .v-menu__activator .v-btn__content {
-    flex-direction: row-reverse;
-  }
-  .v-toolbar__items .v-btn:not(.v-btn--floating):not(.v-btn--icon) .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu .v-btn__content i, .v-toolbar__items .v-toolbar__items .v-menu__activator .v-btn__content i {
-    display: none;
-    padding: 4px;
-    font-size: 20px;
-  }
-
-  .v-dialog__content .v-dialog.gym-modal {
-    max-width: 400px !important;
-    max-height: 600px !important;
-  }
-
-  .v-content__wrap .container.fluid {
-    width: 800px !important;
-    max-width: 800px !important;
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12) !important;
-    background: #fff;
-    padding-top: 5px !important;
-  }
+#app__container.desktop aside .branding {
+  text-align: center;
+  margin-top: 50px;
 }
-.template-list .v-window__container .v-window-item {
-  /*display: flex;*/
-  flex-wrap: wrap;
-  height: -webkit-fill-available;
+#app__container.desktop aside .branding img {
+  max-width: 100px;
+  display: block;
+  margin: auto;
 }
-.template-list .v-window__container .v-window-item .raids__empty {
+#app__container.desktop aside .branding .v-toolbar__title {
+  font-family: "Teko";
+  font-size: 30px;
+  font-weight: 500;
+  display: inline-block;
+  background: linear-gradient(to right, #5a6cae, #8e56d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+#app__container.desktop aside .v-list {
+  margin: 0 10px;
+}
+#app__container.desktop aside .v-list .v-list__tile {
+  color: #a8a7cf;
+}
+#app__container.desktop aside .v-list .v-list__tile i {
+  color: #a8a7cf;
+}
+#app__container.desktop aside .v-list .v-list__tile:hover {
+  text-decoration: none;
+}
+#app__container.desktop aside .v-list .v-list__tile.v-list__tile--active {
+  background: rgba(0, 0, 0, 0.04);
+  color: #8e56d9;
+}
+#app__container.desktop aside .v-list .v-list__tile.v-list__tile--active i {
+  color: #8e56d9;
+}
+#app__container.desktop .v-content {
+  flex-direction: column;
+  margin-left: 300px;
+}
+#app__container.desktop .v-content .v-content-title {
+  height: 50px;
   width: 100%;
-  position: inherit;
-  background: url("/storage/img/static/empty.png") bottom center no-repeat;
-  background-size: contain;
-  margin-bottom: 45px;
+  position: fixed;
+  border-radius: 0;
+  background: #fff;
+  z-index: 5555;
+  border-bottom: 1px solid #eee;
 }
-.template-list .v-window__container .v-window-item .raids__empty h3 {
-  margin-top: calc( 50% - 50px);
+#app__container.desktop .v-content .v-content-title p {
+  font-family: "Teko";
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 50px;
+  margin-left: 20px;
+  display: inline-block;
+  background: linear-gradient(to right, #5a6cae, #8e56d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-
-#app__container {
-  background-color: #333333;
+#app__container.desktop .v-content .container.fluid {
+  margin-top: 60px;
 }
-#app__container .v-toolbar.v-toolbar--fixed.theme--dark.primary {
-  background-color: #333333 !important;
+#app__container.desktop .v-content .admin__container {
+  display: flex;
 }
-#app__container main.v-content {
-  background-color: #333333;
+#app__container.desktop .v-content .admin__container .admin__menu {
+  width: 320px;
+  width: 320px;
+  height: calc(100vh - 50px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+  background: #fafafa;
+  margin-left: -10px;
+  padding-left: 10px;
+  margin-top: -10px;
+  padding-right: 10px;
+  border-radius: 0;
 }
-#app__container main #bg1,
-#app__container main .theme--light.v-pagination.v-pagination {
-  background: #333333 !important;
+#app__container.desktop .v-content .admin__container .admin__menu::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: transparent;
 }
-#app__container main .v-tabs {
-  background: #333333;
+#app__container.desktop .v-content .admin__container .admin__menu::-webkit-scrollbar-thumb {
+  background: transparent;
 }
-#app__container main .v-tabs .v-tabs__bar .v-tabs__div {
-  color: #a8a7cf;
+#app__container.desktop .v-content .admin__container .admin__menu:hover::-webkit-scrollbar-thumb {
+  background: #eee;
 }
-#app__container main .v-subheader,
-#app__container main .section__title,
-#app__container main .donation,
-#app__container main .credit,
-#app__container main .settings-section .v-list__tile,
-#app__container main .setting.checkbox .v-input--selection-controls.v-input .v-label {
-  color: #ccc !important;
+#app__container.desktop .v-content .admin__container .admin__screen {
+  flex: 1 1 auto;
+  margin-left: 320px;
 }
-#app__container main p.description {
-  color: #666 !important;
+#app__container.desktop .v-content .v-list__tile--active {
+  background: #eee;
 }
-#app__container main .raid__wrapper {
-  background-color: #404040;
+#app__container.desktop .v-content .v-list__tile--active .v-list__tile__title {
+  background: linear-gradient(to right, #5a6cae, #8e56d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-#app__container main .raid__wrapper h3 span {
-  color: #ccc;
+#app__container.desktop .v-dialog.gym-modal {
+  max-width: 400px !important;
+  max-height: 700px;
 }
-#app__container main .raid__wrapper h3 span.raid__timer span {
-  color: #fff;
+#app__container.desktop.template-map .v-content {
+  padding-bottom: 0 !important;
 }
-#app__container main .raid__wrapper .raid__gym {
-  color: #ccc;
+#app__container.desktop.template-map .v-content .container.fluid {
+  padding: 0;
+  margin-top: 0;
+  border-radius: 0;
 }
-#app__container main .event__empty .wrapper p {
-  color: #ccc;
+#app__container.desktop.template-map .v-content .container.fluid .vue2leaflet-map {
+  border-radius: 0;
 }
-#app__container main .event__empty img {
-  background-color: #404040;
+#app__container.desktop.template-list .container.fluid, #app__container.desktop.template-events .container.fluid, #app__container.desktop.template-ranking .container.fluid, #app__container.desktop.template-preferences .container.fluid {
+  max-width: 650px;
 }
-#app__container main .setting__wrapper,
-#app__container main .setting {
-  color: #ccc;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+#app__container.desktop.template-profile .user__card {
+  border-radius: 0;
+  margin: -10px;
 }
-#app__container main .setting input[type=text],
-#app__container main .setting select,
-#app__container main .setting input[type=number] {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: #404040;
+#app__container.desktop.template-profile .ranking__card {
+  border-radius: 0;
+  margin: 0 -10px;
 }
-#app__container main .v-item-group .theme--light.v-btn:not(.v-btn--active):not(.v-btn--text):not(.v-btn--outlined) {
-  background: #404040 !important;
-  color: #ccc;
-}
-#app__container main .v-list__tile__title {
-  color: #ccc;
-}
-#app__container main .theme--light.v-list .v-avatar {
-  background: #404040;
-}
-#app__container main .theme--light.v-icon {
-  color: #a8a7cf;
-}
-#app__container main .search__wrapper {
-  background: #333333;
-}
-#app__container main .search__wrapper .v-input__slot {
-  background: #404040 !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-}
-#app__container main .search__wrapper .v-input__slot input {
-  color: #ccc !important;
-}
-#app__container main .v-divider.theme--light {
-  border-color: rgba(255, 255, 255, 0.2);
-}
-#app__container main .theme--light.v-pagination .v-pagination__item:not(.v-pagination__item--active) {
-  background-color: #404040;
-  color: #ccc;
-}
-#app__container main .multiselect__tags {
-  background: #404040;
-  color: #ccc;
-  border-color: rgba(255, 255, 255, 0.2);
-}
-#app__container .v-card {
-  background-color: #404040;
-}
-#app__container .v-card .v-card__text p {
-  color: #ccc;
-}
-#app__container .v-dialog.gym-modal .v-card {
-  background-color: #404040;
-}
-#app__container .v-dialog.gym-modal .v-card .dialog__title,
-#app__container .v-dialog.gym-modal .v-card .dialog__city {
-  color: #a8a7cf;
-}
-#app__container .v-dialog.gym-modal .button--close,
-#app__container .v-dialog.gym-modal .bt {
-  background-color: #333333;
-}
-#app__container .v-dialog.gym-modal h3 {
-  color: #a8a7cf;
-}
-#app__container .v-dialog.gym-modal .step__title,
-#app__container .v-dialog.gym-modal .step__timer,
-#app__container .v-dialog.gym-modal select.minutes,
-#app__container .v-dialog.gym-modal select.hour {
-  color: #ccc;
-}
-#app__container .v-dialog.gym-modal [data-step-name=level] .step__wrapper ul li button {
-  background: #333333;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: #ccc;
-}
-#app__container .v-dialog.gym-modal .v-picker__body {
-  background-color: #404040;
-}
-#app__container .v-dialog.gym-modal .v-picker__body .accent--text button {
-  color: #ccc !important;
-}
-#app__container footer .theme--light.v-bottom-nav .v-btn {
-  background-color: #333333 !important;
-}
-#app__container footer .theme--light.v-bottom-nav .v-btn:not(.v-btn--active) {
-  /*color: $dark_secondary !important;*/
+#app__container.desktop.template-profile .user__summary,
+#app__container.desktop.template-profile .user__stats,
+#app__container.desktop.template-profile .ranking__card h4,
+#app__container.desktop.template-profile .ranking__position,
+#app__container.desktop.template-profile .ranking__more,
+#app__container.desktop.template-profile .settings-section,
+#app__container.desktop.template-profile #user__ranking h2 {
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 html {
@@ -13688,3 +13611,348 @@ range_button:active {
         text-decoration: none;
     }
 }*/
+#app__container.mode-dark {
+  background-color: #333333;
+}
+#app__container.mode-dark .v-toolbar.v-toolbar--fixed.theme--dark.primary {
+  background-color: #333333 !important;
+}
+#app__container.mode-dark main.v-content {
+  background-color: #333333;
+}
+#app__container.mode-dark main #bg1,
+#app__container.mode-dark main .theme--light.v-pagination.v-pagination {
+  background: #333333 !important;
+}
+#app__container.mode-dark main .v-tabs {
+  background: #333333;
+}
+#app__container.mode-dark main .v-tabs .v-tabs__bar .v-tabs__div {
+  color: #a8a7cf;
+}
+#app__container.mode-dark main .v-subheader,
+#app__container.mode-dark main .section__title,
+#app__container.mode-dark main .donation,
+#app__container.mode-dark main .credit,
+#app__container.mode-dark main .settings-section .v-list__tile,
+#app__container.mode-dark main .setting.checkbox .v-input--selection-controls.v-input .v-label {
+  color: #ccc !important;
+}
+#app__container.mode-dark main p.description {
+  color: #666 !important;
+}
+#app__container.mode-dark main .raid__wrapper {
+  background-color: #404040;
+}
+#app__container.mode-dark main .raid__wrapper h3 span {
+  color: #ccc;
+}
+#app__container.mode-dark main .raid__wrapper h3 span.raid__timer span {
+  color: #fff;
+}
+#app__container.mode-dark main .raid__wrapper .raid__gym {
+  color: #ccc;
+}
+#app__container.mode-dark main .event__empty .wrapper p {
+  color: #ccc;
+}
+#app__container.mode-dark main .event__empty img {
+  background-color: #404040;
+}
+#app__container.mode-dark main .setting__wrapper,
+#app__container.mode-dark main .setting {
+  color: #ccc;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+#app__container.mode-dark main .setting input[type=text],
+#app__container.mode-dark main .setting select,
+#app__container.mode-dark main .setting input[type=number] {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: #404040;
+}
+#app__container.mode-dark main .v-item-group .theme--light.v-btn:not(.v-btn--active):not(.v-btn--text):not(.v-btn--outlined) {
+  background: #404040 !important;
+  color: #ccc;
+}
+#app__container.mode-dark main .v-list__tile__title {
+  color: #ccc;
+}
+#app__container.mode-dark main .theme--light.v-list .v-avatar {
+  background: #404040;
+}
+#app__container.mode-dark main .theme--light.v-icon {
+  color: #a8a7cf;
+}
+#app__container.mode-dark main .search__wrapper {
+  background: #333333;
+}
+#app__container.mode-dark main .search__wrapper .v-input__slot {
+  background: #404040 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+#app__container.mode-dark main .search__wrapper .v-input__slot input {
+  color: #ccc !important;
+}
+#app__container.mode-dark main .v-divider.theme--light {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+#app__container.mode-dark main .theme--light.v-pagination .v-pagination__item:not(.v-pagination__item--active) {
+  background-color: #404040;
+  color: #ccc;
+}
+#app__container.mode-dark main .multiselect__tags {
+  background: #404040;
+  color: #ccc;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+#app__container.mode-dark .v-card {
+  background-color: #404040;
+}
+#app__container.mode-dark .v-card .v-card__text p {
+  color: #ccc;
+}
+#app__container.mode-dark .v-dialog.gym-modal .v-card {
+  background-color: #404040;
+}
+#app__container.mode-dark .v-dialog.gym-modal .v-card .dialog__title,
+#app__container.mode-dark .v-dialog.gym-modal .v-card .dialog__city {
+  color: #a8a7cf;
+}
+#app__container.mode-dark .v-dialog.gym-modal .button--close,
+#app__container.mode-dark .v-dialog.gym-modal .bt {
+  background-color: #333333;
+}
+#app__container.mode-dark .v-dialog.gym-modal h3 {
+  color: #a8a7cf;
+}
+#app__container.mode-dark .v-dialog.gym-modal .step__title,
+#app__container.mode-dark .v-dialog.gym-modal .step__timer,
+#app__container.mode-dark .v-dialog.gym-modal select.minutes,
+#app__container.mode-dark .v-dialog.gym-modal select.hour {
+  color: #ccc;
+}
+#app__container.mode-dark .v-dialog.gym-modal [data-step-name=level] .step__wrapper ul li button {
+  background: #333333;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #ccc;
+}
+#app__container.mode-dark .v-dialog.gym-modal .v-picker__body {
+  background-color: #404040;
+}
+#app__container.mode-dark .v-dialog.gym-modal .v-picker__body .accent--text button {
+  color: #ccc !important;
+}
+#app__container.mode-dark footer .theme--light.v-bottom-nav .v-btn {
+  background-color: #333333 !important;
+}
+#app__container.mode-dark footer .theme--light.v-bottom-nav .v-btn:not(.v-btn--active) {
+  /*color: $dark_secondary !important;*/
+}
+#app__container.mode-dark.desktop .v-navigation-drawer {
+  background: #333333;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+#app__container.mode-dark.desktop .v-navigation-drawer .v-list .v-list__tile {
+  color: #a8a7cf;
+}
+#app__container.mode-dark.desktop .v-navigation-drawer .v-list .v-list__tile i {
+  color: #a8a7cf;
+}
+#app__container.mode-dark.desktop .v-navigation-drawer .v-list .v-list__tile.v-list__tile--active {
+  background-color: #404040;
+  color: #8e56d9;
+}
+#app__container.mode-dark.desktop .v-navigation-drawer .v-list .v-list__tile.v-list__tile--active i {
+  color: #8e56d9;
+}
+#app__container.mode-dark.desktop .v-navigation-drawer .v-list .v-list__tile:hover {
+  background-color: #404040;
+}
+#app__container.mode-dark.desktop .v-content .v-content-title {
+  background: #333333;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+#app__container.mode-dark.desktop .v-content .admin__container .admin__menu {
+  background: #404040;
+}
+#app__container.mode-dark.desktop .v-content .admin__container .admin__menu:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+#app__container.mode-dark.desktop .v-content .admin__container .admin__menu .v-list__tile--active {
+  background: #333333;
+  color: #ccc;
+}
+
+@media (prefers-color-scheme: dark) {
+  #app__container.mode-system {
+    background-color: #333333;
+  }
+  #app__container.mode-system .v-toolbar.v-toolbar--fixed.theme--dark.primary {
+    background-color: #333333 !important;
+  }
+  #app__container.mode-system main.v-content {
+    background-color: #333333;
+  }
+  #app__container.mode-system main #bg1,
+#app__container.mode-system main .theme--light.v-pagination.v-pagination {
+    background: #333333 !important;
+  }
+  #app__container.mode-system main .v-tabs {
+    background: #333333;
+  }
+  #app__container.mode-system main .v-tabs .v-tabs__bar .v-tabs__div {
+    color: #a8a7cf;
+  }
+  #app__container.mode-system main .v-subheader,
+#app__container.mode-system main .section__title,
+#app__container.mode-system main .donation,
+#app__container.mode-system main .credit,
+#app__container.mode-system main .settings-section .v-list__tile,
+#app__container.mode-system main .setting.checkbox .v-input--selection-controls.v-input .v-label {
+    color: #ccc !important;
+  }
+  #app__container.mode-system main p.description {
+    color: #666 !important;
+  }
+  #app__container.mode-system main .raid__wrapper {
+    background-color: #404040;
+  }
+  #app__container.mode-system main .raid__wrapper h3 span {
+    color: #ccc;
+  }
+  #app__container.mode-system main .raid__wrapper h3 span.raid__timer span {
+    color: #fff;
+  }
+  #app__container.mode-system main .raid__wrapper .raid__gym {
+    color: #ccc;
+  }
+  #app__container.mode-system main .event__empty .wrapper p {
+    color: #ccc;
+  }
+  #app__container.mode-system main .event__empty img {
+    background-color: #404040;
+  }
+  #app__container.mode-system main .setting__wrapper,
+#app__container.mode-system main .setting {
+    color: #ccc;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  #app__container.mode-system main .setting input[type=text],
+#app__container.mode-system main .setting select,
+#app__container.mode-system main .setting input[type=number] {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: #404040;
+  }
+  #app__container.mode-system main .v-item-group .theme--light.v-btn:not(.v-btn--active):not(.v-btn--text):not(.v-btn--outlined) {
+    background: #404040 !important;
+    color: #ccc;
+  }
+  #app__container.mode-system main .v-list__tile__title {
+    color: #ccc;
+  }
+  #app__container.mode-system main .theme--light.v-list .v-avatar {
+    background: #404040;
+  }
+  #app__container.mode-system main .theme--light.v-icon {
+    color: #a8a7cf;
+  }
+  #app__container.mode-system main .search__wrapper {
+    background: #333333;
+  }
+  #app__container.mode-system main .search__wrapper .v-input__slot {
+    background: #404040 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  #app__container.mode-system main .search__wrapper .v-input__slot input {
+    color: #ccc !important;
+  }
+  #app__container.mode-system main .v-divider.theme--light {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  #app__container.mode-system main .theme--light.v-pagination .v-pagination__item:not(.v-pagination__item--active) {
+    background-color: #404040;
+    color: #ccc;
+  }
+  #app__container.mode-system main .multiselect__tags {
+    background: #404040;
+    color: #ccc;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  #app__container.mode-system .v-card {
+    background-color: #404040;
+  }
+  #app__container.mode-system .v-card .v-card__text p {
+    color: #ccc;
+  }
+  #app__container.mode-system .v-dialog.gym-modal .v-card {
+    background-color: #404040;
+  }
+  #app__container.mode-system .v-dialog.gym-modal .v-card .dialog__title,
+#app__container.mode-system .v-dialog.gym-modal .v-card .dialog__city {
+    color: #a8a7cf;
+  }
+  #app__container.mode-system .v-dialog.gym-modal .button--close,
+#app__container.mode-system .v-dialog.gym-modal .bt {
+    background-color: #333333;
+  }
+  #app__container.mode-system .v-dialog.gym-modal h3 {
+    color: #a8a7cf;
+  }
+  #app__container.mode-system .v-dialog.gym-modal .step__title,
+#app__container.mode-system .v-dialog.gym-modal .step__timer,
+#app__container.mode-system .v-dialog.gym-modal select.minutes,
+#app__container.mode-system .v-dialog.gym-modal select.hour {
+    color: #ccc;
+  }
+  #app__container.mode-system .v-dialog.gym-modal [data-step-name=level] .step__wrapper ul li button {
+    background: #333333;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: #ccc;
+  }
+  #app__container.mode-system .v-dialog.gym-modal .v-picker__body {
+    background-color: #404040;
+  }
+  #app__container.mode-system .v-dialog.gym-modal .v-picker__body .accent--text button {
+    color: #ccc !important;
+  }
+  #app__container.mode-system footer .theme--light.v-bottom-nav .v-btn {
+    background-color: #333333 !important;
+  }
+  #app__container.mode-system footer .theme--light.v-bottom-nav .v-btn:not(.v-btn--active) {
+    /*color: $dark_secondary !important;*/
+  }
+  #app__container.mode-system.desktop .v-navigation-drawer {
+    background: #333333;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  #app__container.mode-system.desktop .v-navigation-drawer .v-list .v-list__tile {
+    color: #a8a7cf;
+  }
+  #app__container.mode-system.desktop .v-navigation-drawer .v-list .v-list__tile i {
+    color: #a8a7cf;
+  }
+  #app__container.mode-system.desktop .v-navigation-drawer .v-list .v-list__tile.v-list__tile--active {
+    background-color: #404040;
+    color: #8e56d9;
+  }
+  #app__container.mode-system.desktop .v-navigation-drawer .v-list .v-list__tile.v-list__tile--active i {
+    color: #8e56d9;
+  }
+  #app__container.mode-system.desktop .v-navigation-drawer .v-list .v-list__tile:hover {
+    background-color: #404040;
+  }
+  #app__container.mode-system.desktop .v-content .v-content-title {
+    background: #333333;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  #app__container.mode-system.desktop .v-content .admin__container .admin__menu {
+    background: #404040;
+  }
+  #app__container.mode-system.desktop .v-content .admin__container .admin__menu:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  #app__container.mode-system.desktop .v-content .admin__container .admin__menu .v-list__tile--active {
+    background: #333333;
+    color: #ccc;
+  }
+}
