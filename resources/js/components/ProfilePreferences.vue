@@ -69,8 +69,9 @@
         methods: {
             updateMetaColor() {
                 let appearanceMod = this.$store.getters.getSetting("appaeranceMod")
-                let themeColor = appearanceMod == 'dark' ? '#333333' : '"#ffffff"' 
-                document.getElementById('theme-color').setAttribute("content", themeColor);
+                let darkMod =  window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                let themeColor = appearanceMod == 'dark' || darkMod ? '#333333' : '#ffffff' 
+                document.getElementById('theme-color').setAttribute("content", themeColor)
             }
         }
     }

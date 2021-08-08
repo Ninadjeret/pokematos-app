@@ -83,6 +83,10 @@ export default {
       markersLayer: [],
     };
   },
+  created() {
+    let appearanceMod = this.$store.getters.getSetting("appaeranceMod")
+    if( appearanceMod == 'dark' ) this.url = this.urlRocket;
+  },
   computed: {
     mapFilters: {
       get: function () {
@@ -384,15 +388,15 @@ export default {
       }
     },
     displayRocketMap() {
-      console.log("tutu");
       if (this.mode == "base") {
         console.log("pilou");
         this.mode = "rocket";
         this.url = this.urlRocket;
         this.addMarkers();
       } else {
+        let appearanceMod = this.$store.getters.getSetting("appaeranceMod")
         this.mode = "base";
-        this.url = this.urlBase;
+        if( appearanceMod != 'dark' ) this.url = this.urlBase;
         this.addMarkers();
       }
     },

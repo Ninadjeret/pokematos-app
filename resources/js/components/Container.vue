@@ -10,6 +10,8 @@
         <div class="branding">
             <img :src="baseUrl+'/storage/img/static/logo_pokematos_256.png'">
             <v-toolbar-title >POKEMATOS</v-toolbar-title>
+                        <div class="current-city" v-if="$route.name == 'map' && this.$store.state.currentCity && cities &&  cities.length === 1">{{ this.$store.state.currentCity.name }}</div>
+            <div class="current-city multiple" v-if="$route.name == 'map' && this.$store.state.currentCity && cities &&  cities.length > 1" @click.stop="dialogCities = true">{{ this.$store.state.currentCity.name }}</div>
         </div>
         <v-list class="pt-0">
           <v-divider></v-divider>
@@ -257,8 +259,9 @@
             },
             updateMetaColor() {
                 let appearanceMod = this.$store.getters.getSetting("appaeranceMod")
-                let themeColor = appearanceMod == 'dark' ? '#333333' : '"#ffffff"' 
-                document.getElementById('theme-color').setAttribute("content", themeColor);
+                let darkMod =  window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                let themeColor = appearanceMod == 'dark' || darkMod ? '#333333' : '#ffffff' 
+                document.getElementById('theme-color').setAttribute("content", themeColor)
             }
         }
     }

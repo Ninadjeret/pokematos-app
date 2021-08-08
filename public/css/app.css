@@ -12944,7 +12944,7 @@ body.logged-out .denied a {
 
 #app__container.desktop aside .branding {
   text-align: center;
-  margin-top: 50px;
+  margin: 50px 20px 20px 20px;
 }
 #app__container.desktop aside .branding img {
   max-width: 100px;
@@ -13046,7 +13046,8 @@ body.logged-out .denied a {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-#app__container.desktop .v-dialog.gym-modal {
+#app__container.desktop .v-dialog.gym-modal,
+#app__container.desktop .v-dialog.city-modal {
   max-width: 400px !important;
   max-height: 700px;
 }
