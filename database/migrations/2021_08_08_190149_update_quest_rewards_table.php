@@ -15,7 +15,15 @@ class UpdateQuestRewardsTable extends Migration
     {
         Schema::table('quest_rewards', function (Blueprint $table) {
             $table->string('sstype')->nullable()->after('type');
-            $table->integer('qty')->default(1)->after('pkmn');
+            $table->integer('qty')->default(1)->after('sstype');
+        });
+
+        Schema::create('quest_reward_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('slug');
+            $table->string('niantic_id');
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -30,5 +38,6 @@ class UpdateQuestRewardsTable extends Migration
             $table->dropColumn('qty');
             $table->dropColumn('sstype');
         });
+        Schema::dropIfExists('quest_reward_types');
     }
 }

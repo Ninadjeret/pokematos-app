@@ -1,0 +1,107 @@
+[
+    {
+      "slug": "megaenergy",
+      "name": "Méga énergie"
+    },
+    {
+      "slug": "potion",
+      "name": "Potion"
+    },
+    {
+      "slug": "superpotion",
+      "name": "Super Potion"
+    },
+    {
+      "slug": "hyperpotion",
+      "name": "Hyper Potion"
+    },
+    {
+      "slug": "potionmax",
+      "name": "Potion Max"
+    },
+    {
+      "slug": "rappel",
+      "name": "Rappel"
+    },
+    {
+      "slug": "egg",
+      "name": "Oeuf chance"
+    },
+    {
+      "slug": "encens",
+      "name": "Encens"
+    },
+    {
+      "slug": "ct_immediate",
+      "name": "CT Attaque Immédiate"
+    },
+    {
+      "slug": "ct_chargee",
+      "name": "CT Attaque Chargée"
+    },
+    {
+      "slug": "ct_immediate_elite",
+      "name": "CT Attaque Immédiade d\"élite"
+    },
+    {
+      "slug": "ct_charge_eelite",
+      "name": "CT Chargée d\"élite"
+    },
+    {
+      "slug": "candy",
+      "name": "Super Bonbon"
+    },
+    {
+      "slug": "xlcandy",
+      "name": "Super Bonbon L"
+    },
+    {
+      "slug": "raslugpass",
+      "name": "Passe de raslug"
+    },
+    {
+      "slug": "remote_raslugpass",
+      "name": "Passe de Raslug à distance"
+    },
+    {
+      "slug": "premium_raslugpass",
+      "name": "Passe de Raslug premium"
+    },
+    {
+      "slug": "starpiece",
+      "name": "Morceau d\"Étoile"
+    },
+    {
+      "slug": "pokeball",
+      "name": "Poké Ball"
+    },
+    {
+      "slug": "greatball",
+      "name": "Super Ball"
+    },
+    {
+      "slug": "ultraball",
+      "name": "Hyper Ball"
+    },
+    {
+      "slug": "troykey",
+      "name": "Module Leurre"
+    },
+
+    {
+      "slug": "troykey_glacial",
+      "name": "Leurre Glacial"
+    },
+    {
+      "slug": "troykey_magnetic",
+      "name": "Leurre Magnétique"
+    },
+    {
+      "slug": "troykey_moss",
+      "name": "Leurre Moussu"
+    },
+    {
+      "slug": "troykey_rainy",
+      "name": "Leurre Pluvieux"
+    }
+  ]

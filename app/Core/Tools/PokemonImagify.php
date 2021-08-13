@@ -125,4 +125,28 @@ class PokemonImagify
     $img->insert($pkmn, 'bottom-right', 0, 52);
     $img->save($save);
   }
+
+  public static function createQuestRewardTypeThumbnail($path, $save) {
+    $img = Image::make(storage_path() . '/app/pokemon/empty.png');
+
+    $item = Image::make($path);
+    $item->resize(null, 240, function ($constraint) {
+        $constraint->aspectRatio();
+    });
+    
+    $img->insert($item, 'center');
+    $img->save($save);    
+  } 
+
+  public static function createQuestRewardTypeMapThumbnail($path, $save) {
+    $img = Image::make(storage_path() . '/app/pokemon/map_marker_quest_pokemon.png');
+
+    $item = Image::make($path);
+    $item->resize(null, 80, function ($constraint) {
+        $constraint->aspectRatio();
+    });
+    
+    $img->insert($item, 'bottom', 0, 52);
+    $img->save($save);    
+  } 
 }
