@@ -22,6 +22,8 @@ import AdminRolesRole from "./components/admin/roles/Role.vue";
 
 import AdminQuests from "./components/admin/quests/Quests.vue";
 import AdminQuest from "./components/admin/quests/Quest.vue";
+import AdminQuestRewards from "./components/admin/quests/Rewards.vue";
+import AdminQuestReward from "./components/admin/quests/Reward.vue";
 
 import AdminLogs from "./components/admin/Logs.vue";
 
@@ -497,6 +499,33 @@ const routes = [{
                 component: AdminBosses
             },
             {
+                path: "quests/rewards",
+                name: "admin.quests.rewards",
+                meta: {
+                    title: "Gérer les objets de quête",
+                    parent: "admin"
+                },
+                component: AdminQuestRewards
+            },
+            {
+                path: "quests/rewards/add",
+                name: "admin.quests.rewards.add",
+                meta: {
+                    title: "Nouvel objet de quête",
+                    parent: "admin"
+                },
+                component: AdminQuestReward
+            },
+            {
+                path: "quests/rewards/:reward_id",
+                name: "admin.quests.rewards.edit",
+                meta: {
+                    title: "Modilier l'objet de quête",
+                    parent: "admin"
+                },
+                component: AdminQuestReward
+            },
+            {
                 path: "quests",
                 name: "admin.quests",
                 meta: {
@@ -575,7 +604,7 @@ const routes = [{
                     parent: "admin.pokemon"
                 },
                 component: AdminPokemon
-            }
+            },         
         ]
     }
     /*{

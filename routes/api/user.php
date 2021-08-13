@@ -38,6 +38,7 @@ Route::group(['middleware' => ['can:pokemon_manage']], function () {
   Route::put('pokemon/gamemaster', 'App\Pokemon\GameMasterController@update');
   Route::get('pokemon/{pokemon}', 'App\Pokemon\PokemonController@show');
   Route::put('pokemon/{pokemon}', 'App\Pokemon\PokemonController@update');
+  Route::delete('pokemon/{pokemon}', 'App\Pokemon\PokemonController@destroy');
   Route::put('pokemon/{pokemon}/thumbnails', 'App\Pokemon\PokemonController@updateThumbnails');
 });
 
@@ -48,6 +49,9 @@ Route::get('quests/rewards', 'App\Quests\QuestRewardController@index');
 Route::get('quests', 'App\Quests\QuestController@index');
 Route::group(['middleware' => ['can:quest_edit']], function () {
     Route::resource('quests', 'App\Quests\QuestController', ['except' => ['index']]);
+    Route::get('quests/rewards/mega', 'App\Quests\QuestRewardController@mega');
+    Route::get('quests/rewards/{quest_reward}', 'App\Quests\QuestRewardController@show');
+    Route::put('quests/rewards/{quest_reward}', 'App\Quests\QuestRewardController@update');
 });
 
 /**

@@ -27,7 +27,6 @@ import VueRouter from 'vue-router';
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import Vuex from 'vuex'
 import appStore from './store/store';
-import preferencesStore from './store/preferencesStore';
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import 'vuetify/dist/vuetify.min.css'
@@ -85,7 +84,6 @@ const router = new VueRouter({
 const app = new Vue({
     render: h => h(Container),
     store: appStore,
-    preferencesStore: preferencesStore,
     router,
     beforeCreate() {
         this.$store.dispatch('initStore');

@@ -62,7 +62,6 @@ class GeneratePokemonThumbnails extends Command
             }
             $quest_path = storage_path() . "/app/public/img/pokemon/quest/map_marker_quest_pokemon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
 
-
             try {
                 $file = "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Pokemon%20-%20256x256/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
                 $copied = copy($file, $default_path);
@@ -84,7 +83,17 @@ class GeneratePokemonThumbnails extends Command
             $image->save($cropped_path);
             $image->createRaidThumbnail($cropped_path, $raid_path);
             $image->createQuestThumbnail($cropped_path, $quest_path);
+
+            //Gestion des mega énergies
             
+            if(  $pokemon->form_id == '51' || $pokemon->form_id == '52' ) {
+                $base = Pokemon::where('pokedex_id', $pokemon->pokedex_id)->where('form_id', '00')->first();
+                $default_energy_path = storage_path() . "/app/public/img/pokemon/energy/mega_energy_{$pokemon->pokedex_id}.png";
+                $quest_energy_path = storage_path() . "/app/public/img/pokemon/energyquest/map_marker_quest_energy_{$pokemon->pokedex_id}.png";
+                $image->createEnergyThumbnail($cropped_path, $default_energy_path);
+                $image->createEnergyQuestThumbnail($cropped_path, $quest_energy_path);
+            }
+        
         }
         $bar->setMessage("<fg=green>Génération terminée</>");
         $bar->finish();

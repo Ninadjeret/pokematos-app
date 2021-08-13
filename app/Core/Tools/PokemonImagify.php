@@ -99,4 +99,30 @@ class PokemonImagify
     $img->insert($path, 'bottom', 0, 52);
     $img->save($save);
   }
+
+  public function createEnergyThumbnail($path, $save)
+  {
+    $img = Image::make(storage_path() . '/app/pokemon/mega_energy.png');
+
+    $pkmn = Image::make($path);
+    $pkmn->resize(null, 120, function ($constraint) {
+        $constraint->aspectRatio();
+    });
+
+    $img->insert($pkmn, 'bottom-right', 0, 0);
+    $img->save($save);
+  }
+
+  public function createEnergyQuestThumbnail($path, $save)
+  {
+    $img = Image::make(storage_path() . '/app/pokemon/map_marker_quest_energy.png');
+
+    $pkmn = Image::make($path);
+    $pkmn->resize(null, 60, function ($constraint) {
+        $constraint->aspectRatio();
+    });
+    
+    $img->insert($pkmn, 'bottom-right', 0, 52);
+    $img->save($save);
+  }
 }

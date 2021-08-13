@@ -221,6 +221,12 @@ export default {
           icon: "device_unknown",
           permission: "pokemon_manage",
         },
+        {
+          label: "Gérer les objets de quêtes",
+          route: "admin.quests.rewards",
+          icon: "device_unknown",
+          permission: "quest_edit",
+        },
       ],
     };
   },
