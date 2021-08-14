@@ -90,11 +90,7 @@ export default {
   computed: {
     mapFilters: {
       get: function () {
-        let filters = this.$store.getters.getSetting("mapFilters");
-        if (!filters || typeof filters == "string") {
-          return [];
-        }
-        return filters;
+        return this.$store.getters.getSetting("mapFilters");
       },
       set: function (newValue) {
         this.$store.commit("setSetting", {

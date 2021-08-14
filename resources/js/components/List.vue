@@ -430,26 +430,6 @@ export default {
   },
   created() {
     this.fetchRewards();
-    this.$store.commit("initSetting", {
-      setting: "raidsListFilters",
-      value: ["1", "2", "3", "4", "5", "6", "7"],
-    });
-    this.$store.commit("initSetting", {
-      setting: "questsListFilters",
-      value: [],
-    });
-    this.$store.commit("initSetting", {
-      setting: "raidsZoneFilters",
-      value: [],
-    });
-    this.$store.commit("initSetting", {
-      setting: "questsZoneFilters",
-      value: [],
-    });
-    this.$store.commit("initSetting", {
-      setting: "raidsListOrder",
-      value: "date",
-    });
     let lastChanges = this.$store.state.settings.lastChanges;
     lastChanges.lists.local = Date.now() / 1000;
     this.$store.commit("setSetting", {

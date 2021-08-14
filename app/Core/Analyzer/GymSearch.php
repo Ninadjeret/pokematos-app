@@ -170,6 +170,7 @@ class GymSearch
                         //echo $pattern.'<br>';
                         $is_find = 0;
                         foreach ($this->sanitizedNames as $sanitizedName) {
+                            if( empty($pattern) ) continue;
                             if (strstr($sanitizedName, $pattern)) {
                                 $is_find++;
                             }

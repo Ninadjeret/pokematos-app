@@ -26,7 +26,7 @@ class DiscordMessage extends Model
             'channel.id' => (int) $this->channel_discord_id,
             'message.id' => (int) $this->discord_id
         ]);
-        if ($result) {
+        if ($result === true || $result == '404' ) {
             $this->delete();
         } else {
             $this->to_delete_at = date('Y-m-d H:i:s');

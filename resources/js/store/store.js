@@ -7,7 +7,11 @@ import VuexPersistence from 'vuex-persist';
 Vue.use(Vuex);
 
 const defaultSettings = {
-    raidsListFilters: ["1", "2", "3", "4", "5", "6"],
+    mapFilters: ["empty_gyms", "active_gyms", "empty_stops", "active_stops"],
+    raidsListFilters: ["1", "2", "3", "4", "5", "6", "7"],
+    questsListFilters: [],
+    raidsZoneFilters: [],
+    questsZoneFilters: [],
     raidsListOrder: 'date',
     hideGyms: false,
     appaeranceMod: 'system'
