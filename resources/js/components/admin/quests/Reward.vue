@@ -9,7 +9,7 @@
       <div class="setting">
         <label>Type</label>
         <select v-if="types" v-model="type">
-          <option v-for="item in types" :value="item.id">
+          <option v-for="item in types" :value="item.slug">
             {{ item.name }}
           </option>
         </select>
@@ -63,122 +63,15 @@ export default {
       type: "",
       sstype: null,
       qty: "",
-      types: [
-        {
-          id: 'megaenergy',
-          name: 'Méga énergie'
-        },
-        {
-          id: 'potion',
-          name: 'Potion'
-        },
-        {
-          id: 'superpotion',
-          name: 'Super Potion'
-        },
-        {
-          id: 'hyperpotion',
-          name: 'Hyper Potion'
-        },
-        {
-          id: 'potionmax',
-          name: 'Potion Max'
-        },
-        {
-          id: 'rappel',
-          name: 'Rappel'
-        },
-        {
-          id: 'egg',
-          name: 'Oeuf chance'
-        },
-        {
-          id: 'encens',
-          name: 'Encens'
-        },
-        {
-          id: 'ct_immediate',
-          name: 'CT Attaque Immédiate'
-        },
-        {
-          id: 'ct_chargee',
-          name: 'CT Attaque Chargée'
-        },
-        {
-          id: 'ct_immediate_elite',
-          name: 'CT Attaque Immédiade d\'élite'
-        },
-        {
-          id: 'ct_charge_eelite',
-          name: 'CT Chargée d\'élite'
-        },
-        {
-          id: 'candy',
-          name: 'Super Bonbon'
-        },
-        {
-          id: 'xlcandy',
-          name: 'Super Bonbon L'
-        },
-        {
-          id: 'raidpass',
-          name: 'Passe de raid'
-        },
-        {
-          id: 'remote_raidpass',
-          name: 'Passe de Raid à distance'
-        },
-        {
-          id: 'premium_raidpass',
-          name: 'Passe de Raid premium'
-        },
-        {
-          id: 'starpiece',
-          name: 'Morceau d\'Étoile'
-        },
-        {
-          id: 'pokeball',
-          name: 'Poké Ball'
-        },
-        {
-          id: 'greatball',
-          name: 'Super Ball'
-        },
-        {
-          id: 'ultraball',
-          name: 'Hyper Ball'
-        },
-        {
-          id: 'troykey',
-          name: 'Module Leurre'
-        },
-
-        {
-          id: 'troykey_glacial',
-          name: 'Leurre Glacial'
-        },
-        {
-          id: 'troykey_magnetic',
-          name: 'Leurre Magnétique'
-        },
-        {
-          id: 'troykey_moss',
-          name: 'Leurre Moussu'
-        },
-        {
-          id: 'troykey_rainy',
-          name: 'Leurre Pluvieux'
-        },
-
-
-      ],
+      types: [],
       pokemons: [],
     };
   },
   created() {
+    this.fetchMega();
+    this.fetchTypes();
     if (this.$route.params.reward_id) {
-      this.fetch();
-      this.fetchMega();
+      this.fetch();  
     }
   },
   computed: {
@@ -202,6 +95,13 @@ export default {
         .get("/api/user/quests/rewards/mega")
         .then((res) => {
           this.pokemons = res.data;
+        })
+    },
+    fetchTypes() {
+      axios
+        .get("/api/user/quests/rewards/types")
+        .then((res) => {
+          this.types = res.data;
         })
     },
     submit() {

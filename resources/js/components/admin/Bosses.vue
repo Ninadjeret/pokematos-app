@@ -16,7 +16,7 @@
         </template>
       </multiselect>
       <div v-for="(boss, index) in bosses1t" class="setting pokemon">
-        <img :src="boss.thumbnail_url" />
+        <img :src="boss.thumbnails.base" />
         <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove1t(index)">
           <v-icon>close</v-icon>
@@ -40,7 +40,7 @@
         </template>
       </multiselect>
       <div v-for="(boss, index) in bosses3t" class="setting pokemon">
-        <img :src="boss.thumbnail_url" />
+        <img :src="boss.thumbnails.base" />
         <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove3t(index)">
           <v-icon>close</v-icon>
@@ -64,7 +64,7 @@
         </template>
       </multiselect>
       <div v-for="(boss, index) in bosses5t" class="setting pokemon">
-        <img :src="boss.thumbnail_url" />
+        <img :src="boss.thumbnails.base" />
         <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove5t(index)">
           <v-icon>close</v-icon>
@@ -88,7 +88,7 @@
         </template>
       </multiselect>
       <div v-for="(boss, index) in bosses7t" class="setting pokemon">
-        <img :src="boss.thumbnail_url" />
+        <img :src="boss.thumbnails.base" />
         <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove7t(index)">
           <v-icon>close</v-icon>
@@ -112,7 +112,7 @@
         </template>
       </multiselect>
       <div v-for="(boss, index) in bosses6t" class="setting pokemon">
-        <img :src="boss.thumbnail_url" />
+        <img :src="boss.thumbnails.base" />
         <p>{{ boss.name_fr }}</p>
         <v-btn flat icon color="deep-orange" @click="remove6t(index)">
           <v-icon>close</v-icon>

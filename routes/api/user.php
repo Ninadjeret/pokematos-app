@@ -50,6 +50,7 @@ Route::get('quests', 'App\Quests\QuestController@index');
 Route::group(['middleware' => ['can:quest_edit']], function () {
     Route::resource('quests', 'App\Quests\QuestController', ['except' => ['index']]);
     Route::get('quests/rewards/mega', 'App\Quests\QuestRewardController@mega');
+    Route::get('quests/rewards/types', 'App\Quests\QuestRewardTypeController@index');
     Route::get('quests/rewards/{quest_reward}', 'App\Quests\QuestRewardController@show');
     Route::put('quests/rewards/{quest_reward}', 'App\Quests\QuestRewardController@update');
 });

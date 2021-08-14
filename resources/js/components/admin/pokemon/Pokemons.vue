@@ -29,7 +29,7 @@
             }"
           >
             <v-list-tile-avatar>
-              <img :src="item.thumbnail_url" />
+              <img :src="item.thumbnails.base" />
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>

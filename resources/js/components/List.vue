@@ -124,7 +124,7 @@
             <div class="raids__wrapper">
               <div v-on:click="showModal(gym)" v-for="gym in activeQuests" class="raid__wrapper">
                 <div class="raid__img">
-                  <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnail_url" />
+                  <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnails.base" />
                   <img
                     v-if="!gym.quest.reward"
                     :src="baseUrl+'/storage/img/static/unknown.png'"
@@ -168,7 +168,7 @@
                 class="raid__wrapper"
               >
                 <div class="raid__img">
-                  <img :src="gym.invasion.boss.thumbnail" />
+                  <img :src="gym.invasion.boss.thumbnails.base" />
                 </div>
                 <div class="raid__content">
                   <h3>
@@ -241,7 +241,7 @@
           </template>
         </multiselect>
         <div v-for="(reward, index) in questsListFilters" class="setting pokemon">
-          <img :src="reward.thumbnail_url" />
+          <img :src="reward.thumbnails.base" />
           <p>{{reward.name}}</p>
           <v-btn flat icon color="deep-orange" @click="removeReward(index)">
             <v-icon>close</v-icon>
@@ -484,7 +484,7 @@ export default {
           this.baseUrl+"/storage/img/static/raid/egg_" + raid.egg_level + ".png"
         );
       } else {
-        return raid.pokemon.thumbnail_url;
+        return raid.pokemon.thumbnails.base;
       }
     },
     getRaidStartTime(raid) {

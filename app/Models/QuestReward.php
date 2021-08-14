@@ -9,12 +9,18 @@ class QuestReward extends Model
 {
     protected $table = 'quest_rewards';
     protected $fillable = ['name', 'type', 'sstype', 'qty'];
-    protected $appends = ['thumbnail_url'];
+    protected $appends = ['thumbnails'];
 
-    public function getThumbnailUrlAttribute() {
+    public function getThumbnailsAttribute() {
         if( $this->type == 'megaenergy' ) {
-            return  asset("/storage/img/pokemon/energy/mega_energy_{$this->sstype}.png");
+            return (object) [
+                'base' => asset("/storage/img/pokemon/energy/megaenergy_{$this->sstype}.png"),
+                'quest' => asset("/storage/img/pokemon/energyquest/megaenergy_{$this->sstype}.png"),
+            ];
         }
-        return 'https://assets.profchen.fr/img/rewards/reward_'.$this->id.'.png';
+        return (object) [
+            'base' => asset("storage/img/items/base/item_{$this->type}.png"),
+            'quest' => asset("storage/img/items/quest/item_{$this->type}.png"),
+        ];
     }
 }

@@ -215,7 +215,7 @@ class RocketConnector extends Model
     {
         $stop = $invasion->getStop();
         $title = "Invasion de {$invasion->boss->name} au Pokéstop {$stop->name}";
-        $img_url = $invasion->boss->thumbnail;
+        $img_url = $invasion->boss->thumbnails->base;
 
         $description = (!empty($invasion->pokemon_step1)) ? ":one: {$invasion->pokemon_step1->name}\r\n" : ":one: ?\r\n";
         $description .= (!empty($invasion->pokemon_step2)) ? ":two: {$invasion->pokemon_step2->name}\r\n" : ":two: ?\r\n";

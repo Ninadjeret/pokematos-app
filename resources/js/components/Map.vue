@@ -232,18 +232,10 @@ export default {
         zindex = 2000;
         if (gym.quest.reward_type && gym.quest.reward_type == "pokemon") {
           var imgclassname = "map-marker__img quest";
-          url =
-            that2.baseUrl+"/storage/img/pokemon/quest/map_marker_quest_pokemon_" +
-            gym.quest.reward.pokedex_id +
-            "_" +
-            gym.quest.reward.form_id +
-            ".png";
+          url = gym.quest.reward.thumbnails.quest;
         } else if (gym.quest.reward_type && gym.quest.reward_type == "reward") {
           var imgclassname = "map-marker__img quest";
-          url =
-            "https://assets.profchen.fr/img/map/map_marker_quest_reward_" +
-            gym.quest.reward.id +
-            ".png";
+          url = gym.quest.reward.thumbnails.quest;
         } else {
           var imgclassname = "map-marker__img quest";
           url =
@@ -273,19 +265,7 @@ export default {
             gym.raid.egg_level +
             ".png";
           if (gym.raid.pokemon != false) {
-            if (gym.raid.pokemon.form_id == "00") {
-              url =
-                that2.baseUrl+"/storage/img/pokemon/raid/map_marker_pokemon_" +
-                gym.raid.pokemon.pokedex_id +
-                ".png";
-            } else {
-              url =
-                that2.baseUrl+"/storage/img/pokemon/raid/map_marker_pokemon_" +
-                gym.raid.pokemon.pokedex_id +
-                "_" +
-                gym.raid.pokemon.form_id +
-                ".png";
-            }
+            url = gym.raid.pokemon.thumbnails.raid;
           }
           var html =
             '<img class="' +

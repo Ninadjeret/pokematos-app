@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Pokemon;
 use Illuminate\Console\Command;
-use App\Core\Tools\PokemonImagify;
+use App\Core\Tools\ThumbnailMaker;
 
 class GeneratePokemonThumbnails extends Command
 {
@@ -54,15 +54,8 @@ class GeneratePokemonThumbnails extends Command
             $bar->advance();
             $bar->setMessage("Génération pour {$pokemon->name_fr}");
 
-            $default_path = storage_path() . "/app/public/img/pokemon/base/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
-            $cropped_path = storage_path() . "/app/public/img/pokemon/cropped/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
-            $raid_path = storage_path() . "/app/public/img/pokemon/raid/map_marker_pokemon_{$pokemon->pokedex_id}.png";
-            if ($pokemon->form_id != '00') {
-                $raid_path = storage_path() . "/app/public/img/pokemon/raid/map_marker_pokemon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
-            }
-            $quest_path = storage_path() . "/app/public/img/pokemon/quest/map_marker_quest_pokemon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
-
             try {
+                $default_path = storage_path() . "/app/public/img/pokemon/base/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
                 $file = "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Pokemon%20-%20256x256/pokemon_icon_{$pokemon->pokedex_id}_{$pokemon->form_id}.png";
                 $copied = copy($file, $default_path);
             } catch (\Exception $e) {
@@ -71,27 +64,14 @@ class GeneratePokemonThumbnails extends Command
                 continue;
             }
 
+            ThumbnailMaker::forPokemonRaid($pokemon);
+            ThumbnailMaker::forPokemonQuest($pokemon);
 
-            if (!file_exists($default_path)) {
-                //$this->alert("Image non générée pour {$pokemon->name_fr}");
-                $errors[] = ['id' => $pokemon->pokedex_id, 'name' => $pokemon->name_fr];
-                continue;
-            }
-
-            $image = new PokemonImagify($default_path);
-            $image->cropTransparentBg();
-            $image->save($cropped_path);
-            $image->createRaidThumbnail($cropped_path, $raid_path);
-            $image->createQuestThumbnail($cropped_path, $quest_path);
-
-            //Gestion des mega énergies
-            
+            //Gestion des mega énergies      
             if(  $pokemon->form_id == '51' || $pokemon->form_id == '52' ) {
                 $base = Pokemon::where('pokedex_id', $pokemon->pokedex_id)->where('form_id', '00')->first();
-                $default_energy_path = storage_path() . "/app/public/img/pokemon/energy/mega_energy_{$pokemon->pokedex_id}.png";
-                $quest_energy_path = storage_path() . "/app/public/img/pokemon/energyquest/map_marker_quest_energy_{$pokemon->pokedex_id}.png";
-                $image->createEnergyThumbnail($cropped_path, $default_energy_path);
-                $image->createEnergyQuestThumbnail($cropped_path, $quest_energy_path);
+                ThumbnailMaker::forPokemonEnergyBase($base);
+                ThumbnailMaker::forPokemonEnergyQuest($base);
             }
         
         }

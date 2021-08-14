@@ -119,7 +119,7 @@ class RaidEmbed
 
     private function getThumbnailUrl()
     {
-        return $this->raid->pokemon ? $this->raid->pokemon->thumbnail_url : asset('storage/img/static/raid/egg_' . $this->raid->egg_level . '.png');
+        return $this->raid->pokemon ? $this->raid->pokemon->thumbnails->base : asset('storage/img/static/raid/egg_' . $this->raid->egg_level . '.png');
     }
 
     private function getGymUrl()

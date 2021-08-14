@@ -10,7 +10,7 @@ class Pokemon extends Model
 
     protected $fillable = ['pokedex_id', 'niantic_id', 'name_fr', 'form_id', 'name_ocr', 'base_att', 'base_def', 'base_sta', 'parent_id', 'boss', 'boss_level'];
     protected $table = 'pokemons';
-    protected $appends = ['thumbnail_url', 'cp', 'name', 'boss_cp'];
+    protected $appends = ['thumbnails', 'cp', 'name', 'boss_cp'];
     protected $casts = [
         'boss' => 'boolean',
         'shiny' => 'boolean',
@@ -21,9 +21,14 @@ class Pokemon extends Model
         return $this->name_fr;
     }
 
-    public function getThumbnailUrlAttribute()
+    public function getThumbnailsAttribute()
     {
-        return asset('storage/img/pokemon/base/pokemon_icon_' . $this->pokedex_id . '_' . $this->form_id . '.png');
+        return (object) [
+            'base' => asset('storage/img/pokemon/base/pokemon_icon_' . $this->pokedex_id . '_' . $this->form_id . '.png'),
+            'raid' => asset('storage/img/pokemon/raid/marker_' . $this->pokedex_id . '_' . $this->form_id . '.png'),
+            'quest' => asset('storage/img/pokemon/quest/marker_' . $this->pokedex_id . '_' . $this->form_id . '.png'),
+        ];
+        
     }
 
     public function getCpAttribute()

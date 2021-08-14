@@ -13,7 +13,7 @@
                   </v-list-tile-title>
                 </v-list-tile-content>
                 <v-avatar v-if="quest.rewards.length >= 1">
-                    <img :src="quest.rewards[0].thumbnail_url">
+                    <img :src="quest.rewards[0].thumbnails.base">
                     <span v-if="quest.rewards.length > 1" class="rewards_badge">
                         +{{quest.rewards.length - 1}}
                     </span>

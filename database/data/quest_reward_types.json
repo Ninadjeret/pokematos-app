@@ -1,107 +1,232 @@
 [
     {
       "slug": "megaenergy",
+      "niantic_id": "pokemon_details_mega_candy",
       "name": "Méga énergie"
     },
     {
       "slug": "potion",
+      "niantic_id": "Item_0101",
       "name": "Potion"
     },
     {
+      "slug": "stardust",
+      "niantic_id": "stardust_painted",
+      "name": "Poussière Étoile"
+    },
+    {
       "slug": "superpotion",
+      "niantic_id": "Item_0102",
       "name": "Super Potion"
     },
     {
       "slug": "hyperpotion",
+      "niantic_id": "Item_0103",
       "name": "Hyper Potion"
     },
     {
       "slug": "potionmax",
+      "niantic_id": "Item_0104",
       "name": "Potion Max"
     },
     {
       "slug": "rappel",
+      "niantic_id": "Item_0201",
       "name": "Rappel"
     },
     {
-      "slug": "egg",
+      "slug": "rappel_max",
+      "niantic_id": "Item_0202",
+      "name": "Rappel Max"
+    },
+    {
+      "slug": "luckyegg",
+      "niantic_id": "luckyegg",
       "name": "Oeuf chance"
     },
     {
       "slug": "encens",
+      "niantic_id": "Incense_0",
       "name": "Encens"
     },
     {
       "slug": "ct_immediate",
+      "niantic_id": "Item_1201",
       "name": "CT Attaque Immédiate"
     },
     {
       "slug": "ct_chargee",
+      "niantic_id": "Item_1202",
       "name": "CT Attaque Chargée"
     },
     {
       "slug": "ct_immediate_elite",
-      "name": "CT Attaque Immédiade d\"élite"
+      "niantic_id": "Item_1203",
+      "name": "CT Attaque Immédiade d'élite"
     },
     {
       "slug": "ct_charge_eelite",
-      "name": "CT Chargée d\"élite"
+      "niantic_id": "Item_1204",
+      "name": "CT Chargée d'élite"
     },
     {
       "slug": "candy",
+      "niantic_id": "Item_1301",
       "name": "Super Bonbon"
     },
     {
       "slug": "xlcandy",
+      "niantic_id": "RareXLCandy_PSD",
       "name": "Super Bonbon L"
     },
     {
-      "slug": "raslugpass",
-      "name": "Passe de raslug"
+      "slug": "raidpass",
+      "niantic_id": "Item_1401",
+      "name": "Passe de Raid"
     },
     {
-      "slug": "remote_raslugpass",
-      "name": "Passe de Raslug à distance"
+      "slug": "remote_raidpass",
+      "niantic_id": "Item_1408",
+      "name": "Passe de Raid à distance"
     },
     {
-      "slug": "premium_raslugpass",
-      "name": "Passe de Raslug premium"
+      "slug": "premium_raidpass",
+      "niantic_id": "Item_1402",
+      "name": "Passe de Raid premium"
+    },
+    {
+      "slug": "ex_raidpass",
+      "niantic_id": "Item_1403",
+      "name": "Passe de Raid Ex"
     },
     {
       "slug": "starpiece",
-      "name": "Morceau d\"Étoile"
+      "niantic_id": "starpiece",
+      "name": "Morceau d'Étoile"
     },
     {
       "slug": "pokeball",
+      "niantic_id": "pokeball_sprite",
       "name": "Poké Ball"
     },
     {
       "slug": "greatball",
+      "niantic_id": "greatball_sprite",
       "name": "Super Ball"
     },
     {
       "slug": "ultraball",
+      "niantic_id": "ultraball_sprite",
       "name": "Hyper Ball"
     },
     {
       "slug": "troykey",
+      "niantic_id": "TroyKey",
       "name": "Module Leurre"
     },
-
     {
       "slug": "troykey_glacial",
+      "niantic_id": "TroyKey_glacial",
       "name": "Leurre Glacial"
     },
     {
       "slug": "troykey_magnetic",
+      "niantic_id": "TroyKey_magnetic",
       "name": "Leurre Magnétique"
     },
     {
       "slug": "troykey_moss",
+      "niantic_id": "TroyKey_moss",
       "name": "Leurre Moussu"
     },
     {
       "slug": "troykey_rainy",
+      "niantic_id": "TroyKey_rainy",
       "name": "Leurre Pluvieux"
+    },
+    {
+      "slug": "radar_rocket",
+      "niantic_id": "TR_hideout_icon_leader",
+      "name": "Radar Rocket"
+    },
+    {
+      "slug": "radar_rocket_plus",
+      "niantic_id": "TR_hideout_icon_giovanni",
+      "name": "Radar Rocket (Giovanni)"
+    },
+    {
+      "slug": "incubator",
+      "niantic_id": "EggIncubatorIAP_Empty",
+      "name": "Incubateur"
+    },
+    {
+      "slug": "superincubator",
+      "niantic_id": "EggIncubatorSuper_Empty",
+      "name": "Super Incubateur"
+    },
+    {
+      "slug": "poffin",
+      "niantic_id": "Item_0704",
+      "name": "Poffin"
+    },
+    {
+      "slug": "baie_framby",
+      "niantic_id": "Item_0701",
+      "name": "Baie Framby"
+    },
+    {
+      "slug": "baie_nanab",
+      "niantic_id": "Item_0703",
+      "name": "Baie Nanab"
+    },
+    {
+      "slug": "baie_nanana",
+      "niantic_id": "Item_0705",
+      "name": "Baie Nanana"
+    },
+    {
+      "slug": "baie_framby_doree",
+      "niantic_id": "Item_0706",
+      "name": "Baie Framby Dorée"
+    },
+    {
+      "slug": "baie_nanana_argentee",
+      "niantic_id": "Item_0707",
+      "name": "Baie Nanana Argentée"
+    },
+    {
+      "slug": "pierre_soleil",
+      "niantic_id": "Bag_Sun_Stone_Sprite",
+      "name": "Pierre soleil"
+    },
+    {
+      "slug": "roche_royale",
+      "niantic_id": "Bag_King's_Rock_Sprite",
+      "name": "Roche Royale"
+    },
+    {
+      "slug": "peau_metal",
+      "niantic_id": "Bag_Metal_Coat_Sprite",
+      "name": "Peau Métal"
+    },
+    {
+      "slug": "ameliorator",
+      "niantic_id": "Bag_Up-Grade_Sprite",
+      "name": "Améliorateur"
+    },
+    {
+      "slug": "ecaille_draco",
+      "niantic_id": "Bag_Dragon_Scale_Sprite",
+      "name": "Écaille Draco"
+    },  
+    {
+      "slug": "pierre_unova",
+      "niantic_id": "Bag_Unova_Stone_Sprite",
+      "name": "Pierre d'Unova"
+    },
+    {
+      "slug": "pierre_sinnoh",
+      "niantic_id": "Bag_Sinnoh_Stone_Sprite",
+      "name": "Pierre de Sinnoh"
     }
   ]
