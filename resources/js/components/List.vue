@@ -54,9 +54,9 @@
                   <div class="raid__gym">
                     <img
                       v-if="gym.ex"
-                      src="https://assets.profchen.fr/img/app/connector_gym_ex.png"
+                      :src="baseUrl+'/storage/img/static/connector_gym_ex.png'"
                     />
-                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png" />
+                    <img v-if="!gym.ex" :src="baseUrl+'/storage/img/static/connector_gym.png'" />
                     <template v-if="gym.zone">{{gym.zone.name}} -</template>
                     {{gym.name}}
                   </div>
@@ -95,9 +95,9 @@
                   <div class="raid__gym">
                     <img
                       v-if="gym.ex"
-                      src="https://assets.profchen.fr/img/app/connector_gym_ex.png"
+                      :src="baseUrl+'/storage/img/static/connector_gym_ex.png'"
                     />
-                    <img v-if="!gym.ex" src="https://assets.profchen.fr/img/app/connector_gym.png" />
+                    <img v-if="!gym.ex" :src="baseUrl+'/storage/img/static/connector_gym.png'" />
                     <template v-if="gym.zone">{{gym.zone.name}} -</template>
                     {{gym.name}}
                   </div>
@@ -107,7 +107,8 @@
           </div>
         </div>
 
-        <div v-if="futureRaids.length === 0 &  activeRaids.length === 0" class="raids__empty hide">
+        <div v-if="futureRaids.length === 0 &  activeRaids.length === 0" class="event__empty hide">
+          <img src="/storage/img/static/empty_2.png">
           <h3>Aucun raid pour le moment...</h3>
           <div class="wrapper" v-if="raidsListFilters.length < 5">
             <p>Elargissez vos critères pour voir s'il y a d'autres raids dans les environs</p>
@@ -123,10 +124,10 @@
             <div class="raids__wrapper">
               <div v-on:click="showModal(gym)" v-for="gym in activeQuests" class="raid__wrapper">
                 <div class="raid__img">
-                  <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnail_url" />
+                  <img v-if="gym.quest.reward" :src="gym.quest.reward.thumbnails.base" />
                   <img
                     v-if="!gym.quest.reward"
-                    src="https://assets.profchen.fr/img/app/unknown.png"
+                    :src="baseUrl+'/storage/img/static/unknown.png'"
                   />
                 </div>
                 <div class="raid__content">
@@ -134,7 +135,7 @@
                     <span>{{gym.quest.quest.name}}</span>
                   </h3>
                   <div class="raid__gym">
-                    <img src="https://assets.profchen.fr/img/app/connector_pokestop.png" />
+                    <img :src="baseUrl+'/storage/img/static/connector_pokestop.png'" />
                     <template v-if="gym.zone">{{gym.zone.name}} -</template>
                     {{gym.name}}
                   </div>
@@ -143,7 +144,8 @@
             </div>
           </div>
         </div>
-        <div v-if="activeQuests.length === 0" class="raids__empty hide">
+        <div v-if="activeQuests.length === 0" class="event__empty hide">
+          <img src="/storage/img/static/empty_2.png">
           <h3>Aucune quête pour le moment...</h3>
           <div class="wrapper" v-if="questsListFilters.length >= 1">
             <p>Elargissez vos critères pour voir s'il y a d'autres quêtes dans les environs</p>
@@ -166,14 +168,14 @@
                 class="raid__wrapper"
               >
                 <div class="raid__img">
-                  <img :src="gym.invasion.boss.thumbnail" />
+                  <img :src="gym.invasion.boss.thumbnails.base" />
                 </div>
                 <div class="raid__content">
                   <h3>
                     <span>{{gym.invasion.boss.name}}</span>
                   </h3>
                   <div class="raid__gym">
-                    <img src="https://assets.profchen.fr/img/app/connector_pokestop.png" />
+                    <img :src="baseUrl+'/storage/img/static/connector_pokestop.png'" />
                     <template v-if="gym.zone">{{gym.zone.name}} -</template>
                     {{gym.name}}
                   </div>
@@ -182,7 +184,8 @@
             </div>
           </div>
         </div>
-        <div v-if="activeRocketInvasions.length === 0" class="raids__empty hide">
+        <div v-if="activeRocketInvasions.length === 0" class="event__empty hide">
+          <img src="/storage/img/static/empty_2.png">
           <h3>Aucune invasion Rocket pour le moment...</h3>
         </div>
       </v-tab-item>
@@ -238,7 +241,7 @@
           </template>
         </multiselect>
         <div v-for="(reward, index) in questsListFilters" class="setting pokemon">
-          <img :src="reward.thumbnail_url" />
+          <img :src="reward.thumbnails.base" />
           <p>{{reward.name}}</p>
           <v-btn flat icon color="deep-orange" @click="removeReward(index)">
             <v-icon>close</v-icon>
@@ -295,6 +298,9 @@ export default {
     },
     zones() {
       return this.$store.state.zones;
+    },
+    baseUrl() {
+      return window.pokematos.baseUrl;
     },
     rewards() {
       return this.objects.concat(this.pokemons);
@@ -424,26 +430,6 @@ export default {
   },
   created() {
     this.fetchRewards();
-    this.$store.commit("initSetting", {
-      setting: "raidsListFilters",
-      value: ["1", "2", "3", "4", "5", "6", "7"],
-    });
-    this.$store.commit("initSetting", {
-      setting: "questsListFilters",
-      value: [],
-    });
-    this.$store.commit("initSetting", {
-      setting: "raidsZoneFilters",
-      value: [],
-    });
-    this.$store.commit("initSetting", {
-      setting: "questsZoneFilters",
-      value: [],
-    });
-    this.$store.commit("initSetting", {
-      setting: "raidsListOrder",
-      value: "date",
-    });
     let lastChanges = this.$store.state.settings.lastChanges;
     lastChanges.lists.local = Date.now() / 1000;
     this.$store.commit("setSetting", {
@@ -475,10 +461,10 @@ export default {
       }
       if (raidStatus == "future" || !raid.pokemon) {
         return (
-          "https://assets.profchen.fr/img/eggs/egg_" + raid.egg_level + ".png"
+          this.baseUrl+"/storage/img/static/raid/egg_" + raid.egg_level + ".png"
         );
       } else {
-        return raid.pokemon.thumbnail_url;
+        return raid.pokemon.thumbnails.base;
       }
     },
     getRaidStartTime(raid) {

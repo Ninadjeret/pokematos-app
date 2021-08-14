@@ -1,7 +1,7 @@
 <template>
 <header class="header__wrapper--app">
     <div v-if="getCurrentLink().url == '/'" class="header-title home">
-        <img src="https://assets.profchen.fr/img/logo_main_400.png"> POKEMATOS <small v-if="currentCity">{{ currentCity.name }}</small>
+        <img :src="baseUrl+'/storage/img/static/logo_main_400.png'"> POKEMATOS <small v-if="currentCity">{{ currentCity.name }}</small>
         <button v-if="cities && cities.length > 1" v-on:click="showModal()"><i class="material-icons">location_city</i></button>
         <modal v-if="cities" name="cityChoice">
             <h3>Choisis ta zone</h3>
@@ -33,6 +33,11 @@ export default {
         console.log('Component mounted.')
     },
     created() {
+    },
+    computed: {
+        baseUrl() {
+            return window.pokematos.baseUrl;
+        },
     },
     methods: {
         getCurrentLink() {

@@ -91,7 +91,7 @@ class Event extends Model
     public function getImageAttribute($value)
     {
         if (empty($value)) {
-            return 'https://assets.profchen.fr/img/app/event_train_plain.jpg';
+            return asset('storage/img/static/train/event_train_plain.jpg');
         }
         return $value;
     }
@@ -156,7 +156,7 @@ class Event extends Model
 
     public static function formatArgs($args)
     {
-        if (!empty($args['event']['image']) && strstr($args['event']['image'], 'assets.profchen')) unset($args['event']['image']);
+        if (!empty($args['event']['image']) && strstr($args['event']['image'], 'storage/img/static')) unset($args['event']['image']);
         $start_time = new \DateTime($args['event']['start_time']);
         $args['event']['end_time'] = $start_time->format('Y-m-d') . ' 23:59:00';
         if (empty($args['event']['multi_guilds'])) $args['event']['multi_guilds'] = 0;

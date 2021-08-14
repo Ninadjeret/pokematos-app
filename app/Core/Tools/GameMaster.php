@@ -49,20 +49,13 @@ class GameMaster
       ];
 
       $name_fr = $name_ocr;
-      if (!empty($form_id) && $form_id != '00') {
-        foreach ($forms as $form => $label) {
-          if (strstr($node->templateId, $form)) {
-            $name_fr = $name_ocr . ' ' . $label;
-          }
-        }
-      }
+      $form = \App\Core\Helpers::getPokemonFormFromName($node->templateId);
 
-      //On transforme les IDS des formes en numéro pour correspondre aux sprites officielles
-      if (strstr($form_id, 'GALARIAN')) {
-        $form_id = '31';
-      }
-      if (strstr($form_id, 'ALOLA')) {
-        $form_id = '61';
+      if ($form) {
+        $name_fr = $name_ocr . ' ' . $form['name'];
+        $form_id = $form['id'];
+      } else {
+        $form_id = '00';
       }
 
       $data = [

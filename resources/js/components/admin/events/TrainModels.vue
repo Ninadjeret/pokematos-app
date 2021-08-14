@@ -14,7 +14,7 @@
                 <template v-for="(train, index) in trains">
                     <v-list-tile :key="event.id" :to="{ name: 'admin.events.trainmodel.edit', params: { trainmodel_id: train.id } }">
                         <v-list-tile-avatar>
-                            <img src="https://assets.profchen.fr/img/app/event_train.png">
+                            <img :src="baseUrl+'/storage/img/static/train/event_train.png'">
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>{{event.name}}</v-list-tile-title>
@@ -41,6 +41,11 @@
         },
         created() {
             this.fetchEvents();
+        },
+        computed: {
+            baseUrl() {
+                return window.pokematos.baseUrl;
+            }
         },
         methods: {
             fetchEvents() {

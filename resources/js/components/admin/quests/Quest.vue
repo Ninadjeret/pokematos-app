@@ -28,7 +28,7 @@
                     </template>
                 </multiselect>
                 <div v-for="(reward, index) in rewards_selected" class="setting pokemon">
-                    <img :src="reward.thumbnail_url">
+                    <img :src="reward.thumbnails.base">
                     <p>{{reward.name}}</p>
                     <v-btn flat icon color="deep-orange" @click="removeReward(index)">
                         <v-icon>close</v-icon>

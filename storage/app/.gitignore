@@ -2,6 +2,6 @@
 !public/
 !questions/
 !questions/*
-!pokemon/
-!pokemon/*
+!sources/
+!sources/*
 !.gitignore

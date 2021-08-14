@@ -76,7 +76,8 @@
 }
 
 .setting {
-    border-top: 1px solid #eee;
+    border-radius: 0 !important;
+    border-bottom: 1px solid #eee;
     padding: 16px;
 
     &.colorpicker {

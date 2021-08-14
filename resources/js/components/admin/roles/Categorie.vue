@@ -18,6 +18,8 @@
                     :trigger-style="{ width: '32px', height: '32px' }">
                 </swatches>
             </div>
+        </div>
+        <div class="settings-section">            
             <v-subheader>Notifications</v-subheader>
             <div class="setting d-flex switch">
                 <div>
@@ -33,6 +35,8 @@
                     <option v-for="channel in channels" :value="channel.id">{{channel.name}}</option>
                 </select>
             </div>
+        </div>
+        <div class="settings-section">            
             <v-subheader>Restrictions</v-subheader>
             <div class="setting d-flex switch">
                 <div>

@@ -15,6 +15,8 @@
           <option v-for="role in roles" :value="role.id">{{role.name}}</option>
         </select>
       </div>
+    </div>
+    <div class="settings-section">     
       <v-subheader>Modération</v-subheader>
       <div class="setting">
         <label>Roles des modérateurs</label>
@@ -32,6 +34,8 @@
           :value="autorisation.value"
         ></v-checkbox>
       </div>
+    </div>
+    <div class="settings-section">
       <v-subheader>Administration</v-subheader>
       <div class="setting">
         <label>Roles des administrateurs</label>

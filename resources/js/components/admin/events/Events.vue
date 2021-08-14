@@ -14,7 +14,7 @@
                 <template v-for="(event, index) in activeEvents">
                     <v-list-tile :key="event.id" :to="{ name: 'admin.events.edit', params: { event_id: event.id } }">
                         <v-list-tile-avatar>
-                            <img src="https://assets.profchen.fr/img/app/event_train.png">
+                            <img :src="baseUrl+'/storage/img/static/train/event_train.png'">
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>
@@ -32,7 +32,7 @@
                 <template v-for="(event, index) in passedEvents">
                     <v-list-tile :key="event.id" :to="{ name: 'admin.events.edit', params: { event_id: event.id } }">
                         <v-list-tile-avatar>
-                            <img src="https://assets.profchen.fr/img/app/event_train.png">
+                            <img :src="baseUrl+'/storage/img/static/train/event_train.png'">
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>
@@ -73,6 +73,9 @@
                     let now = moment();
                     return now.isAfter(endTime);
                 });
+            },
+            baseUrl() {
+                return window.pokematos.baseUrl;
             }
         },
         created() {

@@ -9,7 +9,7 @@
       >
         <v-tab v-for="(boss, index) in bosses" :key="boss.id" ripple>
           {{ boss.name }}
-          <img :src="boss.thumbnail" />
+          <img :src="boss.thumbnails.base" />
         </v-tab>
         <v-tab-item v-for="(boss, index) in bosses" :key="boss.id">
           <v-card flat>
@@ -30,10 +30,11 @@
                   >
                 </multiselect>
                 <div
+                  v-if="boss.pokemon['step' + step.id]"
                   v-for="(pokemon, index) in boss.pokemon['step' + step.id]"
                   class="setting pokemon"
                 >
-                  <img :src="pokemon.thumbnail_url" />
+                  <img :src="pokemon.thumbnails.base" />
                   <p>{{ pokemon.name_fr }}</p>
                   <v-btn
                     flat
@@ -102,14 +103,6 @@ export default {
       axios.get("/api/rocket/bosses").then((res) => {
         this.bosses = res.data;
         this.boss = this.bosses[0];
-        let message = "Problème lors de la récupération";
-        if (err.response.data) {
-          message = err.response.data;
-        }
-        this.$store.commit("setSnackbar", {
-          message: message,
-          timeout: 1500,
-        });
       });
     },
     fetchPokemons() {

@@ -47,7 +47,7 @@ class Raid extends Model
 
     public function getThumbnailUrlAttribute()
     {
-        return 'https://assets.profchen.fr/img/pokemon/pokemon_icon_' . $this->pokedex_id . '_' . $this->form_id . '.png';
+        return asset('storage/img/pokemon/base/pokemon_icon_' . $this->pokedex_id . '_' . $this->form_id . '.png');
     }
 
     public function getSourceAttribute()

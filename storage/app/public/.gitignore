@@ -1,3 +1,16 @@
 *
 !.gitignore
 !captures
+!img
+!img/**
+img/pokemon/**
+!img/pokemon/base
+!img/pokemon/cropped
+!img/pokemon/quest
+!img/pokemon/raid
+!img/pokemon/energy
+!img/pokemon/energyquest
+
+img/items/**
+!img/items/base
+!img/items/quest

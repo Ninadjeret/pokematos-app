@@ -151,7 +151,9 @@
     bottom: 0;
     padding: 0;
     margin-bottom: 10px;
-    right: calc( 50% - 25px );
+    width: calc(100% - 25px);
+    display: flex;
+    justify-content: center;
 }
 .v-dialog__content .button--close {
     width: 45px;

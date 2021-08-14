@@ -15,18 +15,19 @@
                 <strong>{{gym.quest.name}}</strong> en cours
               </span>
             </p>
-            <img v-if="!gym.quest" src="https://assets.profchen.fr/img/app/egg_0.png" />
-            <img v-if="gym.quest && gym.quest.reward" :src="gym.quest.reward.thumbnail_url" />
+            <img v-if="!gym.quest" :src="baseUrl+'/storage/img/static/raid/egg_0.png'" />
+            <img v-if="gym.quest && gym.quest.reward" :src="gym.quest.reward.thumbnails.base" />
+            <p v-if="gym.quest && gym.quest.reward && gym.quest.reward_type == 'reward'">{{gym.quest.reward.name}}</p>
             <img
               v-if="gym.quest && !gym.quest.reward"
-              src="https://assets.profchen.fr/img/app/unknown.png"
+              :src="baseUrl+'/storage/img/static/unknown.png'"
             />
             <div
               v-if="!gym.gym && gym.invasion && features && features.rocket"
               class="rocket_invasion"
             >
               <a v-on:click="setScreenTo('RocketBoss')">
-                <img :src="gym.invasion.boss.thumbnail" />
+                <img :src="gym.invasion.boss.thumbnails.base" />
                 <p>{{gym.invasion.boss.name}} est présent(e) !</p>
                 <span>
                   En savoir plus
@@ -159,7 +160,7 @@
         <div v-if="modalScreen == 'editPOI'" class="modal__screen edit-poi">
           <h3 class>Modifier le POI</h3>
           <gym-edit v-bind:poi-id="gym.id" v-on:poi-create="setScreenTo('default')"></gym-edit>
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>
@@ -175,13 +176,13 @@
                 v-if="gym.raid.egg_level == pokemon.boss_level"
               >
                 <a v-on:click="updateRaidBoss(pokemon)">
-                  <img :src="pokemon.thumbnail_url" />
+                  <img :src="pokemon.thumbnails.base" />
                 </a>
               </li>
             </ul>
           </div>
           <hr />
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>
@@ -215,7 +216,7 @@
             </v-flex>
           </v-layout>
           <hr />
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="postNewRaidEx()" class="bt modal__action cancel">Confirmer</a>
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
@@ -232,7 +233,7 @@
                 :class="(selectedBoss.boss.id == boss.id) ? 'selected' : 'unselected'"
               >
                 <a @click="selectBoss(boss)">
-                  <img :src="boss.thumbnail" />
+                  <img :src="boss.thumbnails.base" />
                   <span>{{boss.name}}</span>
                 </a>
               </li>
@@ -252,10 +253,10 @@
                   :searchable="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
-                    <img :src="option.thumbnail_url" />
+                    <img :src="option.thumbnails.base" />
                   </template>
                   <template slot="option" slot-scope="props">
-                    <img class="option__image" :src="props.option.thumbnail_url" />
+                    <img class="option__image" :src="props.option.thumbnails.base" />
                   </template>
                 </multiselect>
                 <p>{{step.name}}</p>
@@ -266,7 +267,7 @@
               <a class="bt" @click="createRocketInvasion()">Valider</a>
             </div>
           </div>
-          <div class="footer-action">
+          <div class="footer--actions">
             <a
               v-if="!gym.invasion"
               v-on:click="setScreenTo('default')"
@@ -284,7 +285,7 @@
           <h3 class>Invasion Rocket !</h3>
           <hr />
           <div class="rocket_detail">
-            <img :src="gym.invasion.boss.thumbnail" />
+            <img :src="gym.invasion.boss.thumbnails.base" />
             <p
               v-if="gym.invasion.boss === 3"
             >{{gym.invasion.boss.name}} est présente au Pokéstop {{gym.name}}. Voici les pokémons qu'elle va utliser pour t'affronter</p>
@@ -296,7 +297,7 @@
           <div v-for="step in rocketSteps" class="rocket_pokemons">
             <img
               v-if="gym.invasion['pokemon_'+step.id]"
-              :src="gym.invasion['pokemon_'+step.id]['thumbnail_url']"
+              :src="gym.invasion['pokemon_'+step.id]['thumbnails']['base']"
             />
             <span v-if="!gym.invasion['pokemon_'+step.id]" class="rocket_unknown">?</span>
             <p>{{step.name}}</p>
@@ -346,7 +347,7 @@
                   <v-list-tile-title>{{quest.name}}</v-list-tile-title>
                 </v-list-tile-content>
                 <v-avatar v-if="!questToSubmit">
-                  <img :src="quest.rewards[0].thumbnail_url" />
+                  <img :src="quest.rewards[0].thumbnails.base" />
                   <span
                     v-if="quest.rewards.length > 1"
                     class="rewards_badge"
@@ -368,7 +369,7 @@
               <ul>
                 <li v-for="reward in questToSubmit.rewards" :key="reward.id">
                   <a @click="postNewQuest(questToSubmit.id, reward)">
-                    <img :src="reward.thumbnail_url" />
+                    <img :src="reward.thumbnails.base" />
                   </a>
                 </li>
               </ul>
@@ -376,7 +377,7 @@
             </div>
           </div>
 
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>
@@ -390,14 +391,14 @@
               <ul v-if="pokemons">
                 <li v-for="reward in gym.quest.quest.rewards" :key="reward.name">
                   <a v-on:click="updateQuest(gym.quest.id, reward, false)">
-                    <img :src="reward.thumbnail_url" />
+                    <img :src="reward.thumbnails.base" />
                   </a>
                 </li>
               </ul>
             </div>
           </div>
           <hr />
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>
@@ -461,14 +462,14 @@
                   v-if="createRaidData.eggLevel === 0 || createRaidData.eggLevel == pokemon.boss_level"
                 >
                   <a v-on:click="updateRaidBoss(pokemon)">
-                    <img :src="pokemon.thumbnail_url" />
+                    <img :src="pokemon.thumbnails.base" />
                   </a>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div class="footer-action">
+          <div class="footer--actions">
             <a v-on:click="setScreenTo('default')" class="bt modal__action cancel">Annuler</a>
           </div>
         </div>
@@ -570,6 +571,9 @@ export default {
     },
     currentCity() {
       return this.$store.state.currentCity;
+    },
+    baseUrl() {
+      return window.pokematos.baseUrl;
     },
     filteredQuests() {
       return this.$store.state.quests.filter((quest) => {
@@ -751,7 +755,8 @@ export default {
           if (this.gym.raid.ex) {
             this.raidAnnonce = "Un raid EX va avoir lieu ici prochainement";
             this.raidUrl =
-              "https://assets.profchen.fr/img/eggs/egg_" +
+              this.baseUrl + 
+              "/storage/img/static/raid/egg_" +
               this.gym.raid.egg_level +
               ".png";
           } else {
@@ -760,7 +765,8 @@ export default {
               this.gym.raid.egg_level +
               " têtes va bientot éclore...";
             this.raidUrl =
-              "https://assets.profchen.fr/img/eggs/egg_" +
+              this.baseUrl + 
+              "/storage/img/static/raid/egg_" +
               this.gym.raid.egg_level +
               ".png";
           }
@@ -774,7 +780,8 @@ export default {
           this.raidAnnonce =
             "Un raid " + this.gym.raid.egg_level + " têtes est en cours...";
           this.raidUrl =
-            "https://assets.profchen.fr/img/eggs/egg_" +
+            this.baseUrl + 
+            "/storage/img/static/raid/egg_" +
             this.gym.raid.egg_level +
             ".png";
           if (this.gym.raid.ex) this.raidAnnonce = "Un raid EX est en cours...";
@@ -786,16 +793,16 @@ export default {
           this.timeLeft = parseInt(this.endTime.diff(now, "milliseconds"));
           this.raidAnnonce =
             "Un raid " + this.gym.raid.pokemon.name_fr + " est en cours...";
-          this.raidUrl = this.gym.raid.pokemon.thumbnail_url;
+          this.raidUrl = this.gym.raid.pokemon.thumbnails.base;
         } else {
           this.timeLeft = false;
           this.raidAnnonce = "Rien pour le moment...";
-          this.raidUrl = "https://assets.profchen.fr/img/app/egg_0.png";
+          this.raidUrl = this.baseUrl+"/storage/img/static/raid/egg_0.png";
         }
       } else {
         this.timeLeft = false;
         this.raidAnnonce = "Rien pour le moment...";
-        this.raidUrl = "https://assets.profchen.fr/img/app/egg_0.png";
+        this.raidUrl = this.baseUrl+"/storage/img/static/raid/egg_0.png";
       }
     },
     getInvasionData() {

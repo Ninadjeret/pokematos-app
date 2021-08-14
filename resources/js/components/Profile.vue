@@ -13,7 +13,7 @@
               '.png'
             "
           />
-          <img v-else src="https://assets.profchen.fr/img/avatar_default.png" />
+          <img v-else :src="baseUrl+'/storage/img/static/user/avatar_default.png'" />
         </div>
         <div class="user__info">
           <h3>{{ user.name }} <small>//via Discord</small></h3>
@@ -36,12 +36,12 @@
       </div>
     </div>
 
-    <div class="settings-section" id="user__ranking">
+    <div class="" id="user__ranking">
       <h2>Classements</h2>
       <div v-if="user" class="ranking__card">
         <h4>Raids annoncés</h4>
         <div class="ranking__position">
-          <div><img src="https://assets.profchen.fr/img/test/test4.png" /></div>
+          <div><img :src="baseUrl+'/storage/img/static/ranking/baseicon.png'" /></div>
           <table v-if="ranking" class="position__table">
             <thead>
               <td class="position_pos">Pos.</td>
@@ -68,12 +68,12 @@
     <div class="settings-section help">
       <div class="section__title">Assistance</div>
       <div class="settings-section__wrapper">
-        <div class="setting__wrapper">
-          <a
-            href="https://www.profchen.fr/settings/policy/"
+      <div class="setting__wrapper">
+          <router-link
+            to="/profile/preferences"
             class="setting-link"
-            >Politique de confidentialité</a
-          >
+            >Préférences
+          </router-link>
         </div>
         <div class="setting__wrapper">
           <a href="https://www.pokematos.fr/documentation" class="setting-link"
@@ -85,8 +85,8 @@
             >Retélécharger les données</span
           >
         </div>
-        <div class="setting__wrapper">
-          <span class="setting-link add-to-home-screen">Ajouter à l'écran d'accueil</span>
+        <div class="setting__wrapper" :style="'display: '+installButtonVisibility">
+          <a class="setting-link add-to-home-screen" @click="installApp">Ajouter à l'écran d'accueil</a>
         </div>
       </div>
     </div>
@@ -149,6 +149,7 @@ export default {
     return {
       dialogUpdate: false,
       ranking: false,
+      installButtonVisibility: 'none',
     };
   },
   computed: {
@@ -169,13 +170,21 @@ export default {
     appVersion() {
       return window.pokematos.version;
     },
+    baseUrl() {
+      return window.pokematos.baseUrl;
+    },
     currentCity() {
       return this.$store.state.currentCity;
-    },
+    }
   },
   created() {
     this.$store.commit("fetchUser");
     this.fetchRanking();
+  },
+  mounted() {
+    if( window.deferredPrompt ) {
+      this.installButtonVisibility = 'flex';
+    }  
   },
   methods: {
     async updateData() {
@@ -193,6 +202,18 @@ export default {
           this.ranking = res.data;
         });
     },
+    installApp() {
+      console.log('install')   
+      window.deferredPrompt.prompt();
+      window.deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          this.installButtonVisibility = 'none';
+        } else {
+          this.installButtonVisibility = 'flex';
+        }
+        window.deferredPrompt = null;
+      });
+    }
   },
 };
 </script>

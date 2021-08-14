@@ -83,14 +83,14 @@ export default {
       markersLayer: [],
     };
   },
+  created() {
+    let appearanceMod = this.$store.getters.getSetting("appaeranceMod")
+    if( appearanceMod == 'dark' ) this.url = this.urlRocket;
+  },
   computed: {
     mapFilters: {
       get: function () {
-        let filters = this.$store.getters.getSetting("mapFilters");
-        if (!filters || typeof filters == "string") {
-          return [];
-        }
-        return filters;
+        return this.$store.getters.getSetting("mapFilters");
       },
       set: function (newValue) {
         this.$store.commit("setSetting", {
@@ -104,6 +104,9 @@ export default {
     },
     currentCity() {
       return this.$store.state.currentCity;
+    },
+    baseUrl() {
+      return window.pokematos.baseUrl;
     },
   },
   watch: {
@@ -128,7 +131,7 @@ export default {
             {
               icon: L.icon({
                 iconUrl:
-                  "https://assets.profchen.fr/img/map/map_marker_player.png",
+                  that.baseUrl+"/storage/img/static/map/marker_player.png",
               }),
             }
           ).addTo(that.$refs.map.mapObject);
@@ -213,34 +216,26 @@ export default {
       var zindex = gym.gym ? 500 : 1;
       var label = false;
       var url = gym.gym
-        ? "https://assets.profchen.fr/img/map/map_marker_default_01.png"
-        : "https://assets.profchen.fr/img/map/map_marker_stop.png";
+        ? this.baseUrl+"/storage/img/static/map/marker_default_01.png"
+        : this.baseUrl+"/storage/img/static/map/marker_stop.png";
       var imgclassname = "map-marker__img";
       if (gym.ex) {
         zindex = 1000;
-        url = "https://assets.profchen.fr/img/map/map_marker_default_ex_03.png";
+        url = this.baseUrl+"/storage/img/static/map/marker_default_ex_03.png";
       }
 
       if (gym.quest) {
         zindex = 2000;
         if (gym.quest.reward_type && gym.quest.reward_type == "pokemon") {
           var imgclassname = "map-marker__img quest";
-          url =
-            "https://assets.profchen.fr/img/map/map_marker_quest_pokemon_" +
-            gym.quest.reward.pokedex_id +
-            "_" +
-            gym.quest.reward.form_id +
-            ".png";
+          url = gym.quest.reward.thumbnails.quest;
         } else if (gym.quest.reward_type && gym.quest.reward_type == "reward") {
           var imgclassname = "map-marker__img quest";
-          url =
-            "https://assets.profchen.fr/img/map/map_marker_quest_reward_" +
-            gym.quest.reward.id +
-            ".png";
+          url = gym.quest.reward.thumbnails.quest;
         } else {
           var imgclassname = "map-marker__img quest";
           url =
-            "https://assets.profchen.fr/img/map/map_marker_quest_unknown.png";
+            this.baseUrl+"/storage/img/static/map/marker_quest_unknown.png";
         }
       }
 
@@ -262,23 +257,11 @@ export default {
           imgclassname = imgclassname + " raid";
           label = raidEndTime.diff(now, "minutes") + " min";
           url =
-            "https://assets.profchen.fr/img/map/map_marker_active_" +
+            this.baseUrl+"/storage/img/static/map/marker_active_" +
             gym.raid.egg_level +
             ".png";
           if (gym.raid.pokemon != false) {
-            if (gym.raid.pokemon.form_id == "00") {
-              url =
-                "https://assets.profchen.fr/img/map/map_marker_pokemon_" +
-                gym.raid.pokemon.pokedex_id +
-                ".png";
-            } else {
-              url =
-                "https://assets.profchen.fr/img/map/map_marker_pokemon_" +
-                gym.raid.pokemon.pokedex_id +
-                "_" +
-                gym.raid.pokemon.form_id +
-                ".png";
-            }
+            url = gym.raid.pokemon.thumbnails.raid;
           }
           var html =
             '<img class="' +
@@ -303,13 +286,13 @@ export default {
               label = raidStartTime.diff(now, "minutes") + " min";
             }
             url =
-              "https://assets.profchen.fr/img/map/map_marker_future_" +
+              this.baseUrl+"/storage/img/static/map/marker_future_" +
               gym.raid.egg_level +
               ".png";
           } else {
             label = raidStartTime.diff(now, "minutes") + " min";
             url =
-              "https://assets.profchen.fr/img/map/map_marker_future_" +
+              this.baseUrl+"/storage/img/static/map/marker_future_" +
               gym.raid.egg_level +
               ".png";
           }
@@ -348,7 +331,7 @@ export default {
     addRocketMarker(gym) {
       const that2 = this;
       let url =
-        "https://assets.profchen.fr/img/map/map_marker_rocket_" +
+        this.baseUrl+"/storage/img/static/map/marker_rocket_" +
         gym.invasion.boss.name +
         ".png";
       var mapMarker = L.marker([gym.lat, gym.lng], {
@@ -381,15 +364,15 @@ export default {
       }
     },
     displayRocketMap() {
-      console.log("tutu");
       if (this.mode == "base") {
         console.log("pilou");
         this.mode = "rocket";
         this.url = this.urlRocket;
         this.addMarkers();
       } else {
+        let appearanceMod = this.$store.getters.getSetting("appaeranceMod")
         this.mode = "base";
-        this.url = this.urlBase;
+        if( appearanceMod != 'dark' ) this.url = this.urlBase;
         this.addMarkers();
       }
     },

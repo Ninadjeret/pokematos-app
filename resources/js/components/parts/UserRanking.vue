@@ -93,7 +93,7 @@
               />
               <img
                 v-else
-                src="https://assets.profchen.fr/img/avatar_default.png"
+                :src="baseUrl+'/storage/img/static/user/avatar_default.png'"
               />
               <div class="position">{{ position }}</div>
             </div>
@@ -132,7 +132,7 @@
               />
               <img
                 v-else
-                src="https://assets.profchen.fr/img/avatar_default.png"
+                :src="baseUrl+'/storage/img/static/user/avatar_default.png'"
               />
             </div>
             <div class="namecity">
@@ -173,6 +173,9 @@ export default {
     },
     currentCity() {
       return this.$store.state.currentCity;
+    },
+    baseUrl() {
+      return window.pokematos.baseUrl;
     },
     top3() {
       if (this.ranking.length >= 3) {

@@ -20,7 +20,7 @@ class RocketBoss extends Model
         'pokemon_step2' => 'array',
         'pokemon_step3' => 'array',
     ];
-    protected $appends = ['pokemon', 'thumbnail'];
+    protected $appends = ['pokemon', 'thumbnails'];
     protected $hidden = ['pokemon_step1', 'pokemon_step2', 'pokemon_step3'];
 
     public function getPokemonAttribute() {
@@ -41,7 +41,10 @@ class RocketBoss extends Model
         return $return;
     }
 
-    public function getThumbnailAttribute() {
-        return "https://assets.profchen.fr/img/rocket/boss_{$this->id}.png";
+    public function getThumbnailsAttribute() {
+        return (object) [
+            'base' => asset("storage/img/static/rocket/boss_{$this->id}.png"),
+            'map' => asset("storage/img/static/map/marker_rocket_{$this->name}.png"),
+        ];
     }
 }

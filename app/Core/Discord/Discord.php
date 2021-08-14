@@ -37,7 +37,7 @@ class Discord
             Log::channel('discord')->info("--------------------------------------------------");
             Log::channel('discord')->info("{$statusCode} - channel->deleteMessage --- {$message}");
             Log::channel('discord')->info(print_r($args, true));
-            return false;
+            return $statusCode;
         }
     }
 

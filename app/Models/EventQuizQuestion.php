@@ -35,18 +35,20 @@ class EventQuizQuestion extends Model
 
     public function start()
     {
-        /*$this->quiz->sendToDiscord('question_announce', [
-            '%question_difficulty' => $this->question->difficulty,
-            '%question_theme' => $this->question->theme->name,
-        ]);*/
-        sleep(5);
+
+        //On empeche de déclencher deux fois la question
+        if (!empty($this->start_time)) return;
+
+        $start_time = new \DateTime();
+        $this->update([
+            'start_time' => $start_time->format('Y-m-d H:i:s'),
+        ]);
+
+        sleep(20);
 
         $start_time = new \DateTime();
         $end_time = new \DateTime();
         $end_time->modify('+ ' . $this->quiz->delay . ' minutes');
-
-        //On empeche de déclencher deux fois la question
-        if (!empty($this->start_time)) return;
 
         $this->update([
             'start_time' => $start_time->format('Y-m-d H:i:s'),
@@ -132,7 +134,6 @@ class EventQuizQuestion extends Model
                     '%answer' => $this->question->answer,
                     '%explanation' => $this->question->explanation
                 ]);
-                sleep(10);
             }
         } else {
             $this->quiz->sendToDiscord('question_not_answered');

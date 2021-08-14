@@ -161,7 +161,7 @@ class QuestConnector extends Model
 
         $role_poi_lie = Role::where('gym_id', $quest->getStop()->id)->first();
         $role_zone_liee = ($quest->getStop()->zone) ? Role::where('zone_id', $quest->getStop()->zone->id)->first() : false;
-        $role_pokemon_lie = Role::where('pokemon_id', $quest->reward->id)->first();
+        $role_pokemon_lie = ($quest->reward) ? Role::where('pokemon_id', $quest->reward->id)->first() : false ;
 
         //Gestion des tags
         $patterns = array(
@@ -243,7 +243,7 @@ class QuestConnector extends Model
             }
         } else {
             $title = "Quête {$quest->name} en cours";
-            $img_url = 'https://assets.profchen.fr/img/app/unknown.png';
+            $img_url = asset('storage/img/static/unknown.png');
             $description = 'On ne connait pas encore la récompense';
         }
 
@@ -258,7 +258,7 @@ class QuestConnector extends Model
             'author' => array(
                 'name' => $quest->getStop()->name,
                 'url' => $quest->getStop()->google_maps_url,
-                'icon_url' => 'https://assets.profchen.fr/img/app/connector_pokestop.png'
+                'icon_url' => asset('storage/img/static/connector_pokestop.png')
             ),
         );
 

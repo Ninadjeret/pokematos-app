@@ -32,7 +32,8 @@
         <label>Position</label>
         <map-field id="gym-coordinates" v-model="coordinates"></map-field>
       </div>
-
+    </div>
+    <div class="settings-section">  
       <v-subheader>Arène</v-subheader>
 
       <div class="setting d-flex switch">
@@ -69,7 +70,8 @@
           </v-btn>
         </div>
       </div>
-
+    </div>
+    <div class="settings-section">  
       <div v-if="inAdmin && getId">
         <v-subheader>Autres actions</v-subheader>
         <v-list-tile color="pink" @click="dialog = true">Supprimer le POI</v-list-tile>

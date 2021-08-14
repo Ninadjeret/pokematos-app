@@ -215,7 +215,7 @@ class RocketConnector extends Model
     {
         $stop = $invasion->getStop();
         $title = "Invasion de {$invasion->boss->name} au Pokéstop {$stop->name}";
-        $img_url = $invasion->boss->thumbnail;
+        $img_url = $invasion->boss->thumbnails->base;
 
         $description = (!empty($invasion->pokemon_step1)) ? ":one: {$invasion->pokemon_step1->name}\r\n" : ":one: ?\r\n";
         $description .= (!empty($invasion->pokemon_step2)) ? ":two: {$invasion->pokemon_step2->name}\r\n" : ":two: ?\r\n";
@@ -232,7 +232,7 @@ class RocketConnector extends Model
             'author' => array(
                 'name' => $invasion->getStop()->name,
                 'url' => $invasion->getStop()->google_maps_url,
-                'icon_url' => 'https://assets.profchen.fr/img/app/connector_pokestop_rocket.png'
+                'icon_url' => asset('storage/img/static/connector_pokestop_rocket.png')
             ),
         );
 

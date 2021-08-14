@@ -7,9 +7,14 @@ import VuexPersistence from 'vuex-persist';
 Vue.use(Vuex);
 
 const defaultSettings = {
-    raidsListFilters: ["1", "2", "3", "4", "5", "6"],
+    mapFilters: ["empty_gyms", "active_gyms", "empty_stops", "active_stops"],
+    raidsListFilters: ["1", "2", "3", "4", "5", "6", "7"],
+    questsListFilters: [],
+    raidsZoneFilters: [],
+    questsZoneFilters: [],
     raidsListOrder: 'date',
-    hideGyms: false
+    hideGyms: false,
+    appaeranceMod: 'system'
 }
 
 const store = new Vuex.Store({
@@ -223,6 +228,9 @@ const store = new Vuex.Store({
         getSetting: state => (setting) => {
             if (state.settings && state.settings[setting]) {
                 return state.settings[setting];
+            } else if( defaultSettings[setting] ) {
+                console.log(defaultSettings[setting])
+                return defaultSettings[setting];
             } else {
                 return false;
             }
@@ -274,7 +282,8 @@ const store = new Vuex.Store({
             } catch (error) {
                 console.log('tutututut')
                 console.log(error)
-                if (error.response.status == '401') {
+                console.log(error.response)
+                if ( error.response  && error.response.status == '401') {
                     document.location.reload(true);
                 }
             }

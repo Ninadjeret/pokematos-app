@@ -45,11 +45,11 @@
                   <span class="stop__marker">
                     <img
                       v-if="step.stop.ex"
-                      src="https://assets.profchen.fr/img/app/connector_gym_ex.png"
+                      :src="baseUrl+'/storage/img/static/connector_gym_ex.png'"
                     />
                     <img
                       v-if="!step.stop.ex"
-                      src="https://assets.profchen.fr/img/app/connector_gym.png"
+                      :src="baseUrl+'/storage/img/static/connector_gym.png'"
                     />
                   </span>
                   <span v-if="step.stop && step.stop.zone">{{step.stop.zone.name}} -</span>
@@ -152,6 +152,9 @@ export default {
     },
     currentCity() {
       return this.$store.state.currentCity;
+    },
+    baseUrl() {
+      return window.pokematos.baseUrl;
     },
     date() {
       moment.locale("fr");

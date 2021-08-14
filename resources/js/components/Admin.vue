@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="parent_view" v-if="$route.name == 'admin'">
+  <div class="admin__container">
+    <div class="admin__menu" v-if="$route.name == 'admin' || $vuetify.breakpoint.lgAndUp">
       <div
         class="settings-section"
         v-if="
@@ -85,7 +85,7 @@
       </div>
     </div>
     <transition name="slide-right">
-      <router-view></router-view>
+      <router-view class="admin__screen"></router-view>
     </transition>
   </div>
 </template>
@@ -220,6 +220,12 @@ export default {
           route: "admin.pokemon",
           icon: "device_unknown",
           permission: "pokemon_manage",
+        },
+        {
+          label: "Gérer les objets de quêtes",
+          route: "admin.quests.rewards",
+          icon: "device_unknown",
+          permission: "quest_edit",
         },
       ],
     };

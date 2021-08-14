@@ -70,6 +70,8 @@
             >
             </multiselect>
           </div>
+        </div>
+        <div class="settings-section">          
           <v-subheader>Boss</v-subheader>
           <div class="setting">
             <label>Filtrer les récompenses</label>
@@ -90,6 +92,8 @@
             >
             </multiselect>
           </div>
+        </div>
+        <div class="settings-section">          
           <v-subheader>Format de l'annonce</v-subheader>
           <div class="setting">
             <label>Format</label>

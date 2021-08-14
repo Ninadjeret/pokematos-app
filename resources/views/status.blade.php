@@ -79,7 +79,7 @@ foreach( ['00','01','02','03','04','05','06','07','08','09','10','11','12','13',
 @section('content')
 <div class="status__header">
     <div class="container">
-          <img src="https://assets.profchen.fr/img/logo_pokematos.png">
+          <img src="<?php echo asset('storage/img/static/logo_pokematos.png'); ?>">
           <h1>POKEMATOS&nbsp;<small>Statut</small></h1>
       </div>
 </div>

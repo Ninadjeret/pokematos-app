@@ -5,7 +5,7 @@ namespace App\Core;
 use App\Models\Role;
 use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\URL;
 class App
 {
 
@@ -14,6 +14,7 @@ class App
         $settings = \App\Models\Setting::get();
         $config = [
             'version' => config('app.version'),
+            'baseUrl' => URL::to('/'),
             'config' => [
                 'raids' => [
                     'timing_before_eclosion' => intval("-{$settings->timing_before_eclosion}"),

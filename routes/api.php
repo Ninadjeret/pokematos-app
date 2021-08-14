@@ -123,10 +123,6 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::resource('themes', 'Events\QuizThemeController');
     });
 
-    Route::group(['middleware' => ['can:settings_manage']], function () {
-        Route::get('settings', 'SettingController@get');
-        Route::put('settings', 'SettingController@update');
-    });
 });
 
 
@@ -173,8 +169,12 @@ Route::post('debug', 'DebugController@log');
 Route::get('stats/g/ia', 'StatsController@getGlobalIAReport');
 Route::get('stats/c/{city_slug}/ia', 'StatsController@getCityIAReport');
 
+//Monitoring
+Route::get('monitor/analyzer', 'StatsController@monitorAnalyzer');
+Route::get('monitor/status', 'StatsController@monitorStatus');
+
 //Public
-Route::get('public/pokemons', 'PokemonController@getAll');
+Route::get('public/pokemons', 'App\Pokemon\PokemonController@index');
 Route::get('public/tools/pokemon/get-pokedex-from-name/{name}', 'Tools\PokemonController@getPokedexIdFromNameFr');
 
 //Subscriptions

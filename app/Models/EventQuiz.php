@@ -164,7 +164,7 @@ class EventQuiz extends Model
         \App\Core\Discord\Discord::SyncBot();
 
         $this->sendToDiscord('quiz_ended');
-        sleep(5);
+        sleep(15);
         if ($this->event->multi_guilds) {
             $ranking = new Ranking($this->questions);
             $this->sendToDiscord('quiz_final_score_guilds', [
@@ -328,8 +328,8 @@ class EventQuiz extends Model
     public static function getEmbedThumbnails()
     {
         return (object) [
-            'question' => 'https://assets.profchen.fr/img/app/event_quiz_question.png',
-            'ranking' => 'https://assets.profchen.fr/img/app/event_quiz_ranking.png'
+            'question' => asset('storage/img/static/quiz/event_quiz_question.png'),
+            'ranking' => asset('storage/img/static/quiz/event_quiz_ranking.png')
         ];
     }
 }
